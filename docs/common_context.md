@@ -18,6 +18,7 @@ It is not yet the live trading system and does not place orders. Mature rules ma
 
 - Real-time intraday data: use the user's Futu OpenD connection as the preferred source. It is faster and more direct than repeatedly reading a browser chart.
 - After-close and historical data: use the most reliable suitable source available, including structured public data or local frozen data. The source, timestamp, session definition, and any delay must be recorded.
+- Fallback rule: if Futu OpenD is unavailable or the requested subscription/data is not returned, switch to public after-close data only. Never describe delayed, partial, or historical data as live market data.
 - Browser charts remain useful for visual confirmation and educational material, but they are not the default real-time data pipeline.
 - Build 4H candles from 1H data when the source does not expose a native 4H interval, and record the aggregation convention.
 - Never mix a live Futu stream with historical bars from another source without checking symbol, timezone, adjustment, session, and price-scale consistency.
