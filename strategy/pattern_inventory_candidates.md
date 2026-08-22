@@ -108,7 +108,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-ABC-BULL-TRANSITION-LOW` | 急跌后的方向性 A、回调和 H1/H2-like 恢复；父级过渡，信号 K/计数边界，前高簇贴近触发 | [`LOW 2024-06-11–06-24`](../research/low_bullish_h1_h2_first_obstacle_boundary_2024-06-11_2024-06-24.md) | `pattern_like / bullish-ABC-candidate / H1-H2-like / first-obstacle-crowded / valid_no_trade / event_context_pending` |
 | `VIS-ABC-BULL-NVDA-H1-VISUAL` | 上涨父级中的强方向腿、短但偏深 B、随后 H1-like 恢复；形态正向但原 stop 被跳空越过 | [`NVDA 2025-06-23–07-03`](../research/nvda_bullish_abc_h1_visual_candidate_2025-06-23_2025-07-03.md) | `pattern_like / morphology-positive / original-stop-invalidated-by-gap / reprice-pending` |
 | `VIS-ABC-BEAR-MSFT-L1-L2-VISUAL` | 高位转弱后的空头 A、反弹 B、再下行 L1/L2-like；原 sell-stop 被跳空越过 | [`MSFT 2025-10-28–11-20`](../research/msft_bearish_abc_l1_l2_visual_candidate_2025-10-28_2025-11-20.md) | `pattern_like / bearish-ABC-candidate / L1-L2-like / gap-trigger-boundary / pending` |
-| `VIS-ABC-BEAR-CRM-L1-L2-VISUAL` | 空头父级、反弹 B、L1/L2-like 两次恢复；15m 可重建盘中触发；L1 首支撑拥挤，L2 仅条件空间；IGV/QQQ/SPY 同步走弱 | [`CRM 2025-03-10–03-28`](../research/crm_bearish_abc_l1_l2_visual_candidate_2025-03-10_2025-03-28.md) | `pattern_like / sector-aligned / L1-first-support-crowded / L2-conditional-space / L2-count-pending / non-gap-trigger / pending` |
+| `VIS-ABC-BEAR-CRM-RESET-L1-VISUAL` | 空头父级、反弹 B、第一次 L1 后反弹越过前 B 高点；后续更像计数重置后的新 L1；15m 触发可重建；首支撑仍偏近；IGV/QQQ/SPY 同步走弱 | [`CRM 2025-03-10–03-28`](../research/crm_bearish_abc_l1_l2_visual_candidate_2025-03-10_2025-03-28.md) | `pattern_like / sector-aligned / L1-first-support-crowded / reset-L1-conditional-space / non-gap-trigger / pending` |
 
 ### 视觉筛选的最小流程
 
