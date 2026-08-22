@@ -18,6 +18,16 @@ It is not yet the live trading system and does not place orders. Mature rules ma
 - 如果只能取得结构化数据而没有足够的图表上下文，结论必须标为“数据审计/候选”，不能写成完整视觉判断。
 - 研究文件应把“视觉结构判断”和“数值核验”分栏记录，避免为了方便回测而把主观结构偷偷改写成伪精确阈值。
 
+## Research phases: visual discovery before quantification
+
+当前阶段不是量化建模，而是建立一个真正看得懂 Price Action 图表的研究助手。研究顺序分三层：
+
+1. **视觉发现层**：在完整图表上先筛选“看起来像”的候选，优先判断背景、左侧结构、A/B/C、H/L1-3、位置和压力变化。此阶段允许保留模糊边界，粗略画出可能的入场、结构止损和目标区域，不宣称胜率。
+2. **结构优化层**：对筛出的优质候选，再核对同周期计数、信号 K、触发、主要支撑/阻力、事件边界和大致 R/R；把相似形态、失败形态和不应交易的形态并排比较。
+3. **程序验证层**：只有当视觉规则已经稳定、边界足够清楚，才考虑把少数规则交给 Codex Trading 做数据回放或量化测试。它不是当前阶段的默认工作流。
+
+因此，候选文件可以先用 `visual_candidate` 或 `pattern_like` 状态进入研究库；“看起来像”是筛选入口，不是最终规则，也不需要一开始就精确到固定阈值。
+
 ## Repository boundaries
 
 - `PA Research`: research notes, source-aligned definitions, chart reviews, hypotheses, and validated rule specifications.
