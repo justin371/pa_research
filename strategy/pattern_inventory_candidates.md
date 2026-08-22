@@ -99,6 +99,8 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-RANGE-EDGE-NOT-ABC-RBLX` | 局部 A/B/C 外形，但 B 回到 A 起点和父级区间下沿；C 盘中冲高后收盘失败，后续恢复不能倒灌 | [`RBLX 2024-03-18–04-05`](../research/rblx_range_edge_not_abc_boundary_2024-03-18_2024-04-05.md) | `pattern_like / range-edge-reaction / not-ABC-continuation / signal-quality-failure / valid_no_trade` |
 | `VIS-ABC-BULL-H1-GAP-GOOGL` | 强 A、浅 B 后跳空越过原 buy stop；方向正确但成交重订后首障碍拥挤，limit-retest 未成交 | [`GOOGL 2024-03-04–03-22`](../research/googl_bullish_h1_gap_trigger_boundary_2024-03-04_2024-03-22.md) | `pattern_like / bullish-H1-like / gap-trigger-reprice / first-obstacle-boundary / valid_no_trade` |
 | `VIS-ABC-BULL-H1-DEEP-B-EMA200-HD` | 深 B 回到左侧支撑簇；第一次多头尝试可画成 H1-like，但信号 K 一般，EMA200 贴近触发，XLY/SPY 同期转弱 | [`HD 2024-07-01–07-31`](../research/hd_bullish_h1_ema200_sector_boundary_2024-07-01_2024-07-31.md) | `pattern_like / bullish-H1-like / deep-B / signal-quality-boundary / EMA200-first-obstacle / sector-filter-warning / valid_no_trade` |
+| `VIS-ABC-BEAR-L1-GAP-QCOM` | 强空头 A 与 SOXX 同向；B 反弹后 L1 下破，但开盘跳过理想触发，实际成交使第一支撑空间不足；limit-retest 未成交 | [`QCOM 2024-07-17–07-30`](../research/qcom_bearish_abc_l1_l2_gap_sector_boundary_2024-07-17_2024-07-30.md) | `pattern_like / strong-A-gap-impulse / L1-gap-trigger-reprice / sector-aligned / valid_no_trade` |
+| `VIS-ABC-BEAR-L2-FIRST-SUPPORT-QCOM` | L1 后反弹再下破，L2-like 触发可在低周期重建；第一支撑约 `0.87R`，且进入财报前 3 天 | [`QCOM 2024-07-17–07-30`](../research/qcom_bearish_abc_l1_l2_gap_sector_boundary_2024-07-17_2024-07-30.md) | `pattern_like / L2-first-support-boundary / earnings-window-invalid / valid_no_trade` |
 
 ### 视觉筛选的最小流程
 
