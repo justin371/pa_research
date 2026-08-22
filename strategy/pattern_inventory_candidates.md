@@ -118,6 +118,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-ABC-BEAR-AMZN-L1-NO-GAP-BOUNDARY` | 普通/方向性 A 后深 B；`10-15` 无缺口、低周期顺序清楚的 L1-like 下破，但第一支撑只有边界空间且 XLY 不弱 | [`AMZN 2024-09-23–10-15`](../research/amzn_bearish_abc_l1_no_gap_first_support_boundary_2024-09-23_2024-10-15.md) | `pattern_like / ordinary-or-directional-A / deep-B / no-gap-trigger / first-obstacle-borderline / sector-mixed / earnings-filter-passed / pending` |
 | `VIS-ABC-BEAR-NFLX-L1-NO-GAP-SPACE` | 方向性强 A、深但后段受控 B；无开盘缺口；盘中刺破与收盘确认均可重建，首支撑有条件空间；事后首支撑到达 | [`NFLX 2025-02-14–03-28`](../research/nflx_bearish_abc_l1_no_gap_space_2025-02-14_2025-03-28.md) | `pattern_like / research_positive_conditional / strong-looking-A / deep-but-controlled-B / no-gap-trigger / first-obstacle-space-positive / process-target-reached / sector-aligned / earnings-filter-passed / pending` |
 | `VIS-ABC-BULL-CRWD-H2-DEEP-B` | 强 A 后深 B，后段在 `68.17` 附近稳定；`09-23` 首次尝试/失败突破有计数歧义，`10-02` H2-like，`10-03` 15m 可重建买入；首阻力有但不宽，财报过滤通过，`2024-07-19` incident 单列 | [`CRWD 2024-09-11–10-11`](../research/crwd_bullish_h2_deep_b_late_stabilization_2024-09-11_2024-10-11.md) | `pattern_like / research_positive_conditional / low-cycle-trigger-confirmed / first-obstacle-space-positive-but-not-wide / earnings-filter-passed / incident-context-pending` |
+| `VIS-ABC-BULL-GROWTH-UNIVERSE-2024Q3` | SHOP/PLTR/DDOG/UBER 的完整日线视觉筛选：多头 ABC/H1-H2-like 外形与事件跳空、嵌套计数、缺口状态和首障碍边界并列 | [`2024 Q3 成长股视觉筛选`](../research/visual_screen_growth_universe_2024q3_CN.md) | `visual-screen / boundary-log / no-new-positive / not-quantitative / no-low-cycle-audit` |
 
 ### 视觉筛选的最小流程
 
