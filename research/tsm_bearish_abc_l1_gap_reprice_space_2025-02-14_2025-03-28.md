@@ -1,6 +1,6 @@
 # TSM 空头 ABC / L1-like：强 A、受控 B 与有空间的缺口重订分支（2025-02-14 至 2025-03-28）
 
-状态：`pattern_like / research_positive_conditional / strong-A / controlled-B / L1-like / gap-reprice-space-positive / sector-aligned / earnings-filter-passed / pending`
+状态：`pattern_like / research_positive_conditional / strong-A / controlled-B / L1-like / gap-reprice-space-positive / sector-aligned / earnings-filter-passed / process-target-reached / original-stop-not-filled / pending`
 
 ## 1. 证据头
 
@@ -99,12 +99,22 @@ new_target = first visible support, not later lows
 | structural stop | B 高点 `180.30` 上方，研究约 `181.0–181.5` |
 | first obstacle | `167.99–165.05` 左侧支撑簇 |
 | tradeability | 重订后首障碍约 `1.6R+`，属于条件正向候选；不代表原订单已成交 |
-| status | `pattern_like / research_positive_conditional / gap-reprice-space-positive / sector-aligned / earnings-filter-passed / pending` |
+| status | `pattern_like / research_positive_conditional / gap-reprice-space-positive / sector-aligned / earnings-filter-passed / process-target-reached / original-stop-not-filled / pending` |
 
-## 7. 可复用结论
+## 7. 事后过程审计：只审计重订分支，不回写原订单
+
+以下是完成 `2025-03-26` 之前的前置判断后，才允许补上的路径记录。它不证明当时“应该交易”，也不把一次路径当成统计结果。
+
+- 原始 `177.22` sell-stop 没有按原价成交：`2025-03-26` 开盘约 `176.66`，已经低于触发区；旧价 `177.22` 的 sell-limit/retest 也没有成交，当日高点约 `176.98`。
+- 如果研究计划明确允许接受小缺口后重订，`176.66` 附近可作为独立的开盘重订分支。第一根 `15m` K 线高约 `176.98`、收约 `176.12`，之后 `10:00` 收约 `174.00`，价格没有先回收整个 B 高点区。
+- 重订分支当天最低约 `169.01`；`2025-03-27` 最低约 `165.15`，已经穿过首支撑上沿 `167.99`，并接近事先标出的支撑簇下沿 `165.05`。`2025-03-28` 最低约 `161.71`，属于首支撑之后的后续路径，不能拿来扩大入场前目标。
+- 因此，本案例的过程标签可以增加 `process-target-reached / first-support-reached / reprice-path-only`；原始 stop 和旧价 limit 仍保持 `not-filled`。这是一条手工复核路径，不是量化胜率或自动执行规则。
+
+## 8. 可复用结论
 
 1. 强 A、B 仍低于 A 起点、C 首次恢复，是视觉上足够的第一阶段候选，不必先把它写成精确量化条件。
 2. 小缺口不必自动否决整个形态；它会否决原始成交假设，但如果新成交仍远离结构止损且第一障碍有空间，可以另列重订分支。
 3. `sell-limit/retest` 没有回到价位时必须标为未成交，不能用后续下跌证明“本来应该成交”。
 4. `03-27/28` 的连续下跌不自动增加 L2；没有新的反向 B 和独立第二次尝试，就先记为 L1 后跟随。
 5. 这是条件正向研究样本，不是已验证规则；先与 KLAC、TSLA 和 NKE 的不同订单几何比较，再决定是否值得更多低周期案例。
+6. “缺口后重订仍有空间”必须经过真实路径审计才有意义：先区分原始订单是否成交，再看重订分支是否到达前置首支撑；不能把后续下跌倒灌给原始 stop。
