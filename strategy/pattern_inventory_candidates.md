@@ -97,6 +97,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-ABC-BULL-DEEP-VOLATILE-B` | 上涨背景中出现方向性恢复；B 含大范围反向冲击；H1/H2-like 形态和低周期跟随存在，但信号 K 与首障碍不合格 | [`LLY 2024-06-06–2024-06-13`](../research/lly_bullish_abc_h1_h2_first_obstacle_boundary_2024-06-06_2024-06-13.md) | `pattern_like / valid_no_trade / deep-volatile-B / signal-quality-pending / first-obstacle-boundary` |
 | `VIS-ABC-BULL-H2-GAP-TRIGGER` | 方向性 A、浅受控 B、重复支撑和优质信号 K；触发日跳空越过原 buy stop，首阻力又贴近 | [`BKNG 2024-06-12–2024-06-18`](../research/bkng_bullish_h2_gap_trigger_boundary_2024-06-12_2024-06-18.md) | `pattern_like / morphology-positive / valid_no_trade-on-original-order / gap-trigger-reprice / first-obstacle-boundary` |
 | `VIS-RANGE-EDGE-NOT-ABC-RBLX` | 局部 A/B/C 外形，但 B 回到 A 起点和父级区间下沿；C 盘中冲高后收盘失败，后续恢复不能倒灌 | [`RBLX 2024-03-18–04-05`](../research/rblx_range_edge_not_abc_boundary_2024-03-18_2024-04-05.md) | `pattern_like / range-edge-reaction / not-ABC-continuation / signal-quality-failure / valid_no_trade` |
+| `VIS-ABC-BULL-H1-GAP-GOOGL` | 强 A、浅 B 后跳空越过原 buy stop；方向正确但成交重订后首障碍拥挤，limit-retest 未成交 | [`GOOGL 2024-03-04–03-22`](../research/googl_bullish_h1_gap_trigger_boundary_2024-03-04_2024-03-22.md) | `pattern_like / bullish-H1-like / gap-trigger-reprice / first-obstacle-boundary / valid_no_trade` |
 
 ### 视觉筛选的最小流程
 
