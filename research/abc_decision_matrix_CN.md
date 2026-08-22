@@ -62,6 +62,7 @@
 | `QCOM 2024-07-24 L1` | 空头 ABC / L1；强 A 后前强后弱 B | `07-17–19` gap-impulse A；`07-22/23` 反弹到 `188.06` 后回落；SOXX 同向下跌 | 理想 `184.14` 下方 sell stop；07-24 开盘约 `181.44` 跳过触发；结构止损约 `188.60` 上方；limit-retest 未成交 | 理想首支撑 `178.01` 约 `1.37R`；实际开盘成交后约 `0.48R` | `pattern_like / strong-A-gap-impulse / L1-gap-trigger-reprice / sector-aligned / valid_no_trade` |
 | `QCOM 2024-07-30 L2-like` | 空头 ABC / L2-like；L1 后反弹再下破 | `07-26/29` 反弹到 `175.02`；07-30 低点二次下破；同周期计数仍保留 L2-like 边界 | `170.43` 下方 sell stop；结构止损约 `175.50` 上方；15m 约 10:00 触发，无开盘跳过 | `166.04` 第一支撑约 `0.87R`；EMA200 约 `165.24` 只是后续磁铁 | `pattern_like / L2-first-support-boundary / sector-aligned / earnings-window-invalid / valid_no_trade` |
 | `UBER 2024-07-23/26` | 空头 A 后 H3-like 计数歧义；L1 后 L2-like | `07-17/18` 强反转型 A；`07-19/22/23` 三次上探候选；`07-25` 再抬高并扩张；XLY 同期偏弱 | `64.40` 下方 sell stop；`07-26` 15m 未从开盘跳过触发价但触发附近收回；结构止损约 `69.70–70.00` 上方 | 左侧 `62.90–63.30`；约 `0.2–0.3R`；MM/后续低点不能越级 | `pattern_like / provisional-H3-like / L2-like / C-class-expansion-boundary / earnings-filter-passed / valid_no_trade` |
+| `AAPL 2024-05-08/09` | 多头 H1-like；事件驱动 A 后浅 B | `05-03` 财报后跳空形成方向性 A；`05-06/08` 浅 B 后段收缩；`05-08` 小实体/长下影，`05-09` 低周期恢复 | `181.10` 上方 buy stop；`05-09` 15m 从开盘下方上穿，未跳过；结构止损约 `178.20–178.40` 下方 | `184.98` 为入场前第一独立阻力；约 `1.1R–1.4R`，视止损分支而定 | `pattern_like / research_positive_conditional / event-driven-A / earnings-filter-passed / sector-aligned / low-cycle-confirmed / first-obstacle-borderline` |
 
 `?` 表示已有研究文件没有把该分支的精确成交价冻结为统一字段；在进入统计前必须补齐，不能用估计值替代。
 

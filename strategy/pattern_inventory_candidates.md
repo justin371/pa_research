@@ -103,6 +103,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-ABC-BULL-H1-DEEP-B-EMA200-HD` | 深 B 回到左侧支撑簇；第一次多头尝试可画成 H1-like，但信号 K 一般，EMA200 贴近触发，XLY/SPY 同期转弱 | [`HD 2024-07-01–07-31`](../research/hd_bullish_h1_ema200_sector_boundary_2024-07-01_2024-07-31.md) | `pattern_like / bullish-H1-like / deep-B / signal-quality-boundary / EMA200-first-obstacle / sector-filter-warning / valid_no_trade` |
 | `VIS-ABC-BEAR-L1-GAP-QCOM` | 强空头 A 与 SOXX 同向；B 反弹后 L1 下破，但开盘跳过理想触发，实际成交使第一支撑空间不足；limit-retest 未成交 | [`QCOM 2024-07-17–07-30`](../research/qcom_bearish_abc_l1_l2_gap_sector_boundary_2024-07-17_2024-07-30.md) | `pattern_like / strong-A-gap-impulse / L1-gap-trigger-reprice / sector-aligned / valid_no_trade` |
 | `VIS-ABC-BEAR-L2-FIRST-SUPPORT-QCOM` | L1 后反弹再下破，L2-like 触发可在低周期重建；第一支撑约 `0.87R`，且进入财报前 3 天 | [`QCOM 2024-07-17–07-30`](../research/qcom_bearish_abc_l1_l2_gap_sector_boundary_2024-07-17_2024-07-30.md) | `pattern_like / L2-first-support-boundary / earnings-window-invalid / valid_no_trade` |
+| `VIS-ABC-BULL-H1-EVENT-DRIVEN-A` | 财报后跳空产生强局部 A；浅 B 后出现小实体/长下影 H1-like，低周期从触发下方上穿 | [`AAPL 2024-05-03–05-09`](../research/aapl_bullish_h1_event_driven_a_2024-05-03_2024-05-09.md) | `research_positive_conditional / event-driven-A / earnings-filter-passed / low-cycle-confirmed / first-obstacle-borderline` |
 
 ### 视觉筛选的最小流程
 
