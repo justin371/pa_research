@@ -90,6 +90,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-ABC-BEAR-GAP-FIRST-SUPPORT-BOUNDARY` | 强 A、反向 B、L1/L2-like 下破；第一支撑近且跳空改变成交 | [`COIN 2024-01-02–01-12`](../research/coin_bearish_l1_l2_gap_boundary_2024-01-02_2024-01-12.md) | `valid_no_trade / event-context-pending` |
 | `VIS-H3-COIN-BEAR-FLAG-EXPANSION` | 空头 A 后三次上探候选；第三次回到阻力但范围扩张 | [`COIN 2024-01-04–01-09`](../research/coin_bearish_l1_l2_gap_boundary_2024-01-02_2024-01-12.md#h3-like-熊旗顶部补审-2024-01-04–2024-01-09) | `provisional H3-like / C-class boundary / valid_no_trade` |
 | `VIS-ABC-BULL-LARGECAP-SCREEN-2024` | 多个大盘股窗口出现强 A、B、H1/H2-like 再推，但首障碍或冲击背景阻止升级 | [`AAPL/MSFT/GOOGL/META 视觉筛选`](../research/largecap_visual_screen_2024_CN.md) | `visual_screen / no_clean_positive_yet` |
+| `VIS-ABC-BULL-SNOW-DEEP-B-H2` | 上涨背景中的深但后段受控 B；支撑/EMA20 处出现 H2-like 反应，但触发上方左侧高点过近 | [`SNOW 2026-08-14–08-21`](../research/snow_bullish_h2_first_obstacle_boundary_2026-08-14_2026-08-21.md) | `pattern_like / valid_no_trade / first-obstacle-crowded / confirmation-pending` |
 
 ### 视觉筛选的最小流程
 
