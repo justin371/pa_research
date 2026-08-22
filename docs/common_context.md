@@ -28,6 +28,8 @@ It is not yet the live trading system and does not place orders. Mature rules ma
 
 因此，候选文件可以先用 `visual_candidate` 或 `pattern_like` 状态进入研究库；“看起来像”是筛选入口，不是最终规则，也不需要一开始就精确到固定阈值。
 
+后续每张图先按 [`视觉 PA 复核卡`](visual_pa_review_card_CN.md) 走一遍：它把完整图表、背景、母腿与局部腿、A/B/C、H/L 计数、信号 K、订单、结构止损、第一障碍和 MM 按视觉优先顺序串起来。复核卡是研究助手的工作顺序，不是量化评分器。
+
 ## Repository boundaries
 
 - `PA Research`: research notes, source-aligned definitions, chart reviews, hypotheses, and validated rule specifications.

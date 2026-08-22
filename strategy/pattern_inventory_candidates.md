@@ -63,6 +63,8 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 
 这一节是视觉筛选目录，不是胜率表，也不是量化输入。先在完整图表上判断“像不像”，再决定哪些候选值得做精细 R/R 或低周期核验。详细案例只保存在各自的研究文件中，这里只保留入口和视觉问题，避免两个 Repo 或多个文件重复搬运同一套内容。
 
+统一的逐图复核顺序见 [`docs/visual_pa_review_card_CN.md`](../docs/visual_pa_review_card_CN.md)。
+
 | 视觉候选 ID | 先看什么 | 代表性入口 | 当前状态 |
 | --- | --- | --- | --- |
 | `VIS-ABC-BULL-H2-REPEATED-SUPPORT` | 强 A 后回调两次；两个低点落在同一支撑簇；第二次反应更清楚 | [`KLAC 2025-05-07–06-03`](../research/klac_h2_case_study_2025-05-07_2025-06-03.md) | `visual_candidate / tradeability borderline`：第一阻力 `79.03`–`79.79` 仅约 `0.8R`–`1.0R`，MM 不能替代近端阻力审计 |
