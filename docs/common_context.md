@@ -66,6 +66,14 @@ The probability table is treated as conditional experience-based guidance, not g
 - A measured move can be calculated from a local leg for a near-term target and from the larger parent leg for a later target. Both are valid only if their anchors were available and clearly defined before the relevant decision.
 - When a prior breakout area, EMA50, gap, or pause zone is retested after a larger leg, evaluate it as a possible support/resistance role reversal and nested pullback, not automatically as a new unrelated trend.
 
+## H1/H2 quality definition (research candidate)
+
+- Separate the H1/H2 count from the quality of a tradable setup. A small local high break in the middle of a range may be recorded as a low-quality count, but it is not automatically a trade.
+- Give priority to higher-timeframe background, structural location, and pressure asymmetry. The preferred location is a pre-existing support, EMA20/EMA50 test with directional acceptance, breakout retest, range edge, gap edge, or META confluence zone.
+- A stronger candidate has weak, overlapping pullback selling and a signal K that either closes strongly near its high or rejects lower prices at support and then confirms above its high. A doji or long lower tail alone is insufficient.
+- Treat a strong bear pullback, range-middle location, late climax, nearby major resistance, poor space, and event risk as downgrade or no-trade evidence.
+- This is a research definition, not yet a fixed production rule. See `research/h1_h2_quality_definition_CN.md`.
+
 ## Order and risk principles
 
 - Initial default for H1/H2/L1/L2 and breakout-pullback setups: use a stop entry after a valid signal.
@@ -120,7 +128,7 @@ The `72.00` stop used in the KLAC H2 study is a structural research example, not
 - A precise operational definition of ABC for our own use.
 - The exact conditions that distinguish valid H3/L3 setups from ordinary range noise.
 - The minimum quality standard for a high-quality or high-probability setup.
-- How to grade location, space, signal-bar quality, and follow-through consistently.
+- How to grade location, space, signal-bar quality, and follow-through consistently across a sufficiently large sample.
 - Which patterns should be promoted from research hypothesis to programmatic rule.
 
 ## Working agreement
