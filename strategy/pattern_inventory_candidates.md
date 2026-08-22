@@ -81,6 +81,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-H3-L3-SECOND-PUSH-EXPANSION` | 第一推后第二推明显扩张；第三推在支撑处减速，但不能自动视为楔形反转 | [`ANET 2024-05-16–06-10`](../research/anet_h3_l3_case_study_2024-05-16_2024-06-10.md) | `independent boundary / C-class continuation-or-climax risk` |
 | `VIS-H3-L3-RANGE-TRANSITION-BOUNDARY` | 旧三腿标签对应下沿二次测试、区间重叠和后段向上扩张；没有清楚的第三次衰竭推进 | [`ASML 2025-05-19–06-13`](../research/asml_h3_l3_range_transition_boundary_2025-05-19_2025-06-13.md) | `not_h3_l3 / range-transition / visual boundary` |
 | `VIS-H3-BEAR-FLAG-RESUMPTION` | 空头背景熊旗中的三次向上测试；第三推在主要阻力下失败，随后出现空头接受 | [`KLAC 2025-03-12–03-28`](../research/klac_h3_bear_flag_case_2025-03-12_2025-03-28.md) | `pattern_like / research_positive_candidate / event-context-pending` |
+| `VIS-ABC-BEAR-L2-EVENT-BOUNDARY` | 跳空强 A 后两次较低反弹；L2 方向清楚但第一支撑太近 | [`ANET 2024-02-12–02-21`](../research/anet_bearish_l2_event_boundary_2024-02-12_2024-02-21.md) | `pattern_like / valid_no_trade / event-context-pending` |
 | `VIS-L3-RETEST-CONTINUATION` | L2 跟随后先有新反弹分隔，再出现低周期回测和 L3 触发 | [`TSLA 2026-03-25–03-30`](../research/tsla_l3_case_study_2026-03-25_2026-03-30.md) | `provisional` |
 | `VIS-H3-THREE-PUSH-SUPPORT-REACTION` | 三个低点逐步下移但推进间距收窄；第三次测试落在支撑候选，之后出现反弹但未确认主要反转 | [`TSLA 2026-05-19–06-26`](../research/h3_l3_research_gate_CN.md) | `pattern_like / B-class short-reaction or no-trade` |
 | `VIS-RESISTANCE-MULTI-PUSH-NO-TRADE` | 多次测试主要阻力；没有反向触发不提前做空；突破接受后另开分支 | [`TSLA 2025-09-04–09-12`](../research/tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md) | `no-trade boundary` |
