@@ -50,6 +50,8 @@ For the current research phase, temporarily prioritize the ABC pullback framewor
 - Keep setup/count bars separate from confirmation/trigger bars. H1/H2/H3 or L1/L2/L3 identify the attempt sequence; they do not authorize an order by themselves.
 - The current study order is: larger background → A pressure → B pressure → major/minor support-resistance → H/L attempt count → signal K → trigger → stop/invalidation → first obstacle and measured-move space.
 - For a live review, the sequence is not “find the completed A/B/C first.” It is: recognize A pressure while it is developing, start scanning the B pullback immediately, then decide whether the next H/L attempt is tradable. A later retrospective label must not erase an earlier valid decision window.
+- Candidate priority follows A-leg quality: when the trend and A leg are strong, the first valid H1/L1 signal K after a controlled pullback may be researched; when A is ordinary, overlapping, or ambiguous, H1/L1 is observation-only and preference shifts to H2/L2 after the first attempt fails or lacks follow-through. This is a research priority, not a guaranteed probability rule.
+- A complete chart may be used to audit the case, but the entry decision must be reconstructed from the bars, levels, event information, and space available at that timestamp. Later C-leg strength, measured-move completion, final target, or profit cannot upgrade an earlier setup retroactively. If the setup was not clear at the decision time, record a valid no-trade or hypothesis.
 
 ### Strong bearish A-leg filter
 
@@ -61,6 +63,14 @@ For bearish ABC studies, prioritize an A leg that shows genuine downside pressur
 - a pullback that returns to a meaningful prior support-turned-resistance, EMA zone, or break area.
 
 These are quality evidences, not rigid all-or-none requirements. A financial-results gap must be marked separately: it can prove strong movement, but it is event-driven evidence and must not be counted as an ordinary Price Action bar or silently merged into the baseline sample. A wide, slow channel is a downgrade for the first clean ABC sample, even if three downward swings can be labeled.
+
+### Strong-A versus ordinary-A entry priority
+
+Use the same distinction symmetrically for bullish and bearish studies:
+
+- Strong A: directional closes, limited overlap, consecutive pressure, clear follow-through, and a trend context rather than a mature range middle. After B becomes controlled and reaches a meaningful location, H1/L1 can be the first candidate to evaluate.
+- Ordinary A: mixed closes, heavy overlap, shallow or unclear progress, wide channel behavior, or conflict with a trading range. Do not force H1/L1; wait for a clearer second attempt H2/L2, or mark the setup as no-trade.
+- The signal K, trigger, structural stop, first obstacle, and R/R still decide whether the candidate is tradable. Strong A only changes which attempt deserves priority; it does not authorize an order by itself.
 
 ## Priority concepts
 
