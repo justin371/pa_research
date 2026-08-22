@@ -52,6 +52,10 @@ The probability table is treated as conditional experience-based guidance, not g
 - Three-push wedges can have variations. They need not be perfectly convergent, and the third push does not always exceed the second.
 - A strong trend bar is evidence, not an automatic entry. Avoid chasing late climax behavior; prefer a suitable pullback or confirmation.
 - When the first entry is uncertain, a second entry often provides better confirmation, but it still requires adequate space and risk/reward.
+- Do not force the market into an overly short time window. A visible leg can be a nested leg inside a larger impulse, and two apparent legs can later be reinterpreted as one larger leg when the broader structure becomes clear.
+- Leg segmentation is provisional until enough context develops. Record the local leg and the parent leg separately rather than treating them as competing truths.
+- A measured move can be calculated from a local leg for a near-term target and from the larger parent leg for a later target. Both are valid only if their anchors were available and clearly defined before the relevant decision.
+- When a prior breakout area, EMA50, gap, or pause zone is retested after a larger leg, evaluate it as a possible support/resistance role reversal and nested pullback, not automatically as a new unrelated trend.
 
 ## Order and risk principles
 
@@ -84,6 +88,13 @@ The `72.00` stop used in the KLAC H2 study is a structural research example, not
 - Useful weakening evidence includes smaller bodies, more overlap, failed follow-through, repeated upper tails, and a mature channel near resistance.
 - A practical research template is to reduce part of the position near the first target zone, keep a smaller remainder for the exact target or extension, and exit the remainder on a clear reversal or structural failure.
 - Do not hold the entire position solely to capture the last few cents of a measured move when the first obstacle and risk geometry already justify reducing exposure.
+
+## Retracement-depth confluence
+
+- A 50% retracement of a prior impulse is an important observation level in Brooks-style analysis, but it is not a mandatory entry rule by itself.
+- Its value increases when it overlaps with repeated prior lows/highs, a known support/resistance zone, an EMA test, a measured-move reference, and a clear H1/H2 or L1/L2 attempt.
+- In the KLAC study, the `2025-05-23` and `2025-05-30` lows were near the same support area; the first test was near EMA20 and the later test approached the 50% retracement before recovering above EMA20.
+- This is best recorded as confluence: impulse + retracement depth + repeated level + moving-average recovery + second attempt. The 50% measurement remains an important but non-required reference.
 
 ## Research status
 
