@@ -87,6 +87,7 @@ The probability table is treated as conditional experience-based guidance, not g
 - Treat a strong bear pullback, range-middle location, late climax, nearby major resistance, poor space, and event risk as downgrade or no-trade evidence.
 - This is a research definition, not yet a fixed production rule. See `research/h1_h2_quality_definition_CN.md`.
 - The first three TSLA ABC/H1-H2 comparisons are recorded in `research/tsla_abc_h1_h2_comparison_matrix.md`. The current common finding is that pattern quality and Daily tradeability must be scored separately; the first obstacle can invalidate an otherwise attractive setup.
+- The first symmetric TSLA short sample is recorded in `research/tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md`: L1/L2 follow the same location, trigger, first-obstacle, and R/R discipline; L3 is not an automatic reversal label.
 
 ## Order and risk principles
 
