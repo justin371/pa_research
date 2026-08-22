@@ -14,6 +14,14 @@ It is not yet the live trading system and does not place orders. Mature rules ma
 - `Codex Trading`: programmatic research tools, Trading System implementation, backtesting, and Execution Agent work.
 - The reference material in the existing Codex Trading knowledge base is read-only during research unless a rule has matured and transfer work is explicitly in scope.
 
+## Market-data source policy
+
+- Real-time intraday data: use the user's Futu OpenD connection as the preferred source. It is faster and more direct than repeatedly reading a browser chart.
+- After-close and historical data: use the most reliable suitable source available, including structured public data or local frozen data. The source, timestamp, session definition, and any delay must be recorded.
+- Browser charts remain useful for visual confirmation and educational material, but they are not the default real-time data pipeline.
+- Build 4H candles from 1H data when the source does not expose a native 4H interval, and record the aggregation convention.
+- Never mix a live Futu stream with historical bars from another source without checking symbol, timezone, adjustment, session, and price-scale consistency.
+
 ## Core framework
 
 The primary framework is Al Brooks Price Action. Elliott Wave theory is not part of the main framework. ABC is used only as an operational Price Action description when useful: a first leg, a pullback, and a resumption leg.
