@@ -71,6 +71,7 @@ The probability table is treated as conditional experience-based guidance, not g
 - Separate the H1/H2 count from the quality of a tradable setup. A small local high break in the middle of a range may be recorded as a low-quality count, but it is not automatically a trade.
 - Give priority to higher-timeframe background, structural location, and pressure asymmetry. The preferred location is a pre-existing support, EMA20/EMA50 test with directional acceptance, breakout retest, range edge, gap edge, or META confluence zone.
 - A stronger candidate has weak, overlapping pullback selling and a signal K that either closes strongly near its high or rejects lower prices at support and then confirms above its high. A doji or long lower tail alone is insufficient.
+- Keep the setup/count bar separate from the confirmation/trigger bar. A strong confirmation bar cannot retroactively make a large opposite-direction setup bar a high-quality bullish signal; classify that sequence as conditional until the bar sequence, location, and follow-through are reviewed together.
 - Treat a strong bear pullback, range-middle location, late climax, nearby major resistance, poor space, and event risk as downgrade or no-trade evidence.
 - This is a research definition, not yet a fixed production rule. See `research/h1_h2_quality_definition_CN.md`.
 
