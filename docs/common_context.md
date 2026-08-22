@@ -77,6 +77,14 @@ For every candidate trade, record all of the following before entry:
 
 The `72.00` stop used in the KLAC H2 study is a structural research example, not a universal price rule. The same checklist must be recalculated for each instrument and timeframe.
 
+## Profit management around measured moves
+
+- A measured move is a target zone, not a price that must be touched exactly.
+- When price enters the target area and momentum weakens, partial profit-taking is reasonable even if the exact projection has not been reached.
+- Useful weakening evidence includes smaller bodies, more overlap, failed follow-through, repeated upper tails, and a mature channel near resistance.
+- A practical research template is to reduce part of the position near the first target zone, keep a smaller remainder for the exact target or extension, and exit the remainder on a clear reversal or structural failure.
+- Do not hold the entire position solely to capture the last few cents of a measured move when the first obstacle and risk geometry already justify reducing exposure.
+
 ## Research status
 
 ### Relatively clear
