@@ -35,6 +35,18 @@ The main context questions are:
 4. Which Price Action pattern is forming?
 5. What is the entry trigger, stop, first obstacle, target, and invalidation?
 
+## Immediate research scope: ABC and H/L1-3
+
+For the current research phase, temporarily prioritize the ABC pullback framework and H1/H2/H3, L1/L2/L3 attempts. Breakout trading remains a separate later topic and should not be mixed into the current H/L count studies.
+
+- `A` is the directional impulse or trend leg; `B` is the pullback; `C` is the possible resumption leg.
+- `H1`, `H2`, and `H3` are successive bull attempts within the same pullback context. `L1`, `L2`, and `L3` are the symmetric bear attempts.
+- A count is only meaningful when it belongs to the same timeframe and the same pullback leg. Do not combine a Daily H2 with a 15m H2 as if they were one count.
+- H3/L3 are the third-attempt research category. When the three attempts weaken, occur at a meaningful edge, and show pressure exhaustion, they may overlap with a three-push wedge/reversal. The number `3` alone does not prove a wedge or a reversal; in a strong trend, a third attempt can still continue.
+- Do not count every small intrabar high/low. A count should represent a meaningful attempt at a relevant location, followed by a signal and confirmation review.
+- Keep setup/count bars separate from confirmation/trigger bars. H1/H2/H3 or L1/L2/L3 identify the attempt sequence; they do not authorize an order by themselves.
+- The current study order is: larger background → A pressure → B pressure → major/minor support-resistance → H/L attempt count → signal K → trigger → stop/invalidation → first obstacle and measured-move space.
+
 ## Priority concepts
 
 - H1/H2/H3 and L1/L2/L3, understood as context-dependent pullback attempts rather than rigid labels.
