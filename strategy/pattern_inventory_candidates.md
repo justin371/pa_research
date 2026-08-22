@@ -109,6 +109,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-ABC-BULL-NVDA-H1-VISUAL` | 上涨父级中的强方向腿、短但偏深 B、随后 H1-like 恢复；形态正向但原 stop 被跳空越过 | [`NVDA 2025-06-23–07-03`](../research/nvda_bullish_abc_h1_visual_candidate_2025-06-23_2025-07-03.md) | `pattern_like / morphology-positive / original-stop-invalidated-by-gap / reprice-pending` |
 | `VIS-ABC-BEAR-MSFT-L1-L2-VISUAL` | 高位转弱后的空头 A、反弹 B、再下行 L1/L2-like；原 sell-stop 被跳空越过 | [`MSFT 2025-10-28–11-20`](../research/msft_bearish_abc_l1_l2_visual_candidate_2025-10-28_2025-11-20.md) | `pattern_like / bearish-ABC-candidate / L1-L2-like / gap-trigger-boundary / pending` |
 | `VIS-ABC-BEAR-CRM-RESET-L1-VISUAL` | 空头父级、反弹 B、第一次 L1 后反弹越过前 B 高点；后续更像计数重置后的新 L1；15m 触发可重建；首支撑仍偏近；IGV/QQQ/SPY 同步走弱 | [`CRM 2025-03-10–03-28`](../research/crm_bearish_abc_l1_l2_visual_candidate_2025-03-10_2025-03-28.md) | `pattern_like / sector-aligned / L1-first-support-crowded / reset-L1-conditional-space / non-gap-trigger / pending` |
+| `VIS-ABC-BEAR-QCOM-RANGE-B-BOUNDARY` | 强 A 后 B 变宽、重叠多、反复穿越均线；后续向下运动应按区间逻辑而非自动 L2 | [`QCOM 2025-02-21–03-28`](../research/qcom_bearish_abc_range_b_boundary_2025-02-21_2025-03-28.md) | `boundary / range-transition / not-open-trend-ABC / observation-only` |
 
 ### 视觉筛选的最小流程
 
