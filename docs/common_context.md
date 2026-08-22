@@ -93,7 +93,10 @@ The probability table is treated as conditional experience-based guidance, not g
 
 - Initial default for H1/H2/L1/L2 and breakout-pullback setups: use a stop entry after a valid signal.
 - Market or close entry may be considered after a strong breakout, but slippage and wider stops must be accepted.
-- Limit entries at range edges, measured-move targets, or reversal points are advanced and remain a later research topic.
+- A sell stop waits for price to move down through the trigger; a sell limit waits for price to rebound up to the limit. A limit order placed below the live market is marketable and may fill immediately; it is not a substitute for a downside sell stop.
+- Limit/retest entries at a structural resistance or support edge can be researched as a separate branch, but the order must be placed only after the retest context is known. Do not merge its statistics with the original breakout-stop branch.
+- A gap through a stop trigger changes the actual fill, risk, and first-obstacle geometry. Recalculate the trade; do not backfill the intended trigger price.
+- Limit entries at range edges, measured-move targets, or reversal points are advanced and remain a later research topic. The TSLA `2025-03-04` post-gap resistance retest is an example for research, not a fixed production rule.
 - Every setup must specify the stop, first obstacle, target, and failure condition before it can be considered for backtesting.
 
 ## Trade-plan checklist
