@@ -121,7 +121,7 @@ H3/L3 可以作为第三次尝试的视觉入口，但不等于三推楔形，�
 
 | 视觉组合 | 代表案例 | 当前含义 |
 | --- | --- | --- |
-| `strong-looking-A + controlled/deep-but-late-controlled-B + no-gap trigger + first obstacle has room` | `NFLX 2025-03-28` | 最值得继续补低周期和过程结果；仍需保留盘中刺破与收盘确认两个订单分支 |
+| `strong-looking-A + controlled/deep-but-late-controlled-B + no-gap trigger + first obstacle has room` | `NFLX 2025-03-28` | 最值得继续补低周期和过程结果；事后 `03-31` 已触及预先标出的首支撑，但仍保留盘中刺破与收盘确认两个订单分支 |
 | `strong-A + controlled-B + small gap + reprice keeps space` | `TSM 2025-03-26` | 形态层和空间层偏正，但原始订单已失效；只能作为重订后的条件候选 |
 | `ordinary-A + deep-B + no-gap trigger + first obstacle borderline` | `AMZN 2024-10-15` | 形态像且订单干净，但不值得因为“无 gap”而升级 |
 | `strong-A + controlled-B + small gap + space compressed` | `NKE 2025-10-28` | 形态层可以保留，交易层倾向观望或等回测，不追着缺口成交 |
