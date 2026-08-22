@@ -30,6 +30,8 @@ It is not yet the live trading system and does not place orders. Mature rules ma
 
 后续每张图先按 [`视觉 PA 复核卡`](visual_pa_review_card_CN.md) 走一遍：它把完整图表、背景、母腿与局部腿、A/B/C、H/L 计数、信号 K、订单、结构止损、第一障碍和 MM 按视觉优先顺序串起来。复核卡是研究助手的工作顺序，不是量化评分器。
 
+当前阶段的跨案例视觉综合见 [`ABC / H-L 视觉研究阶段性综合`](../research/abc_visual_synthesis_v0_2_CN.md)。它用于快速区分“可以直接作为筛图依据”的共性、“仍需继续观察”的候选，以及不能声称已经验证的结论。
+
 ## Repository boundaries
 
 - `PA Research`: research notes, source-aligned definitions, chart reviews, hypotheses, and validated rule specifications.
