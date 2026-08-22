@@ -23,12 +23,12 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 
 参考库中的扫描器还使用 H1/H2/H3、L1/L2/L3 表示“冲量之后的一、二、三条逆趋势腿”的描述性 proxy。这个 proxy 只能帮助召回样本，不能替代因果的信号、触发、止损和空间判断。
 
-### Elliott ABC 与几何 AB=CD 不是同一套字母
+### ABC 与几何 AB=CD 不是同一套字母
 
-- **Elliott ABC**：A 是第一条修正波，B 是反向反应，C 是第二条修正波；它描述修正的结构。
+- **本项目的 ABC**：A 是第一条方向腿，B 是回调，C 是原方向恢复；它是 Price Action 的操作性结构标签，不依赖外部波段体系。
 - **几何 AB=CD**：A→B 是第一段方向腿，C 是回调后的第二段起点，D 是从 C 投影出的目标；它描述价格距离。
 
-以后案例中分别记录 `elliott_A/B/C` 和 `measure_A/B/C/D`，避免把两个“ABC”混为一谈。
+以后案例中分别记录 `A_leg/B_pullback/C_resumption` 和 `measure_A/B/C/D`，避免把结构标签和测量锚点混为一谈。
 
 ## 2. 什么才算“高质量候选”
 
@@ -59,20 +59,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 
 先研究 `TPB-H2-L2`、`ABC-CONT` 和 `BOP-ABC`。它们最容易把用户已有的 H1/H2、ABC、左侧支撑/阻力和 MM 观察写成可复核字段。`TPB-H1-L1` 作为对照组；`H3-L3-COMPLEX` 先留在目录中，不作为本轮工作主线。
 
-## 4. Elliott 结构分类：先分类，不直接当入场
-
-| Elliott 形态 | 常见内部结构 | 在本项目中的用途 | 优先级 |
-| --- | --- | --- | --- |
-| Zigzag | 5-3-5，尖锐的 A-B-C 修正 | 检查 C 是否在大级别支撑/阻力完成，并等待 PA 触发；可映射到 TPB 或 MTR | 高 |
-| Flat | 3-3-5，较横向的 A-B-C 修正 | 检查 B 是否接近 A 起点、C 是否完成失败/延续；通常需要更多位置证据 | 中 |
-| Expanded flat | 3-3-5，B 超过 A 起点、C 超过 A 终点 | 记录为较深的 B 和更高的失败风险，不因形状本身提高评级 | 中 |
-| Running flat | 3-3-5，B 很强但 C 未走足 | 稀有样本，只作分类；不能提前贴标签 | 低 |
-| Triangle | A-B-C-D-E，通常 3-3-3-3-3 | 记录为压缩/平衡后突破；它不是三推楔形，也不直接授权入场 | 中 |
-| Double/Triple three | W-X-Y（或 W-X-Y-X-Z） | 记录为复杂修正，优先留作近失/拒绝样本 | 低 |
-
-Elliott 的标签描述的是波浪层级和修正形态；真正的交易决策仍要回到市场状态、位置、触发、止损和空间。不能因为一个图形能被标成 Zigzag 或 Flat，就事后声称它具有固定胜率。
-
-## 5. AB=CD 与 measured move：测量层，不是独立形态
+## 4. AB=CD 与 measured move：测量层，不是独立形态
 
 ### 5.1 方向腿等距
 
@@ -94,7 +81,7 @@ Elliott 的标签描述的是波浪层级和修正形态；真正的交易决策
 
 每个目标都要记录 `target_type`、锚点、计算时点、附近障碍和到达后的价格反应。测量目标是空间与管理工具，不是买卖方向的充分条件。
 
-## 6. 每个案例统一记录的字段
+## 5. 每个案例统一记录的字段
 
 ```text
 symbol
@@ -104,7 +91,7 @@ direction
 A_leg_origin / A_leg_end
 B_correction_start / B_correction_end
 B_leg_count
-elliott_shape              # zigzag / flat / triangle / combination / unknown
+abc_mode                   # continuation / reversal / complex / unknown
 H_or_L_attempt             # H1 / H2 / H3 / L1 / L2 / L3
 location_and_left_structure
 signal_bar / confirmation_bar
@@ -117,20 +104,16 @@ outcome                    # continuation / reversal / failure / no-trade / pend
 evidence_status             # descriptive / research-candidate / replayed / validated
 ```
 
-## 7. 研究边界与下一步
+## 6. 研究边界与下一步
 
 - 本文件不声称任何固定胜率；胜率必须来自预先定义、跨标的、按时间切分的回放或回测。
-- `H1/H2/H3`、`L1/L2/L3`、Elliott ABC、AB=CD 和 measured move 先分栏记录，不能压成一个分数。
+- `H1/H2/H3`、`L1/L2/L3`、操作性 ABC、AB=CD 和 measured move 先分栏记录，不能压成一个分数。
 - 先从 `TPB-H2-L2`、`ABC-CONT`、`BOP-ABC` 各挑代表性多空案例，做因果标注；再决定哪些值得程序化。
 - 三推楔形保持暂停，不把 `H3-L3-COMPLEX` 偷换成三推反转规则。
 - 任何候选要进入交易系统，还必须通过现有市场许可、15 分钟触发、结构止损、第一障碍、成本和审计门槛。
 
 ## 参考资料
 
-- [Elliott Wave International — Corrective Waves](https://www.elliottwave.com/waveopedia/corrective-waves/)
-- [Elliott Wave International — Zigzags](https://www.elliottwave.com/waveopedia/zigzags/)
-- [Elliott Wave International — Flats](https://www.elliottwave.com/waveopedia/flats/)
-- [Elliott Wave International — Triangles](https://www.elliottwave.com/waveopedia/triangles/)
 - [Al Brooks — Bar Counting: High and Low 1, 2, 3, and 4 Patterns and ABC Corrections](https://www.oreilly.com/library/view/trading-price-action/9781118172339/OEBPS/9781118172339_epub_c_17.htm)
 - [Al Brooks — Measured Moves Based on the Size of the First Leg](https://www.oreilly.com/library/view/trading-price-action/9781118172339/OEBPS/9781118172339_epub_c_07.htm)
 - [Brooks Trading Course — Price Action Trading Terms Glossary](https://www.brookstradingcourse.com/price-action-trading-terms-glossary/)
