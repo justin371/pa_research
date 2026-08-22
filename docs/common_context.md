@@ -13,6 +13,7 @@ It is not yet the live trading system and does not place orders. Mature rules ma
 - `PA Research`: research notes, source-aligned definitions, chart reviews, hypotheses, and validated rule specifications.
 - `Codex Trading`: programmatic research tools, Trading System implementation, backtesting, and Execution Agent work.
 - The reference material in the existing Codex Trading knowledge base is read-only during research unless a rule has matured and transfer work is explicitly in scope.
+- The one-way research-to-system boundary, status vocabulary, handoff fields, and promotion gates are defined in [`docs/research_to_system_handoff_CN.md`](research_to_system_handoff_CN.md). Creating a research file does not mean that the rule is ready for Codex Trading.
 
 ## Market-data source policy
 
