@@ -113,6 +113,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-ABC-BEAR-NKE-L1-GAP-RETEST` | 强 A 后 B 仍低于 A 起点；L1-like 恢复，但小缺口使原 sell-stop失效；旧低点回测可另列 sell-limit/retest；后续低开不自动数 L2 | [`NKE 2025-10-03–10-29`](../research/nke_bearish_abc_minor_gap_boundary_2025-10-03_2025-10-29.md) | `pattern_like / strong-A / controlled-B-conditional / minor-gap-trigger / limit-retest-possible / first-obstacle-borderline / pending` |
 | `VIS-ABC-BEAR-TSM-L1-GAP-REPRICE` | 强 A、受控 B、L1-like 恢复；原 stop 被小缺口越过，旧低点 limit 未回测；接受缺口后的重订仍有第一支撑空间 | [`TSM 2025-02-14–03-28`](../research/tsm_bearish_abc_l1_gap_reprice_space_2025-02-14_2025-03-28.md) | `pattern_like / research_positive_conditional / strong-A / controlled-B / gap-reprice-space-positive / sector-aligned / earnings-filter-passed / pending` |
 | `VIS-ABC-BEAR-AMZN-L1-NO-GAP-BOUNDARY` | 普通/方向性 A 后深 B；`10-15` 无缺口、低周期顺序清楚的 L1-like 下破，但第一支撑只有边界空间且 XLY 不弱 | [`AMZN 2024-09-23–10-15`](../research/amzn_bearish_abc_l1_no_gap_first_support_boundary_2024-09-23_2024-10-15.md) | `pattern_like / ordinary-or-directional-A / deep-B / no-gap-trigger / first-obstacle-borderline / sector-mixed / earnings-filter-passed / pending` |
+| `VIS-ABC-BEAR-NFLX-L1-NO-GAP-SPACE` | 方向性强 A、深但后段受控 B；无开盘缺口；盘中刺破与收盘确认均可重建，首支撑有条件空间 | [`NFLX 2025-02-14–03-28`](../research/nflx_bearish_abc_l1_no_gap_space_2025-02-14_2025-03-28.md) | `pattern_like / research_positive_conditional / strong-looking-A / deep-but-controlled-B / no-gap-trigger / first-obstacle-space-positive / sector-aligned / earnings-filter-passed / pending` |
 
 ### 视觉筛选的最小流程
 
