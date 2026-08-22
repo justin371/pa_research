@@ -64,6 +64,7 @@
 | `UBER 2024-07-23/26` | 空头 A 后 H3-like 计数歧义；L1 后 L2-like | `07-17/18` 强反转型 A；`07-19/22/23` 三次上探候选；`07-25` 再抬高并扩张；XLY 同期偏弱 | `64.40` 下方 sell stop；`07-26` 15m 未从开盘跳过触发价但触发附近收回；结构止损约 `69.70–70.00` 上方 | 左侧 `62.90–63.30`；约 `0.2–0.3R`；MM/后续低点不能越级 | `pattern_like / provisional-H3-like / L2-like / C-class-expansion-boundary / earnings-filter-passed / valid_no_trade` |
 | `AAPL 2024-05-08/09` | 多头 H1-like；事件驱动 A 后浅 B | `05-03` 财报后跳空形成方向性 A；`05-06/08` 浅 B 后段收缩；`05-08` 小实体/长下影，`05-09` 低周期恢复 | `181.10` 上方 buy stop；`05-09` 15m 从开盘下方上穿，未跳过；结构止损约 `178.20–178.40` 下方 | `184.98` 为入场前第一独立阻力；约 `1.1R–1.4R`，视止损分支而定 | `pattern_like / research_positive_conditional / event-driven-A / earnings-filter-passed / sector-aligned / low-cycle-confirmed / first-obstacle-borderline` |
 | `NVDA 2025-06-23/07-03` | 多头 ABC / H1-like；形态正向、订单待重订 | 上涨父级中 `06-23/27` 方向性推进；`06-30/07-01` 短但偏深的 B；`07-02/03` 恢复并有跟随 | 若以 `07-02` 高点约 `157.39` 挂 buy stop，`07-03` 15m 首根开盘约 `158.16` 已跳过原触发；不得假定原价成交 | 第一轮尚未计算 R/R；先确认主要阻力、事件/板块和重订后的风险几何 | `pattern_like / morphology-positive / original-stop-invalidated-by-gap / reprice-pending` |
+| `MSFT 2025-10-28/11-20` | 空头 ABC / L1-L2-like；空头边界候选 | 高位转弱后出现方向性下跌 A；`11-10/14` 反弹 B；`11-18/21` 再次向下 | 若以 `11-17` 低点约 `500.79` 挂 sell stop，`11-18` 开盘约 `491.32` 已跳过原触发；父级和事件背景也待核对 | 第一轮不计算 R/R；先确认事件、主要支撑、L1/L2 计数和重订订单 | `pattern_like / bearish-ABC-candidate / L1-L2-like / gap-trigger-boundary / pending` |
 
 `?` 表示已有研究文件没有把该分支的精确成交价冻结为统一字段；在进入统计前必须补齐，不能用估计值替代。
 
