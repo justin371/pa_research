@@ -77,6 +77,7 @@ For every candidate trade, record all of the following before entry:
 - Volatility and position size: the stop distance must match current volatility and the planned account risk.
 - Sector/background filter: for a stock, check the relevant sector ETF or broader market. Prefer alignment and avoid taking a strong single-stock trade directly against a weak sector without a specific reason.
 - Event risk: earnings, major economic releases, gaps, and other known events can invalidate ordinary chart geometry.
+- Earnings rule: do not open a new position within the three trading sessions before a scheduled earnings release. The purpose is to avoid gambling on the report and the event-driven gap. Management of an already-open position is a separate decision and must not be silently treated as a new entry.
 - Invalidation: state what price action proves the setup wrong before entering.
 
 The `72.00` stop used in the KLAC H2 study is a structural research example, not a universal price rule. The same checklist must be recalculated for each instrument and timeframe.
