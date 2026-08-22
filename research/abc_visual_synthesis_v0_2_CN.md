@@ -105,4 +105,8 @@ H3/L3 可以作为第三次尝试的视觉入口，但不等于三推楔形，�
 3. 把新的图表案例与现有矩阵并列，而不是复制 Codex Trading 的程序标签；
 4. 只有视觉定义、订单分支和边界在多个独立案例中稳定后，才讨论是否移交 Codex Trading。
 
+### 普通 A 腿筛选的最新对照
+
+`MSFT`、`AMZN`、`META`、`NFLX`、`CAT` 的人工窗口都呈现出“普通强 A → B → H1/H2-like 恢复”的外形，但触发附近已有前高/主要阻力，首障碍没有足够空间。它们被保留为 `pattern_like / valid_no_trade`，而事件状态仍单独标记为待核验；普通 A 的初步形态本身不自动等于交易质量更高。详情见 [`ordinary_a_visual_screen_2024-05_2024-07_CN.md`](ordinary_a_visual_screen_2024-05_2024-07_CN.md)。下一轮应优先寻找 B 结束后仍明显低于 A 高点、而不是已经贴近前高的窗口。
+
 当前仍是 PA Research-only；不修改 Codex Trading，不交给 Execution Agent，不把本摘要当作量化规则。
