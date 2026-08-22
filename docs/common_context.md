@@ -49,6 +49,17 @@ For the current research phase, temporarily prioritize the ABC pullback framewor
 - Keep setup/count bars separate from confirmation/trigger bars. H1/H2/H3 or L1/L2/L3 identify the attempt sequence; they do not authorize an order by themselves.
 - The current study order is: larger background → A pressure → B pressure → major/minor support-resistance → H/L attempt count → signal K → trigger → stop/invalidation → first obstacle and measured-move space.
 
+### Strong bearish A-leg filter
+
+For bearish ABC studies, prioritize an A leg that shows genuine downside pressure rather than a slow, highly overlapping broad channel:
+
+- large bear bodies, closes near the low, and range expansion;
+- consecutive bear bars or an accepted break/gap with follow-through;
+- clean lower-low/lower-high progress with limited overlap;
+- a pullback that returns to a meaningful prior support-turned-resistance, EMA zone, or break area.
+
+These are quality evidences, not rigid all-or-none requirements. A financial-results gap must be marked separately: it can prove strong movement, but it is event-driven evidence and must not be counted as an ordinary Price Action bar or silently merged into the baseline sample. A wide, slow channel is a downgrade for the first clean ABC sample, even if three downward swings can be labeled.
+
 ## Priority concepts
 
 - H1/H2/H3 and L1/L2/L3, understood as context-dependent pullback attempts rather than rigid labels.
@@ -90,6 +101,7 @@ The probability table is treated as conditional experience-based guidance, not g
 - This is a research definition, not yet a fixed production rule. See `research/h1_h2_quality_definition_CN.md`.
 - The first three TSLA ABC/H1-H2 comparisons are recorded in `research/tsla_abc_h1_h2_comparison_matrix.md`. The current common finding is that pattern quality and Daily tradeability must be scored separately; the first obstacle can invalidate an otherwise attractive setup.
 - The first symmetric TSLA short sample is recorded in `research/tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md`: L1/L2 follow the same location, trigger, first-obstacle, and R/R discipline; L3 is not an automatic reversal label.
+- The stronger TSLA bearish ABC/L1-L2 case is recorded in `research/tsla_bearish_abc_case_2024-07-11_2024-08-05.md`: the A direction is strong but partly earnings-driven, the `233–235` zone acts as resistance, and `2024-07-30`/`2024-08-01` provide the L1/L2 comparison. It is a strong-pattern case, not the clean no-event baseline.
 - The next TSLA bearish ABC candidate screen is recorded in `research/tsla_bearish_abc_candidate_screen_2026-08-22.md`: `2026-02-11` → `2026-03-03` → `2026-03-11` → `2026-03-30` is structurally clear and reaches a first measured-move projection near `365`, but its Daily L1/L2 first-obstacle R/R is not automatically adequate. Treat it as a pattern-and-filter study, not a ready-made trade.
 - The post-climax continuation is recorded in `research/tsla_range_after_sell_climax_2025-03-11_2025-05-13.md`: a broad parent range, lower/upper edge tests, second-leg trap risk, and breakout acceptance must be separated.
 
