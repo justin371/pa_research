@@ -113,3 +113,7 @@
 ## 普通 A 腿筛选日志（2024-05 至 2024-07）
 
 本轮人工筛选的 `MSFT`、`AMZN`、`META`、`NFLX`、`CAT` 都能画出普通 A → B → 恢复尝试的外形，但触发前第一独立阻力分别贴近或覆盖订单附近，因此保留为 `pattern_like / valid_no_trade`，不把后续突破倒灌成正例。详细证据见 [`ordinary_a_visual_screen_2024-05_2024-07_CN.md`](ordinary_a_visual_screen_2024-05_2024-07_CN.md)。这批样本的作用是补强“普通 A 也必须过空间闸门”的负向对照；事件检查未在该日志中作为正向证据使用。
+
+## LOW 过渡背景与首障碍边界
+
+`LOW 2024-06-11–06-24` 形成了急跌后的方向性多头 A、回调、H1/H2-like 恢复；但父级仍偏过渡，Daily 信号 K 不够干净，且 `2024-02-23/26` 高点簇约 `221.92–223.01` 在触发上方很近。低周期可以重建越过触发的过程，却不能创造 Daily 结构止损下不存在的空间。该案例保留为 `pattern_like / bullish-ABC-candidate / H1-H2-like / first-obstacle-crowded / valid_no_trade / event-context-pending`，详见 [`low_bullish_h1_h2_first_obstacle_boundary_2024-06-11_2024-06-24.md`](low_bullish_h1_h2_first_obstacle_boundary_2024-06-11_2024-06-24.md)。
