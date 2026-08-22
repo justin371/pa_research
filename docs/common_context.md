@@ -119,6 +119,17 @@ This is a current research hypothesis and operating principle, not yet a statist
 - Position-management actions must be predeclared for the setup; this principle does not create a universal breakeven or time-stop rule.
 - If the first major resistance leaves inadequate R/R, the correct action is no trade or reduced exposure. Only after the obstacle is cleared should the measured move become the next primary target.
 
+## Pre-breakout resistance versus post-breakout acceptance
+
+A resistance setup and a breakout setup are different states of the market:
+
+- Before acceptance above a major resistance, a double top or three/four-push approach is a reason to expect a reaction and remain flat. A short is a separate hypothesis and still requires an actual bearish trigger; the shape alone is not a short entry.
+- When price closes decisively beyond the pre-identified resistance, has limited upper rejection, and shows 15m/1H follow-through or a successful hold above the zone, reclassify the idea as a breakout-pullback/acceptance setup. Do not keep treating it as the old double top after the market has invalidated that premise.
+- A strong breakout can justify a new entry even if the anticipated pullback never arrives. That entry is a separate BOP decision, not a retroactive H1/H2 entry.
+- If the breakout bar is unusually wide relative to recent volatility, use a lower-timeframe trigger or reduced initial risk. Do not use normal size simply because the close is strong.
+- If the next session gaps into another major resistance zone, recompute the actual fill, stop, and first-obstacle R/R. If the gap removes the space, skip the new trade rather than carrying forward the old theoretical entry.
+- A breakout thesis is working while price accepts above the zone and produces follow-through; it is warning when price repeatedly returns to the zone; it is invalid when price accepts back below it.
+
 ## Retracement-depth confluence
 
 - A 50% retracement of a prior impulse is an important observation level in Brooks-style analysis, but it is not a mandatory entry rule by itself.
