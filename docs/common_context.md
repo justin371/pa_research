@@ -40,6 +40,7 @@ The main context questions are:
 For the current research phase, temporarily prioritize the ABC pullback framework and H1/H2/H3, L1/L2/L3 attempts. Breakout trading remains a separate later topic and should not be mixed into the current H/L count studies.
 
 - `A` is the directional impulse or trend leg; `B` is the pullback; `C` is the possible resumption leg.
+- `A` is also a retrospective structural label, not the date when live research begins. Once directional pressure is recognizable, immediately evaluate the next B pullback and H/L attempts. Do not wait for C to finish or for the whole ABC to become visually complete. Every case should record both the earliest recognizable A date and the actual decision/trigger date.
 - `H1`, `H2`, and `H3` are successive bull attempts within the same pullback context. `L1`, `L2`, and `L3` are the symmetric bear attempts.
 - A count is only meaningful when it belongs to the same timeframe and the same pullback leg. Do not combine a Daily H2 with a 15m H2 as if they were one count.
 - H3/L3 are the third-attempt research category. When the three attempts weaken, occur at a meaningful edge, and show pressure exhaustion, they may overlap with a three-push wedge/reversal. The number `3` alone does not prove a wedge or a reversal; in a strong trend, a third attempt can still continue.
@@ -48,6 +49,7 @@ For the current research phase, temporarily prioritize the ABC pullback framewor
 - Do not count every small intrabar high/low. A count should represent a meaningful attempt at a relevant location, followed by a signal and confirmation review.
 - Keep setup/count bars separate from confirmation/trigger bars. H1/H2/H3 or L1/L2/L3 identify the attempt sequence; they do not authorize an order by themselves.
 - The current study order is: larger background → A pressure → B pressure → major/minor support-resistance → H/L attempt count → signal K → trigger → stop/invalidation → first obstacle and measured-move space.
+- For a live review, the sequence is not “find the completed A/B/C first.” It is: recognize A pressure while it is developing, start scanning the B pullback immediately, then decide whether the next H/L attempt is tradable. A later retrospective label must not erase an earlier valid decision window.
 
 ### Strong bearish A-leg filter
 
@@ -100,7 +102,7 @@ The probability table is treated as conditional experience-based guidance, not g
 - Treat a strong bear pullback, range-middle location, late climax, nearby major resistance, poor space, and event risk as downgrade or no-trade evidence.
 - This is a research definition, not yet a fixed production rule. See `research/h1_h2_quality_definition_CN.md`.
 - The first three TSLA ABC/H1-H2 comparisons are recorded in `research/tsla_abc_h1_h2_comparison_matrix.md`. The current common finding is that pattern quality and Daily tradeability must be scored separately; the first obstacle can invalidate an otherwise attractive setup.
-- The first symmetric TSLA short sample is recorded in `research/tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md`: L1/L2 follow the same location, trigger, first-obstacle, and R/R discipline; L3 is not an automatic reversal label.
+- The first symmetric TSLA short sample is recorded in `research/tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md`: the corrected structural timeline starts with A candidate `2025-01-31`–`2025-02-11`, B `2025-02-12`–`2025-02-19`, and an early L2/second-attempt candidate on `2025-02-20`; the later `2025-03-03`–`2025-03-10` section is a continuation subcase. L1/L2 still follow the same location, trigger, first-obstacle, and R/R discipline; L3 is not an automatic reversal label.
 - The stronger TSLA bearish ABC/L1-L2 case is recorded in `research/tsla_bearish_abc_case_2024-07-11_2024-08-05.md`: the A direction is strong but partly earnings-driven, the `233–235` zone acts as resistance, and `2024-07-30`/`2024-08-01` provide the L1/L2 comparison. It is a strong-pattern case, not the clean no-event baseline.
 - The clean no-earnings TSLA local ABC case is recorded in `research/tsla_bearish_abc_case_2024-03-04_2024-03-14.md`: three strong bear bars form A, a weak bounce forms B, `2024-03-12` is a failed L1, and `2024-03-13` provides the clearer L2. It occurs near a local range top, so it is a range-edge reversal sample rather than a mid-trend continuation sample.
 - The TSLA bearish ABC comparison matrix is recorded in `research/tsla_bearish_abc_comparison_matrix.md`: it ranks the clean range-edge sample, the event-driven strong sample, the strongest mid-trend sample, and the weaker/overlapping candidates so the next review does not treat every three-part decline equally.
