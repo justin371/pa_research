@@ -8,6 +8,16 @@ PA Research is the research and visual-structure layer. Its job is to study char
 
 It is not yet the live trading system and does not place orders. Mature rules may later be transferred to Codex Trading for implementation and backtesting, and only then considered for execution automation.
 
+## Visual-first research doctrine
+
+完整图表的视觉判断是本项目最重要的能力和主要工作流。研究必须先回答“左侧发生了什么、当前处在趋势/区间/过渡的哪一部分、支撑阻力和压力如何组织”，再讨论 ABC、H/L 计数和订单。
+
+- Daily、4H/60m、15m 等周期用于建立层级背景和触发上下文；能看到的范围、周期和数据完整性必须写清楚。
+- Futu OpenD、历史 K 线和计算结果只用于测量、核对时间顺序、量价、R/R 和执行细节；它们不能替代完整图表的结构解释。
+- 扫描器、指标或单个 K 线标签不能单独证明 ABC、H1/H2/H3、L1/L2/L3 或“高胜率”。
+- 如果只能取得结构化数据而没有足够的图表上下文，结论必须标为“数据审计/候选”，不能写成完整视觉判断。
+- 研究文件应把“视觉结构判断”和“数值核验”分栏记录，避免为了方便回测而把主观结构偷偷改写成伪精确阈值。
+
 ## Repository boundaries
 
 - `PA Research`: research notes, source-aligned definitions, chart reviews, hypotheses, and validated rule specifications.
