@@ -111,6 +111,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-ABC-BEAR-CRM-RESET-L1-VISUAL` | 空头父级、反弹 B、第一次 L1 后反弹越过前 B 高点；后续更像计数重置后的新 L1；15m 触发可重建；首支撑仍偏近；IGV/QQQ/SPY 同步走弱 | [`CRM 2025-03-10–03-28`](../research/crm_bearish_abc_l1_l2_visual_candidate_2025-03-10_2025-03-28.md) | `pattern_like / sector-aligned / L1-first-support-crowded / reset-L1-conditional-space / non-gap-trigger / pending` |
 | `VIS-ABC-BEAR-QCOM-RANGE-B-BOUNDARY` | 强 A 后 B 变宽、重叠多、反复穿越均线；后续向下运动应按区间逻辑而非自动 L2 | [`QCOM 2025-02-21–03-28`](../research/qcom_bearish_abc_range_b_boundary_2025-02-21_2025-03-28.md) | `boundary / range-transition / not-open-trend-ABC / observation-only` |
 | `VIS-ABC-BEAR-NKE-L1-GAP-RETEST` | 强 A 后 B 仍低于 A 起点；L1-like 恢复，但小缺口使原 sell-stop失效；旧低点回测可另列 sell-limit/retest；后续低开不自动数 L2 | [`NKE 2025-10-03–10-29`](../research/nke_bearish_abc_minor_gap_boundary_2025-10-03_2025-10-29.md) | `pattern_like / strong-A / controlled-B-conditional / minor-gap-trigger / limit-retest-possible / first-obstacle-borderline / pending` |
+| `VIS-ABC-BEAR-TSM-L1-GAP-REPRICE` | 强 A、受控 B、L1-like 恢复；原 stop 被小缺口越过，旧低点 limit 未回测；接受缺口后的重订仍有第一支撑空间 | [`TSM 2025-02-14–03-28`](../research/tsm_bearish_abc_l1_gap_reprice_space_2025-02-14_2025-03-28.md) | `pattern_like / research_positive_conditional / strong-A / controlled-B / gap-reprice-space-positive / sector-aligned / earnings-filter-passed / pending` |
 
 ### 视觉筛选的最小流程
 
