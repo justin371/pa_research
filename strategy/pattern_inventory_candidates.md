@@ -82,6 +82,8 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-L3-RETEST-CONTINUATION` | L2 跟随后先有新反弹分隔，再出现低周期回测和 L3 触发 | [`TSLA 2026-03-25–03-30`](../research/tsla_l3_case_study_2026-03-25_2026-03-30.md) | `provisional` |
 | `VIS-H3-THREE-PUSH-SUPPORT-REACTION` | 三个低点逐步下移但推进间距收窄；第三次测试落在支撑候选，之后出现反弹但未确认主要反转 | [`TSLA 2026-05-19–06-26`](../research/h3_l3_research_gate_CN.md) | `pattern_like / B-class short-reaction or no-trade` |
 | `VIS-RESISTANCE-MULTI-PUSH-NO-TRADE` | 多次测试主要阻力；没有反向触发不提前做空；突破接受后另开分支 | [`TSLA 2025-09-04–09-12`](../research/tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md) | `no-trade boundary` |
+| `VIS-ABC-BULL-H2-RESISTANCE-BOUNDARY` | 支撑反应和 H2-like 尝试都存在，但左侧高点就在触发上方 | [`ANET 2023-11-15–11-22`](../research/anet_bullish_h2_visual_boundary_2023-11-15_2023-11-22.md) | `valid_no_trade / pattern_like` |
+| `VIS-ABC-BEAR-GAP-FIRST-SUPPORT-BOUNDARY` | 强 A、反向 B、L1/L2-like 下破；第一支撑近且跳空改变成交 | [`COIN 2024-01-02–01-12`](../research/coin_bearish_l1_l2_gap_boundary_2024-01-02_2024-01-12.md) | `valid_no_trade / event-context-pending` |
 
 ### 视觉筛选的最小流程
 
