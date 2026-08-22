@@ -60,6 +60,23 @@ The probability table is treated as conditional experience-based guidance, not g
 - Limit entries at range edges, measured-move targets, or reversal points are advanced and remain a later research topic.
 - Every setup must specify the stop, first obstacle, target, and failure condition before it can be considered for backtesting.
 
+## Trade-plan checklist
+
+For every candidate trade, record all of the following before entry:
+
+- Entry: exact trigger price and order type; a signal bar alone is not an entry.
+- Stop: structural invalidation level, with enough room for a normal test; do not place it inside a known support/resistance zone.
+- First obstacle: the nearest independent support/resistance or measured-move area.
+- Risk/reward: at least 1R of space to the first obstacle for a viable candidate; a complete swing idea should normally offer at least 2R.
+- Target: first scale/management target and larger measured-move or structural target.
+- Signal-bar quality: close, tail, overlap, follow-through expectation, and whether it is a climax or shock bar.
+- Volatility and position size: the stop distance must match current volatility and the planned account risk.
+- Sector/background filter: for a stock, check the relevant sector ETF or broader market. Prefer alignment and avoid taking a strong single-stock trade directly against a weak sector without a specific reason.
+- Event risk: earnings, major economic releases, gaps, and other known events can invalidate ordinary chart geometry.
+- Invalidation: state what price action proves the setup wrong before entering.
+
+The `72.00` stop used in the KLAC H2 study is a structural research example, not a universal price rule. The same checklist must be recalculated for each instrument and timeframe.
+
 ## Research status
 
 ### Relatively clear
