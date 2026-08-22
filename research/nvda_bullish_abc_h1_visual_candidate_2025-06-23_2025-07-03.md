@@ -1,6 +1,6 @@
 # NVDA 多头 ABC / H1-like 视觉候选：2025-06-23 至 2025-07-03
 
-状态：`pattern_like / bullish-ABC-candidate / H1-like / stage-1-visual-only / pending`
+状态：`pattern_like / bullish-ABC-candidate / H1-like / gap-trigger-reprice / pending`
 
 ## 1. 图表证据
 
@@ -69,3 +69,13 @@
 
 这个案例的当前价值，是提供一个比“首障碍拥挤”的边界样本更清楚的普通趋势视觉候选；它仍然只是候选，不是已验证的交易规则。
 
+## 6. 已做的初步订单审计
+
+如果把 `2025-07-02` 的高点约 `157.39` 作为原始 buy-stop：
+
+- `2025-07-03` 的 15m 首根 K 线开盘约 `158.16`，已经高于原触发价；
+- 因此不能把它记录成“在 `157.39` 正常成交后上涨”；
+- 原 stop 分支需要重算成交，或改成等待新的回测/新的设置 K；
+- 这只改变订单与交易可行性，不抹掉日线上的 H1-like 视觉结构。
+
+所以当前升级后的描述是：`morphology-positive / original-stop-invalidated-by-gap / reprice-pending`。它正好说明 PA 助手要同时会看形态和执行分支，但不能让后者反过来污染前者。
