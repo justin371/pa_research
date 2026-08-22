@@ -115,6 +115,22 @@ H3/L3 可以作为第三次尝试的视觉入口，但不等于三推楔形，�
 
 这套分层服务于“看懂图、筛选机会、给出人工优化入口”，不是量化扫描器，也不授权自动执行。
 
+## 新增跨案例观察：哪些图值得先深入
+
+把最近的条件正向样本和边界样本放在一起，当前可以形成一套定性优先级，但还不应压成评分：
+
+| 视觉组合 | 代表案例 | 当前含义 |
+| --- | --- | --- |
+| `strong-looking-A + controlled/deep-but-late-controlled-B + no-gap trigger + first obstacle has room` | `NFLX 2025-03-28` | 最值得继续补低周期和过程结果；仍需保留盘中刺破与收盘确认两个订单分支 |
+| `strong-A + controlled-B + small gap + reprice keeps space` | `TSM 2025-03-26` | 形态层和空间层偏正，但原始订单已失效；只能作为重订后的条件候选 |
+| `ordinary-A + deep-B + no-gap trigger + first obstacle borderline` | `AMZN 2024-10-15` | 形态像且订单干净，但不值得因为“无 gap”而升级 |
+| `strong-A + controlled-B + small gap + space compressed` | `NKE 2025-10-28` | 形态层可以保留，交易层倾向观望或等回测，不追着缺口成交 |
+| `strong-A + H2-like support reaction + first resistance crowded` | `TSLA 2025-08-22`、`KLAC 2025-10-23` | 多头形态可能成立，但首障碍先决定能否做；MM 不能覆盖近端阻力 |
+
+当前可复用的人工筛选语言是：先问“这是不是一个方向性母腿”，再问“反向 B 的压力有没有在后段减弱”，最后问“信号 K 出现在有意义的位置后，前方第一道障碍是否给它呼吸空间”。三项都较好时才进入低周期审计；只满足一两项时，继续保留为边界样本。
+
+这不是新的量化规则，也不是胜率结论，而是帮助助手在完整图表上优先选择值得人类深入的 pattern-like 结构。
+
 ## 助手每次筛图的最低输出
 
 ```text
