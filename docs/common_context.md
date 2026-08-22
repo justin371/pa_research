@@ -108,6 +108,17 @@ The `72.00` stop used in the KLAC H2 study is a structural research example, not
 - A practical research template is to reduce part of the position near the first target zone, keep a smaller remainder for the exact target or extension, and exit the remainder on a clear reversal or structural failure.
 - Do not hold the entire position solely to capture the last few cents of a measured move when the first obstacle and risk geometry already justify reducing exposure.
 
+## Resistance-first hierarchy before measured moves
+
+This is a current research hypothesis and operating principle, not yet a statistically validated production rule:
+
+- Rank a pre-existing major support/resistance zone before using a measured move. A measured move is a projection; it does not erase a known obstacle.
+- If the current leg approaches a prior major high and forms a double top, especially where an older high/low role reversal created resistance, assume a reaction is more likely than a clean break until acceptance is demonstrated.
+- A strong trend can break that resistance, but the exception needs observable evidence: strong closes beyond the zone, follow-through, and preferably a pullback that holds above it. An intrabar wick or one isolated breakout bar is not enough.
+- If the breakout outcome is uncertain, do not open a new position solely because the measured move points through the resistance. For an existing position, treat the zone as the first management area: consider partial reduction, keep only a defined remainder, or wait for acceptance/retest before adding.
+- Position-management actions must be predeclared for the setup; this principle does not create a universal breakeven or time-stop rule.
+- If the first major resistance leaves inadequate R/R, the correct action is no trade or reduced exposure. Only after the obstacle is cleared should the measured move become the next primary target.
+
 ## Retracement-depth confluence
 
 - A 50% retracement of a prior impulse is an important observation level in Brooks-style analysis, but it is not a mandatory entry rule by itself.
