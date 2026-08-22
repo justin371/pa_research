@@ -71,6 +71,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-ABC-BEAR-L2-EARLY-TRIGGER` | 强空头 A 后 B 反弹；低点二次跌破，但第一支撑很近 | [`TSLA 2025-02-20`](../research/tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md) | `visual_candidate / no-trade filter` |
 | `VIS-ABC-BEAR-L1-L2-FIRST-OBSTACLE` | 强空头 A 后 B 反弹到 EMA200 附近；C 内部有 L1/L2，但低点下方第一支撑很近 | [`TSLA 2026-02-11–03-30`](../research/tsla_bearish_abc_candidate_screen_2026-08-22.md) | `visual_candidate / no-trade filter`：L1/L2 均保留为形态样本，不把后续下跌倒灌成入场授权 |
 | `VIS-ABC-BEAR-L2-RANGE-EDGE` | 区间上沿失败后，强阴线 A、弱反弹 B、L1 失败再到 L2 | [`TSLA 2024-03-04–03-14`](../research/tsla_bearish_abc_case_2024-03-04_2024-03-14.md) | `pattern_like` |
+| `VIS-ABC-BEAR-L2-RESISTANCE-RETEST` | 强 A 后反弹回前支撑转阻力；第一次失败后再次测试，L2 信号更清楚，第一支撑仍有空间 | [`TSLA 2024-07-30–08-01`](../research/tsla_bearish_abc_case_2024-07-11_2024-08-05.md) | `event-driven positive / ~1.5R research benchmark` |
 | `VIS-ABC-BEAR-GAP-RETEST` | 原始破位被跳空改变；不要沿用旧 stop，重新等待反弹回测 | [`TSLA 2025-03-04 284 回测`](../research/tsla_abc_playbook_2025-03-04_284_retest.md) | `audited branch` |
 | `VIS-L3-CONTINUATION-CLIMAX` | 第三次尝试没有减弱，反而扩张；L3 不等于楔形反转 | [`TSLA 2025-03-07/10`](../research/tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md) | `counterexample` |
 | `VIS-L3-RETEST-CONTINUATION` | L2 跟随后先有新反弹分隔，再出现低周期回测和 L3 触发 | [`TSLA 2026-03-25–03-30`](../research/tsla_l3_case_study_2026-03-25_2026-03-30.md) | `provisional` |
