@@ -59,6 +59,42 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 
 先研究 `TPB-H2-L2`、`ABC-CONT` 和 `BOP-ABC`。它们最容易把用户已有的 H1/H2、ABC、左侧支撑/阻力和 MM 观察写成可复核字段。`TPB-H1-L1` 作为对照组；`H3-L3-COMPLEX` 先留在目录中，不作为本轮工作主线。
 
+## 3A. 视觉发现候选目录
+
+这一节是视觉筛选目录，不是胜率表，也不是量化输入。先在完整图表上判断“像不像”，再决定哪些候选值得做精细 R/R 或低周期核验。详细案例只保存在各自的研究文件中，这里只保留入口和视觉问题，避免两个 Repo 或多个文件重复搬运同一套内容。
+
+| 视觉候选 ID | 先看什么 | 代表性入口 | 当前状态 |
+| --- | --- | --- | --- |
+| `VIS-ABC-BULL-H2-REPEATED-SUPPORT` | 强 A 后回调两次；两个低点落在同一支撑簇；第二次反应更清楚 | [`KLAC 2025-05-07–06-03`](../research/klac_h2_case_study_2025-05-07_2025-06-03.md) | `pattern_like` |
+| `VIS-ABC-BULL-H1-SHALLOW-PULLBACK` | 强 A 后只有一天浅回调；前一根回调 K 不漂亮，但下一根确认很强 | [`KLAC 2025-10-14–10-24`](../research/klac_h1_case_study_2025-10-14_2025-10-24.md) | `visual_candidate` |
+| `VIS-ABC-BULL-DEEP-SUPPORT-REVERSAL` | 大周期上涨背景中的深 B；EMA/主要支撑汇聚；低周期出现反转过程 | [`TSLA 2026-05-15–05-22`](../research/tsla_h1_h2_case_study_2026-05-15_2026-05-22.md) | `visual_candidate` |
+| `VIS-ABC-BEAR-L2-EARLY-TRIGGER` | 强空头 A 后 B 反弹；低点二次跌破，但第一支撑很近 | [`TSLA 2025-02-20`](../research/tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md) | `visual_candidate / no-trade filter` |
+| `VIS-ABC-BEAR-L2-RANGE-EDGE` | 区间上沿失败后，强阴线 A、弱反弹 B、L1 失败再到 L2 | [`TSLA 2024-03-04–03-14`](../research/tsla_bearish_abc_case_2024-03-04_2024-03-14.md) | `pattern_like` |
+| `VIS-ABC-BEAR-GAP-RETEST` | 原始破位被跳空改变；不要沿用旧 stop，重新等待反弹回测 | [`TSLA 2025-03-04 284 回测`](../research/tsla_abc_playbook_2025-03-04_284_retest.md) | `audited branch` |
+| `VIS-L3-CONTINUATION-CLIMAX` | 第三次尝试没有减弱，反而扩张；L3 不等于楔形反转 | [`TSLA 2025-03-07/10`](../research/tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md) | `counterexample` |
+| `VIS-L3-RETEST-CONTINUATION` | L2 跟随后先有新反弹分隔，再出现低周期回测和 L3 触发 | [`TSLA 2026-03-25–03-30`](../research/tsla_l3_case_study_2026-03-25_2026-03-30.md) | `provisional` |
+| `VIS-RESISTANCE-MULTI-PUSH-NO-TRADE` | 多次测试主要阻力；没有反向触发不提前做空；突破接受后另开分支 | [`TSLA 2025-09-04–09-12`](../research/tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md) | `no-trade boundary` |
+
+### 视觉筛选的最小流程
+
+1. 先看完整 Daily/4H/60m 图表，不先找标签；标出左侧主要高低点、区间边缘和明显阻力/支撑。
+2. 再问它是否真的有方向性 A 腿，B 是否是回调而不是区间中部摆动，C 是否已经开始。
+3. 只要“看起来像”就先进入候选：粗略画出可能的信号 K、入场区域、结构止损和第一目标区；不要求一开始精确到固定阈值。
+4. 把候选分成“值得深入”“形态像但不值得交易”“明显不是这个 pattern”三类。
+5. 只对第一类候选补 15m 触发、事件过滤、实际 R/R 和失败状态；第二类本身也保留为过滤样本。
+
+## 4. 用户确认的长期形态主线
+
+后续形态研究以以下清单为主，不把“触碰 EMA”本身当作形态：
+
+1. **H1 / H2 / H3**：多头背景中的第一次、第二次、第三次向上尝试；
+2. **L1 / L2 / L3**：空头背景中的第一次、第二次、第三次向下尝试；
+3. **交易区间顶部卖出**：优先寻找区间顶部的二次入场或失败突破；
+4. **交易区间底部买入**：优先寻找区间底部的二次入场或失败突破；
+5. **趋势反转**：保留为高级形态，先记录，稍后再详细定义、复盘和验证。
+
+EMA、AB=CD 和 measured move 都只能作为背景、位置、空间或目标的辅助字段，不能因为价格碰到 EMA 或达到一个测量值，就单独创建交易信号。
+
 ## 4. AB=CD 与 measured move：测量层，不是独立形态
 
 ### 5.1 方向腿等距
