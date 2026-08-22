@@ -9,7 +9,7 @@
 - 周期：先看 Daily 完整窗口，再用 60m/15m 核对 `2024-10-02`–`2024-10-03` 的触发；
 - 数据：Futu OpenD 历史 QFQ，收盘后读取，不是实时行情，没有下单；
 - 板块参考：SOXX 同期方向大体配合；
-- 当前标签：`pattern_like / research_positive_conditional / strong-looking-A / deep-B-late-stabilization / bullish-H2-like / low-cycle-trigger-confirmed / first-obstacle-space-positive-but-not-wide / event-check-pending`。
+- 当前标签：`pattern_like / research_positive_conditional / strong-looking-A / deep-B-late-stabilization / bullish-H2-like / low-cycle-trigger-confirmed / first-obstacle-space-positive-but-not-wide / earnings-filter-passed / incident-context-pending`。
 
 ## 1. 完整背景与 A/B
 
@@ -79,7 +79,7 @@
 - `2024-10-02` 是有实体、收盘靠近日内高位的多头 K，视觉质量可接受，但不是最理想的长实体/长下影组合；所以它适合 `conditional`，不适合直接升级为高质量模板。
 - B 期间的量价变化可以作为观察项，但不把缩量写成必要条件；价格在支撑附近是否停止继续扩张更重要。
 - SOXX 在 `2024-10-02`–`10-04` 从约 `224.96` 向 `228.85` 走强，CRWD 的恢复获得一定板块配合；SPY/QQQ 也未显示明显的相反市场压力。这是 META 加分项，不替代结构和空间判断。
-- CRWD 的历史财报/重大事件日期尚未在本文件中独立核验，因此不标为“事件过滤通过”；在事件核验前保留 `event-check-pending`，不把它当作干净无事件基准。
+- CrowdStrike 官方资料显示，下一次财报在 `2024-11-26` 发布；`2024-10-03` 的候选触发窗口不在财报前三个交易日内，因此按用户规则财报过滤通过。官方资料同时提到 `2024-07-19` 的 Channel File 291 incident；这不是本次触发前的财报窗口，但仍应作为独立的事件/波动背景保留，不能把本案例写成完全无事件基准。来源：[`CrowdStrike 2024-11-26 财报公告`](https://ir.crowdstrike.com/news-releases/news-release-details/crowdstrike-announces-date-fiscal-third-quarter-2025-financial-results-conference-call)、[`CrowdStrike 2024-08-28 财报说明`](https://ir.crowdstrike.com/news-releases/news-release-details/crowdstrike-reports-second-quarter-fiscal-year-2025-financial/)。
 
 ## 6. 事后过程审计（不倒灌）
 
@@ -97,7 +97,7 @@
 | order | 无开盘跳过；buy-stop 与收盘确认分支分开 |
 | structural stop | B 低点 `68.17` 下方，研究约 `67.4–67.8`；更宽缓冲需重新审查 R/R |
 | first obstacle | `75.11–75.54` 前高/失败突破阻力区 |
-| tradeability | 条件上有空间，但不是宽裕正例；事件核验和计数仍待补充 |
-| status | `pattern_like / research_positive_conditional / low-cycle-trigger-confirmed / first-obstacle-space-positive-but-not-wide / event-check-pending` |
+| tradeability | 条件上有空间，但不是宽裕正例；财报过滤通过，事件背景和计数仍需单列 |
+| status | `pattern_like / research_positive_conditional / low-cycle-trigger-confirmed / first-obstacle-space-positive-but-not-wide / earnings-filter-passed / incident-context-pending` |
 
 可复用的视觉结论：**强 A 后的深 B 不是自动否决，但必须看到 B 的后段确实稳定；如果第一次尝试在前高处失败，第二次尝试的价值来自新的位置测试，而不是简单数两根阳线。即使低周期触发干净，首阻力和事件背景仍可以把条件候选降级为观望。**
