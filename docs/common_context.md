@@ -104,7 +104,7 @@ Use the same distinction symmetrically for bullish and bearish studies:
 - H1/H2/H3 and L1/L2/L3, understood as context-dependent pullback attempts rather than rigid labels.
 - Trading-range top shorts and bottom longs, especially second entries.
 - Major trend reversals, now organized by the [`MTR visual framework`](../research/mtr_visual_framework_CN.md); they remain provisional and are not a production rule.
-- Final flags, breakouts, channels, wedges, measured moves, opening reversals, and magnets/support-resistance, following Brooks' flexible pattern language. Final Flag 的工作框架见[`Final Flag visual framework`](../research/final_flag_visual_framework_CN.md)；开盘反转的视觉框架见[`Opening Reversal visual framework`](../research/opening_reversal_visual_framework_CN.md)；紧/宽通道的视觉框架见[`Channel visual framework`](../research/channel_visual_framework_CN.md)。
+- Final flags, breakouts, channels, wedges, measured moves, opening reversals, failed breakouts, climaxes, and magnets/support-resistance, following Brooks' flexible pattern language. Final Flag 的工作框架见[`Final Flag visual framework`](../research/final_flag_visual_framework_CN.md)；开盘反转的视觉框架见[`Opening Reversal visual framework`](../research/opening_reversal_visual_framework_CN.md)；紧/宽通道的视觉框架见[`Channel visual framework`](../research/channel_visual_framework_CN.md)；失败突破与高潮反转的视觉框架见[`Failed breakout / climax reversal visual framework`](../research/failed_breakout_climax_visual_framework_CN.md)。
 - Measured Move and AB=CD are space and target tools, not standalone entry signals.
 - EMA is supporting context only; touching the EMA is not a pattern by itself.
 
@@ -214,6 +214,16 @@ This is a current research hypothesis and operating principle, not yet a statist
 - If the breakout outcome is uncertain, do not open a new position solely because the measured move points through the resistance. For an existing position, treat the zone as the first management area: consider partial reduction, keep only a defined remainder, or wait for acceptance/retest before adding.
 - Position-management actions must be predeclared for the setup; this principle does not create a universal breakeven or time-stop rule.
 - If the first major resistance leaves inadequate R/R, the correct action is no trade or reduced exposure. Only after the obstacle is cleared should the measured move become the next primary target.
+
+## Failed breakout versus climactic reversal
+
+The compact visual framework is [`Failed breakout / climax reversal visual framework`](../research/failed_breakout_climax_visual_framework_CN.md).
+
+- A failed breakout requires a pre-existing boundary and evidence that price was not accepted beyond it. A wick or one opposite bar is only a test or candidate, not confirmation.
+- A climax is late expansion or acceleration; it can lead to a small reversal, a trading range, or continuation. Do not fade a climax without location, structural damage, follow-through and space.
+- The first reverse move is usually evidence of a reversal attempt, not proof of MTR. Keep waiting for a second entry, a retest that holds, or equivalent structural confirmation.
+- If the original direction closes strongly beyond the boundary and follows through, reclassify the setup as BOP/acceptance and invalidate the failed-breakout thesis.
+- The first independent support/resistance and structural stop still outrank the measured move. If the first obstacle is too close, record `valid_no_trade` even when the pattern looks visually clean.
 
 ## Pre-breakout resistance versus post-breakout acceptance
 
