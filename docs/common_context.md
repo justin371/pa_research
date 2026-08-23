@@ -113,6 +113,7 @@ Use the same distinction symmetrically for bullish and bearish studies:
 - Measured Move and AB=CD are space and target tools, not standalone entry signals. The cross-pattern target order is [`Measured Move、磁铁与目标层级视觉管理框架`](../research/measured_move_magnet_target_hierarchy_CN.md)：先看第一独立障碍，只有结构被接受后才把 MM 当主要延伸目标。
 - 趋势后段入场是上述所有 pattern 共用的时机/空间过滤层，见[`趋势后段入场视觉框架`](../research/late_trend_entry_visual_framework_CN.md)：区分受控回调、高潮风险、突破接受和后段无空间，不把强趋势自动等同为可追价。
 - EMA is supporting context only; touching the EMA is not a pattern by itself.
+- 失败突破/高潮的主动 pattern 入口见[`失败突破与高潮`](../patterns/05_failed_breakout_climax/README.md)；它必须把测试、失败候选、小反转/区间、MTR 候选和 BOP 接受分开。
 
 ## Probability principles
 
