@@ -71,6 +71,8 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 
 当前核心实现队列是 `TPB-H1-L1`、`TPB-H2-L2`、`ABC-CONT`、`RFB-SECOND`、`FAILED-BREAKOUT-CLIMAX`、`BOP-ABC`、`MTR-ABC` 和 `THREE-PUSH-PRESSURE-STATE`。它们共同覆盖第一次/第二次入场、趋势 ABC、区间边缘、失败突破、突破回踩、主要反转和三推压力状态；三推仍不冻结成自动反转规则。
 
+八个目录的交叉关系不另造第九个 pattern；统一复核和切换入口见[`核心八个 Pattern 交叉一致性审计`](../research/core_pattern_cross_audit_CN.md)。
+
 ## 3A. 视觉发现候选目录
 
 这一节是视觉筛选目录，不是胜率表，也不是量化输入。先在完整图表上判断“像不像”，再决定哪些候选值得做精细 R/R 或低周期核验。详细案例只保存在各自的研究文件中，这里只保留入口和视觉问题，避免两个 Repo 或多个文件重复搬运同一套内容。第一轮与第二轮的边界见[`PA Pattern 视觉筛选协议`](../research/visual_pattern_triage_protocol_CN.md)。
