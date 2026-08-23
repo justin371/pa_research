@@ -51,7 +51,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | A | `ABC-CONT` | 强趋势 ABC 延续 | A 是可见的方向腿，B 是受控回调，C 恢复原方向；B 尚未演化成双向交易区间 | C 在结构位置形成方向性信号并得到确认 | `Leg1 = Leg2`、AB=CD、或 A 腿终点后的下一个独立磁铁 | A 其实是高潮/区间内脉冲；B 过度重叠；C 未恢复或重新跌回区间 |
 | A | `BOP-ABC` | 突破后的 ABC 回踩 | 先有被接受的突破，随后 B 回踩突破区，C 再次离开突破区 | 多头回踩守住旧高上方、空头守住旧低下方，并出现重新突破/确认 | 突破前区间高度、A 腿等距、下一道结构障碍 | 收盘重新接受回旧区间；突破没有跟随；回踩变成失败突破 |
 | A | `RFB-SECOND` | 区间边缘失败突破后的二次入场（工作框架见 [`range-edge framework`](../research/range_edge_second_entry_framework_CN.md)） | 价格在已知区间边缘刺破后重新进入区间；反向尝试再次失败 | 区间边缘重新收回后，出现方向一致的 H2/L2 或等价确认 | 区间边缘、区间高度和中点是目标参考，不预设一定到达 | 发生在区间中部；重新进入后没有跟随；区间边缘未被事先确认 |
-| A | `MTR-ABC` | 主要位置上的反转 ABC | 成熟趋势/通道出现 A-B-C 反转结构，同时有双顶/双底、趋势线破坏或失败突破证据 | 第二次反向尝试突破信号 K，并在结构失效点外设止损 | 先看最近磁铁，再看 AB=CD 或 measured move；目标是区域而非单点 | 只是趋势中的普通回调；反向突破没有接受；止损空间过大 |
+| A | `MTR-ABC` | 主要位置上的反转 ABC | 成熟趋势/通道出现 A-B-C 反转结构，同时有双顶/双底、趋势线破坏或失败突破证据 | 第二次反向尝试突破信号 K，并在结构失效点外设止损 | 先看最近磁铁，再看 AB=CD 或 measured move；目标是区域而非单点 | 只是趋势中的普通回调；反向突破没有接受；止损空间过大；详细视觉框架见[`MTR visual framework`](../research/mtr_visual_framework_CN.md) |
 | B | `TPB-H1-L1` | 强趋势中的第一次尝试 | A 腿强、B 浅或以时间整理为主，第一次恢复就形成 H1/L1 | 位置、信号 K 和跟随质量都很强时才保留 | 以前一腿或下一道障碍为主；避免追在大腿末端 | A 腿不强、B 很深、H1 太晚、第一障碍太近 |
 | B | `H3-L3-COMPLEX` | 第三次尝试/复杂回调 | 前两次恢复未能离开区域，第三次才出现方向尝试 | 只作观察样本；需更严格的结构、空间和跟随确认 | 可记录等距投影，但不能把 MM 当作反转证明 | 计数重置不清、区间中部、三推/楔形解释混入；本轮暂缓 |
 
@@ -89,6 +89,10 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-L3-RETEST-CONTINUATION` | L2 跟随后先有新反弹分隔，再出现低周期回测和 L3 触发 | [`TSLA 2026-03-25–03-30`](../research/tsla_l3_case_study_2026-03-25_2026-03-30.md) | `provisional` |
 | `VIS-H3-THREE-PUSH-SUPPORT-REACTION` | 三个低点逐步下移但推进间距收窄；第三次测试落在支撑候选，之后出现反弹但未确认主要反转 | [`TSLA 2026-05-19–06-26`](../research/h3_l3_research_gate_CN.md) | `pattern_like / B-class short-reaction or no-trade` |
 | `VIS-RESISTANCE-MULTI-PUSH-NO-TRADE` | 多次测试主要阻力；没有反向触发不提前做空；突破接受后另开分支 | [`TSLA 2025-09-04–09-12`](../research/tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md) | `no-trade boundary` |
+| `VIS-MTR-TSLA-RANGE-TOP-L2` | 局部区间上沿失败、强空头 A、弱 B、L1 失败后 L2；静态首支撑有空间，但结构止损先于首支撑失效 | [`TSLA 2024-03-04–03-14`](../research/tsla_bearish_abc_case_2024-03-04_2024-03-14.md) | `MTR-candidate / range-edge-overlap / process-stop-first` |
+| `VIS-MTR-NFLX-TOP-BOUNDARY` | 强多头后高位多次测试、空头反应和低周期触发存在，但首支撑拥挤且后续重新突破顶部 | [`NFLX 2024-08-05–09-26`](../research/nflx_three_push_top_boundary_2024-08-05_2024-09-26.md) | `MTR-like / H3-like / valid_no_trade / later-invalidated` |
+| `VIS-MTR-TSLA-BOP-INVALIDATION` | 主要阻力下的双高/多次测试先构成反转尝试；强突破收盘接受后，MTR thesis 失效并切换为 BOP | [`TSLA 2025-09-08–09-12`](../research/tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md) | `reversal-attempt / failed-MTR-thesis / BOP-acceptance` |
+| `VIS-MTR-BULL-TRANSITION-BOUNDARIES` | ASML 双底样区间过渡、LOW 急跌后多头恢复；两者说明低位反应不等于已确认多头 MTR | [`MTR visual framework`](../research/mtr_visual_framework_CN.md) | `bullish-reversal-attempt / range-transition / valid_no_trade` |
 | `VIS-ABC-BULL-H2-RESISTANCE-BOUNDARY` | 支撑反应和 H2-like 尝试都存在，但左侧高点就在触发上方 | [`ANET 2023-11-15–11-22`](../research/anet_bullish_h2_visual_boundary_2023-11-15_2023-11-22.md) | `valid_no_trade / pattern_like` |
 | `VIS-ABC-BEAR-GAP-FIRST-SUPPORT-BOUNDARY` | 强 A、反向 B、L1/L2-like 下破；低周期 L1 可成交但首支撑先到，L2 原触发被开盘跳过 | [`COIN 2024-01-02–01-12`](../research/coin_bearish_l1_l2_gap_boundary_2024-01-02_2024-01-12.md) | `valid_no_trade / L1-low-cycle-confirmed / first-support-reached-before-stop / L2-opening-skip / event-context-pending` |
 | `VIS-H3-COIN-BEAR-FLAG-EXPANSION` | 空头 A 后三次上探候选；第三次回到阻力但范围扩张；后续低周期 L1 先到首支撑 | [`COIN 2024-01-04–01-09`](../research/coin_bearish_l1_l2_gap_boundary_2024-01-02_2024-01-12.md#h3-like-熊旗顶部补审-2024-01-04–2024-01-09) | `provisional H3-like / C-class boundary / first-support-reached / L2-opening-skip / valid_no_trade` |

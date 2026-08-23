@@ -43,7 +43,7 @@
 | H3/L3 与复杂回调 | `boundary / conditional` | KLAC 熊旗、TSLA L3、ANET、ASML、COIN、NFLX、XOM、UBER、NOW、DELL；Futu 定向筛选的 BKNG、PM、AMD、GOOGL、NKE、WMT | H3 有 KLAC 条件候选，但 L3 尚无同等质量的“衰竭 + 反向触发 + 首障碍有空间”候选；最新定向筛选仍被首障碍、事件、趋势延续或背景方向否决，继续区分衰竭、延续和区间，只有新边界或订单分支才加样本 | P1 |
 | 三推/楔形视觉形状 | `covered as boundary, not frozen` | TSLA 2026-05、NFLX 高位、多个 H3/L3 研究 | 保持“第三推减弱”与“第三推扩张”并排，不把 H3/L3 自动等同三推楔形反转 | P1 |
 | 区间顶部/底部二次入场 | `framework / partial` | TSLA 区间边缘、RBLX、QCOM、TSLA 2024-03 区间上沿 L2、IWM 2024-04 指数控制，以及 [`交易区间边缘二次入场与失败突破`](range_edge_second_entry_framework_CN.md) | 仍缺一个空间真正宽裕的事件干净顶部/底部正向样本，以及失败突破重新进入的独立对照；保持区间逻辑，不能借用趋势腿计数 | P1 |
-| 主要趋势反转 / MTR | `partial / difficult` | 一些 TSLA、NFLX、XOM、COIN 高位边界 | 需要明确“趋势反转尝试”和“趋势中普通回调”的并排案例；先不把它升级为交易规则 | P3 |
+| 主要趋势反转 / MTR | `framework / partial / provisional` | TSLA 2024-03 区间上沿空头候选、NFLX 高位多次测试、TSLA 2025-09 突破否定、PLTR 普通 A 边界、ASML 双底样区间过渡、LOW 低位多头反转尝试；统一框架见[`MTR visual framework`](mtr_visual_framework_CN.md) | 仍缺无事件、双向、首障碍宽裕且过程完整的标准正例；继续区分反转尝试、普通回调、区间反应和三推延续，不升级为生产规则 | P1（条件触发） |
 | 缺口后的订单分支 | `covered as boundary` | TSM 重订、NKE、QCOM、LRCX、GOOGL、BKNG、COIN、NVDA、VRT | 不再增加同质案例；只在新 pattern 同时出现缺口时，记录原 stop、开盘重订、limit-retest、观望四个合同的区别 | P3 |
 | 第一独立障碍与 MM | `cross-case stable principle` | 几乎所有已审计案例都记录了首阻力/首支撑与 MM 的先后关系 | 继续用视觉样本确认“先看左侧障碍，MM 只作后续路径”；不要把精确 R/R 当成第一阶段入口 | P3 |
 | 强信号 K、压力收缩、EMA/META 汇聚 | `qualitative / reusable` | KLAC、CRWD、TSLA、NFLX、TSM 等 | 需要在更多不同背景下观察，而不是设固定实体、百分比或成交量阈值；回调缩量保持为重要参考、非必要条件 | P3 |
