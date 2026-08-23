@@ -235,7 +235,7 @@ space_to_first_obstacle: clearly_positive / borderline / blocked / unknown
 
 第一道独立支撑/阻力优先于一个孤立的 measured move。MM、AB=CD、50% 回调和缺口可以提供目标或汇合优势，但不能覆盖近端主要障碍，也不能互相重复计数。若 MM 和前高落在同一价格簇，只算一个主要障碍。
 
-支撑/阻力的视觉强度排序见[`共同上下文：Support/resistance strength hierarchy`](common_context.md#supportresistance-strength-hierarchy-visual-working-version)。排序只表示结构优先级；实际 R/R 仍按入场方向上的最近独立区域计算。
+支撑/阻力的视觉强度排序见[`共同上下文：Support/resistance strength hierarchy`](common_context.md#supportresistance-strength-hierarchy-visual-working-version)，八个 pattern 的位置差异见[`支撑/阻力强度与八个 Pattern 的位置审计`](../research/support_resistance_cross_pattern_audit_CN.md)。排序只表示结构优先级；实际 R/R 仍按入场方向上的最近独立区域计算。
 
 `1R`、`2R` 只作为粗略几何检查，不是精确评分：
 
