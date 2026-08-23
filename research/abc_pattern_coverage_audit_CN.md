@@ -54,6 +54,7 @@
 | 缺口后的订单分支 | `covered as boundary` | TSM 重订、NKE、QCOM、LRCX、GOOGL、BKNG、COIN、NVDA、VRT | 不再增加同质案例；只在新 pattern 同时出现缺口时，记录原 stop、开盘重订、limit-retest、观望四个合同的区别 | P3 |
 | 第一独立障碍与 MM | `cross-case stable principle` | 几乎所有已审计案例都记录了首阻力/首支撑与 MM 的先后关系 | 继续用视觉样本确认“先看左侧障碍，MM 只作后续路径”；不要把精确 R/R 当成第一阶段入口 | P3 |
 | 强信号 K、压力收缩、EMA/META 汇聚 | `qualitative / reusable` | KLAC、CRWD、TSLA、NFLX、TSM 等 | 需要在更多不同背景下观察，而不是设固定实体、百分比或成交量阈值；回调缩量保持为重要参考、非必要条件 | P3 |
+| Inside Bar / 两根 K 线反转 | `framework / partial / provisional` | KLAC 2025-10 两根反向序列、AAPL 2024-05 小实体/下影 H1-like、RBLX 2024-04 区间失败、KLAC 2025-06 H2 setup-confirmation、TSLA 2025-03 跳空非内包对照；统一框架见[`Inside Bar / two-bar reversal visual framework`](inside_bar_two_bar_reversal_visual_framework_CN.md) | 当前尚无一组严格母 K OHLC 已冻结、事件干净、首障碍宽裕的标准 Inside Bar 正例；继续区分严格内包、两根反转、H/L 信号序列和普通停顿 | P1 |
 
 ## 目前可以暂时认为已经形成的视觉语言
 
