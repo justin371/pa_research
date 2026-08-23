@@ -45,6 +45,7 @@
 | 区间顶部/底部二次入场 | `framework / partial` | TSLA 区间边缘、RBLX、QCOM、TSLA 2024-03 区间上沿 L2、IWM 2024-04 指数控制，以及 [`交易区间边缘二次入场与失败突破`](range_edge_second_entry_framework_CN.md) | 仍缺一个空间真正宽裕的事件干净顶部/底部正向样本，以及失败突破重新进入的独立对照；保持区间逻辑，不能借用趋势腿计数 | P1 |
 | 主要趋势反转 / MTR | `framework / partial / provisional` | TSLA 2024-03 区间上沿空头候选、NFLX 高位多次测试、TSLA 2025-09 突破否定、PLTR 普通 A 边界、ASML 双底样区间过渡、LOW 低位多头反转尝试；统一框架见[`MTR visual framework`](mtr_visual_framework_CN.md) | 仍缺无事件、双向、首障碍宽裕且过程完整的标准正例；继续区分反转尝试、普通回调、区间反应和三推延续，不升级为生产规则 | P1（条件触发） |
 | 最终旗形 / Final Flag | `framework / partial / provisional` | KLAC 2025-10 多头浅旗延续控制、NFLX 2024-08 高位压缩反转边界、TSLA 2025-09 阻力下反转假设被 BOP 接受否定、KLAC 2025-03 熊旗延续控制；统一框架见[`Final Flag visual framework`](final_flag_visual_framework_CN.md) | 仍缺事件干净、第二次反向触发不跳空且首障碍宽裕的标准反转样本；保持与普通旗形、MTR、区间边缘和 BOP 分开 | P1（条件触发） |
+| 开盘反转 / Opening Reversal | `framework / partial / provisional` | RBLX 2024-04-04 开盘上冲失败、COIN 2024-01-09 空头开盘反应、VRT 2026-04-17 开盘接受边界、TSLA 2025-03-04 跳空延续/回测订单边界；统一框架见[`Opening Reversal visual framework`](opening_reversal_visual_framework_CN.md) | 仍缺事件干净、反向确认清楚且首障碍宽裕的多空标准正例；继续与 BOP、Final Flag、MTR、区间边缘和普通 H/L 回调分开 | P1 |
 | 缺口后的订单分支 | `covered as boundary` | TSM 重订、NKE、QCOM、LRCX、GOOGL、BKNG、COIN、NVDA、VRT | 不再增加同质案例；只在新 pattern 同时出现缺口时，记录原 stop、开盘重订、limit-retest、观望四个合同的区别 | P3 |
 | 第一独立障碍与 MM | `cross-case stable principle` | 几乎所有已审计案例都记录了首阻力/首支撑与 MM 的先后关系 | 继续用视觉样本确认“先看左侧障碍，MM 只作后续路径”；不要把精确 R/R 当成第一阶段入口 | P3 |
 | 强信号 K、压力收缩、EMA/META 汇聚 | `qualitative / reusable` | KLAC、CRWD、TSLA、NFLX、TSM 等 | 需要在更多不同背景下观察，而不是设固定实体、百分比或成交量阈值；回调缩量保持为重要参考、非必要条件 | P3 |

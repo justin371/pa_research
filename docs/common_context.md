@@ -104,7 +104,7 @@ Use the same distinction symmetrically for bullish and bearish studies:
 - H1/H2/H3 and L1/L2/L3, understood as context-dependent pullback attempts rather than rigid labels.
 - Trading-range top shorts and bottom longs, especially second entries.
 - Major trend reversals, now organized by the [`MTR visual framework`](../research/mtr_visual_framework_CN.md); they remain provisional and are not a production rule.
-- Final flags, breakouts, channels, wedges, measured moves, opening reversals, and magnets/support-resistance, following Brooks' flexible pattern language. Final Flag 的工作框架见[`Final Flag visual framework`](../research/final_flag_visual_framework_CN.md)。
+- Final flags, breakouts, channels, wedges, measured moves, opening reversals, and magnets/support-resistance, following Brooks' flexible pattern language. Final Flag 的工作框架见[`Final Flag visual framework`](../research/final_flag_visual_framework_CN.md)；开盘反转的视觉框架见[`Opening Reversal visual framework`](../research/opening_reversal_visual_framework_CN.md)。
 - Measured Move and AB=CD are space and target tools, not standalone entry signals.
 - EMA is supporting context only; touching the EMA is not a pattern by itself.
 
