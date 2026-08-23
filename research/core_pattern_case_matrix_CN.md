@@ -47,4 +47,6 @@
 
 ## 边界
 
+MTR/L3 的最新缺口审计见[`MTR 与三推证据缺口审计`](mtr_three_push_evidence_gap_audit_2026-08-23_CN.md)。
+
 矩阵只服务 PA Research 的视觉筛选和人工复核，不建立统计胜率、不创建量化扫描器、不修改 Codex Trading，也不连接 Execution Agent。

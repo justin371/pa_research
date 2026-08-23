@@ -71,6 +71,7 @@ thesis_state: reversal-attempt / MTR-candidate / MTR-confirmed-for-research / fa
 - [`头肩与圆顶/圆底边界`](../../research/head_shoulders_rounded_top_bottom_visual_framework_CN.md)
 - [`TSLA 区间顶部 MTR 候选`](../../research/tsla_bearish_abc_case_2024-03-04_2024-03-14.md)
 - [`NFLX 三推顶部边界`](../../research/nflx_three_push_top_boundary_2024-08-05_2024-09-26.md)
+- [`MTR 与三推证据缺口审计`](../../research/mtr_three_push_evidence_gap_audit_2026-08-23_CN.md)：本轮没有新增无事件、二次确认清楚且首障碍宽裕的 MTR 正例。
 
 ## 当前案例对照
 

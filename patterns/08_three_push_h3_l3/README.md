@@ -127,3 +127,4 @@ H3/L3 描述的是第三次有意义的方向尝试；“三推”描述的是�
 - [`TSLA H3/L3 研究闸门`](../../research/h3_l3_research_gate_CN.md)
 - [`NFLX 三推顶部边界`](../../research/nflx_three_push_top_boundary_2024-08-05_2024-09-26.md)
 - [`XOM 三推扩张边界`](../../research/xom_bearish_h3_flag_expansion_boundary_2024-07-18_2024-08-02.md)
+- [`MTR 与三推证据缺口审计`](../../research/mtr_three_push_evidence_gap_audit_2026-08-23_CN.md)：BKNG/PM 最接近 L3 衰竭但被首障碍否决；本轮没有新增合格 L3 正例。
