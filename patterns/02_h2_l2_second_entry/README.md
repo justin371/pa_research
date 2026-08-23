@@ -62,6 +62,7 @@ H2/L2 的“第二次”是同一回调中的第二次有意义的方向尝试�
 | 案例 | H2/L2 判断 | 研究结论 |
 | --- | --- | --- |
 | [`KLAC 2025-05-07–06-03`](../../research/klac_h2_case_study_2025-05-07_2025-06-03.md) | 支撑区、重复低点、EMA 汇合；H2 信号 K 与确认分开 | 形态较清楚，但仍先审计 `79.03–79.79` 首阻力和结构止损 |
+| [`CRWD 2024-09-11–10-11`](../../research/crwd_bullish_h2_deep_b_late_stabilization_2024-09-11_2024-10-11.md) | 深 B 前段压力较强，后段在 `68.17` 附近稳定；H2-like 与 15m 触发可分开 | 条件正向但首阻力只有约 `1.5R–1.9R`，且有 incident context，不是普通基准 |
 | [`TSLA 2025-08-06–08-22`](../../research/tsla_abc_h1_h2_case_study_2025-08-06_2025-08-22.md) | 深但后段受控 B；H1 后支撑处 H2-like 反应 | 形态成立候选，日线追入因首阻力拥挤而 no-trade；低周期另立合同 |
 | [`SNOW 2026-08-14–08-21`](../../research/snow_bullish_h2_first_obstacle_boundary_2026-08-14_2026-08-21.md) | 深 B 后强收回，H2-like 外形清楚 | 形态像但第一阻力不足，作为边界样本而非正向样本 |
 
@@ -73,6 +74,7 @@ H2/L2 的“第二次”是同一回调中的第二次有意义的方向尝试�
 - [`TSLA ABC/H1/H2 案例`](../../research/tsla_abc_h1_h2_case_study_2025-08-06_2025-08-22.md)
 - [`SNOW H2 首阻力边界`](../../research/snow_bullish_h2_first_obstacle_boundary_2026-08-14_2026-08-21.md)
 - [`ABC 决策矩阵`](../../research/abc_decision_matrix_CN.md)
+- [`H1/L1、H2/L2 与 ABC 证据缺口审计`](../../research/h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)
 
 ## 当前目标验收
 

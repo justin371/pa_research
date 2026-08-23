@@ -90,6 +90,7 @@ H1/L1 的“第一次”是回调中第一次**有意义**的方向恢复，不�
 - [`ABC 与 H/L 统一范围`](../../research/abc_h1_h2_h3_l1_l2_l3_scope_CN.md)
 - [`COST H1 首障碍边界`](../../research/cost_bullish_h1_first_obstacle_boundary_2024-05-13_2024-05-16.md)
 - [`TSLA ABC/H1/H2 比较`](../../research/tsla_abc_h1_h2_comparison_matrix.md)
+- [`H1/L1、H2/L2 与 ABC 证据缺口审计`](../../research/h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)：本轮 H1/L1 普通开放趋势纯净基准仍为 `no-new-positive`。
 
 ## 暂不冻结
 

@@ -73,6 +73,7 @@ ABC 的判断顺序是：
 | 多头强/条件 A-B-H | [`KLAC H2`](../../research/klac_h2_case_study_2025-05-07_2025-06-03.md)、[`TSLA H2`](../../research/tsla_abc_h1_h2_case_study_2025-08-06_2025-08-22.md) | 强 A、深/浅 B、H2 与首障碍分层 |
 | 多头 H1 边界 | [`AAPL H1`](../../research/aapl_bullish_h1_event_driven_a_2024-05-03_2024-05-09.md)、[`COST H1`](../../research/cost_bullish_h1_first_obstacle_boundary_2024-05-13_2024-05-16.md) | 事件驱动 A、浅 B、信号质量和首阻力 |
 | 空头开放/条件 ABC | [`NFLX L1`](../../research/nflx_bearish_abc_l1_no_gap_space_2025-02-14_2025-03-28.md)、[`TSM L1`](../../research/tsm_bearish_abc_l1_gap_reprice_space_2025-02-14_2025-03-28.md) | 强 A、受控 B、缺口重订和首支撑 |
+| 多头深 B 条件 ABC | [`CRWD H2`](../../research/crwd_bullish_h2_deep_b_late_stabilization_2024-09-11_2024-10-11.md) | 深 B 后段稳定、H2-like、低周期确认、首阻力和事件边界 |
 | 区间/过渡边界 | [`RBLX 区间边界`](../../research/rblx_range_edge_not_abc_boundary_2024-03-18_2024-04-05.md)、[`QCOM 宽 B`](../../research/qcom_bearish_abc_range_b_boundary_2025-02-21_2025-03-28.md) | 防止把区间内部或过渡状态硬叫趋势 ABC |
 
 ## 当前目标验收
@@ -90,3 +91,4 @@ ABC 的判断顺序是：
 - [`ABC 覆盖审计`](../../research/abc_pattern_coverage_audit_CN.md)
 - [`TSLA 2024 空头 ABC`](../../research/tsla_bearish_abc_case_2024-03-04_2024-03-14.md)
 - [`NFLX 空头 ABC/L1`](../../research/nflx_bearish_abc_l1_no_gap_space_2025-02-14_2025-03-28.md)
+- [`H1/L1、H2/L2 与 ABC 证据缺口审计`](../../research/h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)
