@@ -197,7 +197,7 @@ NKE `2025-10-27–10-30` 把同一个空头候选拆成了几个不能混写的�
 4. B 腿压力：受控 / 深但后段受控 / 未受控 / 不清楚
 5. 位置：主要支撑阻力、区间边缘、EMA、缺口、META 汇聚
 6. 当时可见的信号 K 与触发
-7. 订单分支：stop / limit-retest / market-close / observation-only
+7. 订单分支：stop / stop-limit / limit-retest / market-close / observation-only
 8. 结构止损与失效条件
 9. 第一独立障碍、粗略空间和可能的止盈区
 10. 仍不确定什么，以及是否值得补 4H/60m/15m

@@ -6,7 +6,7 @@
 
 同一个 PA pattern 可以有不同的入场方式。视觉助手先判断形态和位置，再选择订单分支；不能因为形态看起来成立，就假设只有一种订单。这里的目标是帮助研究和复盘，不是建立量化下单程序。
 
-## 1. 先分清四种分支
+## 1. 先分清五种分支
 
 ### A. Stop：等待信号 K 被突破
 
@@ -34,7 +34,18 @@ Stop 的逻辑是“价格证明它愿意继续走”。它不等于追价授权
 
 只在以下条件同时较清楚时作为研究分支：方向压力很强、收盘位置有接受、继续等待可能错过主要运动，而且止损宽度和第一障碍仍然合理。要明确承受滑点和更差成交，不能把它当默认方式。
 
-### D. Observation-only：形态像，但不值得进场
+### D. Stop-limit：触发后仍限制最差成交价
+
+Stop-limit 不是普通 stop 的别名，而是另一份执行合同：
+
+- 价格先越过 stop trigger，订单才被激活；
+- 激活后只能在 limit price 或更优价格成交；
+- 如果价格跳过 limit price，订单可能完全不成交；
+- “方向后来走对了”不能证明它曾经成交；没有可靠逐笔数据时，历史 K 线只能记录 `fill unknown / no-fill possible`，不能假定成交。
+
+研究记录必须把 `stop_trigger`、`limit_price`、实际成交/未成交和触发后的第一障碍分开。若 stop-limit 未成交，不能沿用普通 stop 的 R/R；若实际成交价改变了结构风险或空间，也必须重新分类。当前 ABC 研究默认不把 stop-limit 当作普通 stop 的替代品，只在出现明确订单问题或可靠成交证据时单独审计。
+
+### E. Observation-only：形态像，但不值得进场
 
 以下情况可以保留为 `pattern_like` 或 `valid_no_trade`：
 
@@ -62,7 +73,7 @@ Stop 的逻辑是“价格证明它愿意继续走”。它不等于追价授权
 
 ```text
 pattern_state: pattern_like / research_ready / valid_no_trade / research_positive
-order_branch: stop / limit-retest / market-close / observation-only
+order_branch: stop / stop-limit / limit-retest / market-close / observation-only
 decision_time:
 signal_bar:
 trigger_price_or_zone:

@@ -103,7 +103,7 @@ stage_1_status: pattern_like / boundary / not_this_pattern / pending
 
 ```text
 signal_bar / confirmation_bar:
-order_branch: stop / limit-retest / market-close / observation-only
+order_branch: stop / stop-limit / limit-retest / market-close / observation-only
 trigger_zone:
 structural_stop_zone:
 first_independent_obstacle:
