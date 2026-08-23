@@ -54,10 +54,30 @@
 | 紧通道 / 宽通道 / 状态切换 | `framework / partial / provisional` | KLAC 2025-03 宽熊旗上沿空头恢复、TSLA 2025-08 强趋势/通道线候选、XOM 2024-07 宽旗扩张边界；统一框架见[`Channel visual framework`](channel_visual_framework_CN.md) | 仍缺一个平行边界已确认、事件干净、首障碍宽裕的紧通道正向样本；继续区分强趋势腿、趋势线候选、宽通道、区间和 MTR | P1 |
 | 缺口后的订单分支 | `covered as boundary` | TSM 重订、NKE、QCOM、LRCX、GOOGL、BKNG、COIN、NVDA、VRT | 不再增加同质案例；只在新 pattern 同时出现缺口时，记录原 stop、开盘重订、limit-retest、观望四个合同的区别 | P3 |
 | 多周期视觉复核 | `framework / partial / provisional` | TSLA、NVDA 的低周期确认，TSM 的缺口后重订，TSLA 2024-03 的 Daily L2 与 15m 跟随，QCOM/GOOGL 的开盘跳过边界；统一入口见[`Daily / 4H / 1H / 15m 分层框架`](multitimeframe_visual_review_framework_CN.md) | 继续补充“同一高周期合同的低周期确认”与“低周期自成交易”的对称对照；保持高周期首障碍、结构止损和低周期窄止损分开，不把不同合同结果合并 | P1（条件触发） |
+| 趋势后段入场 / 追价过滤 | `framework / cross-pattern / provisional` | TSLA、KLAC、NFLX、TSLA 空头等受控回调、高潮风险、BOP 接受和后段无空间对照；统一入口见[`趋势后段入场视觉框架`](late_trend_entry_visual_framework_CN.md) | 继续把“等回调/二次入场、低周期确认、突破接受新合同、观望”与各 pattern 连接；不另造一个独立 K 线形态，也不把追价规则量化冻结 | P1（条件触发） |
 | 第一独立障碍与 MM | `framework / cross-case stable principle` | 几乎所有已审计案例都记录了首阻力/首支撑与 MM 的先后关系；统一顺序见[`Measured Move、磁铁与目标层级视觉管理框架`](measured_move_magnet_target_hierarchy_CN.md) | 继续用视觉样本确认“先看左侧障碍，MM 只作后续路径”；补充不同路径的分批止盈和障碍接受对照；不要把精确 R/R 当成第一阶段入口 | P2（条件触发） |
 | 强信号 K、压力收缩、EMA/META 汇聚 | `qualitative / reusable` | KLAC、CRWD、TSLA、NFLX、TSM 等 | 需要在更多不同背景下观察，而不是设固定实体、百分比或成交量阈值；回调缩量保持为重要参考、非必要条件 | P3 |
 | Inside Bar / 两根 K 线反转 | `framework / partial / provisional` | KLAC 2025-10 两根反向序列、AAPL 2024-05 小实体/下影 H1-like、RBLX 2024-04 区间失败、KLAC 2025-06 H2 setup-confirmation、TSLA 2025-03 跳空非内包对照；统一框架见[`Inside Bar / two-bar reversal visual framework`](inside_bar_two_bar_reversal_visual_framework_CN.md) | 当前尚无一组严格母 K OHLC 已冻结、事件干净、首障碍宽裕的标准 Inside Bar 正例；继续区分严格内包、两根反转、H/L 信号序列和普通停顿 | P1 |
 | 三角形 / 扩张三角形 / 区间内区间 | `framework / partial / provisional` | ASML 区间重复测试、TSLA 阻力下压缩后 BOP 接受、RBLX 宽区间内失败、COIN/XOM 扩张边界、KLAC 趋势旗形对照；统一框架见[`Triangle / expanding triangle visual framework`](triangle_expanding_range_visual_framework_CN.md) | 当前尚无严格、事件干净、两侧边界清楚、突破跟随和首障碍宽裕的标准三角形正例；继续区分普通压缩、Inside Bar/IOI、旗形、成熟区间、接受与失败突破 | P1 |
+
+## 当前主动实现范围
+
+用户已确认当前不继续扩展其他形态，先把以下 pattern 作为独立研究单元建立并逐项实现：
+
+- H1/L1 第一次入场；
+- H2/L2 第二次入场；
+- ABC 趋势延续；
+- 交易区间边缘二次入场；
+- 失败突破与高潮；
+- 突破回踩 / BOP；
+- MTR 趋势反转；
+- 三推 / H3-L3 压力状态。
+
+目录入口见 [`patterns/README`](../patterns/README.md)。这不是把每个单元变成量化规则，而是先为视觉识别、案例、订单分支、首障碍和 no-trade 边界建立稳定容器。
+
+## 课程交叉覆盖结论
+
+PAHubCN 已读到用户指定的空章节停止点。课程中的趋势、突破、区间、反转、二次入场、概率、执行和风险内容已映射到上述研究单元或共同上下文；Swing/Scalp、Trader's Equation、订单、止损和仓位管理属于跨形态执行层，不另建 pattern 家族。当前唯一需要单独补足的视觉跨形态过滤层是“趋势后段入场”，已由[`趋势后段入场视觉框架`](late_trend_entry_visual_framework_CN.md)承接。VCP 仍是独立主题，不属于 PAHubCN 课程映射。
 
 ## 目前可以暂时认为已经形成的视觉语言
 

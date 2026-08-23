@@ -102,12 +102,14 @@ Use the same distinction symmetrically for bullish and bearish studies:
 
 ## Priority concepts
 
+- 当前主动实现的 pattern 目录总览见 [`PA Research 核心 Pattern 目录`](../patterns/README.md)。当前范围固定为 H1/L1、H2/L2、ABC 延续、区间边缘二次入场、失败突破/高潮、突破回踩/BOP、MTR 和三推/H3-L3；其他形态暂不扩展。
 - H1/H2/H3 and L1/L2/L3, understood as context-dependent pullback attempts rather than rigid labels.
 - Trading-range top shorts and bottom longs, especially second entries.
 - Major trend reversals, now organized by the [`MTR visual framework`](../research/mtr_visual_framework_CN.md); they remain provisional and are not a production rule.
 - Head-and-shoulders and rounded tops/bottoms are organized by the [`头肩顶/底与圆顶/圆底视觉边界框架`](../research/head_shoulders_rounded_top_bottom_visual_framework_CN.md)：头肩先作为复杂双顶/双底或 MTR 候选，圆顶/圆底先作为控制权转移警报，不因外形自动入场。
 - Final flags, breakouts, channels, wedges, measured moves, opening reversals, failed breakouts, climaxes, double tops/bottoms, three-push variations, inside bars, triangles, and magnets/support-resistance, following Brooks' flexible pattern language. Final Flag 的工作框架见[`Final Flag visual framework`](../research/final_flag_visual_framework_CN.md)；开盘反转的视觉框架见[`Opening Reversal visual framework`](../research/opening_reversal_visual_framework_CN.md)；紧/宽通道的视觉框架见[`Channel visual framework`](../research/channel_visual_framework_CN.md)；失败突破与高潮反转的视觉框架见[`Failed breakout / climax reversal visual framework`](../research/failed_breakout_climax_visual_framework_CN.md)；双顶/双底、MTR 与 Final Flag 的对照入口见[`Double top/bottom, MTR and Final Flag comparison`](../research/double_top_bottom_mtr_final_flag_comparison_CN.md)；三推/H3-L3 的压力状态见[`Three-push / H3-L3 pressure-state framework`](../research/three_push_pressure_state_framework_CN.md)；Inside Bar / 两根 K 线反转的视觉框架见[`Inside Bar / two-bar reversal visual framework`](../research/inside_bar_two_bar_reversal_visual_framework_CN.md)；三角形与扩张三角形的视觉框架见[`Triangle / expanding triangle visual framework`](../research/triangle_expanding_range_visual_framework_CN.md)。
 - Measured Move and AB=CD are space and target tools, not standalone entry signals. The cross-pattern target order is [`Measured Move、磁铁与目标层级视觉管理框架`](../research/measured_move_magnet_target_hierarchy_CN.md)：先看第一独立障碍，只有结构被接受后才把 MM 当主要延伸目标。
+- 趋势后段入场是上述所有 pattern 共用的时机/空间过滤层，见[`趋势后段入场视觉框架`](../research/late_trend_entry_visual_framework_CN.md)：区分受控回调、高潮风险、突破接受和后段无空间，不把强趋势自动等同为可追价。
 - EMA is supporting context only; touching the EMA is not a pattern by itself.
 
 ## Probability principles
