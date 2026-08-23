@@ -11,6 +11,8 @@
 
 当前 ABC 的阶段边界与停止同质深审的条件见[`ABC 研究状态与工作边界 v0.3`](abc_research_status_v0_3_CN.md)。
 
+最新一轮 `AMD/QCOM/MU/HD/JPM/NKE/LLY/AVGO/AMAT/CSCO/TXN/NOW` 的轻量筛选见[`2024–2025 候选网格轻量视觉筛选`](visual_screen_candidate_grid_2024_2025_CN.md)。本轮没有新增普通开放趋势正向基准，主要补充了事件/跳空/嵌套尺度的过滤对照。
+
 案例状态的含义：
 
 - `covered`：已经有多个案例或正反对照，视觉语言相对稳定；
