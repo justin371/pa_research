@@ -59,6 +59,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | B | `CHANNEL-STATE` | 紧通道、宽通道与趋势状态切换 | 紧通道尊重单向惯性；宽通道承认双方交易与上下边界；重叠、回调深度、边界接受和跟随决定是否切换为区间、BOP 或 MTR | 紧通道回调的 H1/L1、宽通道边缘的 H2/L2、通道外突破接受或失败回到通道；详见[`Channel visual framework`](../research/channel_visual_framework_CN.md) | 紧通道看下一推进/边界；宽通道先看中线/另一边界；MM 只能在障碍被接受后使用 | 两点趋势线被误叫通道；通道中部追单；扩张第三推被误叫衰竭；第一次刺破就反向；首障碍太近 |
 | B | `TPB-H1-L1` | 强趋势中的第一次尝试 | A 腿强、B 浅或以时间整理为主，第一次恢复就形成 H1/L1 | 位置、信号 K 和跟随质量都很强时才保留 | 以前一腿或下一道障碍为主；避免追在大腿末端 | A 腿不强、B 很深、H1 太晚、第一障碍太近 |
 | B | `H3-L3-COMPLEX` | 第三次尝试/复杂回调 | 前两次恢复未能离开区域，第三次才出现方向尝试 | 只作观察样本；需更严格的结构、空间和跟随确认 | 可记录等距投影，但不能把 MM 当作反转证明 | 计数重置不清、区间中部、三推/楔形解释混入；本轮暂缓 |
+| A | `THREE-PUSH-PRESSURE-STATE` | 三推/H3-L3 的衰竭、扩张、区间重复测试与通道延续分流 | 先确认三次尝试属于同一 lineage，再比较推进效率、K 线质量、结构接受和位置；详见[`Three-push / H3-L3 pressure-state framework`](../research/three_push_pressure_state_framework_CN.md) | 衰竭候选等待反向 stop 或二次确认；扩张优先顺势/观望；区间重复测试切换区间逻辑 | 先看第三推极端外结构止损和第一独立障碍，再看 MM；首障碍不足约 1R 记 no-trade | 只数到三就反向；第三推扩张误叫衰竭；区间中部/通道触碰误叫 H3/L3；忽略跳空和首障碍 |
 
 ### 当前优先顺序
 
@@ -104,6 +105,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-ABC-BEAR-GAP-FIRST-SUPPORT-BOUNDARY` | 强 A、反向 B、L1/L2-like 下破；低周期 L1 可成交但首支撑先到，L2 原触发被开盘跳过 | [`COIN 2024-01-02–01-12`](../research/coin_bearish_l1_l2_gap_boundary_2024-01-02_2024-01-12.md) | `valid_no_trade / L1-low-cycle-confirmed / first-support-reached-before-stop / L2-opening-skip / event-context-pending` |
 | `VIS-H3-COIN-BEAR-FLAG-EXPANSION` | 空头 A 后三次上探候选；第三次回到阻力但范围扩张；后续低周期 L1 先到首支撑 | [`COIN 2024-01-04–01-09`](../research/coin_bearish_l1_l2_gap_boundary_2024-01-02_2024-01-12.md#h3-like-熊旗顶部补审-2024-01-04–2024-01-09) | `provisional H3-like / C-class boundary / first-support-reached / L2-opening-skip / valid_no_trade` |
 | `VIS-H3-NFLX-THREE-PUSH-TOP` | 强多头 A 后高位多次测试；空头反应和低周期触发存在，但首支撑拥挤、后来顶部被越过 | [`NFLX 2024-08-05–09-26`](../research/nflx_three_push_top_boundary_2024-08-05_2024-09-26.md) | `provisional three-push-top / L1-like-low-cycle-confirmed / first-support-reached / later-structure-invalidated / valid_no_trade` |
+| `VIS-THREE-PUSH-PRESSURE-STATE` | 把 H3/L3 案例按第三推压力状态分成衰竭、扩张/高潮、区间重复测试和通道延续 | [`三推/H3-L3 压力状态框架`](../research/three_push_pressure_state_framework_CN.md) | `framework / provisional / no-clean-positive-yet` |
 | `VIS-H3-XOM-BEAR-FLAG-EXPANSION` | 空头 A 后三次上探；第三次抬高并扩张，随后出现 L1-like 反应但触发日跳空 | [`XOM 2024-07-18–08-02`](../research/xom_bearish_h3_flag_expansion_boundary_2024-07-18_2024-08-02.md) | `provisional H3-like / C-class expansion boundary / valid_no_trade / event-context-pending` |
 | `VIS-H3-UBER-COUNT-SPACE-BOUNDARY` | 强空头 A 后三次上探候选；第三次之后出现更高、更宽的扩张；后续 L2-like 低周期未从开盘跳过原触发但首支撑太近 | [`UBER 2024-07-17–07-26`](../research/uber_bearish_h3_l2_first_support_boundary_2024-07-17_2024-07-26.md) | `pattern_like / provisional-H3-like / count-ambiguous / C-class-expansion-boundary / earnings-filter-passed / valid_no_trade` |
 | `VIS-H3-SCREEN-2025-08_11` | AVGO/MSFT/PANW/MRVL/DELL/LULU/TXN/TGT/DIS 的独立筛选：强趋势重复回调、事件恢复、宽 B 或区间过渡外形；没有冻结为同一 lineage 的正向 H3/L3 | [`H3/L3 候选筛选日志`](../research/h3_l3_candidate_screen_2025-08_2025-11_CN.md) | `visual-screen / boundary-log / event-gap-boundary / range-transition / not-quantitative / no-new-positive` |
