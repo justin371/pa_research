@@ -40,7 +40,7 @@
 | 普通趋势中的 ABC 延续 | `conditional` | KLAC、TSLA、CRWD、AMZN、NVDA、MDT 过渡型多头，以及 NFLX/TSM 的空头对照 | 更干净的样本仍可作为补充，但不再阻塞当前视觉工作版；仅在新边界或指定案例出现时补审 | P2（条件触发） |
 | H1/H2 多头 | `conditional / boundary` | KLAC H2、CRWD H2、AMZN H2、TSLA H2、NVDA H1、MDT 过渡型 H2-like、SPY 指数控制、SNOW 近期 H2-like | 普通开放趋势正向基准仍是条件性缺口；不主动重复寻找，遇到新的订单/首阻力边界时再补 | P2（条件触发） |
 | L1/L2 空头 | `conditional` | NFLX L1、TSM L1 重订、AMZN L1、MCD L1、TSLA L2、NKE/QCOM/LRCX，ADBE 过渡转空 L1-like，CME 视觉边界，以及 QQQ/IWM/DIA 指数控制 | ADBE 仍不是纯开放趋势；更干净的样本可补充，但不再作为扩大股票池的默认任务 | P2（条件触发） |
-| H3/L3 与复杂回调 | `boundary / conditional` | KLAC 熊旗、TSLA L3、ANET、ASML、COIN、NFLX、XOM、UBER、NOW、DELL | H3 有 KLAC 条件候选，但 L3 尚无同等质量的“衰竭 + 反向触发 + 首障碍有空间”候选；继续区分衰竭、延续和区间，只有新边界或订单分支才加样本 | P1 |
+| H3/L3 与复杂回调 | `boundary / conditional` | KLAC 熊旗、TSLA L3、ANET、ASML、COIN、NFLX、XOM、UBER、NOW、DELL；Futu 定向筛选的 BKNG、PM、AMD、GOOGL、NKE | H3 有 KLAC 条件候选，但 L3 尚无同等质量的“衰竭 + 反向触发 + 首障碍有空间”候选；最新定向筛选仍被首障碍、事件或趋势延续否决，继续区分衰竭、延续和区间，只有新边界或订单分支才加样本 | P1 |
 | 三推/楔形视觉形状 | `covered as boundary, not frozen` | TSLA 2026-05、NFLX 高位、多个 H3/L3 研究 | 保持“第三推减弱”与“第三推扩张”并排，不把 H3/L3 自动等同三推楔形反转 | P1 |
 | 区间顶部/底部二次入场 | `partial` | TSLA 区间边缘、RBLX、QCOM 区间边界及部分 H2/L2 案例 | 独立于开放趋势 ABC 的区间顶部卖出、底部买入、失败突破后二次入场；尤其要保持区间逻辑，不能借用趋势腿计数 | P2 |
 | 主要趋势反转 / MTR | `partial / difficult` | 一些 TSLA、NFLX、XOM、COIN 高位边界 | 需要明确“趋势反转尝试”和“趋势中普通回调”的并排案例；先不把它升级为交易规则 | P3 |
