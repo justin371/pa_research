@@ -21,7 +21,7 @@
 | Pattern 家族 | 当前覆盖 | 已有视觉证据 | 仍缺少的关键对照 | 下一步优先级 |
 | --- | --- | --- | --- | --- |
 | 普通趋势中的 ABC 延续 | `conditional` | KLAC、TSLA、CRWD、AMZN、NVDA，以及 NFLX/TSM 的空头对照 | 再找一个没有事件跳空、A 方向清楚、B 后段受控、首障碍明显宽裕的独立样本，确认不是只记住少数股票 | P1 |
-| H1/H2 多头 | `conditional / boundary` | KLAC H2、CRWD H2、AMZN H2、TSLA H2、NVDA H1、SPY 指数控制 | 一个普通开放趋势、无开盘跳过、前方首阻力不拥挤的视觉正向基准；现在许多样本被首阻力或缺口否决 | P1 |
+| H1/H2 多头 | `conditional / boundary` | KLAC H2、CRWD H2、AMZN H2、TSLA H2、NVDA H1、SPY 指数控制、SNOW 近期 H2-like | 一个普通开放趋势、无开盘跳过、前方首阻力不拥挤的视觉正向基准；SNOW 说明深 B、优质反应 K 仍可能被首障碍否决 | P1 |
 | L1/L2 空头 | `conditional` | NFLX L1、TSM L1 重订、AMZN L1、MCD L1、TSLA L2、NKE/QCOM/LRCX | 第二个无缺口、普通开放趋势、第一支撑真正宽裕的 L1/L2；把“形态像”和“值得做”分开 | P1 |
 | H3/L3 与复杂回调 | `boundary / conditional` | KLAC 熊旗、TSLA L3、ANET、ASML、COIN、NFLX、XOM、UBER、NOW、DELL | 一个计数稳定、第三次推进确实减弱或在关键位置出现清楚反向反应的 H3/L3 对照；目前扩张型和区间型反例更多 | P2 |
 | 三推/楔形视觉形状 | `covered as boundary, not frozen` | TSLA 2026-05、NFLX 高位、多个 H3/L3 研究 | 需要更多“第三推减弱”与“第三推扩张”的并排图；不能把 H3/L3 自动等同三推楔形反转 | P2 |
@@ -32,6 +32,8 @@
 | 强信号 K、压力收缩、EMA/META 汇聚 | `qualitative / reusable` | KLAC、CRWD、TSLA、NFLX、TSM 等 | 需要在更多不同背景下观察，而不是设固定实体、百分比或成交量阈值；回调缩量保持为重要参考、非必要条件 | P3 |
 
 ## 目前可以暂时认为已经形成的视觉语言
+
+近期的 `SNOW 2026-08-14–08-21` 已经把“深但后段受控 B + H2-like 反应”补到多头侧，但它的第一阻力几乎贴着日线触发，因此仍是边界，不是正向样本。它和 PM 的差别在于：SNOW 的低周期短线分支也不足以消除首障碍；PM 则明确展示了第一合同开盘跳过、第二合同重建后仍被首阻力否决。
 
 1. **背景先于标签。** 先看开放趋势、交易区间、区间边缘、过渡或高潮；区间中部的小波动不能因为有两次高点/低点就强行标成 ABC。
 2. **A 腿决定第一轮筛选方向。** 强方向、少重叠、跟随清楚时优先看 H1/L1；普通 A 或宽通道时先观察，等待 H2/L2；这只是优先级，不是胜率承诺。
@@ -72,4 +74,3 @@
 - [`ABC 决策矩阵`](abc_decision_matrix_CN.md)
 - [`PA Pattern 视觉筛选协议`](visual_pattern_triage_protocol_CN.md)
 - [`视觉复核卡`](../docs/visual_pa_review_card_CN.md)
-
