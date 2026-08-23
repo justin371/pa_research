@@ -1,0 +1,50 @@
+# 核心八个 Pattern 代表性案例矩阵 V0.1
+
+日期：2026-08-23  
+状态：`visual-research / case-matrix / not-statistical`
+
+## 使用方式
+
+这张矩阵只做导航和缺口管理，不是胜率表。每个 pattern 至少保留：
+
+- 一个值得继续审计的条件性候选；
+- 一个形态像但被首障碍、事件、计数、跳空或状态否决的边界；
+- 一个能够防止误读的反例或缺口说明。
+
+案例的结论只依据入场决策时可见的结构。后续达到 MM、反转或盈利，只能作为路径审计，不能回写成原始入场证据。
+
+## 八个 pattern 矩阵
+
+| Pattern | 条件性候选 | 边界 / no-trade | 反例或当前缺口 |
+| --- | --- | --- | --- |
+| [`H1/L1 第一次入场`](../patterns/01_h1_l1_first_entry/README.md) | [`AAPL 2024-05-03–05-09`](aapl_bullish_h1_event_driven_a_2024-05-03_2024-05-09.md)：事件后强 A、浅 B、H1-like，作为 event-driven 条件候选 | [`COST 2024-05-13–05-16`](cost_bullish_h1_first_obstacle_boundary_2024-05-13_2024-05-16.md)：信号 K 和 A 都像，但首阻力贴近，`valid_no_trade` | [`JNJ 2025-09-18–10-08`](jnj_bullish_h1_first_obstacle_2025-09-18_2025-10-08.md)：形态恢复清楚但首阻力阻塞；仍缺事件干净、开放趋势、首障碍宽裕的对称基准 |
+| [`H2/L2 第二次入场`](../patterns/02_h2_l2_second_entry/README.md) | [`KLAC 2025-05-07–06-03`](klac_h2_case_study_2025-05-07_2025-06-03.md)：支撑簇、重复低点、EMA 汇合，H2 信号与确认分开 | [`SNOW 2026-08-14–08-21`](snow_bullish_h2_first_obstacle_boundary_2026-08-14_2026-08-21.md)：H2-like 清楚但第一阻力不足；低周期也不能替日线空间 | [`TSLA 2025-08-06–08-22`](tsla_abc_h1_h2_case_study_2025-08-06_2025-08-22.md)：深 B 后 H2-like，日线与低周期合同分开；仍需更多事件干净、多空对称案例 |
+| [`ABC 趋势延续`](../patterns/03_abc_continuation/README.md) | [`NFLX 2025-02-14–03-28`](nflx_bearish_abc_l1_no_gap_space_2025-02-14_2025-03-28.md)：方向性 A、深但后段受控 B、L1-like，首支撑可审计 | [`QCOM 2025-02-21–03-28`](qcom_bearish_abc_range_b_boundary_2025-02-21_2025-03-28.md)：B 变宽、重叠多，后续不能自动继承开放趋势 ABC | [`RBLX 2024-03-18–04-05`](rblx_range_edge_not_abc_boundary_2024-03-18_2024-04-05.md)：区间边缘而非趋势 ABC；仍缺无事件、开放趋势、A/B/C 路径清楚且空间宽裕的多空基准 |
+| [`区间边缘二次入场`](../patterns/04_range_edge_second_entry/README.md) | [`RBLX 2024-03-18–04-05`](rblx_range_edge_not_abc_boundary_2024-03-18_2024-04-05.md)：区间边缘与趋势腿计数分开，适合研究 second-leg trap | [`TSLA 2025-03-11–05-13`](tsla_range_after_sell_climax_2025-03-11_2025-05-13.md)：卖出高潮后进入区间，不能把早期冲量继续当 ABC | [`QCOM 2025-02-21–03-28`](qcom_bearish_abc_range_b_boundary_2025-02-21_2025-03-28.md)：宽 B/过渡边界；仍缺事件干净、上下沿都清楚且首目标空间宽裕的双向对照 |
+| [`失败突破与高潮`](../patterns/05_failed_breakout_climax/README.md) | [`TSLA 2025-03-11–05-13`](tsla_range_after_sell_climax_2025-03-11_2025-05-13.md)：高潮后先看小反转/区间，不自动升级 MTR | [`TSLA 2025-09-08–09-12`](tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md)：原反转假设被强突破接受否定，必须转 BOP | [`COST 2024-07-11–07-18`](cost_bearish_abc_climax_boundary_2024-07-11_2024-07-18.md)：强 A/高潮边界但首支撑与事件阻塞；仍缺无事件、反向二次确认和首障碍宽裕的正例 |
+| [`突破回踩 / BOP`](../patterns/06_breakout_pullback_bop/README.md) | [`TSLA 2025-09-08–09-12`](tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md)：阻力外强收盘接受，旧 MTR/区间合同废弃，建立新 BOP 合同 | [`GOOGL 2024-03-04–03-22`](googl_bullish_h1_gap_trigger_boundary_2024-03-04_2024-03-22.md)：方向正确但跳空重订后首障碍拥挤，`valid_no_trade` | [`TSLA 2025-03-04 284 回测`](tsla_abc_playbook_2025-03-04_284_retest.md)：gap-and-go 后的回测是独立 limit-retest；仍缺事件干净、回踩守住、首障碍宽裕的多空对照 |
+| [`MTR 趋势反转`](../patterns/07_mtr_reversal/README.md) | [`TSLA 2024-03-04–03-14`](tsla_bearish_abc_case_2024-03-04_2024-03-14.md)：区间上沿重叠的 MTR candidate，L1 失败后 L2 清楚但过程止损优先 | [`NFLX 2024-08-05–09-26`](nflx_three_push_top_boundary_2024-08-05_2024-09-26.md)：高位多次测试和反向触发存在，但首支撑拥挤、后来重新越顶 | [`ASML 2025-05-19–06-13`](asml_h3_l3_range_transition_boundary_2025-05-19_2025-06-13.md)：双底样但更像区间过渡；仍缺无事件、结构破坏、二次确认和首障碍宽裕的双向正例 |
+| [`三推 / H3-L3`](../patterns/08_three_push_h3_l3/README.md) | [`KLAC 2025-03-12–03-28`](klac_h3_bear_flag_case_2025-03-12_2025-03-28.md)：熊旗顶部第三推受阻后有空头接受，条件性研究候选 | [`NFLX 2024-08-05–09-26`](nflx_three_push_top_boundary_2024-08-05_2024-09-26.md)：多次测试超过三次且首障碍拥挤，形态像但不值得交易 | [`TSLA 2025-03-07–03-10`](tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md)：L3 扩张/卖出高潮，不是衰竭反转；L3 仍缺同等质量的无事件衰竭正例 |
+
+## 跨矩阵的共同结论
+
+1. **候选与可交易性必须分栏**：AAPL、KLAC、TSLA 等可以进入条件性研究，不代表可以直接下单。
+2. **首障碍是最常见的否决**：COST、SNOW、GOOGL、NFLX 的形态并不一定差，问题在于触发后先遇到的结构不留空间。
+3. **状态切换比标签更重要**：TSLA 2025-09 从反转假设切到 BOP；TSLA 2025-03 从高潮进入区间；ASML 从三推样外观切到区间过渡。
+4. **第三推要与扩张并列**：KLAC 提供受阻候选，TSLA L3 和 XOM/COIN 研究提供扩张/高潮边界，不能只收集“第三推变弱”的图。
+5. **真正的空白不是再找更多相似图**：当前最有价值的缺口是事件干净、双向、第二次确认明确、首障碍宽裕的开放趋势反转/三推正例，以及 BOP 回踩守住的清楚对照。
+
+## 下一轮案例选择规则
+
+只有出现以下一种新信息，才值得增加案例：
+
+- 填补某个方向缺口（例如 L3 衰竭，或区间底部多头）；
+- 填补订单缺口（原 stop、开盘重订、limit-retest 或低周期确认的独立分支）；
+- 填补状态转换缺口（失败突破转 BOP、三推转 MTR、ABC 转区间）；
+- 填补首障碍几何缺口（清楚的空间正例或首障碍先到的反例）。
+
+若只是另一张同样的“强 A + H2-like + 首阻力过近”图，保留引用即可，不再复制深审。
+
+## 边界
+
+矩阵只服务 PA Research 的视觉筛选和人工复核，不建立统计胜率、不创建量化扫描器、不修改 Codex Trading，也不连接 Execution Agent。

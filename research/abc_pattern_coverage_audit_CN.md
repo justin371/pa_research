@@ -11,6 +11,8 @@
 
 当前 ABC 的阶段边界与停止同质深审的条件见[`ABC 研究状态与工作边界 v0.3`](abc_research_status_v0_3_CN.md)。
 
+八个主动 pattern 的代表性候选、边界和真正缺口见[`核心八个 Pattern 代表性案例矩阵`](core_pattern_case_matrix_CN.md)。它只做研究导航，不声称统计胜率。
+
 最新一轮 `AMD/QCOM/MU/HD/JPM/NKE/LLY/AVGO/AMAT/CSCO/TXN/NOW` 的轻量筛选见[`2024–2025 候选网格轻量视觉筛选`](visual_screen_candidate_grid_2024_2025_CN.md)。本轮没有新增普通开放趋势正向基准，主要补充了事件/跳空/嵌套尺度的过滤对照。
 
 ## 目标逐项证据审计（2026-08-23）
