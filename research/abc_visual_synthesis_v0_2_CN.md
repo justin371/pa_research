@@ -346,7 +346,7 @@ NVDA 的价值不在于制造一个正例，而在于让助手保持三个分离
 
 COST 的训练价值是：**普通 A 可以进入候选，深 B 后的“先探后收”可以提高 H2-like 的视觉质量，但不能用低周期真实触发替代第一阻力审计。** 详细审计见 [`COST 多头 ABC/H2-like 首阻力边界`](cost_bullish_abc_h2_visual_boundary_2025-04-21_2025-05-16.md)。
 
-空头侧的 NFLX、TSM、AMZN、MCD 四案例对照已单独整理为[`空头 ABC 视觉控制对照`](abc_bearish_visual_control_comparison_nflx_tsm_mcd_amzn_CN.md)。它们共同说明：`strong-looking A` 只提高 L1 检查优先级；无 gap 只改善订单时序；第一支撑仍然必须先于 MM 审计。MCD 作为“形态和订单都像、但第一支撑否决”的控制样本，与 NFLX/TSM 的条件正向分支并列使用。
+空头侧的 NFLX、TSM、AMZN、MCD 与 ADBE 五案例对照已单独整理为[`空头 ABC 视觉控制对照`](abc_bearish_visual_control_comparison_nflx_tsm_mcd_amzn_CN.md)。它们共同说明：`strong-looking A` 只提高 L1 检查优先级；无 gap 只改善订单时序；第一支撑仍然必须先于 MM 审计；父级过渡与纯开放趋势也要分开。MCD 作为“形态和订单都像、但第一支撑否决”的控制样本，ADBE 作为“局部形态和空间较好、但父级过渡且市场逆势”的条件样本，与 NFLX/TSM 的条件正向分支并列使用。
 
 ## 本轮新增：MCD 空头 L1-like、无缺口触发与第一支撑否决
 
