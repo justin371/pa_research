@@ -37,11 +37,11 @@
 
 | Pattern 家族 | 当前覆盖 | 已有视觉证据 | 仍缺少的关键对照 | 下一步优先级 |
 | --- | --- | --- | --- | --- |
-| 普通趋势中的 ABC 延续 | `conditional` | KLAC、TSLA、CRWD、AMZN、NVDA、MDT 过渡型多头，以及 NFLX/TSM 的空头对照 | 再找一个没有事件跳空、A 方向清楚、B 后段受控、首障碍明显宽裕的独立样本，确认不是只记住少数股票 | P1 |
-| H1/H2 多头 | `conditional / boundary` | KLAC H2、CRWD H2、AMZN H2、TSLA H2、NVDA H1、MDT 过渡型 H2-like、SPY 指数控制、SNOW 近期 H2-like | 一个普通开放趋势、无开盘跳过、前方首阻力不拥挤的视觉正向基准；SNOW/MDT 说明深 B、优质反应 K 仍可能被首障碍或父级状态否决 | P1 |
-| L1/L2 空头 | `conditional` | NFLX L1、TSM L1 重订、AMZN L1、MCD L1、TSLA L2、NKE/QCOM/LRCX，ADBE 过渡转空 L1-like，CME 视觉边界，以及 QQQ/IWM/DIA 指数控制 | ADBE 的低周期、第一支撑和财报过滤已通过，但父级不是纯净开放趋势、市场逆势；QQQ/IWM/DIA 与 CME 的形态清楚但首支撑拥挤；继续寻找无开盘跳过、第一支撑真正宽裕的纯开放趋势 L1/L2 | P1 |
-| H3/L3 与复杂回调 | `boundary / conditional` | KLAC 熊旗、TSLA L3、ANET、ASML、COIN、NFLX、XOM、UBER、NOW、DELL | 一个计数稳定、第三次推进确实减弱或在关键位置出现清楚反向反应的 H3/L3 对照；目前扩张型和区间型反例更多 | P2 |
-| 三推/楔形视觉形状 | `covered as boundary, not frozen` | TSLA 2026-05、NFLX 高位、多个 H3/L3 研究 | 需要更多“第三推减弱”与“第三推扩张”的并排图；不能把 H3/L3 自动等同三推楔形反转 | P2 |
+| 普通趋势中的 ABC 延续 | `conditional` | KLAC、TSLA、CRWD、AMZN、NVDA、MDT 过渡型多头，以及 NFLX/TSM 的空头对照 | 更干净的样本仍可作为补充，但不再阻塞当前视觉工作版；仅在新边界或指定案例出现时补审 | P2（条件触发） |
+| H1/H2 多头 | `conditional / boundary` | KLAC H2、CRWD H2、AMZN H2、TSLA H2、NVDA H1、MDT 过渡型 H2-like、SPY 指数控制、SNOW 近期 H2-like | 普通开放趋势正向基准仍是条件性缺口；不主动重复寻找，遇到新的订单/首阻力边界时再补 | P2（条件触发） |
+| L1/L2 空头 | `conditional` | NFLX L1、TSM L1 重订、AMZN L1、MCD L1、TSLA L2、NKE/QCOM/LRCX，ADBE 过渡转空 L1-like，CME 视觉边界，以及 QQQ/IWM/DIA 指数控制 | ADBE 仍不是纯开放趋势；更干净的样本可补充，但不再作为扩大股票池的默认任务 | P2（条件触发） |
+| H3/L3 与复杂回调 | `boundary / conditional` | KLAC 熊旗、TSLA L3、ANET、ASML、COIN、NFLX、XOM、UBER、NOW、DELL | 继续区分衰竭、延续和区间三类压力；新样本只在带来独立边界或订单分支时加入 | P1 |
+| 三推/楔形视觉形状 | `covered as boundary, not frozen` | TSLA 2026-05、NFLX 高位、多个 H3/L3 研究 | 保持“第三推减弱”与“第三推扩张”并排，不把 H3/L3 自动等同三推楔形反转 | P1 |
 | 区间顶部/底部二次入场 | `partial` | TSLA 区间边缘、RBLX、QCOM 区间边界及部分 H2/L2 案例 | 独立于开放趋势 ABC 的区间顶部卖出、底部买入、失败突破后二次入场；尤其要保持区间逻辑，不能借用趋势腿计数 | P2 |
 | 主要趋势反转 / MTR | `partial / difficult` | 一些 TSLA、NFLX、XOM、COIN 高位边界 | 需要明确“趋势反转尝试”和“趋势中普通回调”的并排案例；先不把它升级为交易规则 | P3 |
 | 缺口后的订单分支 | `covered as boundary` | TSM 重订、NKE、QCOM、LRCX、GOOGL、BKNG、COIN、NVDA、VRT | 不再增加同质案例；只在新 pattern 同时出现缺口时，记录原 stop、开盘重订、limit-retest、观望四个合同的区别 | P3 |
@@ -69,17 +69,15 @@
 
 ## 研究缺口与停止条件
 
-### 当前最值得继续找的图
+### 当前只在什么情况下继续找图
 
-优先寻找一张新的普通开放趋势图，满足视觉上大致具备：
+不再把“找到一张完美的普通开放趋势正例”作为默认任务。只有出现以下情况之一，才增加新的图表案例：
 
-- A 腿方向明确，最好有连续推进或少重叠的强 K 线；
-- B 没有在父级区间中部完全横化，后段压力有所收缩；
-- H1/L1 或 H2/L2 的计数在当时已完成的 K 线下说得通；
-- 没有财报前三个交易日禁做问题，也没有开盘直接跳过原触发的主要歧义；
-- 触发前能看见一段不拥挤的第一道独立障碍。
+- 用户指定了新的标的、周期或订单问题；
+- 新图可能填补 H3/L3 的衰竭、延续或区间边界；
+- 新图出现当前尚未覆盖的订单合同、跳空状态或第一障碍结构。
 
-先把它标为 `pattern_like`，只写背景、A/B、位置和“为什么像”。如果这四项都通过，再补低周期和订单合同。下一个案例不应为了填表而选择已经熟悉的同一股票或同一种缺口边界。
+新案例仍先标为 `pattern_like`，只写背景、A/B、位置和“为什么像”；只有四项都通过，才补低周期和订单合同。
 
 ### 什么时候可以说一个 pattern“研究得差不多”
 
