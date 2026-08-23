@@ -37,7 +37,7 @@
 
 | Pattern 家族 | 当前覆盖 | 已有视觉证据 | 仍缺少的关键对照 | 下一步优先级 |
 | --- | --- | --- | --- | --- |
-| 普通趋势中的 ABC 延续 | `conditional` | KLAC、TSLA、CRWD、AMZN、NVDA、MDT 过渡型多头，以及 NFLX/TSM 的空头对照 | 更干净的样本仍可作为补充，但不再阻塞当前视觉工作版；仅在新边界或指定案例出现时补审 | P2（条件触发） |
+| 普通趋势中的 ABC 延续 | `conditional` | [`ABC 趋势延续目录`](../patterns/03_abc_continuation/README.md)；KLAC、TSLA、CRWD、AMZN、NVDA、MDT 过渡型多头，以及 NFLX/TSM 的空头对照 | 更干净的样本仍可作为补充，但不再阻塞当前视觉工作版；仅在新边界或指定案例出现时补审 | P2（条件触发） |
 | H1/H2 多头 | `conditional / boundary` | [`H1/L1 第一次入场目录`](../patterns/01_h1_l1_first_entry/README.md)；[`H2/L2 第二次入场目录`](../patterns/02_h2_l2_second_entry/README.md)；KLAC H2、CRWD H2、AMZN H2、TSLA H2、NVDA H1、MDT 过渡型 H2-like、SPY 指数控制、SNOW 近期 H2-like | 普通开放趋势正向基准仍是条件性缺口；不主动重复寻找，遇到新的订单/首阻力边界时再补 | P2（条件触发） |
 | L1/L2 空头 | `conditional` | NFLX L1、TSM L1 重订、AMZN L1、MCD L1、TSLA L2、NKE/QCOM/LRCX，ADBE 过渡转空 L1-like，CME 视觉边界，以及 QQQ/IWM/DIA 指数控制 | ADBE 仍不是纯开放趋势；更干净的样本可补充，但不再作为扩大股票池的默认任务 | P2（条件触发） |
 | H3/L3 与复杂回调 | `boundary / conditional` | KLAC 熊旗、TSLA L3、ANET、ASML、COIN、NFLX、XOM、UBER、NOW、DELL；Futu 定向筛选的 BKNG、PM、AMD、GOOGL、NKE、WMT | H3 有 KLAC 条件候选，但 L3 尚无同等质量的“衰竭 + 反向触发 + 首障碍有空间”候选；最新定向筛选仍被首障碍、事件、趋势延续或背景方向否决，继续区分衰竭、延续和区间，只有新边界或订单分支才加样本 | P1 |

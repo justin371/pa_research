@@ -103,6 +103,7 @@ Use the same distinction symmetrically for bullish and bearish studies:
 ## Priority concepts
 
 - 当前主动实现的 pattern 目录总览见 [`PA Research 核心 Pattern 目录`](../patterns/README.md)。当前范围固定为 H1/L1、H2/L2、ABC 延续、区间边缘二次入场、失败突破/高潮、突破回踩/BOP、MTR 和三推/H3-L3；其他形态暂不扩展。
+- ABC 趋势延续的当前入口见[`ABC 趋势延续`](../patterns/03_abc_continuation/README.md)：先判市场状态，再判 A/B/C；区间内部不强行数趋势腿。
 - H1/H2/H3 and L1/L2/L3, understood as context-dependent pullback attempts rather than rigid labels；当前 H1/L1 入口见[`H1/L1 第一次入场`](../patterns/01_h1_l1_first_entry/README.md)，H2/L2 入口见[`H2/L2 第二次入场`](../patterns/02_h2_l2_second_entry/README.md)。
 - Trading-range top shorts and bottom longs, especially second entries.
 - Major trend reversals, now organized by the [`MTR visual framework`](../research/mtr_visual_framework_CN.md); they remain provisional and are not a production rule.
