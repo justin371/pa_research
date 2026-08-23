@@ -116,7 +116,7 @@
 - B 腿的回撤深度、时间整理和前强后弱之间如何分档；
 - 第一障碍约 `1R` 是否应按 Daily、60m、15m 和波动率分档；
 - H3/L3 何时是动能衰竭，何时只是强趋势延续；
-- sell stop、sell limit/retest、stop-limit 的滑点和未成交样本如何统一统计；
+- sell stop、sell limit/retest、stop-limit 的滑点和未成交样本如何统一统计；当前案例只有 stop/limit-retest/跳空重订证据，stop-limit 仍是协议层的样本缺口；
 - 低周期止损与大周期结构止损如何在同一研究数据库中分层；
 - 跨标的、跨市场状态后是否仍然成立。
 
