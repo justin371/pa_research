@@ -177,6 +177,24 @@ For every candidate trade, record all of the following before entry:
 
 The `72.00` stop used in the KLAC H2 study is a structural research example, not a universal price rule. The same checklist must be recalculated for each instrument and timeframe.
 
+## Support/resistance strength hierarchy (visual working version)
+
+支撑和阻力按**区域**而不是单一价格线记录。下面是研究时的默认强度顺序；它是视觉优先级，不是保证价格一定在那里反转。
+
+| 层级 | 优先观察的结构 | 说明 |
+| --- | --- | --- |
+| `major` | 大周期主要摆动高/低点、成熟交易区间上沿/下沿、明显的支撑转阻力/阻力转支撑、多个周期重合且离开力度大的区域 | 最先检查；如果与入场方向之间空间不足，通常直接否决或降级交易 |
+| `intermediate` | 清楚的次要摆动点、失败突破区、缺口边缘/起涨起跌区、通道边界、得到价格反复验证的 EMA20/EMA50 区域 | 可作为第一道独立障碍或 META 汇合项，但要看是否真的被价格接受/拒绝 |
+| `local` | 单个局部高低点、单根 K 线极值、孤立 EMA 触碰、未经价格反应确认的趋势线或数学投影 | 主要用于低周期管理和触发，不应单独压过 major/intermediate 结构 |
+
+补充纪律：
+
+- 同一价格簇中的前高、MM、缺口边缘和 EMA 只算一个主要障碍，不能重复计数；
+- 强度排序不等于距离排序。第一障碍仍是从入场方向看**最先遇到的独立区域**，不能跳过近端 local/intermediate 区域直接使用更远的 major/MM；
+- 低周期局部位不能自动替代 Daily/4H 结构止损或主要障碍；若采用低周期 thesis，必须单独记录交易假设；
+- 区域被有效接受后，原支撑/阻力角色可能转换；影线刺破但收盘收回，先记录为测试，不自动视为结构穿越；
+- 缺口、50% 回调、EMA 或 MM 只有在价格结构和位置共同支持时才提高质量，不能单独构成入场理由。
+
 ## Profit management around measured moves
 
 - A measured move is a target zone, not a price that must be touched exactly.
