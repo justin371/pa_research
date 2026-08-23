@@ -22,7 +22,7 @@
 | --- | --- | --- | --- | --- |
 | 普通趋势中的 ABC 延续 | `conditional` | KLAC、TSLA、CRWD、AMZN、NVDA，以及 NFLX/TSM 的空头对照 | 再找一个没有事件跳空、A 方向清楚、B 后段受控、首障碍明显宽裕的独立样本，确认不是只记住少数股票 | P1 |
 | H1/H2 多头 | `conditional / boundary` | KLAC H2、CRWD H2、AMZN H2、TSLA H2、NVDA H1、SPY 指数控制、SNOW 近期 H2-like | 一个普通开放趋势、无开盘跳过、前方首阻力不拥挤的视觉正向基准；SNOW 说明深 B、优质反应 K 仍可能被首障碍否决 | P1 |
-| L1/L2 空头 | `conditional` | NFLX L1、TSM L1 重订、AMZN L1、MCD L1、TSLA L2、NKE/QCOM/LRCX，ADBE 过渡转空 L1-like，以及 QQQ/IWM/DIA 指数控制 | ADBE 的低周期、第一支撑和财报过滤已通过，但父级不是纯净开放趋势、市场逆势；QQQ/IWM/DIA 的形态清楚但首支撑拥挤；继续寻找无开盘跳过、第一支撑真正宽裕的纯开放趋势 L1/L2 | P1 |
+| L1/L2 空头 | `conditional` | NFLX L1、TSM L1 重订、AMZN L1、MCD L1、TSLA L2、NKE/QCOM/LRCX，ADBE 过渡转空 L1-like，CME 视觉边界，以及 QQQ/IWM/DIA 指数控制 | ADBE 的低周期、第一支撑和财报过滤已通过，但父级不是纯净开放趋势、市场逆势；QQQ/IWM/DIA 与 CME 的形态清楚但首支撑拥挤；继续寻找无开盘跳过、第一支撑真正宽裕的纯开放趋势 L1/L2 | P1 |
 | H3/L3 与复杂回调 | `boundary / conditional` | KLAC 熊旗、TSLA L3、ANET、ASML、COIN、NFLX、XOM、UBER、NOW、DELL | 一个计数稳定、第三次推进确实减弱或在关键位置出现清楚反向反应的 H3/L3 对照；目前扩张型和区间型反例更多 | P2 |
 | 三推/楔形视觉形状 | `covered as boundary, not frozen` | TSLA 2026-05、NFLX 高位、多个 H3/L3 研究 | 需要更多“第三推减弱”与“第三推扩张”的并排图；不能把 H3/L3 自动等同三推楔形反转 | P2 |
 | 区间顶部/底部二次入场 | `partial` | TSLA 区间边缘、RBLX、QCOM 区间边界及部分 H2/L2 案例 | 独立于开放趋势 ABC 的区间顶部卖出、底部买入、失败突破后二次入场；尤其要保持区间逻辑，不能借用趋势腿计数 | P2 |
@@ -45,6 +45,8 @@
 `ADBE 2026-01-12–01-27` 补了一个“父级过渡转空、局部形态清楚”的空头候选：`01-12/20` 方向性下行、`01-21/26` 受控反弹、`01-27` L1-like 跌破；低周期顺序、第一支撑和财报窗口已经通过初步审计，但市场逆势与父级过渡使它只能作为条件样本。它不被当作纯开放趋势基准，也不被写成胜率或量化输入。下一步仍需寻找更纯净的开放趋势空头样本，而不是继续堆叠同一类过渡案例。
 
 2026-08-23 的新一轮视觉筛选进一步排除了 `XOM`、`PG`、`MCD` 的区间/重叠型外形，以及 `IBM`、`INTU`、`CAT`、`WMT` 的重新定价或状态切换型强下跌。它们保留为过滤对照，没有进入低周期审计；详见[`空头开放趋势视觉筛选日志`](bearish_open_trend_visual_screen_2026-08-23_CN.md)。
+
+同日的 `CME 2026-05-20–06-17` 只做了轻量快筛：局部 A→B→L1-like 外形成立，但左侧过渡/区间色彩、较深 B、开盘跳过和 `249.98–243.30` 支撑簇拥挤，使它停在 `boundary / observation-only`。它补的是“看起来像但不值得继续深审”的空头控制样本，不是新的正向基准；详见[`CME 空头 ABC/L1-like 视觉快筛`](cme_bearish_abc_l1_visual_screen_2026-05-20_2026-06-17.md)。
 
 ## 研究缺口与停止条件
 
