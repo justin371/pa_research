@@ -22,6 +22,48 @@
 - 强突破接受可以否定原 MTR thesis，切换到 BOP；
 - 首障碍太近时，形态可以像，但交易仍是 `valid_no_trade`。
 
+## 最小视觉协议
+
+```text
+parent_trend_and_age:
+major_location:
+reversal_evidence: double-top/bottom / failed-breakout / channel-break / final-flag / other
+first_reverse_attempt:
+first_attempt_follow_through:
+second_reverse_attempt:
+structure_acceptance:
+order_branch: reverse-stop / limit-retest / market-close / observation-only
+structural_stop:
+first_independent_obstacle:
+rough_R_R:
+thesis_state: reversal-attempt / MTR-candidate / MTR-confirmed-for-research / failed-MTR-thesis
+```
+
+## MTR 的五个必要问题
+
+1. 原趋势是否已经成熟，且当前位于主要高点/低点、通道边界或长期支撑阻力？
+2. 反转证据是结构性失败，还是只有减速、影线和一根反向 K？
+3. 第一次反向运动是否破坏了局部结构并得到跟随？
+4. 是否出现第二次反向确认或回测守住？
+5. 结构止损外到第一独立障碍是否仍有空间？
+
+若第 3、4 或 5 项答不清楚，保留 `reversal_attempt` 或 `valid_no_trade`，不要升级为 MTR。
+
+## 与三推和区间边缘的关系
+
+- 双顶/双底和三推首先是位置/压力描述；它们可以提供 MTR 证据，但不自动授权反转；
+- 成熟区间上沿/下沿的二次测试优先归入区间边缘目录；只有失败突破后产生新的反向接受，才另开 MTR 分支；
+- 三推第三次推进扩张时，优先考虑延续/高潮，不要强行叫衰竭；
+- 原方向强收盘突破并接受时，MTR thesis 失效，切换到 BOP。
+
+## 订单与风险
+
+- 默认研究反向 stop-confirmation；
+- 已知颈线、失败边界、角色转换区才可单列 limit-retest；未回测不算成交；
+- 极强反向收盘才考虑 market/close，且仍要过首障碍和事件过滤；
+- 结构止损放在反转极端/失败边界外，不用低周期窄止损包装成大级别 MTR；
+- 第一障碍不足约 1R、财报窗口或原趋势极端重新被接受时，记录 `valid_no_trade` 或 `failed-MTR-thesis`。
+
 ## 现有入口
 
 - [`MTR 视觉框架`](../../research/mtr_visual_framework_CN.md)
@@ -29,3 +71,20 @@
 - [`头肩与圆顶/圆底边界`](../../research/head_shoulders_rounded_top_bottom_visual_framework_CN.md)
 - [`TSLA 区间顶部 MTR 候选`](../../research/tsla_bearish_abc_case_2024-03-04_2024-03-14.md)
 - [`NFLX 三推顶部边界`](../../research/nflx_three_push_top_boundary_2024-08-05_2024-09-26.md)
+
+## 当前案例对照
+
+| 案例 | MTR 状态 | 研究结论 |
+| --- | --- | --- |
+| [`TSLA 2024-03-04–03-14`](../../research/tsla_bearish_abc_case_2024-03-04_2024-03-14.md) | 区间上沿重叠的 MTR candidate | L1 失败后 L2 清楚，但过程先破坏结构止损；静态空间不能代替路径审计 |
+| [`NFLX 2024-08-05–09-26`](../../research/nflx_three_push_top_boundary_2024-08-05_2024-09-26.md) | 高位多次测试 / MTR-like | 首支撑拥挤，且原方向后来重新接受，记 valid no-trade |
+| [`TSLA 2025-09-08–09-12`](../../research/tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md) | failed-MTR-thesis → BOP | 阻力下反转尝试被强收盘突破否定，必须切换新合同 |
+| [`ASML 2025-05-19–06-13`](../../research/asml_h3_l3_range_transition_boundary_2025-05-19_2025-06-13.md) | double-bottom-like / not-MTR | 低位两次测试后进入区间过渡，缺少结构接受和二次确认 |
+
+## 当前目标验收
+
+- 能从普通回调、区间边缘和 MTR candidate 三者中做出区分；
+- 能把双顶/双底、三推、失败突破和通道破坏作为证据而非自动信号；
+- 能记录第一反向、第二次确认、结构止损、首障碍和路径失效；
+- 能在原方向 BOP 接受后废弃 MTR thesis；
+- 保留至少一个形态像但首障碍/路径否决的边界案例。
