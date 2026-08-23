@@ -126,6 +126,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | `VIS-ABC-BULL-JNJ-H1-OPENING-SKIP` | `08-01–15` strong-looking A、`08-18–28` controlled B、`08-29` bullish H1-like；XLV 顺势，但 15m 只触碰触发、`09-02` 小缺口越过原价；B 内高点 `176.74` 形成首阻力 | [`JNJ 2025-08-01–09-02`](../research/jnj_bullish_h1_opening_skip_first_obstacle_boundary_2025-08-01_2025-09-02.md) | `pattern_like / strong-looking-A / controlled-B / bullish-H1-like / sector-aligned / opening-skip / first-obstacle-crowded / valid_no_trade / event-context-pending` |
 | `VIS-ABC-BULL-GROWTH-UNIVERSE-2024Q3` | SHOP/PLTR/DDOG/UBER 的完整日线视觉筛选：多头 ABC/H1-H2-like 外形与事件跳空、嵌套计数、缺口状态和首障碍边界并列 | [`2024 Q3 成长股视觉筛选`](../research/visual_screen_growth_universe_2024q3_CN.md) | `visual-screen / boundary-log / no-new-positive / not-quantitative / no-low-cycle-audit` |
 | `VIS-ABC-MACRO-UNIVERSE-2025H2` | JPM/GS/BAC/SPY 等完整日线窗口的人工视觉筛选；同时保留 XOM/CVX/MCD/KO/PG/WMT/LLY/UNH 的区间、事件、过渡和 lineage 边界 | [`2025 H2 宏观与跨行业视觉筛选`](../research/visual_screen_macro_universe_2025h2_CN.md) | `visual-screen / pattern-like-first / SPY-JPM-next / event-boundary / range-boundary / not-quantitative / no-low-cycle-audit` |
+| `VIS-ABC-ORDINARY-2025H1-FOLLOWUP` | MSFT/AMZN/ORCL/BKNG 与 AVGO/LRCX/AMAT/CSCO/TXN/IBM 的完整日线复筛；强 A、状态切换、缺口污染和过渡边界并列 | [`2025 H1 普通 ABC 视觉复筛`](../research/visual_screen_ordinary_abc_2025h1_followup_CN.md) | `visual-screen / pattern-like-first / event-state-boundary / nested-lineage-boundary / no-new-conditional-positive / not-quantitative / no-low-cycle-audit` |
 
 ### 视觉筛选的最小流程
 
