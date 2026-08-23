@@ -133,6 +133,24 @@ count_reset_reason:
 - 如果出现新趋势腿、新区间或计数被结构打断，要说明 reset 原因；
 - `setup/count bar`、`signal bar`、`confirmation/trigger bar` 必须分开。
 
+### H3/L3 三分流
+
+如果当前尝试被标为 H3/L3，额外填写：
+
+```text
+same_lineage: yes / no / unclear
+third_push_efficiency: weaker / similar / expanding / unclear
+third_push_follow_through: weakening / mixed / strengthening / unclear
+third_push_location:
+reverse_trigger_present: yes / no / unclear
+h3_l3_state: exhaustion_candidate / short_reaction_candidate / continuation_or_climax / not_h3_l3
+```
+
+- `exhaustion_candidate` 需要同一 lineage、压力效率下降、重要位置和反向触发；它也必须通过结构止损与第一障碍审计；
+- `short_reaction_candidate` 只表示支撑/阻力可能带来一次反应，不能升级成主要趋势反转；
+- `continuation_or_climax` 表示第三推仍在扩张或获得跟随，不能因为计数到 3 就逆势交易；
+- 若 lineage 不清楚、已经进入区间或结构被重置，使用 `not_h3_l3`，转回区间/过渡逻辑。
+
 ## 5. Pattern 分类
 
 用最少的标签描述当前候选，允许并列：
