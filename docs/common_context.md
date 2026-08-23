@@ -217,6 +217,8 @@ This is a current research hypothesis and operating principle, not yet a statist
 
 ## Pre-breakout resistance versus post-breakout acceptance
 
+The compact visual framework for BOP, gap-and-go, and breakout pullbacks is [`BOP / gap acceptance visual framework`](../research/bop_gap_acceptance_framework_CN.md).
+
 A resistance setup and a breakout setup are different states of the market:
 
 - Before acceptance above a major resistance, a double top or three/four-push approach is a reason to expect a reaction and remain flat. A short is a separate hypothesis and still requires an actual bearish trigger; the shape alone is not a short entry.
