@@ -42,7 +42,7 @@
 | L1/L2 空头 | `conditional` | NFLX L1、TSM L1 重订、AMZN L1、MCD L1、TSLA L2、NKE/QCOM/LRCX，ADBE 过渡转空 L1-like，CME 视觉边界，以及 QQQ/IWM/DIA 指数控制 | ADBE 仍不是纯开放趋势；更干净的样本可补充，但不再作为扩大股票池的默认任务 | P2（条件触发） |
 | H3/L3 与复杂回调 | `boundary / conditional` | KLAC 熊旗、TSLA L3、ANET、ASML、COIN、NFLX、XOM、UBER、NOW、DELL；Futu 定向筛选的 BKNG、PM、AMD、GOOGL、NKE、WMT | H3 有 KLAC 条件候选，但 L3 尚无同等质量的“衰竭 + 反向触发 + 首障碍有空间”候选；最新定向筛选仍被首障碍、事件、趋势延续或背景方向否决，继续区分衰竭、延续和区间，只有新边界或订单分支才加样本 | P1 |
 | 三推/楔形视觉形状 | `covered as boundary, not frozen` | TSLA 2026-05、NFLX 高位、多个 H3/L3 研究 | 保持“第三推减弱”与“第三推扩张”并排，不把 H3/L3 自动等同三推楔形反转 | P1 |
-| 区间顶部/底部二次入场 | `partial` | TSLA 区间边缘、RBLX、QCOM 区间边界及部分 H2/L2 案例 | 独立于开放趋势 ABC 的区间顶部卖出、底部买入、失败突破后二次入场；尤其要保持区间逻辑，不能借用趋势腿计数 | P2 |
+| 区间顶部/底部二次入场 | `framework / partial` | TSLA 区间边缘、RBLX、QCOM、TSLA 2024-03 区间上沿 L2，以及 [`交易区间边缘二次入场与失败突破`](range_edge_second_entry_framework_CN.md) | 仍缺事件干净的顶部做空、底部做多和失败突破重新进入的独立对照；保持区间逻辑，不能借用趋势腿计数 | P1 |
 | 主要趋势反转 / MTR | `partial / difficult` | 一些 TSLA、NFLX、XOM、COIN 高位边界 | 需要明确“趋势反转尝试”和“趋势中普通回调”的并排案例；先不把它升级为交易规则 | P3 |
 | 缺口后的订单分支 | `covered as boundary` | TSM 重订、NKE、QCOM、LRCX、GOOGL、BKNG、COIN、NVDA、VRT | 不再增加同质案例；只在新 pattern 同时出现缺口时，记录原 stop、开盘重订、limit-retest、观望四个合同的区别 | P3 |
 | 第一独立障碍与 MM | `cross-case stable principle` | 几乎所有已审计案例都记录了首阻力/首支撑与 MM 的先后关系 | 继续用视觉样本确认“先看左侧障碍，MM 只作后续路径”；不要把精确 R/R 当成第一阶段入口 | P3 |
