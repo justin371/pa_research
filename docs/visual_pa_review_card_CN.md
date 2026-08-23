@@ -258,6 +258,39 @@ space_to_first_obstacle: clearly_positive / borderline / blocked / unknown
 
 `research_positive` 只描述研究几何，不等于赢单、不等于经过统计验证，更不等于真实下单授权。
 
+## 11. 核心八个 pattern 的最小差异字段
+
+前面的字段是所有 pattern 共用的底线。下面只填写当前 pattern 特有的最小信息；不要因为某个标签出现，就重复计算同一个支撑、缺口、EMA 或 MM 为多个独立优势。
+
+| Pattern | 最小差异字段 | 进入相邻 pattern 的条件 |
+| --- | --- | --- |
+| `H1/L1` | `attempt_count=first`、A 腿强度、B 是否浅/时间整理、第一次恢复位置、第一次跟随 | 第一次无跟随并形成下一次有意义尝试 → `H2/L2`；父级 A/B/C 清楚 → `ABC` |
+| `H2/L2` | 第一次尝试如何失败/不充分、第二次位置、信号 K 质量、计数是否重置 | 第三次有意义尝试 → `H3/L3`；B 被接受成区间 → `range_edge` 或 `range_transition` |
+| `ABC` | `A_leg_origin/end`、B 类型（受控/深但后段受控/失控）、C 是否恢复原方向、父级/局部锚点 | B 成熟为双向区间 → `range_edge`；突破外侧被接受 → `BOP` |
+| `range_edge` | `upper_zone`、`lower_zone`、`midpoint`、第一次边缘失败、重新进入、second-leg-trap | 刺破后回区间 → `failed_breakout`；区间外接受并回踩守住 → `BOP` |
+| `failed_breakout/climax` | 事前边界、越界方式、接受/拒绝、原侧重返、高潮扩张或衰竭 | 主要结构破坏且二次确认 → `MTR`；原方向重新接受 → `BOP`；第三推扩张 → `three_push` |
+| `BOP` | 突破前边界、收盘外侧接受、跟随、旧边界角色转换、回踩是否守住 | 回到旧区间 → `failed_breakout`/`range_edge`；新趋势成熟后才可能另建 `MTR` |
+| `MTR` | 成熟趋势/主要位置、第一次反向、结构破坏、第二次确认、原趋势是否重新接受 | 原方向重新接受 → 旧 `MTR` 失效并转 `BOP`；只有三次推进但无结构破坏 → `three_push` |
+| `three_push/H3-L3` | 同一 lineage、三次推进效率/重叠/收盘、第三推状态（衰竭/扩张/区间重复/通道延续） | 反向结构被接受 → `MTR`/失败突破；原方向扩张接受 → `BOP` 或延续；区间边缘 → `range_edge` |
+
+这些字段可以共存但有主次：`ABC + H2` 是父级与计数的关系，`three_push + MTR` 是证据与状态转换的关系，`failed_breakout → BOP` 是先后关系。输出时只保留一个当前交易合同，旧合同失效后必须重新冻结触发、成交、止损、首障碍和 R/R。
+
+### 核心输出状态的统一写法
+
+核心八个目录的新记录优先使用下列状态；本卡旧案例中出现的 `research_ready`、`research_positive`、`invalidated`、`pending` 仍可保留，但在摘要中映射为下列标准：
+
+| 标准状态 | 适用情形 | 旧写法映射 |
+| --- | --- | --- |
+| `pattern_like` | 外形已出现，关键位置/触发/空间尚未完整审计 | `visual_candidate` |
+| `research_candidate` | 背景、结构、订单和风险可继续深入 | `research_ready`、`candidate` |
+| `research_positive_conditional` | 入场前几何较好，但仍非胜率或实盘授权 | `research_positive`、`research_positive_candidate` |
+| `observation_only` | 形态值得保留但暂不建立交易合同 | `observation-only` |
+| `valid_no_trade` | 第一障碍、事件、计数、成交或止损几何否决 | `no_trade`、`blocked` |
+| `failed_thesis` | 当前方向假设被结构或接受状态否定 | `invalidated`、`failed-MTR-thesis` |
+| `pending` | 缺少周期、事件、成交或图表上下文 | `pending` |
+
+状态不是评分，也不是胜率。它只告诉视觉助手下一步是继续深审、观望、切换合同，还是保留边界样本。
+
 ## 输出模板
 
 ```text

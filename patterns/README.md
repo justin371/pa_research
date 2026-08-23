@@ -28,17 +28,18 @@
 每个目录都按同一套视觉顺序研究：
 
 ```text
-parent_state
+timeframe
+parent_state / market_context
 left_structure_and_location
 directional_leg_or_range_edge
-pullback_or_failed_attempt
-signal_bar_and_trigger
-order_branch
-structural_stop
-first_independent_obstacle
-rough_R_R
+lineage_and_attempt_count
+pattern_family / pattern_like_reason
+signal_bar_and_trigger / follow_through
+order_branch / actual_fill_or_open_skip
+structural_stop / invalidation
+first_independent_obstacle / rough_R_R
 event_and_sector_context
-failure_or_no_trade_reason
+final_state / failure_or_no_trade_reason
 ```
 
 ## 范围边界
