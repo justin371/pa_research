@@ -56,3 +56,5 @@ final_state / failure_or_no_trade_reason
 ## 核心 pattern 交叉审计
 
 八个目录的共存关系、切换条件、状态词汇和共同否决层见[`核心八个 Pattern 交叉一致性审计`](../research/core_pattern_cross_audit_CN.md)。使用时先判父级市场状态，再判结构/计数，最后判状态转换和交易合同；不要因为多个标签同时出现就重复计算优势。
+
+订单语义和 R/R 的跨 pattern 规则见[`八个 Pattern 的订单合同与 R/R 审计`](../research/order_contract_cross_pattern_audit_CN.md)。

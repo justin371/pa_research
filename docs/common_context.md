@@ -163,6 +163,8 @@ The probability table is treated as conditional experience-based guidance, not g
 
 ## Order and risk principles
 
+八个主动 pattern 的订单合同与 R/R 分支见[`八个 Pattern 的订单合同与 R/R 审计`](../research/order_contract_cross_pattern_audit_CN.md)；形态、触发、成交和结果必须分开记录。
+
 - Initial default for H1/H2/L1/L2 and breakout-pullback setups: use a stop entry after a valid signal.
 - Market or close entry may be considered after a strong breakout, but slippage and wider stops must be accepted.
 - A sell stop waits for price to move down through the trigger; a sell limit waits for price to rebound up to the limit. A limit order placed below the live market is marketable and may fill immediately; it is not a substitute for a downside sell stop.

@@ -194,7 +194,7 @@ follow_through_expected: yes / mixed / no / unknown
 
 ## 7. 订单分支：把“怎么看”和“怎么进”分开
 
-订单分支的可复用规则和跳空处理见 [`订单分支视觉协议`](../research/order_branch_visual_protocol_CN.md)。本卡只保留逐图填写字段，避免把 stop、stop-limit、limit-retest、收盘确认和观望混成一个入场结论。
+订单分支的可复用规则和跳空处理见 [`订单分支视觉协议`](../research/order_branch_visual_protocol_CN.md)；八个主动 pattern 的默认合同和 R/R 分流见[`八个 Pattern 的订单合同与 R/R 审计`](../research/order_contract_cross_pattern_audit_CN.md)。本卡只保留逐图填写字段，避免把 stop、stop-limit、limit-retest、收盘确认和观望混成一个入场结论。
 
 ```text
 order_branch: stop / stop-limit / limit-retest / market-close / observation-only
