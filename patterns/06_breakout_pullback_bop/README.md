@@ -61,6 +61,7 @@ failure: reacceptance_inside_old_range / no_follow_through / event-risk
 - [`多周期视觉复核框架`](../../research/multitimeframe_visual_review_framework_CN.md)
 - [`订单分支协议`](../../research/order_branch_visual_protocol_CN.md)
 - [`BOP 突破回踩专项视觉证据审计`](../../research/bop_visual_evidence_gap_audit_2026-08-24_CN.md)
+- [`BOP 真实多日回踩候选审计`](../../research/bop_multiday_pullback_candidate_audit_2026-08-24_CN.md)
 
 ## 当前案例对照
 

@@ -131,6 +131,8 @@ ABC 趋势延续的独立专项审计见[`ABC 趋势延续专项视觉证据审�
 
 优先 Pattern 的统一候选输出见[`优先 Pattern 代表性视觉候选矩阵`](priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)：KLAC/NFLX/CRWD/TSM 提供条件性合同，TSLA/RBLX 等提供首障碍、过程止损、区间计数和状态切换对照。
 
+BOP 的多日回踩证据缺口见[`BOP 真实多日回踩候选审计`](bop_multiday_pullback_candidate_audit_2026-08-24_CN.md)：TSLA 2025-09 只证明同日接受/回测，TSLA 2025-03 只证明同日旧位回测，当前没有事件干净、过程完整的多日正例。
+
 ## 边界
 
 MTR/L3 的最新缺口审计见[`MTR 与三推证据缺口审计`](mtr_three_push_evidence_gap_audit_2026-08-23_CN.md)。

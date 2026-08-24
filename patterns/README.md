@@ -118,3 +118,5 @@ Head-and-Shoulders / Rounded 头肩与圆顶圆底边界复核见[`头肩与圆�
 完整图表统一复核卡见[`PA 图表视觉复核卡`](../docs/visual_pa_review_card_CN.md)，工作流边界演练见[`完整图表视觉复核工作流边界审计`](../research/visual_review_workflow_boundary_audit_2026-08-24_CN.md)：快筛先判断像不像，深审再处理订单、止损、首障碍和粗略 R/R。
 
 优先 Pattern 的代表性视觉候选与正/反例矩阵见[`优先 Pattern 代表性视觉候选矩阵`](../research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)：每个案例只保留一个主标签，次标签、状态切换、订单合同和首障碍单独记录。
+
+BOP 真实多日回踩的专项审计见[`BOP 真实多日回踩候选审计`](../research/bop_multiday_pullback_candidate_audit_2026-08-24_CN.md)：当前区分了状态切换、同日回测、缺口重订和真正缺失的多日回踩正例。

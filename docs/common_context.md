@@ -306,3 +306,5 @@ A resistance setup and a breakout setup are different states of the market:
 When a definition is uncertain, state the uncertainty instead of silently assuming. Distinguish Brooks' original wording, our interpretation, and any untested hypothesis. Use chart examples to resolve ambiguity, then update this document and the relevant strategy note.
 
 优先 Pattern 的代表性候选与对照矩阵见[`优先 Pattern 代表性视觉候选矩阵`](../research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)：完整图表先快筛，跨 pattern 只保留一个主标签，再审计订单、首障碍、状态切换和过程路径。
+
+BOP 的多日回踩必须与同日盘中回调、gap-and-go 和缺口重订分开；专项审计见[`BOP 真实多日回踩候选审计`](../research/bop_multiday_pullback_candidate_audit_2026-08-24_CN.md)。
