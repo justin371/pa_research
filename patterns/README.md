@@ -36,6 +36,12 @@
 | Double Top / Double Bottom / 双顶双底 | [`Double Top / Double Bottom`](15_double_top_bottom/README.md) | 独立区分两次有分离测试、区间边缘、MTR、Final Flag 与普通延续；不把相近高低点自动当反转 |
 | Head-and-Shoulders / Rounded / 头肩与圆顶圆底 | [`Head-and-Shoulders / Rounded`](16_head_shoulders_rounded/README.md) | 独立区分头肩、圆顶/圆底、复杂双顶双底、颈线接受与普通旗形；不把三个点自动当反转 |
 
+## 基础视觉层
+
+| 基础层 | 目录 | 当前定位 |
+| --- | --- | --- |
+| Support / Resistance / 支撑阻力 | [`Support / Resistance`](../foundations/01_support_resistance/README.md) | 所有 pattern 共用的位置、结构止损、首障碍与角色转换过滤；不是独立交易形态 |
+
 ## 统一研究字段
 
 每个目录都按同一套视觉顺序研究：

@@ -196,7 +196,7 @@ The `72.00` stop used in the KLAC H2 study is a structural research example, not
 
 支撑和阻力按**区域**而不是单一价格线记录。下面是研究时的默认强度顺序；它是视觉优先级，不是保证价格一定在那里反转。
 
-八个主动 pattern 的位置分流见[`支撑/阻力强度与八个 Pattern 的位置审计`](../research/support_resistance_cross_pattern_audit_CN.md)。
+所有 pattern 共用的基础位置层见[`Support / Resistance`](../foundations/01_support_resistance/README.md)；跨 pattern 分流见[`支撑/阻力强度与八个 Pattern 的位置审计`](../research/support_resistance_cross_pattern_audit_CN.md)，专项证据审计见[`Support / Resistance 专项视觉证据审计`](../research/support_resistance_visual_evidence_gap_audit_2026-08-24_CN.md)。
 
 | 层级 | 优先观察的结构 | 说明 |
 | --- | --- | --- |
