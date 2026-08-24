@@ -129,6 +129,8 @@ H/L 与三推共用的第二阶段 lineage、两年左侧背景、重要高低�
 
 空头 L1/L2-like 的 Daily/4H-like/60m 对照见[`MAR 空头 L1/L2-like 视觉资产`](../research/assets/visual_recognition/2026-08-24/round3_l1_l2_mar/README.md)；该历史窗口的 15m 数据不可得，报告保留 `15m-evidence-missing`，不把缺失证据补写成确认。
 
+Round4 历史图表视觉练习见[`Round4 历史图表视觉练习与 H/L/ABC 复核`](../research/visual_recognition_round4_historical_practice_2026-08-24_CN.md)及其[`无标签图表资产`](../research/assets/visual_recognition/2026-08-24/round4_historical_practice/README.md)；本轮增加 42 标的筛选和 7 个 targeted 多周期复核，但 cohort3 Daily 左侧不足两年，所有新增计数保持 `pending`。
+
 优先 Pattern 的代表性视觉候选与正/反例矩阵见[`优先 Pattern 代表性视觉候选矩阵`](../research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)：每个案例只保留一个主标签，次标签、状态切换、订单合同和首障碍单独记录。
 
 BOP 真实多日回踩的专项审计见[`BOP 真实多日回踩候选审计`](../research/bop_multiday_pullback_candidate_audit_2026-08-24_CN.md)：当前区分了状态切换、同日回测、缺口重订和真正缺失的多日回踩正例。

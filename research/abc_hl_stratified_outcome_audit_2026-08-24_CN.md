@@ -1,6 +1,6 @@
 # ABC + H/L 分层历史结果审计（2026-08-24）
 
-状态：`research-only / stratified-outcome-audit-v0.2 / pilot / not-statistical`
+状态：`research-only / stratified-outcome-audit-v0.3 / pilot / not-statistical`
 
 ## 目的与范围
 
@@ -129,6 +129,58 @@ evidence_status: comparable / conditional / excluded / dependent-lineage
 
 补充审计后的变化是：H2-like 案例数量增加了，但**符合“同一合同、同一背景、首障碍有空间、事件已核对、结果可回放”全部条件的样本数量没有增加**。因此本轮不把任何新案例加入 `ABC+H2` 的空间正向基准，也不改变 `no-new-positive`。
 
+## 七、借鉴 Codex Trading 的近似 pattern 审计
+
+范围说明：本节只回看历史图表；所有 pattern、lineage、reset 和缺失字段口径以 PA Research 当前的[`H/L lineage 与三推状态视觉边界复核`](h_l_lineage_visual_boundary_audit_2026-08-24_CN.md)、[`视觉复核工作流边界审计`](visual_review_workflow_boundary_audit_2026-08-24_CN.md)和[`视觉 pattern 快筛协议`](visual_pattern_triage_protocol_CN.md)为准。Codex Trading 只提供历史图表或 OHLC 资产，不提供规则。
+
+本轮只读检查了 Codex Trading 的两类历史材料，并按“只有有帮助的图才保留为参考”筛选：
+
+- `C:\Users\lwang\Documents\Codex\worktrees\trading\research\2026-08-13-legacy-process-register.json`：15 条历史 Daily 过程登记，标签包括 H1/H2/L1/L2/H3/L3。它引用的 `h-tpb-gen-20260813/bars.json` 和 `validation-fixed.json` 在当前 checkout 不存在，Git 对象历史中也没有可重放副本；这些登记行不计为图表案例，也不据此做视觉判断。
+- `C:\Users\lwang\Documents\Codex\worktrees\trading\research\2026-08-13-mrvl-tpb-case-review_CN.md` 与其 `bars.json`：可重建 MRVL 的无标签 Daily 图，用于直接视觉复核。该 Trading 数据集只有约一年 Daily 左侧，不足以替代 PA Research 要求的两年背景，因此两年高低点和 EMA 背景仍以 PA Research 的独立视觉资产复核。
+
+这里采用“近似对应即可进入研究候选层”的宽松视觉标准，但不放宽限制条件。`H1/H2/L1/L2` 仍只是当前回调中的腿数描述；没有同一 lineage、结构位置、守住、确认和首障碍，就只能记作 `pattern_candidate` 或 `boundary_candidate`。
+
+### 7.1 登记表的处理
+
+登记表中的 H/L 标签只用于确认“曾经存在待复核的历史日期”，不作为图表案例。由于缺少源图，无法逐项记录两年 Daily、EMA20/50/200、重要高低点/支撑阻力、母腿/尝试/lineage 或首障碍；本节不把它们混入视觉练习数量。
+
+### 7.2 唯一保留的直接图形参考：MRVL
+
+对 Codex Trading 的 MRVL bars 重新绘制无 pattern 标签的 Daily 图后，可以直接看到：3 月初强方向性 A 腿，随后两段逆势回撤，3 月 19 日回到约 `85` 的结构/EMA20 区域，3 月 20 日越过前一根信号高点。这是一个可借鉴的 `ABC-like + H2-like + TPB` 视觉候选，而不是因为文件已经写了 H2 才接受该标签。
+
+| 视觉复核字段 | MRVL 观察与证据状态 |
+| --- | --- |
+| 两年 Daily 左侧 | **未满足**：当前 bars 只有约一年（`2025-08-11`–`2026-08-10`，251 根 Daily）；不能声称两年背景已完成。 |
+| EMA20/50/200 | 决策日 `2026-03-19` 本地重算约 `85.90 / 83.91 / 81.85`；只作背景汇合，不作 setup、止损或首障碍。 |
+| 重要高低点、支撑阻力 | A 腿附近 `2026-03-06` 高约 `93.33`、`2026-03-10` 高约 `94.98`；回撤低点约为 `2026-03-13` 的 `86.76`、`2026-03-18` 的 `87.10`、`2026-03-19` 的 `85.07`。可见支撑/回测区约 `85–86.5`；`93.37` 与 `94.98` 是决策前可见的近端/远端阻力候选。 |
+| 母腿、尝试与 lineage | 母腿是 `3-06`–`3-10` 的方向性上冲；同一 Daily 回撤内先有一次恢复不足，再有 `3-19` 信号、`3-20` 越过 `3-19` 高点的 H2-like 第二次尝试。计数仍是 provisional，不能把 `5-12` 接成同一 episode。 |
+| 首障碍与空间 | entry `89.6730`、结构 stop `84.50`；到 `93.37` 约 `0.71R`，到 `94.98` 约 `1.03R`。按 PA Research 当前案例合同，近端首障碍不足 `1R` 时保留为边界；远端口径仍是低 R/R 条件带。 |
+| 关键限制 | 无 15m 触发/确认；`3-30` 异常波幅是事前警告；不能用后续上涨或 `5-12` 走势倒灌验证。分类为 `visual_candidate / space-boundary / 15m-evidence-missing`。 |
+
+但首障碍审计同时成立：
+
+- 入场约 `89.6730`、结构止损约 `84.50` 时，到 `93.37` 只有约 `0.71R`；
+- 只有把更远的 `94.98` 当作第一障碍时才约 `1.03R`，仍进入低 R/R 条件带；
+- 3 月 30 日的异常波幅和后续恢复不能倒灌到 3 月 20 日的决策；5 月 12 日也没有独立的 episode、信号、成交、止损和首障碍记录。
+
+因此 MRVL 可以借鉴“怎样从图上读出 H2-like”，但不能借鉴为“高胜率 H2”或空间正向样本。它应进入 `visual_candidate / space-boundary / 15m-evidence-missing` 控制组。
+
+### 7.3 跨仓库借鉴后保留的硬限制
+
+1. 先看两年 Daily 左侧背景、EMA20/50/200、重要高低点和支撑阻力，再看 4H/1H/15m；Trading 回放中只有约一年 Daily 数据的案例，左侧背景标为 `insufficient_for_two_year_review`。
+2. H2/L2 必须有同一回调中的第一次失败/不足与第二次有意义的尝试；两次相似价格、两个低点或识别器标签本身不够。
+3. ABC 只能作为母结构的近似视觉描述；若父级已转为区间、成熟趋势或状态切换，不能把区间内三次摆动继续数成开放趋势 ABC/H3。
+4. EMA20/50/200 只记录背景和汇合，不能替代结构磁铁、首障碍或结构性失效；局部停顿也不能充当首障碍。
+5. Codex Trading 的旧 Daily 结果只能做路径/几何对照，不能直接并入本审计的成交分母；因为它们缺少可分离的 15m 信号、确认、MAE/MFE 和完整生命周期事件。
+
+跨仓库借鉴目前只有 MRVL 提供了可直接复核的历史图；其余登记行因没有源图而被排除。本节不讨论当前规则或生产结论，只保留视觉研究中的 `pattern_candidate`、边界和缺失证据。
+
+### 7.4 Round4 独立历史图练习
+
+随后用 Codex Trading 当前保留的 `multisymbol-cohort3-20260812/bars.json` 做了独立的无标签图表练习：先筛选 42 个 Daily 标的，再放大 NKE、COP、AMZN、DE、JNJ、NFLX、META 七个历史日期，并额外练习 GOOGL、MSFT、XOM。详细字段、图像链接和逐例读法见[`Round4 历史图表视觉练习与 H/L/ABC 复核`](visual_recognition_round4_historical_practice_2026-08-24_CN.md)。
+
+这一步的作用是检验“登记标签是否真的能从图上读出来”。结果并不一致：COP 最接近 `ABC-like + H1-like`；NFLX 可练习 bearish `ABC/L1-L2-like`；JNJ 只能保留 `H2-like hypothesis`；DE 是 `H2-like boundary`；AMZN、META、NKE 以及 GOOGL、MSFT、XOM 更多用于识别父级转区间、晚趋势和 lineage 不清楚的反例。Round4 的 Daily 左侧只有约一年，因此所有新增案例的两年背景仍是 `pending`，没有一个 strict same-lineage 计数被冻结。
+
 ## 当前结论
 
 ```text
@@ -138,6 +190,16 @@ win_rate: not-computable
 realized_R_distribution: not-computable
 priority_geometry_strata: ABC+L1 no-gap space-positive; ABC+H2 late-stabilized low-cycle
 supplemental_cases_reviewed: 5
+codex_trading_register_rows_screened: 15
+legacy_register_rows_excluded_from_visual_count: 7
+round4_daily_screen_symbols: 42
+round4_targeted_multitimeframe_cases: 7
+round4_additional_multitimeframe_practice_cases: 3
+directly_reconstructed_codex_trading_visual_cases: 11
+useful_codex_trading_chart_references: 11
+approximate_h_l_visual_candidates_reviewed: 4
+round4_strict_same_lineage_freezes: 0
+round4_two_year_daily_complete_cases: 0
 new_comparable_positive_samples: 0
 no_new_positive: maintained
 scope: PA Research only; no scanner; no Execution Agent; no Codex Trading changes
