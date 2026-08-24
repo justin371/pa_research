@@ -100,3 +100,5 @@ BOP / 突破接受与突破回踩的边界复核见[`BOP 视觉边界复核`](..
 交易区间边缘二次入场边界复核见[`交易区间边缘二次入场视觉边界复核`](../research/range_edge_second_entry_visual_boundary_audit_2026-08-24_CN.md)：边缘计数、中部观望、second-leg trap 与 limit/stop 合同分开。
 
 Final Flag 最终旗形边界复核见[`Final Flag 最终旗形视觉边界复核`](../research/final_flag_visual_boundary_audit_2026-08-24_CN.md)：趋势末端压缩、普通旗形、区间过渡、BOP 接受和反向二次确认分开。
+
+Opening Reversal 开盘反转边界复核见[`Opening Reversal 开盘反转视觉边界复核`](../research/opening_reversal_visual_boundary_audit_2026-08-24_CN.md)：开盘第一波失败、开盘接受、普通 H/L、事件缺口与实际订单重订分开。
