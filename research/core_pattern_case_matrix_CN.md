@@ -38,6 +38,8 @@ Channel / 通道也不加入核心八个矩阵。它研究紧通道、宽通道�
 
 Inside Bar / 两根 K 线反转也不加入核心八个矩阵。它把严格母子 K 范围、二内包/IOI、两根压力转换和 H/L 信号序列分开；专项审计见[`Inside Bar / 两根 K 线专项视觉证据审计`](inside_bar_two_bar_reversal_visual_evidence_gap_audit_2026-08-24_CN.md)，目录入口见[`Inside Bar / 两根 K 线反转`](../patterns/13_inside_bar_two_bar_reversal/README.md)。KLAC、AAPL、RBLX、TSLA 已覆盖条件序列、首障碍否决、区间中部噪音和跳空非内包，但尚无严格 OHLC 已冻结且空间宽裕的独立正例。
 
+Triangle / 三角形也不加入核心八个矩阵。它研究收缩三角形、扩张三角形、区间内区间以及突破接受/失败；专项审计见[`Triangle / 三角形专项视觉证据审计`](triangle_expanding_range_visual_evidence_gap_audit_2026-08-24_CN.md)，目录入口见[`Triangle / 三角形`](../patterns/14_triangle_expanding_range/README.md)。ASML、TSLA、RBLX、COIN、XOM、KLAC 已覆盖父级区间、突破接受、扩张和旗形对照，但尚无事件干净、两侧边界确认、首障碍宽裕且路径完整的收缩三角形正例。
+
 H1/L1、H2/L2 与 ABC 的证据缺口审计见[`H1/L1、H2/L2 与 ABC 证据缺口审计`](h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)。本轮新增的是 CRWD 的深 B/H2 及 TSM 的 gap-reprice 订单分支；H1/L1 普通开放趋势纯净基准仍记为 `no-new-positive`，不再复制同质边界。
 
 H2/L2 的独立专项审计见[`H2/L2 第二次入场专项视觉证据审计`](h2_l2_visual_evidence_gap_audit_2026-08-24_CN.md)。最新结论是：多头 H2 为条件性覆盖，空头 L2 仍为 `no-new-positive`；低周期窄止损、高周期结构止损、静态 R/R 和真实路径必须分开。
