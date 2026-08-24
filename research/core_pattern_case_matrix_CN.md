@@ -58,6 +58,8 @@ Order / Risk Contracts / 订单风险合同也不作为核心 pattern，而作�
 
 Market State / Context / 市场状态与父级背景也不作为核心 pattern，而作为所有目录共用的上游视觉过滤层。它先区分开放趋势、成熟区间、区间边缘、过渡和高潮，再决定是否允许 ABC、H/L、MTR 或失败突破的计数；入口见[`Market State / Context`](../foundations/07_market_state_context/README.md)，专项审计见[`市场状态与父级背景视觉证据审计`](market_state_context_visual_evidence_audit_2026-08-24_CN.md)。
 
+Leg Pressure / Signal Quality / 强 A 腿、回调压力与信号 K 质量也不作为核心 pattern，而作为所有目录共用的方向质量层。它把强/普通 A、深但受控 B、反向压力扩张、优质 signal K 和 follow-through 分开；入口见[`Leg Pressure / Signal Quality`](../foundations/08_leg_pressure_signal_quality/README.md)，专项审计见[`强 A 腿与信号 K 视觉证据审计`](leg_pressure_signal_quality_visual_evidence_audit_2026-08-24_CN.md)。
+
 H1/L1、H2/L2 与 ABC 的证据缺口审计见[`H1/L1、H2/L2 与 ABC 证据缺口审计`](h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)。本轮新增的是 CRWD 的深 B/H2 及 TSM 的 gap-reprice 订单分支；H1/L1 普通开放趋势纯净基准仍记为 `no-new-positive`，不再复制同质边界。
 
 H2/L2 的独立专项审计见[`H2/L2 第二次入场专项视觉证据审计`](h2_l2_visual_evidence_gap_audit_2026-08-24_CN.md)。最新结论是：多头 H2 为条件性覆盖，空头 L2 仍为 `no-new-positive`；低周期窄止损、高周期结构止损、静态 R/R 和真实路径必须分开。
