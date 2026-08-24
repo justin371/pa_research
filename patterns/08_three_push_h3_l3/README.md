@@ -97,6 +97,8 @@ H3/L3 描述的是第三次有意义的方向尝试；“三推”描述的是�
 | [`TSLA 2025-03-07–03-10`](../../research/tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md) | L3 扩张/卖出高潮 | 说明第三推可以更强；不能把 L3 自动叫成楔形反转 |
 | [`TSLA 2026-05-19–06-26`](../../research/h3_l3_research_gate_CN.md) | 三次低点收窄、支撑反应 | 只能作为短线反应候选；首障碍拥挤，不升级为日线反转交易 |
 | [`XOM 2024-07-18–08-02`](../../research/xom_bearish_h3_flag_expansion_boundary_2024-07-18_2024-08-02.md) | 第三推扩张/高潮边界 | 原方向压力仍强，跳空后需要重订订单；valid-no-trade |
+| [`UBER 2024-07-17–07-26`](../../research/uber_bearish_h3_l2_first_support_boundary_2024-07-17_2024-07-26.md) | 三次上探后更高、更宽，第三推扩张 | 财报过滤通过但首支撑仅约 0.2R–0.3R；H3-like / valid-no-trade |
+| [`ANET 2024-05-16–06-10`](../../research/anet_h3_l3_case_study_2024-05-16_2024-06-10.md) | 第二推扩张，第三次在支撑处减速 | 事件/跳空未闭环；不是逐推减弱的标准 L3 |
 | [`ASML 2025-05-19–06-13`](../../research/asml_h3_l3_range_transition_boundary_2025-05-19_2025-06-13.md) | 区间重复测试 | 重置趋势腿计数，使用区间/过渡逻辑 |
 | [`NFLX 2024-08-05–09-26`](../../research/nflx_three_push_top_boundary_2024-08-05_2024-09-26.md) | 高位多次测试、超过三次且首障碍拥挤 | 形态像但路径不值得交易；不能用后续顶部反推第三推 |
 
@@ -128,3 +130,6 @@ H3/L3 描述的是第三次有意义的方向尝试；“三推”描述的是�
 - [`NFLX 三推顶部边界`](../../research/nflx_three_push_top_boundary_2024-08-05_2024-09-26.md)
 - [`XOM 三推扩张边界`](../../research/xom_bearish_h3_flag_expansion_boundary_2024-07-18_2024-08-02.md)
 - [`MTR 与三推证据缺口审计`](../../research/mtr_three_push_evidence_gap_audit_2026-08-23_CN.md)：BKNG/PM 最接近 L3 衰竭但被首障碍否决；本轮没有新增合格 L3 正例。
+- [`三推/H3-L3 专项视觉证据审计`](../../research/three_push_h3_l3_visual_evidence_gap_audit_2026-08-24_CN.md)：KLAC 保留为唯一 H3 条件候选；L3 为 `no-new-positive`，扩张、区间重复和通道延续分别记录。
+
+本轮专项审计的工作结论是：三推/H3-L3 的视觉分流已经可用，但反向交易仍须通过第二次确认、结构止损和首障碍空间审计；不能因为第三推数量到三次就自动获得反向授权。

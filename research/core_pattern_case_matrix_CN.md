@@ -24,7 +24,7 @@
 | [`失败突破与高潮`](../patterns/05_failed_breakout_climax/README.md) | [`TSLA 2025-03-11–05-13`](tsla_range_after_sell_climax_2025-03-11_2025-05-13.md)：高潮后先看小反转/区间，不自动升级 MTR | [`TSLA 2025-09-08–09-12`](tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md)：原反转假设被强突破接受否定，必须转 BOP | [`COST 2024-07-11–07-18`](cost_bearish_abc_climax_boundary_2024-07-11_2024-07-18.md)：强 A/高潮边界但首支撑与事件阻塞；仍缺无事件、反向二次确认和首障碍宽裕的正例 |
 | [`突破回踩 / BOP`](../patterns/06_breakout_pullback_bop/README.md) | [`TSLA 2025-09-08–09-12`](tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md)：阻力外强收盘接受，旧 MTR/区间合同废弃；[`TSLA 2025-03-04 284 回测`](tsla_abc_playbook_2025-03-04_284_retest.md)：旧位回测形成独立 limit-retest 条件合同 | [`GOOGL 2024-03-04–03-22`](googl_bullish_h1_gap_trigger_boundary_2024-03-04_2024-03-22.md)、[`WMT 2024-06-24–06-27`](wmt_bullish_h1_gap_pullback_boundary_2024-06-24_2024-06-27.md)：方向或形态正确，但跳空/首障碍/信号质量使其 no-trade | [`QCOM 2024-07-24`](qcom_bearish_abc_l1_l2_gap_sector_boundary_2024-07-17_2024-07-30.md)、[`NKE 2025-10-28`](nke_bearish_abc_minor_gap_boundary_2025-10-03_2025-10-29.md)：空头重订/回测边界；仍缺事件干净、回踩守住、首障碍宽裕的多空普通基准 |
 | [`MTR 趋势反转`](../patterns/07_mtr_reversal/README.md) | [`TSLA 2024-03-04–03-14`](tsla_bearish_abc_case_2024-03-04_2024-03-14.md)：区间上沿重叠的 MTR candidate，L1 失败后 L2 清楚但过程止损优先 | [`NFLX 2024-08-05–09-26`](nflx_three_push_top_boundary_2024-08-05_2024-09-26.md)、[`LOW 2024-06-11–06-24`](low_bullish_h1_h2_first_obstacle_boundary_2024-06-11_2024-06-24.md)：反向证据存在，但首支撑/阻力或父级状态否决 | [`ASML 2025-05-19–06-13`](asml_h3_l3_range_transition_boundary_2025-05-19_2025-06-13.md)、[`PLTR 2024-12-24–2025-01-08`](pltr_bearish_abc_l1_ordinary_a_boundary_2024-12-24_2025-01-08.md)：双底/双顶样外观分别落入区间过渡或普通回调；仍缺无事件、结构破坏、二次确认和首障碍宽裕的双向正例 |
-| [`三推 / H3-L3`](../patterns/08_three_push_h3_l3/README.md) | [`KLAC 2025-03-12–03-28`](klac_h3_bear_flag_case_2025-03-12_2025-03-28.md)：熊旗顶部第三推受阻后有空头接受，条件性研究候选 | [`NFLX 2024-08-05–09-26`](nflx_three_push_top_boundary_2024-08-05_2024-09-26.md)：多次测试超过三次且首障碍拥挤，形态像但不值得交易 | [`TSLA 2025-03-07–03-10`](tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md)：L3 扩张/卖出高潮，不是衰竭反转；L3 仍缺同等质量的无事件衰竭正例 |
+| [`三推 / H3-L3`](../patterns/08_three_push_h3_l3/README.md) | [`KLAC 2025-03-12–03-28`](klac_h3_bear_flag_case_2025-03-12_2025-03-28.md)：熊旗顶部第三推受阻后有空头接受，唯一保留的条件性 H3 候选 | [`NFLX 2024-08-05–09-26`](nflx_three_push_top_boundary_2024-08-05_2024-09-26.md)、[`UBER 2024-07-17–07-26`](uber_bearish_h3_l2_first_support_boundary_2024-07-17_2024-07-26.md)：形态或第三推外观存在，但首障碍拥挤/第三推扩张否决 | [`TSLA 2025-03-07–03-10`](tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md)、[`ASML 2025-05-19–06-13`](asml_h3_l3_range_transition_boundary_2025-05-19_2025-06-13.md)：L3 扩张或区间重复；L3 仍为 `no-new-positive` |
 
 ## 本轮补充
 
@@ -35,6 +35,8 @@ H2/L2 的独立专项审计见[`H2/L2 第二次入场专项视觉证据审计`](
 H1/L1 的独立专项审计见[`H1/L1 第一次入场专项证据审计`](h1_l1_visual_evidence_gap_audit_2026-08-24_CN.md)。KLAC 只新增 setup/confirmation 与事件窗口边界，不改变 `no-new-positive` 结论。
 
 BOP 的独立专项审计见[`突破回踩 / BOP 专项视觉证据审计`](bop_visual_evidence_gap_audit_2026-08-24_CN.md)。TSLA 2025-09 主要是突破接受，TSLA 2025-03 才是旧位回测；当前 `event-clean / parent-clear / first-obstacle-space-positive / process-complete` 仍为 `no-new-positive`。
+
+三推/H3-L3 的独立专项审计见[`三推/H3-L3 专项视觉证据审计`](three_push_h3_l3_visual_evidence_gap_audit_2026-08-24_CN.md)。本轮保留 KLAC 的 H3 条件候选，确认 L3 尚无完整衰竭正向合同，并把扩张/高潮、区间重复和通道延续作为独立边界。
 
 ## 跨矩阵的共同结论
 
