@@ -80,7 +80,7 @@
 
 ## 课程交叉覆盖结论
 
-PAHubCN 已读到用户指定的空章节停止点。课程中的趋势、突破、区间、反转、二次入场、概率、执行和风险内容已映射到上述研究单元或共同上下文；Swing/Scalp、Trader's Equation、订单、止损和仓位管理属于跨形态执行层，不另建 pattern 家族。当前唯一需要单独补足的视觉跨形态过滤层是“趋势后段入场”，已由[`趋势后段入场视觉框架`](late_trend_entry_visual_framework_CN.md)承接。VCP 仍是独立主题，不属于 PAHubCN 课程映射。
+PAHubCN 已读到用户指定的空章节停止点。课程中的趋势、突破、区间、反转、二次入场、概率、执行和风险内容已映射到上述研究单元或共同上下文；Swing/Scalp、Trader's Equation、订单、止损和仓位管理属于跨形态执行层，不另建 pattern 家族。当前唯一需要单独补足的视觉跨形态过滤层是“趋势后段入场”，已由[`趋势后段入场视觉框架`](late_trend_entry_visual_framework_CN.md)承接。VCP 已建立独立目录和定义/证据缺口审计，但仍不属于 Brooks 核心八个，也不属于 PAHubCN 课程映射；它必须按 Minervini / SEPA 的独立定义继续审计。
 
 ## 目前可以暂时认为已经形成的视觉语言
 

@@ -1,4 +1,4 @@
-# PA Research 核心 Pattern 目录
+# PA Research 核心 PA Pattern 与独立体系目录
 
 状态：`visual-research / provisional / not-quantitative`
 
@@ -22,6 +22,12 @@
 | 6 | [`突破回踩 / BOP`](06_breakout_pullback_bop/README.md) | 突破被接受后的回踩与新交易合同 |
 | 7 | [`MTR 趋势反转`](07_mtr_reversal/README.md) | 高级形态；需要位置、结构破坏和第二次确认 |
 | 8 | [`三推 / H3-L3 压力状态`](08_three_push_h3_l3/README.md) | 第三次测试的衰竭、扩张、区间重复测试和延续分流 |
+
+## 独立体系主题
+
+| 主题 | 目录 | 当前定位 |
+| --- | --- | --- |
+| VCP / Volatility Contraction Pattern（Minervini） | [`VCP / Minervini`](09_vcp_minervini/README.md) | 独立的强势股整理、连续收缩与 pivot 突破研究；不计入 Brooks 核心八个，不与 ABC/H-L/三推合并 |
 
 ## 统一研究字段
 
@@ -47,7 +53,7 @@ final_state / failure_or_no_trade_reason
 - 这些目录是视觉研究和历史复核入口，不是量化扫描器，也不直接连接 Execution Agent。
 - `research/` 根目录中的案例正文暂不搬迁；目录只负责导航和研究合同。
 - Measured Move、AB=CD、EMA、缺口回补和 META 是位置、空间或汇合因素，不单独构成 pattern。
-- Final Flag、Opening Reversal、通道、Inside Bar、三角形、VCP 等暂不列入当前主动实现队列；已有研究文件保留为参考，不继续扩展。三推虽然可以成为 MTR 的证据，但在这里作为独立 pattern 单独实现。
+- Final Flag、Opening Reversal、通道、Inside Bar、三角形暂不列入当前主动实现队列；已有研究文件保留为参考，不继续扩展。VCP 已建立独立研究目录，但仍处于 `visual-research / provisional`，不计入核心八个。三推虽然可以成为 MTR 的证据，但在这里作为独立 pattern 单独实现。
 
 ## 共同规则
 
