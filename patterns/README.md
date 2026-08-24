@@ -90,3 +90,5 @@ MTR 与三推/H3-L3 的边界复核见[`MTR 与三推/H3-L3 视觉边界复核`]
 H1/L1 第一次入场的边界复核见[`H1/L1 第一次入场视觉边界复核`](../research/h1_l1_first_entry_visual_boundary_audit_2026-08-24_CN.md)：强 A 和受控 B 只是筛选入口，第一次失败要保留 H2/L2 或 no-trade 分支。
 
 H2/L2 第二次入场的边界复核见[`H2/L2 第二次入场视觉边界复核`](../research/h2_l2_second_entry_visual_boundary_audit_2026-08-24_CN.md)：第二次必须属于同一回调且发生在有意义位置；区间、重建和低周期合同另行处理。
+
+ABC 趋势延续的边界复核见[`ABC 趋势延续视觉边界复核`](../research/abc_continuation_visual_boundary_audit_2026-08-24_CN.md)：A/B/C、嵌套腿、区间摆动、B 失控和 MM/首障碍必须分栏审计。

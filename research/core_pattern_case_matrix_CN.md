@@ -66,6 +66,8 @@ H1/L1 第一次入场视觉边界复核见[`H1/L1 第一次入场视觉边界复
 
 H2/L2 第二次入场视觉边界复核见[`H2/L2 第二次入场视觉边界复核`](h2_l2_second_entry_visual_boundary_audit_2026-08-24_CN.md)。它把同一回调的第二次位置测试、区间边缘二次反应、状态重建、实际成交和低周期独立合同分开。
 
+ABC 趋势延续视觉边界复核见[`ABC 趋势延续视觉边界复核`](abc_continuation_visual_boundary_audit_2026-08-24_CN.md)。它把开放趋势 ABC、区间 second-leg trap、B 失控、新 lineage、嵌套腿、C 触发和 MM/首障碍关系放在同一审计顺序中。
+
 H1/L1、H2/L2 与 ABC 的证据缺口审计见[`H1/L1、H2/L2 与 ABC 证据缺口审计`](h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)。本轮新增的是 CRWD 的深 B/H2 及 TSM 的 gap-reprice 订单分支；H1/L1 普通开放趋势纯净基准仍记为 `no-new-positive`，不再复制同质边界。
 
 H2/L2 的独立专项审计见[`H2/L2 第二次入场专项视觉证据审计`](h2_l2_visual_evidence_gap_audit_2026-08-24_CN.md)。最新结论是：多头 H2 为条件性覆盖，空头 L2 仍为 `no-new-positive`；低周期窄止损、高周期结构止损、静态 R/R 和真实路径必须分开。
