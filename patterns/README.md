@@ -88,3 +88,5 @@ final_state / failure_or_no_trade_reason
 MTR 与三推/H3-L3 的边界复核见[`MTR 与三推/H3-L3 视觉边界复核`](../research/mtr_three_push_visual_boundary_audit_2026-08-24_CN.md)：三推是压力观察入口，MTR 需要控制权改变和反向二次确认。
 
 H1/L1 第一次入场的边界复核见[`H1/L1 第一次入场视觉边界复核`](../research/h1_l1_first_entry_visual_boundary_audit_2026-08-24_CN.md)：强 A 和受控 B 只是筛选入口，第一次失败要保留 H2/L2 或 no-trade 分支。
+
+H2/L2 第二次入场的边界复核见[`H2/L2 第二次入场视觉边界复核`](../research/h2_l2_second_entry_visual_boundary_audit_2026-08-24_CN.md)：第二次必须属于同一回调且发生在有意义位置；区间、重建和低周期合同另行处理。
