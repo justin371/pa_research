@@ -134,7 +134,45 @@ process-complete
 
 这不是说 BOP 没有研究价值。当前视觉助手已经能识别突破接受、角色转换和订单重订；下一步只在出现真正多日回踩、事件闭环和首障碍宽裕的新案例时继续补样本，不把同日盘中回调重复命名为多日 BOP。
 
-## 8. 相关入口
+## 8. 下一轮候选多周期复核（2026-08-24）
+
+本轮证据边界：当前 PA Research 工作区没有图像资产，本 session 也没有 Futu/TradingView 连接。以下只复核仓库中已经保存的历史图表复核记录；各案例的来源、历史/收盘后状态以其文件为准，不能说成是本轮新抓取或实时数据。缺少周期、事件或订单字段时，按缺失处理，不用文字或后续走势补图。
+
+| 案例 | 可读周期证据 | BOP 链条审计 | 主要否决 | 裁决 |
+| --- | --- | --- | --- | --- |
+| [`JPM 2025-08-22–09-05`](jpm_bullish_h1_first_obstacle_failure_2025-08-22_2025-09-05.md) | Daily；15m 触发；无可核验 4H/1H bar | `09-05` 开盘越过 `297.26` 后最高约 `299.42` 即回落，没有守住旧边界、再离开或跟随 | 事件 `pending`；首障碍约 `0.39R`；突破分支未冻结结构止损 | `boundary / valid_no_trade / no-new-positive` |
+| [`KLAC 2025-10-14–10-24`](klac_h1_case_study_2025-10-14_2025-10-24.md) | Daily；15m 触发核验；无直接 4H/1H bar | `10-23` 越过 `115.63` 但收盘约 `115.4084`；`10-24` 首次日线接受，回踩为 `not-occurred` | 事件/板块未核验；触发约 `114.2` 到首障碍 `115.49–115.63` 仅约 `1.3` | `strict-first-resistance-no-trade / not-BOP-baseline` |
+| [`META 2024-09-11–10-11`](meta_bullish_h1_h2_visual_candidate_2024-09-11_2024-10-11.md) | 只有 Daily；无可验收 4H/1H/15m | `593.4` 是可见阻力，但没有上方接受；多日浅回调属于嵌套 H1/H2-like，不是 BOP 回踩 | 事件未核验；订单、结构止损、R/R 未冻结；首障碍拥挤 | `observation-only / no-new-positive` |
+| [`TSLA 2025-08-28–09-05`](tsla_h1_h2_case_study_2025-08-28_2025-09-05.md) | Daily；60m 聚合的 `4H-like`；15m | 15m 只有同日“反应—回测—再推进”；未形成接受后的多日回踩；次日开盘跳过理论触发 | `338.90–339.00` 到首阻力 `343.33` 约 `0.59R`；实际开盘约 `348.00` 进入阻力簇 | `valid_no_trade_after_gap / not-multiday-BOP` |
+| [`TSLA 2025-05-08–05-13`](tsla_range_after_sell_climax_2025-03-11_2025-05-13.md) | Daily；无 4H/1H/15m | 只有区间上沿后的突破接受/第二腿候选；没有记录突破后的多日回踩、守住、再离开或新 15m 确认 | 上沿 `285–307` 的角色转换、订单、止损、首障碍和 R/R 未重建 | `conditional-breakout-acceptance / no-new-positive` |
+| [`TSLA 2026-05-15–05-22`](tsla_h1_h2_case_study_2026-05-15_2026-05-22.md) | Daily；60m 聚合的 `4H-like`；15m | 这是深度支撑反转/H1-H2-like，不是旧边界被接受后的 BOP 回踩；后续上涨不能倒灌 | 日线触发到第一主要阻力约 `0.72R`；低周期窄止损只能另立短线合同 | `deep-pullback-reversal / valid_no_trade / not-BOP` |
+| [`TSLA 2025-12-08–12`](tsla_h1_h2_case_study_2025-12-08_2025-12-12.md) | Daily；60m；15m | H2-like 的强反应和日内深回测，不是突破后多日角色转换 | 触发约 `463.10` 到首阻力约 `467` 只有约 `0.2R`；日线直接追入应跳过 | `pattern-like / first-resistance-no-trade / not-BOP` |
+
+三角形候选池也没有新增正例：TSLA 2025-09 仍只是状态切换候选；ASML 是区间内重复测试，RBLX 是失败突破，COIN/XOM 是扩张与重订边界，KLAC 是趋势旗形且首障碍过近。它们都没有同时完成事件闭环、接受后的多日回踩、角色转换守住、再次离开跟随和足够首障碍空间。
+
+### 8.1 本轮裁决
+
+本轮新增筛选的有效候选数为 `0`。没有一个案例同时满足：
+
+```text
+event-clean
+parent-clear
+old-boundary-preidentified
+daily-acceptance
+multi-day-retest-and-hold
+re-departure-follow-through
+actual-order-reconstructable
+first-obstacle-space-positive
+process-complete
+```
+
+因此正式保持：
+
+> `BOP / event-clean / daily-accepted / multi-day-retest-held / first-obstacle-space-positive / process-complete`：**no-new-positive**。
+
+下一次只有在获得可读的 Daily/4H/1H/15m 图表或同等完整的历史周期记录，并能核对事件、实际订单和首障碍后，才升级候选；不把 `breakout-acceptance`、H1/H2、同日回测或后续上涨改名为多日 BOP。
+
+## 9. 相关入口
 
 - [`BOP 突破回踩目录`](../patterns/06_breakout_pullback_bop/README.md)
 - [`BOP 视觉证据缺口审计`](bop_visual_evidence_gap_audit_2026-08-24_CN.md)
