@@ -72,6 +72,7 @@ thesis_state: reversal-attempt / MTR-candidate / MTR-confirmed-for-research / fa
 - [`TSLA 区间顶部 MTR 候选`](../../research/tsla_bearish_abc_case_2024-03-04_2024-03-14.md)
 - [`NFLX 三推顶部边界`](../../research/nflx_three_push_top_boundary_2024-08-05_2024-09-26.md)
 - [`MTR 与三推证据缺口审计`](../../research/mtr_three_push_evidence_gap_audit_2026-08-23_CN.md)：本轮没有新增无事件、二次确认清楚且首障碍宽裕的 MTR 正例。
+- [`MTR 主要趋势反转专项视觉证据审计`](../../research/mtr_visual_evidence_gap_audit_2026-08-24_CN.md)：进一步把 MTR、区间边缘、普通回调和 BOP 失效分层。
 
 ## 当前案例对照
 
@@ -81,6 +82,8 @@ thesis_state: reversal-attempt / MTR-candidate / MTR-confirmed-for-research / fa
 | [`NFLX 2024-08-05–09-26`](../../research/nflx_three_push_top_boundary_2024-08-05_2024-09-26.md) | 高位多次测试 / MTR-like | 首支撑拥挤，且原方向后来重新接受，记 valid no-trade |
 | [`TSLA 2025-09-08–09-12`](../../research/tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md) | failed-MTR-thesis → BOP | 阻力下反转尝试被强收盘突破否定，必须切换新合同 |
 | [`ASML 2025-05-19–06-13`](../../research/asml_h3_l3_range_transition_boundary_2025-05-19_2025-06-13.md) | double-bottom-like / not-MTR | 低位两次测试后进入区间过渡，缺少结构接受和二次确认 |
+| [`PLTR 2024-12-24–2025-01-08`](../../research/pltr_bearish_abc_l1_ordinary_a_boundary_2024-12-24_2025-01-08.md) | ordinary-pullback / early-reversal-candidate | A 腿普通、首支撑不足约 `1R`，不能因为双顶样外观升级为 MTR |
+| [`LOW 2024-06-11–06-24`](../../research/low_bullish_h1_h2_first_obstacle_boundary_2024-06-11_2024-06-24.md) | parent-transition / reversal-attempt | 急跌后的多头恢复与前高阻力拥挤，保留为边界 |
 
 ## 当前目标验收
 
@@ -89,3 +92,5 @@ thesis_state: reversal-attempt / MTR-candidate / MTR-confirmed-for-research / fa
 - 能记录第一反向、第二次确认、结构止损、首障碍和路径失效；
 - 能在原方向 BOP 接受后废弃 MTR thesis；
 - 保留至少一个形态像但首障碍/路径否决的边界案例。
+
+本轮专项审计结论：TSLA 2024-03 是区间边缘重叠且过程先止损的 MTR candidate；NFLX、PLTR、LOW 说明首障碍或父级状态会否决形态；TSLA 2025-09 说明 BOP 接受会终止 MTR thesis。当前仍没有事件闭环、双向、二次确认清楚、首障碍宽裕且路径完整的普通 MTR 正例，因此保持 `provisional / no-new-positive`。
