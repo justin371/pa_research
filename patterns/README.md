@@ -119,6 +119,8 @@ Head-and-Shoulders / Rounded 头肩与圆顶圆底边界复核见[`头肩与圆�
 
 实际图像识别冒烟结果见[`PA 图表视觉识别冒烟验收`](../research/visual_recognition_smoke_test_2026-08-24_CN.md)：公开图像只用于验证能否先识别 pattern 和边界，最终盲测验收仍待未标注、周期清晰的图表集。
 
+第二轮未标注多标的、两年 Daily 背景、EMA20/50/200 与多周期图像资产已并入同一份[`PA 图表视觉识别验收记录`](../research/visual_recognition_smoke_test_2026-08-24_CN.md)，资产入口见[`第二轮多标的多周期视觉资产`](../research/assets/visual_recognition/2026-08-24/round2_multisymbol/README.md)；状态仍为 `acceptance-pending`，干净 BOP/MTR 正例保持 `no-new-positive`。
+
 优先 Pattern 的代表性视觉候选与正/反例矩阵见[`优先 Pattern 代表性视觉候选矩阵`](../research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)：每个案例只保留一个主标签，次标签、状态切换、订单合同和首障碍单独记录。
 
 BOP 真实多日回踩的专项审计见[`BOP 真实多日回踩候选审计`](../research/bop_multiday_pullback_candidate_audit_2026-08-24_CN.md)：当前区分了状态切换、同日回测、缺口重订和真正缺失的多日回踩正例。

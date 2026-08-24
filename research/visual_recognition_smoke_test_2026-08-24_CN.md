@@ -106,3 +106,47 @@ chart_scope: full two-year Daily context plus nested recent intraday windows
 4. **两年背景层：已纳入。** 重要高低点、支撑阻力区域和 EMA20/50/200 已作为视觉背景记录；没有把任何 EMA 交叉或单一 level 当成 pattern 或交易许可。
 
 最终状态仍为 `acceptance-pending`：这一轮证明了在可读、无 pattern 标签的派生多周期图上可以先做结构识别，但还需要更多标的、正例、边界例和反例重复验收，才能声称 H1/H2/L1/L2 与三推/H3-L3 在所有图表上稳定识别。优化层继续冻结。
+
+## 第二轮未标注多标的复核：两年背景、EMA 与关键高低点（截至 2026-08-21）
+
+这一轮继续按“先看左侧两年 Daily，再看 4H-like、1H、15m”的顺序复核四个标的。图像没有 pattern 标签、画线或文字提示；先完成图像直接识别，再用原始历史 OHLC 交叉核对收盘、EMA 和极值。完整资产入口见[`第二轮多标的多周期视觉资产`](assets/visual_recognition/2026-08-24/round2_multisymbol/README.md)。
+
+### 证据头
+
+```text
+symbols: AAPL / NVDA / SPY / RBLX
+data_source: public Yahoo Finance Chart API via Jina Reader
+data_status: historical public data; not Futu; not live authorization
+latest_complete_rth_bar: 2026-08-21 16:00 America/New_York
+timeframes_seen: Daily (~2Y left context) / 4H-like / 1H / 15m
+event_context: unknown; this round does not declare event-clean
+chart_scope: full two-year Daily context plus nested recent intraday windows
+```
+
+请求结束日为 `2026-08-25`，但来源实际返回的最新完整 RTH bar 是 `2026-08-21`；因此下面的“当前”均指该历史截点，不是实时市场状态。Daily 图的 EMA20/50/200 只作为背景和位置参考，不创造 setup、trigger 或 authorization。
+
+### 图像直接识别结果
+
+| 标的 | Daily ~2Y、EMA 与重要锚点 | 4H-like / 1H / 15m 的直接视觉读法 | 主识别、计数与边界 | 结果 |
+| --- | --- | --- | --- | --- |
+| **AAPL** | 2026-08-21 收 `309.35`；EMA20/50/200 为 `312.04 / 309.38 / 283.39`。两年高低约为 `2026-07-29 344.57` 与 `2025-04-08 169.21`；2026 窗口低点约 `2026-01-20 243.42`。图上先保留 `300–307` 支撑、`312–320` 近期角色转换区、`344–345` 前高压力。 | 4H-like/1H 先从 `300–306` 一带恢复至 `319–320`，随后跌回 `310` 附近；15m 可见 8-19 向上越过约 `311–312` 后推进至 `319–320`，接着重新回到原突破区内。 | `primary_pattern: failed-breakout / failed-reclaim boundary`；可看到一次突破尝试和失去接受，但不能把它升级为成功 BOP。8-19 的局部 H1/H2 计数与 8-20/21 的反向腿发生状态切换，`lineage: unclear`。 | `boundary_candidate / BOP no-new-positive` |
+| **NVDA** | 2026-08-21 收 `214.72`；EMA20/50/200 为 `215.45 / 210.54 / 195.60`。两年高低约为 `2026-05-14 236.54` 与 `2025-04-07 86.62`；2026 窗口低点约 `2026-03-30 164.27`。主要可见支撑先看 `210–215`、`195–202`，压力看 `224–230`、`236–237`。 | 4H-like 可读出约 `197` 到 `227–230` 的强多头 A 腿，8-18 至 8-21 出现两段重叠回调至约 `214.5`；1H/15m 的局部却持续偏空，低点逐步下移。 | `primary_pattern: bullish ABC continuation / H2-like candidate`；A/B 关系能看出来，但 H2 是否属于同一回调、何处为信号 K 不能冻结。低周期没有给出与 Daily/4H 一致的确认，不能用 15m 的空头腿倒灌成多头 H2，也不能把它当独立空头 L1/L2。 | `pattern_candidate / count-pending / observation-only` |
+| **SPY** | 2026-08-21 收 `765.72`；EMA20/50/200 为 `763.73 / 752.96 / 710.94`。两年高低约为 `2026-08-13 779.37` 与 `2025-04-07 481.80`；2026 窗口低点约 `2026-03-30 629.28`。主要支撑先看 `763–765`、`752–755`，压力看 `779–780`。 | Daily 保持明显多头；4H-like 从 `735–754` 区域向上突破并在 `775` 上方停留，随后转为高位震荡和回落；1H/15m 从 `778` 附近逐步下行至 `763–766`。 | `primary_pattern: breakout-acceptance followed by late-trend pullback`；能识别接受后的状态，但没有清楚的旧边界回测—再次离开路径，所以不冻结为干净 BOP。低周期可见 L1/L2-like 空头尝试，但与 Daily 多头背景冲突，属于边界而非正例。 | `boundary_candidate / no-new-positive-for-clean-BOP` |
+| **RBLX** | 2026-08-21 收 `38.37`；EMA20/50/200 为 `40.26 / 44.55 / 60.78`，价格仍在三条 EMA 下方。两年高低约为 `2025-07-31 150.59` 与 `2026-07-31 33.88`；2026 窗口高点约 `2026-01-16 91.09`。主要支撑先看 `33.9–36.2`，压力看 `38.7–40.4`、`44.5–47`。 | Daily 是长周期空头；4H-like 显示下跌后进入 `35–40` 双向区间。15m 可见围绕同一压力区的多次向上推动，最后一次曾扩张到约 `40.19`，之后回到 `38` 附近。 | `primary_pattern: three-push / H3-like candidate`，但 `parent_state: mature-range / bearish-transition`，`lineage: unclear-to-range-repeat`；第三推不能直接叫衰竭楔形，也不能升级 MTR。计数若不能在主周期分开复核，必须重置为 `not_h3_l3`。 | `boundary_candidate / observation-only` |
+
+### 这一轮实际覆盖了什么
+
+| Pattern 家族 | 图像覆盖 | 当前视觉结论 |
+| --- | --- | --- |
+| H1/L1、H2/L2 与 ABC | TSLA 的恢复候选、NVDA 的 A/B/H2-like 候选，以及 SPY/NVDA 的低周期反向边界 | 可以先看 A 腿、B 腿和第一次/第二次尝试的外形；同一周期、同一回调 lineage 和信号/跟随仍不能从这轮全部冻结，保持 `count-pending`。 |
+| 三推 / H3-L3 | RBLX 未标注 15m 的多次上推，配合此前 TSLA 标注冒烟图 | 能直接发现“可能有三次推动”，并能看到区间/趋势冲突；尚无新的同一 lineage、第三推状态和反向二次确认完整正例。 |
+| BOP | TSLA 的 BOP-like 接受、SPY 的 breakout-acceptance、AAPL 的失败突破对照 | 能区分接受、真实回踩和失败重回旧区间；本轮没有新增干净多日 BOP 正例，`no-new-positive` 保持。 |
+| 失败突破 / 区间边缘 | AAPL 的突破后重新接受、RBLX 的空头背景转区间 | 视觉边界可识别，但未把一次失败尝试自动升级为 RFB、MTR 或交易合同。 |
+| MTR | TSLA 的 recovery/MTR candidate，RBLX 的三推边界 | 能看出反转候选与普通回调/区间的差异；本轮没有新增结构破坏、接受和第二次确认齐全的 MTR 正例，`no-new-positive` 保持。 |
+
+### 第二轮裁决
+
+1. **两年左侧背景要求已落实。** 四个标的都先看完整约两年 Daily，再把重要高点、低点、支撑阻力区域和 EMA20/50/200 写入识别记录；没有把 EMA 交叉或单一价格线当成 pattern。
+2. **看图识别层进一步通过。** 对未标注图像可以直接读出多头/空头背景、恢复/回调、突破接受、失败突破和三推候选，并能把低周期冲突保留为边界。
+3. **精确计数仍未最终通过。** H1/H2/L1/L2 必须绑定同一周期和同一回调 lineage；RBLX 的三推必须先证明同一 lineage；NVDA/SPY 的低周期反向腿不能事后拼成高周期计数。
+4. **结论保持 `acceptance-pending`，干净正例保持 `no-new-positive`。** 这轮只扩大视觉覆盖，不进入订单、止损、R/R、评分、固定阈值或自动化优化；不修改 Codex Trading，不创建量化扫描器，不连接 Execution Agent。
