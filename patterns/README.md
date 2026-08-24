@@ -106,3 +106,5 @@ Opening Reversal 开盘反转边界复核见[`Opening Reversal 开盘反转视�
 Channel 通道边界复核见[`Channel 通道视觉边界复核`](../research/channel_visual_boundary_audit_2026-08-24_CN.md)：两点连线、紧/宽通道、边界扩张、区间过渡、BOP 接受和订单合同分开。
 
 Inside Bar / 两根 K 线边界复核见[`Inside Bar / 两根 K 线反转视觉边界复核`](../research/inside_bar_two_bar_reversal_visual_boundary_audit_2026-08-24_CN.md)：严格整根范围、二内包/IOI、两根反转、H/L 序列、区间噪音和跳空重订分开。
+
+Triangle / 三角形边界复核见[`Triangle / 三角形视觉边界复核`](../research/triangle_expanding_range_visual_boundary_audit_2026-08-24_CN.md)：收缩、扩张、区间内区间、BOP 接受、失败突破和两点连线误判分开。

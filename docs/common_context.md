@@ -137,6 +137,7 @@ Use the same distinction symmetrically for bullish and bearish studies:
 - Opening Reversal 开盘反转边界复核见[`Opening Reversal 开盘反转视觉边界复核`](../research/opening_reversal_visual_boundary_audit_2026-08-24_CN.md)：先看盘前位置和第一波接受/失败，再决定反向 H/L；开盘跳过必须重订合同。
 - Channel 通道边界复核见[`Channel 通道视觉边界复核`](../research/channel_visual_boundary_audit_2026-08-24_CN.md)：两点连线不等于成熟通道；紧通道、宽通道、扩张、区间过渡和 BOP 接受必须分开。
 - Inside Bar / 两根 K 线边界复核见[`Inside Bar / 两根 K 线反转视觉边界复核`](../research/inside_bar_two_bar_reversal_visual_boundary_audit_2026-08-24_CN.md)：严格整根范围、两根压力转换、H/L setup—signal—trigger、区间中部和跳空重订必须分开。
+- Triangle / 三角形边界复核见[`Triangle / 三角形视觉边界复核`](../research/triangle_expanding_range_visual_boundary_audit_2026-08-24_CN.md)：收缩、扩张、区间内区间、BOP 接受、失败突破和父级状态必须分开。
 
 The probability table is treated as conditional experience-based guidance, not guaranteed win rates. In particular:
 
