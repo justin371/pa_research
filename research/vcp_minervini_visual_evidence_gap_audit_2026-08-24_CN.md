@@ -1,6 +1,6 @@
 # VCP / Minervini 定义与视觉证据缺口审计
 
-日期：2026-08-24  
+日期：2026-08-24
 状态：`independent-system / visual-workable / provisional / no-new-positive`
 
 ## 0. 结论先行
