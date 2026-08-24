@@ -104,3 +104,5 @@ Final Flag 最终旗形边界复核见[`Final Flag 最终旗形视觉边界复�
 Opening Reversal 开盘反转边界复核见[`Opening Reversal 开盘反转视觉边界复核`](../research/opening_reversal_visual_boundary_audit_2026-08-24_CN.md)：开盘第一波失败、开盘接受、普通 H/L、事件缺口与实际订单重订分开。
 
 Channel 通道边界复核见[`Channel 通道视觉边界复核`](../research/channel_visual_boundary_audit_2026-08-24_CN.md)：两点连线、紧/宽通道、边界扩张、区间过渡、BOP 接受和订单合同分开。
+
+Inside Bar / 两根 K 线边界复核见[`Inside Bar / 两根 K 线反转视觉边界复核`](../research/inside_bar_two_bar_reversal_visual_boundary_audit_2026-08-24_CN.md)：严格整根范围、二内包/IOI、两根反转、H/L 序列、区间噪音和跳空重订分开。

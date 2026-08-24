@@ -80,6 +80,8 @@ Opening Reversal 开盘反转边界复核见[`Opening Reversal 开盘反转视�
 
 Channel 通道边界复核见[`Channel 通道视觉边界复核`](channel_visual_boundary_audit_2026-08-24_CN.md)。它把两点趋势线候选、紧/宽通道、扩张、区间过渡、BOP 接受、边界订单和首障碍否决分开；TSLA 保留紧趋势候选，KLAC 保留宽边缘条件候选，XOM/UBER/ASML 提供边界对照。
 
+Inside Bar / 两根 K 线边界复核见[`Inside Bar / 两根 K 线反转视觉边界复核`](inside_bar_two_bar_reversal_visual_boundary_audit_2026-08-24_CN.md)。它把严格母子 K 范围、二内包/IOI、两根压力转换、H/L 信号序列、区间中部噪音和跳空重订分开；当前仍无严格 OHLC 冻结且首障碍宽裕的独立正例。
+
 H1/L1、H2/L2 与 ABC 的证据缺口审计见[`H1/L1、H2/L2 与 ABC 证据缺口审计`](h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)。本轮新增的是 CRWD 的深 B/H2 及 TSM 的 gap-reprice 订单分支；H1/L1 普通开放趋势纯净基准仍记为 `no-new-positive`，不再复制同质边界。
 
 H2/L2 的独立专项审计见[`H2/L2 第二次入场专项视觉证据审计`](h2_l2_visual_evidence_gap_audit_2026-08-24_CN.md)。最新结论是：多头 H2 为条件性覆盖，空头 L2 仍为 `no-new-positive`；低周期窄止损、高周期结构止损、静态 R/R 和真实路径必须分开。
