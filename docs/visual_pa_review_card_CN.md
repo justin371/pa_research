@@ -1,12 +1,35 @@
 # PA 图表视觉复核卡
 
-状态：`visual-first / research tool / canonical-output-v0.4`
+状态：`visual-first / research tool / canonical-output-v0.5`
 
 这是一张给“看懂完整图表的 PA 助手”使用的复核卡。它的用途是先筛选出**看起来像**某个 Price Action pattern 的候选，再用更完整的背景、位置、触发、风险和结果去优化。它不是量化扫描器、不是胜率评分器，也不是自动下单授权。
 
 第一轮筛选与第二轮交易优化的边界，先看[`PA Pattern 视觉筛选协议`](../research/visual_pattern_triage_protocol_CN.md)。跨 pattern 同时出现多个名字时，按[`Cross-Pattern 视觉优先级与冲突消解审计`](../research/cross_pattern_visual_priority_audit_2026-08-24_CN.md)只选一个主标签；本卡是进入第二轮后使用的完整复核卡，没有必要为每个“看起来像”的图形一开始就填满所有价格和 R/R 字段。
 
 代表性条件候选与有效不交易对照见[`优先 Pattern 代表性视觉候选矩阵`](../research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)。
+
+## 图表范围前置要求：先看左侧两年
+
+默认先看同一标的至少两年的 Daily 左侧背景（图表或数据支持时），再看 4H/1H/15m 的局部窗口。局部图不能覆盖掉左侧已经形成的重要结构；同一标的的多周期复核必须引用同一份两年 Daily 背景，而不是每个窗口各自挑选有利片段。
+
+在进入 pattern 命名或 H/L 计数前，先记录：
+
+- 两年窗口内可见的主要高点、主要低点及其日期/价格区域；
+- 当前仍有效或反复测试的支撑、阻力、前高/前低和角色转换区；
+- Daily EMA20、EMA50、EMA200 的相对位置、斜率和价格所在侧；
+- 局部 4H/1H/15m 是否接近这些左侧结构，还是处在区间中部。
+
+```text
+daily_context_window: >=2y / <2y / unavailable
+major_highs:
+major_lows:
+support_zones:
+resistance_zones:
+daily_ema20_50_200: above / mixed / below / unavailable
+left_context_review: complete / partial / unavailable
+```
+
+若两年 Daily、EMA20/50/200 或重要高低点不可见，必须保留 `partial-context`/`pending`，不能用局部走势补写缺失的左侧证据，也不能把图表末端的新高新低当成唯一重要结构。
 
 ## Canonical 输出合同
 
@@ -72,6 +95,9 @@ data_source:             # Futu OpenD / after-close public data / chart screensh
 data_status:             # historical / delayed / live-confirmed / incomplete
 timeframes_seen:         # Daily / 4H or 60m / 15m / other
 chart_scope:             # full context / partial context
+daily_context_window:    # >=2y / <2y / unavailable
+major_high_low_review:   # complete / partial / unavailable
+ema20_50_200_review:     # complete / partial / unavailable
 event_context:           # earnings / macro / gap / none known / unknown
 sector_context:
 ```
@@ -149,6 +175,8 @@ location_of_B_end:
 ```
 
 ## 4. H/L 计数：只数有意义的尝试
+
+第二阶段统一使用[`H/L lineage 与三推状态视觉边界复核`](../research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md)的账本：先写主周期、父级、A/B 锚点、第一次失败/不足和 `lineage_status`，再写 H1/H2/L1/L2 或 H3/L3。若左侧两年背景、重要高低点或支撑阻力没有完成复核，计数只能保留为 `pending`/`pattern_like`。
 
 在同一周期、同一回调背景下记录：
 

@@ -123,6 +123,8 @@ Head-and-Shoulders / Rounded 头肩与圆顶圆底边界复核见[`头肩与圆�
 
 H1/H2、L1/L2 的局部未标注计数复核见[`H1/H2 与 L1/L2 局部盲测资产`](../research/assets/visual_recognition/2026-08-24/round3_hl_drills/README.md)及同一份[`PA 图表视觉识别验收记录`](../research/visual_recognition_smoke_test_2026-08-24_CN.md)的第三轮记录；计数仍须满足同一主周期和同一回调 lineage，未升级为固定规则。
 
+H/L 与三推共用的第二阶段 lineage、两年左侧背景、重要高低点、支撑阻力和 EMA20/50/200 前置复核见[`H/L lineage 与三推状态视觉边界复核`](../research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md)；先登记母腿和失败/不足，再决定计数或状态，当前仍为研究层 `count-pending`。
+
 空头 L1/L2-like 的 Daily/4H-like/60m 对照见[`MAR 空头 L1/L2-like 视觉资产`](../research/assets/visual_recognition/2026-08-24/round3_l1_l2_mar/README.md)；该历史窗口的 15m 数据不可得，报告保留 `15m-evidence-missing`，不把缺失证据补写成确认。
 
 优先 Pattern 的代表性视觉候选与正/反例矩阵见[`优先 Pattern 代表性视觉候选矩阵`](../research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)：每个案例只保留一个主标签，次标签、状态切换、订单合同和首障碍单独记录。

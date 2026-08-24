@@ -204,3 +204,5 @@ scope_safety: pass
 ```
 
 因此，本 goal 的视觉优先最低验收基准已经建立：可以把未标注图像用于 PA Research 的人工候选识别，先输出背景、位置、pattern、推动腿/计数候选和失效边界；不能把 `pattern_candidate`、`H2-like`、`L1/L2-like` 或三推候选写成已验证交易规则。严格计数冻结仍受同一 lineage、区间/趋势切换和部分历史窗口缺失 15m 证据的限制，作为下一阶段的明确阻塞；订单、止损、R/R、评分和自动化继续冻结。
+
+第二阶段的统一执行入口已固化为[`H/L lineage 与三推状态视觉边界复核`](h_l_lineage_visual_boundary_audit_2026-08-24_CN.md)：所有局部图先复用至少两年的 Daily 左侧背景，核对主要高低点、支撑阻力和 EMA20/50/200，再登记母腿、尝试失败/不足和 reset；这只收紧视觉研究记录，不改变本报告的 `no-new-positive` 结论。
