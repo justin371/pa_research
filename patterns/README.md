@@ -31,6 +31,7 @@
 | Final Flag / 最终旗形 | [`Final Flag`](10_final_flag/README.md) | 独立的趋势末端压缩与最后尝试分流；与普通旗形、MTR、BOP 和 VCP 分开 |
 | Opening Reversal / 开盘反转 | [`Opening Reversal`](11_opening_reversal/README.md) | 独立的开盘第一波失败/接受与反向确认研究；与 BOP、区间边缘和普通 H/L 分开 |
 | Channel / 紧通道、宽通道与状态切换 | [`Channel / 通道`](12_channel/README.md) | 独立的通道边界、紧/宽通道、扩张、突破接受与区间过渡研究；不把画线当成自动交易信号 |
+| Inside Bar / 两根 K 线反转 | [`Inside Bar / 两根 K 线反转`](13_inside_bar_two_bar_reversal/README.md) | 独立区分严格内包、二内包/IOI、两根反转与 H/L 信号序列；不把小实体当成自动信号 |
 
 ## 统一研究字段
 
@@ -56,7 +57,7 @@ final_state / failure_or_no_trade_reason
 - 这些目录是视觉研究和历史复核入口，不是量化扫描器，也不直接连接 Execution Agent。
 - `research/` 根目录中的案例正文暂不搬迁；目录只负责导航和研究合同。
 - Measured Move、AB=CD、EMA、缺口回补和 META 是位置、空间或汇合因素，不单独构成 pattern。
-- Inside Bar、三角形暂不列入当前主动实现队列；已有研究文件保留为参考，不继续扩展。VCP、Final Flag、Opening Reversal 与 Channel 已建立独立研究目录，但都处于 `visual-research / provisional`，不计入核心八个。三推虽然可以成为 MTR 的证据，但在这里作为独立 pattern 单独实现。
+- 三角形暂不列入当前主动实现队列；已有研究文件保留为参考，不继续扩展。VCP、Final Flag、Opening Reversal、Channel 与 Inside Bar 已建立独立研究目录，但都处于 `visual-research / provisional`，不计入核心八个。三推虽然可以成为 MTR 的证据，但在这里作为独立 pattern 单独实现。
 
 ## 共同规则
 
