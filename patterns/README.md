@@ -44,6 +44,7 @@
 | Measured Move / AB=CD / 磁铁目标 | [`Measured Move / targets`](../foundations/02_measured_move_targets/README.md) | 所有 pattern 共用的空间、第一独立障碍、目标层级和持仓管理；不是独立交易形态 |
 | Late Trend Entry / 趋势后段过滤 | [`Late Trend Entry / 追价过滤`](../foundations/03_late_trend_entry_filter/README.md) | 所有 pattern 共用的时机、空间、高潮、突破接受和新增仓位过滤；不是独立交易形态 |
 | Multi-timeframe Review / 多周期复核 | [`Multi-timeframe Review`](../foundations/04_multitimeframe_review/README.md) | 所有 pattern 共用的 Daily/4H/1H/15m 职责、确认、独立低周期合同和跳空重订；不是独立交易形态 |
+| Event / Sector / Market Gate / 事件板块闸门 | [`Event / Sector / Market Gate`](../foundations/05_event_sector_market_gate/README.md) | 所有 pattern 共用的财报、重大事件、板块/大盘许可和订单重订前置过滤；不是独立交易形态 |
 
 ## 统一研究字段
 
