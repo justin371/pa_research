@@ -1,6 +1,6 @@
 # ABC + H/L 分层历史结果审计（2026-08-24）
 
-状态：`research-only / stratified-outcome-audit-v0.1 / pilot / not-statistical`
+状态：`research-only / stratified-outcome-audit-v0.2 / pilot / not-statistical`
 
 ## 目的与范围
 
@@ -115,6 +115,20 @@ evidence_status: comparable / conditional / excluded / dependent-lineage
 
 只有 `filled + entry_stop_target_frozen=yes + trade_result` 完整的样本才进入胜率分母。样本太少、合同不一致或共享 lineage 时只做描述，不做排名。未来若要把研究结论移交交易系统，还需要独立的样本外复核，不能由本文件直接升级。
 
+## 六、补充 H2/L1 对照审计
+
+本轮继续检查现有仓库中最接近两条候选分层、但尚未进入首批账本的案例。它们的共同作用是验证筛选条件是否会把“看起来像”误报成机会。
+
+| 案例 | 目标分层 | 前置事实与空间 | 排除/保留原因 |
+| --- | --- | --- | --- |
+| [`AMZN 2024-12-09–12-11`](amzn_bullish_h2_shallow_b_boundary_2024-12-09_2024-12-11.md) | `ABC + H2-like`、强 A、controlled-B、低周期确认 | 无开盘跳过；XLY 同向；触发后独立左侧阻力未冻结，`223.5–224.2` 结构风险较宽；后续 `233` 只作过程审计 | `follow-through-mixed / event-context-pending`；不能加入无事件、空间已证实的 H2 正向池 |
+| [`V 2024-05-06–05-17`](v_bullish_abc_h2_no_gap_first_obstacle_boundary_2024-05-06_2024-05-17.md) | `ABC + H2-like`、深但后段稳定、无 gap 低周期确认 | 低周期触发可重建；第一阻力簇 `276.89–277.72`，约 `0.85R–1.05R`，止损缓冲后更差 | `valid_no_trade / first-obstacle-boundary`；是空间控制组，不是正向样本 |
+| [`KLAC 2025-05-07–06-03`](klac_h2_case_study_2025-05-07_2025-06-03.md) | `ABC + H2`、重复支撑、深 B 后段稳定 | H2 触发和 15m 确认清楚；首阻力 `79.03–79.79`，约 `0.8R–1.0R`；远端 MM 不能越过首障碍 | `research_positive_conditional` 仅指形态/合同可研究；几何仍为边界，不能加入空间正向基准 |
+| [`TSLA 2025-12-08–12-12`](tsla_h1_h2_case_study_2025-12-08_2025-12-12.md) | `ABC + H2-like`、强 A、EMA20 附近二次测试 | H2 形态可读；触发上方 `467–474` 左侧阻力，日线约 `0.2R–0.4R`；信号 K 过宽 | `first-resistance-no-trade`；形态样本保留，交易结果不进入胜率池 |
+| [`TSLA 2026-05-15–05-22`](tsla_h1_h2_case_study_2026-05-15_2026-05-22.md) | `ABC + H1/H2-like`、深回撤至 EMA50/200 与主要支撑 | Daily 直接触发到 `434.66` 约 `0.72R`；低周期可另立合同，但不能用窄止损替换母级结构风险 | `daily-valid-no-trade / low-cycle-contract-separate`；不能与标准 Daily H2 合并 |
+
+补充审计后的变化是：H2-like 案例数量增加了，但**符合“同一合同、同一背景、首障碍有空间、事件已核对、结果可回放”全部条件的样本数量没有增加**。因此本轮不把任何新案例加入 `ABC+H2` 的空间正向基准，也不改变 `no-new-positive`。
+
 ## 当前结论
 
 ```text
@@ -123,6 +137,8 @@ fully_comparable_trade_samples: 0 under the unified outcome schema
 win_rate: not-computable
 realized_R_distribution: not-computable
 priority_geometry_strata: ABC+L1 no-gap space-positive; ABC+H2 late-stabilized low-cycle
+supplemental_cases_reviewed: 5
+new_comparable_positive_samples: 0
 no_new_positive: maintained
 scope: PA Research only; no scanner; no Execution Agent; no Codex Trading changes
 ```
