@@ -54,6 +54,8 @@ Multi-timeframe Review / 多周期复核也不作为核心 pattern，而作为�
 
 Event / Sector / Market Gate / 事件板块闸门也不作为核心 pattern，而作为所有 pattern 共用的前置许可层。它把财报前三日 no-trade、事件后强 A、板块/大盘许可、逆板块降级和跳空后的订单重订分开；入口见[`Event / Sector / Market Gate`](../foundations/05_event_sector_market_gate/README.md)，专项审计见[`事件/板块/大盘视觉证据审计`](event_sector_market_gate_visual_evidence_audit_2026-08-24_CN.md)。
 
+Order / Risk Contracts / 订单风险合同也不作为核心 pattern，而作为所有 pattern 共用的成交与风险基础层。它把 stop、limit-retest、market-close、stop-limit、观察、开盘跳过、实际成交、结构止损、首障碍和 R/R 分开；入口见[`Order / Risk Contracts`](../foundations/06_order_risk_contracts/README.md)，专项审计见[`订单类型与风险合同视觉证据审计`](order_risk_contract_visual_evidence_audit_2026-08-24_CN.md)。
+
 H1/L1、H2/L2 与 ABC 的证据缺口审计见[`H1/L1、H2/L2 与 ABC 证据缺口审计`](h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)。本轮新增的是 CRWD 的深 B/H2 及 TSM 的 gap-reprice 订单分支；H1/L1 普通开放趋势纯净基准仍记为 `no-new-positive`，不再复制同质边界。
 
 H2/L2 的独立专项审计见[`H2/L2 第二次入场专项视觉证据审计`](h2_l2_visual_evidence_gap_audit_2026-08-24_CN.md)。最新结论是：多头 H2 为条件性覆盖，空头 L2 仍为 `no-new-positive`；低周期窄止损、高周期结构止损、静态 R/R 和真实路径必须分开。
