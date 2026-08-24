@@ -96,4 +96,4 @@ Stage 2、Trend Template、相对强度和行业领导地位是背景过滤，�
 
 当前不把 VCP 写成扫描条件，不声称已有胜率，也不把任何后见之明的上涨当作证据。下一阶段应从收盘后的完整日线/周线图中寻找事件干净、背景清楚、T1/T2/T3 可回看、pivot 和首阻力都能在当时确定的多空对照；在此之前，VCP 只保持为独立的视觉工作版。
 
-详细来源层级、未核实的原始定义和首轮视觉审计见 [`VCP / Minervini 定义与视觉证据缺口审计`](../../research/vcp_minervini_visual_evidence_gap_audit_2026-08-24_CN.md)。
+详细来源层级、未核实的原始定义见 [`VCP / Minervini 定义与视觉证据缺口审计`](../../research/vcp_minervini_visual_evidence_gap_audit_2026-08-24_CN.md)；首轮公开图表对照见 [`VCP / Minervini 首轮公开图表视觉对照审计`](../../research/vcp_visual_case_audit_round1_2026-08-24_CN.md)。
