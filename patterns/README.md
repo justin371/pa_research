@@ -96,3 +96,5 @@ ABC 趋势延续的边界复核见[`ABC 趋势延续视觉边界复核`](../rese
 BOP / 突破接受与突破回踩的边界复核见[`BOP 视觉边界复核`](../research/bop_visual_boundary_audit_2026-08-24_CN.md)：突破前合同在接受后必须废弃或重建，影线、gap-and-go、真实回踩与失败突破分开。
 
 失败突破与高潮反转的边界复核见[`失败突破与高潮反转视觉边界复核`](../research/failed_breakout_climax_visual_boundary_audit_2026-08-24_CN.md)：测试、失败候选、小反转/区间、MTR 和 BOP 接受必须按状态切换分开。
+
+交易区间边缘二次入场边界复核见[`交易区间边缘二次入场视觉边界复核`](../research/range_edge_second_entry_visual_boundary_audit_2026-08-24_CN.md)：边缘计数、中部观望、second-leg trap 与 limit/stop 合同分开。
