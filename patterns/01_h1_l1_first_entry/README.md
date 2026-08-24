@@ -70,6 +70,8 @@ H1/L1 的“第一次”是回调中第一次**有意义**的方向恢复，不�
 | --- | --- | --- |
 | [`AAPL 2024-05-03–05-09`](../../research/aapl_bullish_h1_event_driven_a_2024-05-03_2024-05-09.md) | 财报后强 A、浅 B、长下影/小实体 H1-like | 事件驱动的条件正向样本；不能和普通 A 混为一组 |
 | [`KLAC 2025-10-14–10-24`](../../research/klac_h1_case_study_2025-10-14_2025-10-24.md) | 强 A、一天浅 B；`10-22` 是 setup/count bar，`10-23` 才是优质确认/触发 K | 前高磁铁与严格首阻力分支并存；财报前三个交易 session 过滤通过，但事件临近，不能当作完全无事件基准 |
+| [`NFLX 2025-02-14–03-28`](../../research/nflx_bearish_abc_l1_no_gap_space_2025-02-14_2025-03-28.md) | 强-looking 空头 A、深但后段受控 B、`03-28` L1-like | 无缺口、板块许可和首支撑约 `1.4R–1.9R`；条件性空头候选，不能把盘中刺破与收盘确认合并 |
+| [`TSM 2025-02-14–03-28`](../../research/tsm_bearish_abc_l1_gap_reprice_space_2025-02-14_2025-03-28.md) | 强空头 A、受控 B、`03-26` L1-like | 原 stop 被小缺口越过；重订合同仍有空间，旧 limit 未成交；条件性重订候选 |
 | [`COST 2024-05-13–05-16`](../../research/cost_bullish_h1_first_obstacle_boundary_2024-05-13_2024-05-16.md) | A 和信号 K 都像，但触发上方首阻力几乎贴近 | `valid_no_trade`，说明信号质量不能取消空间过滤 |
 | [`NVDA 2025-06-23–07-03`](../../research/nvda_bullish_abc_h1_visual_candidate_2025-06-23_2025-07-03.md) | 强-looking A、短 B、H1-like 恢复 | 形态积极，但原 stop 被跳空越过，必须重订合同 |
 | [`JNJ 2025-09-18–10-08`](../../research/jnj_bullish_h1_first_obstacle_2025-09-18_2025-10-08.md) | 深但位置受控的 B 后出现高质量恢复 K | 形态清楚但首阻力阻塞，保留为边界样本 |
