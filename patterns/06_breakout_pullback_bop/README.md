@@ -60,6 +60,7 @@ failure: reacceptance_inside_old_range / no_follow_through / event-risk
 - [`TSLA BOP 后续案例`](../../research/tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md)
 - [`多周期视觉复核框架`](../../research/multitimeframe_visual_review_framework_CN.md)
 - [`订单分支协议`](../../research/order_branch_visual_protocol_CN.md)
+- [`BOP 突破回踩专项视觉证据审计`](../../research/bop_visual_evidence_gap_audit_2026-08-24_CN.md)
 
 ## 当前案例对照
 
@@ -69,6 +70,7 @@ failure: reacceptance_inside_old_range / no_follow_through / event-risk
 | [`TSLA 2025-03-04 284 回测`](../../research/tsla_abc_playbook_2025-03-04_284_retest.md) | 缺口延续后回测旧位 | 原 sell-stop 被跳过，284 附近 sell-limit/retest 独立研究 |
 | [`GOOGL 2024-03-18`](../../research/googl_bullish_h1_gap_trigger_boundary_2024-03-04_2024-03-22.md) | 强 A/浅 B 后跳空越过原 buy-stop | 方向正确但实际重订后首障碍拥挤，记录 no-trade |
 | [`QCOM 2024-07-24`](../../research/qcom_bearish_abc_l1_l2_gap_sector_boundary_2024-07-17_2024-07-30.md) | 空头突破方向正确但开盘重订 | 理想触发空间被实际开盘价压缩，说明方向对不等于合同合格 |
+| [`NKE 2025-10-28`](../../research/nke_bearish_abc_minor_gap_boundary_2025-10-03_2025-10-29.md) | 小缺口后旧低点真实回测，出现 BOP-like limit-retest 路径 | 回测约 `1.2R`、板块混合且事件背景未清；保留为订单边界，不当作干净 BOP 基准 |
 
 ## 当前目标验收
 
@@ -77,3 +79,5 @@ failure: reacceptance_inside_old_range / no_follow_through / event-risk
 - 能在突破接受后重建成交、止损、首障碍和 R/R；
 - 能把旧 MTR/区间/趋势合同废弃或转换，而不是事后混用；
 - 保留至少一个“突破方向正确但交易几何不合格”的 no-trade 案例。
+
+本轮专项审计结论：TSLA 2025-09 主要验证“突破接受后的状态切换”，TSLA 2025-03 的 `284` 回测才是最清楚的真实回踩合同；两者不能混成同一个入场模式。当前仍缺事件干净、父级清楚、角色转换明确、首障碍宽裕且路径完整的普通 BOP 正例，因此状态保持 `conditional / no-new-positive`。
