@@ -130,6 +130,7 @@ Use the same distinction symmetrically for bullish and bearish studies:
 - BOP / 突破接受与突破回踩的边界复核见[`BOP 视觉边界复核`](../research/bop_visual_boundary_audit_2026-08-24_CN.md)：影线不等于接受，gap-and-go、真实回踩和失败突破必须分别建立合同。
 - 失败突破与高潮反转的边界复核见[`失败突破与高潮反转视觉边界复核`](../research/failed_breakout_climax_visual_boundary_audit_2026-08-24_CN.md)：高潮先预期小反转/区间；失败突破需回到原侧并有反向确认；BOP 接受会否定旧 thesis。
 - 交易区间边缘二次入场边界复核见[`交易区间边缘二次入场视觉边界复核`](../research/range_edge_second_entry_visual_boundary_audit_2026-08-24_CN.md)：先冻结上下沿/中线，再记录边缘尝试；区间中部不继承 ABC/H-L 计数。
+- Final Flag 最终旗形边界复核见[`Final Flag 最终旗形视觉边界复核`](../research/final_flag_visual_boundary_audit_2026-08-24_CN.md)：最终来自趋势末端背景，不来自窄整理外观；接受切 BOP，失败才研究反向二次确认。
 
 ## Probability principles
 
