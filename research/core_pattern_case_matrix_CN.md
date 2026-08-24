@@ -86,6 +86,8 @@ Triangle / 三角形边界复核见[`Triangle / 三角形视觉边界复核`](tr
 
 Double Top / Double Bottom 双顶双底边界复核见[`双顶双底视觉边界复核`](double_top_bottom_visual_boundary_audit_2026-08-24_CN.md)。它把两次有分离测试、区间边缘、普通延续、Final Flag、MTR、BOP 否定和首障碍否决分开；当前仍无事件干净、反向二次确认清楚且空间完整的标准 MTR 正例。
 
+Head-and-Shoulders / Rounded 头肩与圆顶圆底边界复核见[`头肩与圆顶圆底视觉边界复核`](head_shoulders_rounded_visual_boundary_audit_2026-08-24_CN.md)。它把复杂双顶/底、真实颈线、圆形状态转移、普通旗形、BOP 否定和首障碍否决分开；当前仍无事件干净、颈线清楚且路径完整的标准正例。
+
 H1/L1、H2/L2 与 ABC 的证据缺口审计见[`H1/L1、H2/L2 与 ABC 证据缺口审计`](h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)。本轮新增的是 CRWD 的深 B/H2 及 TSM 的 gap-reprice 订单分支；H1/L1 普通开放趋势纯净基准仍记为 `no-new-positive`，不再复制同质边界。
 
 H2/L2 的独立专项审计见[`H2/L2 第二次入场专项视觉证据审计`](h2_l2_visual_evidence_gap_audit_2026-08-24_CN.md)。最新结论是：多头 H2 为条件性覆盖，空头 L2 仍为 `no-new-positive`；低周期窄止损、高周期结构止损、静态 R/R 和真实路径必须分开。
