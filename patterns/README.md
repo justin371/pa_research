@@ -46,6 +46,7 @@
 | Multi-timeframe Review / 多周期复核 | [`Multi-timeframe Review`](../foundations/04_multitimeframe_review/README.md) | 所有 pattern 共用的 Daily/4H/1H/15m 职责、确认、独立低周期合同和跳空重订；不是独立交易形态 |
 | Event / Sector / Market Gate / 事件板块闸门 | [`Event / Sector / Market Gate`](../foundations/05_event_sector_market_gate/README.md) | 所有 pattern 共用的财报、重大事件、板块/大盘许可和订单重订前置过滤；不是独立交易形态 |
 | Order / Risk Contracts / 订单风险合同 | [`Order / Risk Contracts`](../foundations/06_order_risk_contracts/README.md) | 所有 pattern 共用的 stop、limit、market-close、stop-limit、实际成交、结构止损和 R/R 语义；不是独立交易形态 |
+| Market State / Context / 市场状态与父级背景 | [`Market State / Context`](../foundations/07_market_state_context/README.md) | 所有 pattern 共用的趋势/区间/边缘/过渡/高潮分类、second-leg trap 与突破接受后的状态重建；不是独立交易形态 |
 
 ## 统一研究字段
 
