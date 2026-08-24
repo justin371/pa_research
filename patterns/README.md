@@ -94,3 +94,5 @@ H2/L2 第二次入场的边界复核见[`H2/L2 第二次入场视觉边界复核
 ABC 趋势延续的边界复核见[`ABC 趋势延续视觉边界复核`](../research/abc_continuation_visual_boundary_audit_2026-08-24_CN.md)：A/B/C、嵌套腿、区间摆动、B 失控和 MM/首障碍必须分栏审计。
 
 BOP / 突破接受与突破回踩的边界复核见[`BOP 视觉边界复核`](../research/bop_visual_boundary_audit_2026-08-24_CN.md)：突破前合同在接受后必须废弃或重建，影线、gap-and-go、真实回踩与失败突破分开。
+
+失败突破与高潮反转的边界复核见[`失败突破与高潮反转视觉边界复核`](../research/failed_breakout_climax_visual_boundary_audit_2026-08-24_CN.md)：测试、失败候选、小反转/区间、MTR 和 BOP 接受必须按状态切换分开。
