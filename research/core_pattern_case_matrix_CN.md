@@ -129,6 +129,8 @@ ABC 趋势延续的独立专项审计见[`ABC 趋势延续专项视觉证据审�
 
 若只是另一张同样的“强 A + H2-like + 首阻力过近”图，保留引用即可，不再复制深审。
 
+优先 Pattern 的统一候选输出见[`优先 Pattern 代表性视觉候选矩阵`](priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)：KLAC/NFLX/CRWD/TSM 提供条件性合同，TSLA/RBLX 等提供首障碍、过程止损、区间计数和状态切换对照。
+
 ## 边界
 
 MTR/L3 的最新缺口审计见[`MTR 与三推证据缺口审计`](mtr_three_push_evidence_gap_audit_2026-08-23_CN.md)。
