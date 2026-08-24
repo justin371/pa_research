@@ -61,12 +61,26 @@ final_state: continuation / small-reversal / range / MTR-candidate / no-trade
 
 默认研究反向 stop-confirmation；结构回测 limit 是独立分支。高潮后第一结果通常是小反转或区间，不自动升级为主要反转。止损放在失败边界/结构极端外，目标先看最近磁铁。
 
+## 当前案例对照
+
+| 案例 | 状态 | 当前结论 |
+| --- | --- | --- |
+| [`TSLA 2024-03-04–03-14`](../../research/tsla_bearish_abc_case_2024-03-04_2024-03-14.md) | 区间上沿失败、L1 失败后 L2 反向确认 | 最接近条件性失败突破/MTR 候选，但路径先破结构止损，不能称过程正例 |
+| [`RBLX 2024-03-18–04-05`](../../research/rblx_range_edge_not_abc_boundary_2024-03-18_2024-04-05.md) | 区间下沿附近开盘上冲失败 | 父级区间优先，信号 K 和首障碍否决，`valid-no-trade` |
+| [`TSLA 2025-03-07–03-10`](../../research/tsla_range_after_sell_climax_2025-03-11_2025-05-13.md) | 卖出高潮后支撑反应 | 先进入小反转/大区间，不自动升级 MTR |
+| [`COST 2024-07-11–07-18`](../../research/cost_bearish_abc_climax_boundary_2024-07-11_2024-07-18.md) | 高潮型强 A、L1-like 下破 | 首支撑贴近，`valid-no-trade`；强 A 不等于有空间 |
+| [`TSLA 2025-09-08–09-12`](../../research/tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md) | 阻力下失败候选后强收盘接受 | 旧反转 thesis 失效，切换 BOP，不继续逆势 |
+| [`XOM 2024-07-18–08-02`](../../research/xom_bearish_h3_flag_expansion_boundary_2024-07-18_2024-08-02.md) | 第三推扩张/高潮边界 | 原方向仍有控制，跳空重订后空间不足 |
+
+本轮专项审计见[`失败突破与高潮专项视觉证据审计`](../../research/failed_breakout_climax_visual_evidence_gap_audit_2026-08-24_CN.md)。当前结论为：失败突破与高潮已经形成可用的视觉状态分流，但仍没有事件过滤通过、反向二次确认清楚、首障碍宽裕且过程完整的标准正例；保持 `no-new-positive`，不进入 Codex Trading 或 Execution Agent。
+
 ## 现有入口
 
 - [`失败突破与高潮框架`](../../research/failed_breakout_climax_visual_framework_CN.md)
 - [`TSLA 2025-03 高潮与区间`](../../research/tsla_range_after_sell_climax_2025-03-11_2025-05-13.md)
 - [`COST 高潮边界`](../../research/cost_bearish_abc_climax_boundary_2024-07-11_2024-07-18.md)
 - [`三推压力状态框架`](../../research/three_push_pressure_state_framework_CN.md)
+- [`失败突破与高潮专项视觉证据审计`](../../research/failed_breakout_climax_visual_evidence_gap_audit_2026-08-24_CN.md)
 
 ## 当前目标验收
 
