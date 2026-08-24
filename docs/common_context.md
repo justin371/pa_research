@@ -127,6 +127,7 @@ Use the same distinction symmetrically for bullish and bearish studies:
 - H1/L1 第一次入场的边界复核见[`H1/L1 第一次入场视觉边界复核`](../research/h1_l1_first_entry_visual_boundary_audit_2026-08-24_CN.md)：设置 K、确认 K、触发、首障碍与 H2/L2 fallback 必须分开。
 - H2/L2 第二次入场的边界复核见[`H2/L2 第二次入场视觉边界复核`](../research/h2_l2_second_entry_visual_boundary_audit_2026-08-24_CN.md)：第二次是同一回调中的有意义位置测试；区间边缘、状态重建和低周期合同不能混算。
 - ABC 趋势延续的边界复核见[`ABC 趋势延续视觉边界复核`](../research/abc_continuation_visual_boundary_audit_2026-08-24_CN.md)：先判父级和 A/B lineage，再用 H/L 触发 C；MM 不能替代首障碍。
+- BOP / 突破接受与突破回踩的边界复核见[`BOP 视觉边界复核`](../research/bop_visual_boundary_audit_2026-08-24_CN.md)：影线不等于接受，gap-and-go、真实回踩和失败突破必须分别建立合同。
 
 ## Probability principles
 
