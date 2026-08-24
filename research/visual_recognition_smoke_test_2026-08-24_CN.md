@@ -190,3 +190,17 @@ chart_scope: full two-year Daily context plus nested recent intraday windows
 视觉失效边界是重新接受 `392.63–400` 反弹/角色转换区；若价格在该区上方重新建立结构，当前空头恢复读法应废弃或重建。相反，`372–383` 一带是左侧和当前窗口都可见的支撑背景，不能用后续更低点把它事后抹掉。
 
 本样本结果为 `pattern_candidate / count-pending / 15m-evidence-missing`：它证明了空头 A、B、恢复路径可以从无标签图像中读出，但没有把缺失的 15m 证据隐藏起来，也没有进入订单或风险优化。
+
+## 当前 goal-level 验收结论
+
+```text
+visual_candidate_reading: pass-for-research
+two_year_daily_context: pass
+ema20_50_200_and_major_high_low_review: pass
+background_location_pattern_leg_and_invalidation: pass-at-candidate-level
+strict_h1_h2_l1_l2_same-lineage_freeze: pending / evidence-limited
+clean_bop_or_mtr_positive_promotion: no-new-positive
+scope_safety: pass
+```
+
+因此，本 goal 的视觉优先最低验收基准已经建立：可以把未标注图像用于 PA Research 的人工候选识别，先输出背景、位置、pattern、推动腿/计数候选和失效边界；不能把 `pattern_candidate`、`H2-like`、`L1/L2-like` 或三推候选写成已验证交易规则。严格计数冻结仍受同一 lineage、区间/趋势切换和部分历史窗口缺失 15m 证据的限制，作为下一阶段的明确阻塞；订单、止损、R/R、评分和自动化继续冻结。
