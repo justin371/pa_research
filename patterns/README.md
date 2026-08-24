@@ -41,6 +41,7 @@
 | 基础层 | 目录 | 当前定位 |
 | --- | --- | --- |
 | Support / Resistance / 支撑阻力 | [`Support / Resistance`](../foundations/01_support_resistance/README.md) | 所有 pattern 共用的位置、结构止损、首障碍与角色转换过滤；不是独立交易形态 |
+| Measured Move / AB=CD / 磁铁目标 | [`Measured Move / targets`](../foundations/02_measured_move_targets/README.md) | 所有 pattern 共用的空间、第一独立障碍、目标层级和持仓管理；不是独立交易形态 |
 
 ## 统一研究字段
 

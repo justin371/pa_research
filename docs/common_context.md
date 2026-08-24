@@ -214,6 +214,7 @@ The `72.00` stop used in the KLAC H2 study is a structural research example, not
 
 ## Profit management around measured moves
 
+- The cross-pattern visual contract is [`Measured Move / AB=CD / 磁铁目标管理`](../foundations/02_measured_move_targets/README.md); its evidence audit is [`Measured Move / AB=CD / 磁铁视觉证据审计`](../research/measured_move_visual_evidence_gap_audit_2026-08-24_CN.md).
 - A measured move is a target zone, not a price that must be touched exactly.
 - When price enters the target area and momentum weakens, partial profit-taking is reasonable even if the exact projection has not been reached.
 - Useful weakening evidence includes smaller bodies, more overlap, failed follow-through, repeated upper tails, and a mature channel near resistance.
