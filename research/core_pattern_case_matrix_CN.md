@@ -30,6 +30,8 @@
 
 VCP 不加入下面的“核心八个”矩阵，因为它属于 Minervini / SEPA 的独立体系。其定义、来源层级、订单合同和当前证据缺口见[`VCP / Minervini 定义与视觉证据缺口审计`](vcp_minervini_visual_evidence_gap_audit_2026-08-24_CN.md)；目录入口见[`VCP / Minervini`](../patterns/09_vcp_minervini/README.md)。在 VCP 尚未完成独立视觉案例审计前，不把现有 ABC、H1/H2 或 BOP 案例回填成 VCP 正例。
 
+Final Flag 同样不加入核心八个矩阵。它属于 Brooks PA 的趋势末端背景/状态分流，专项审计见[`Final Flag 专项视觉证据审计`](final_flag_visual_evidence_gap_audit_2026-08-24_CN.md)，目录入口见[`Final Flag`](../patterns/10_final_flag/README.md)。现有案例覆盖延续、首阻力否决、BOP 状态切换和高潮边界，尚无事件干净、反向二次确认清楚且首障碍宽裕的标准反转正例。
+
 H1/L1、H2/L2 与 ABC 的证据缺口审计见[`H1/L1、H2/L2 与 ABC 证据缺口审计`](h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)。本轮新增的是 CRWD 的深 B/H2 及 TSM 的 gap-reprice 订单分支；H1/L1 普通开放趋势纯净基准仍记为 `no-new-positive`，不再复制同质边界。
 
 H2/L2 的独立专项审计见[`H2/L2 第二次入场专项视觉证据审计`](h2_l2_visual_evidence_gap_audit_2026-08-24_CN.md)。最新结论是：多头 H2 为条件性覆盖，空头 L2 仍为 `no-new-positive`；低周期窄止损、高周期结构止损、静态 R/R 和真实路径必须分开。
