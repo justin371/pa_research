@@ -42,6 +42,8 @@ Triangle / 三角形也不加入核心八个矩阵。它研究收缩三角形、
 
 Double Top / Double Bottom / 双顶双底也不加入核心八个矩阵。它研究两次有分离测试及其在区间边缘、MTR、Final Flag 和普通延续中的不同归类；专项审计见[`Double Top / Double Bottom 专项视觉证据审计`](double_top_bottom_visual_evidence_gap_audit_2026-08-24_CN.md)，目录入口见[`Double Top / Double Bottom`](../patterns/15_double_top_bottom/README.md)。TSLA、RBLX、NFLX、ASML、KLAC、PLTR 已覆盖条件候选、区间/首障碍否决、BOP 否定和普通回调对照，但尚无事件干净、反向二次确认清楚且空间宽裕的标准 MTR 正例。
 
+Head-and-Shoulders / Rounded / 头肩与圆顶圆底也不加入核心八个矩阵。它把头肩顶/底视为复杂双顶/双底或 MTR 候选，把圆顶/圆底视为控制权转移背景；专项审计见[`Head-and-Shoulders / Rounded 专项视觉证据审计`](head_shoulders_rounded_visual_evidence_gap_audit_2026-08-24_CN.md)，目录入口见[`Head-and-Shoulders / Rounded`](../patterns/16_head_shoulders_rounded/README.md)。TSLA、NFLX、ASML、LOW、RBLX、KLAC 已覆盖颈线/首障碍否决、BOP 否定、区间过渡和普通旗形对照，但尚无事件干净、颈线清楚且第二次确认和空间完整的标准正例。
+
 H1/L1、H2/L2 与 ABC 的证据缺口审计见[`H1/L1、H2/L2 与 ABC 证据缺口审计`](h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)。本轮新增的是 CRWD 的深 B/H2 及 TSM 的 gap-reprice 订单分支；H1/L1 普通开放趋势纯净基准仍记为 `no-new-positive`，不再复制同质边界。
 
 H2/L2 的独立专项审计见[`H2/L2 第二次入场专项视觉证据审计`](h2_l2_visual_evidence_gap_audit_2026-08-24_CN.md)。最新结论是：多头 H2 为条件性覆盖，空头 L2 仍为 `no-new-positive`；低周期窄止损、高周期结构止损、静态 R/R 和真实路径必须分开。

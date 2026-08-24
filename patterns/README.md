@@ -34,6 +34,7 @@
 | Inside Bar / 两根 K 线反转 | [`Inside Bar / 两根 K 线反转`](13_inside_bar_two_bar_reversal/README.md) | 独立区分严格内包、二内包/IOI、两根反转与 H/L 信号序列；不把小实体当成自动信号 |
 | Triangle / 三角形与区间内区间 | [`Triangle / 三角形`](14_triangle_expanding_range/README.md) | 独立区分收缩三角形、扩张三角形、区间内区间、突破接受与失败；不把两点连线当成三角形 |
 | Double Top / Double Bottom / 双顶双底 | [`Double Top / Double Bottom`](15_double_top_bottom/README.md) | 独立区分两次有分离测试、区间边缘、MTR、Final Flag 与普通延续；不把相近高低点自动当反转 |
+| Head-and-Shoulders / Rounded / 头肩与圆顶圆底 | [`Head-and-Shoulders / Rounded`](16_head_shoulders_rounded/README.md) | 独立区分头肩、圆顶/圆底、复杂双顶双底、颈线接受与普通旗形；不把三个点自动当反转 |
 
 ## 统一研究字段
 
