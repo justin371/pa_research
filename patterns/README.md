@@ -112,3 +112,5 @@ Triangle / 三角形边界复核见[`Triangle / 三角形视觉边界复核`](..
 Double Top / Double Bottom 双顶双底边界复核见[`双顶双底视觉边界复核`](../research/double_top_bottom_visual_boundary_audit_2026-08-24_CN.md)：两次有分离测试、区间边缘、普通延续、Final Flag、MTR、BOP 否定和首障碍分开。
 
 Head-and-Shoulders / Rounded 头肩与圆顶圆底边界复核见[`头肩与圆顶圆底视觉边界复核`](../research/head_shoulders_rounded_visual_boundary_audit_2026-08-24_CN.md)：复杂双顶/底、真实颈线、圆形状态转移、普通旗形和 BOP 否定分开。
+
+跨 Pattern 视觉优先级与冲突复核见[`Cross-Pattern 视觉优先级与冲突消解审计`](../research/cross_pattern_visual_priority_audit_2026-08-24_CN.md)：先判父级和位置，再选主标签、次标签、状态切换和 `valid_no_trade`。

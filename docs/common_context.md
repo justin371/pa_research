@@ -140,6 +140,7 @@ Use the same distinction symmetrically for bullish and bearish studies:
 - Triangle / 三角形边界复核见[`Triangle / 三角形视觉边界复核`](../research/triangle_expanding_range_visual_boundary_audit_2026-08-24_CN.md)：收缩、扩张、区间内区间、BOP 接受、失败突破和父级状态必须分开。
 - Double Top / Double Bottom 双顶双底边界复核见[`双顶双底视觉边界复核`](../research/double_top_bottom_visual_boundary_audit_2026-08-24_CN.md)：两次有分离测试、区间边缘、普通延续、Final Flag、MTR、BOP 否定和首障碍必须分开。
 - Head-and-Shoulders / Rounded 头肩与圆顶圆底边界复核见[`头肩与圆顶圆底视觉边界复核`](../research/head_shoulders_rounded_visual_boundary_audit_2026-08-24_CN.md)：复杂双顶/底、真实颈线、圆形状态转移、普通旗形和 BOP 否定必须分开。
+- 跨 Pattern 视觉优先级与冲突复核见[`Cross-Pattern 视觉优先级与冲突消解审计`](../research/cross_pattern_visual_priority_audit_2026-08-24_CN.md)：先判父级和位置，再选一个主标签，次标签只记录结构关系，订单与首障碍单独否决。
 
 The probability table is treated as conditional experience-based guidance, not guaranteed win rates. In particular:
 
