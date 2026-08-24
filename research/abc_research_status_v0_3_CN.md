@@ -1,7 +1,7 @@
 # ABC 研究状态与工作边界 v0.3
 
 日期：2026-08-23  
-状态：`visual-research / provisional / not-quantitative`
+状态：`visual-research / conditional / visual-workable / not-quantitative`
 
 ## 这项研究到底在解决什么问题
 
@@ -15,6 +15,8 @@
 因此，“ABC 研究”包含视觉识别、上下文、计数、订单合同和首障碍五层。之前把这五层在每个候选上同时做到底，导致单个案例耗时过长；从本文件起，默认采用分层流程。
 
 ## 当前暂时可复用的视觉语言
+
+最新 ABC 专项收口见[`ABC 趋势延续专项视觉证据审计`](abc_visual_evidence_gap_audit_2026-08-24_CN.md)。它不改变本文件的分层原则，只把 NFLX/TSM、KLAC/CRWD 与区间/跳空边界汇总成一个可复用入口。
 
 这些是跨案例重复出现、可以先作为助手工作假设的语言，不是已经证明的胜率规则：
 

@@ -76,6 +76,10 @@ ABC 的判断顺序是：
 | 多头深 B 条件 ABC | [`CRWD H2`](../../research/crwd_bullish_h2_deep_b_late_stabilization_2024-09-11_2024-10-11.md) | 深 B 后段稳定、H2-like、低周期确认、首阻力和事件边界 |
 | 区间/过渡边界 | [`RBLX 区间边界`](../../research/rblx_range_edge_not_abc_boundary_2024-03-18_2024-04-05.md)、[`QCOM 宽 B`](../../research/qcom_bearish_abc_range_b_boundary_2025-02-21_2025-03-28.md) | 防止把区间内部或过渡状态硬叫趋势 ABC |
 
+## 当前收口审计
+
+[`ABC 趋势延续专项视觉证据审计`](../../research/abc_visual_evidence_gap_audit_2026-08-24_CN.md) 已把 NFLX/TSM 的空头 L1 条件候选、KLAC/CRWD 的多头深 B/H2 条件覆盖，以及 TSLA/QCOM/RBLX 的区间、过渡、跳空和计数重置边界放到同一套协议里。当前结论是：ABC 视觉识别可用，但普通无事件、双向、首障碍宽裕且过程完整的通用正例尚未冻结；`MM/AB=CD` 只负责目标层，不替代位置和订单审计。
+
 ## 当前目标验收
 
 - A 腿质量决定优先看 H1/L1 还是等待 H2/L2；
@@ -92,3 +96,4 @@ ABC 的判断顺序是：
 - [`TSLA 2024 空头 ABC`](../../research/tsla_bearish_abc_case_2024-03-04_2024-03-14.md)
 - [`NFLX 空头 ABC/L1`](../../research/nflx_bearish_abc_l1_no_gap_space_2025-02-14_2025-03-28.md)
 - [`H1/L1、H2/L2 与 ABC 证据缺口审计`](../../research/h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)
+- [`ABC 趋势延续专项视觉证据审计`](../../research/abc_visual_evidence_gap_audit_2026-08-24_CN.md)
