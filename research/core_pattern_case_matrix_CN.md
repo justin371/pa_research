@@ -48,6 +48,8 @@ Support / Resistance / 支撑阻力不作为核心 pattern，而作为所有目�
 
 Measured Move / AB=CD / 磁铁目标也不作为核心 pattern，而作为所有目录共用的空间与持仓管理基础层。它把结构腿、测量锚点、局部/父级嵌套腿、第一独立障碍、目标区和障碍接受后的目标升级分开；入口见[`Measured Move / AB=CD / 磁铁目标管理`](../foundations/02_measured_move_targets/README.md)，专项审计见[`Measured Move / AB=CD / 磁铁视觉证据审计`](measured_move_visual_evidence_gap_audit_2026-08-24_CN.md)。
 
+趋势后段入场 / 追价过滤也不作为核心 pattern，而作为所有 pattern 共用的时机与空间基础层。它区分早期/中段受控回调、后段无空间、高潮/成熟通道和突破接受后的新合同；入口见[`Late Trend Entry / 追价过滤`](../foundations/03_late_trend_entry_filter/README.md)，专项审计见[`趋势后段入场视觉证据审计`](late_trend_entry_visual_evidence_gap_audit_2026-08-24_CN.md)。
+
 H1/L1、H2/L2 与 ABC 的证据缺口审计见[`H1/L1、H2/L2 与 ABC 证据缺口审计`](h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)。本轮新增的是 CRWD 的深 B/H2 及 TSM 的 gap-reprice 订单分支；H1/L1 普通开放趋势纯净基准仍记为 `no-new-positive`，不再复制同质边界。
 
 H2/L2 的独立专项审计见[`H2/L2 第二次入场专项视觉证据审计`](h2_l2_visual_evidence_gap_audit_2026-08-24_CN.md)。最新结论是：多头 H2 为条件性覆盖，空头 L2 仍为 `no-new-positive`；低周期窄止损、高周期结构止损、静态 R/R 和真实路径必须分开。
