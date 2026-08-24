@@ -113,7 +113,7 @@ ChartMill 的二手整理描述了 Antero Midstream（AM）的一次 VCP 假突�
 
 ```text
 pivot break
-→ acceptance? 
+→ acceptance?
   ├─ yes：进入 accepted_breakout，继续看首阻力和路径
   └─ no：回到母体
         ├─ 低量、受控、仍守结构：观察 / 原合同待验证
