@@ -97,3 +97,4 @@ ABC 的判断顺序是：
 - [`NFLX 空头 ABC/L1`](../../research/nflx_bearish_abc_l1_no_gap_space_2025-02-14_2025-03-28.md)
 - [`H1/L1、H2/L2 与 ABC 证据缺口审计`](../../research/h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)
 - [`ABC 趋势延续专项视觉证据审计`](../../research/abc_visual_evidence_gap_audit_2026-08-24_CN.md)
+- [`ABC + H/L 分层历史结果审计`](../../research/abc_hl_stratified_outcome_audit_2026-08-24_CN.md)：把 ABC 作为母结构、H1/L1 与 H2/L2 作为 C 腿尝试分层；当前只形成候选分层，胜率与 realized R 仍不可计算。
