@@ -1,6 +1,6 @@
 # ABC + H/L 分层历史结果审计（2026-08-24）
 
-状态：`research-only / stratified-outcome-audit-v0.3 / pilot / not-statistical`
+状态：`research-only / stratified-outcome-audit-v0.4 / pilot / not-statistical`
 
 ## 目的与范围
 
@@ -181,6 +181,12 @@ evidence_status: comparable / conditional / excluded / dependent-lineage
 
 这一步的作用是检验“登记标签是否真的能从图上读出来”。结果并不一致：COP 最接近 `ABC-like + H1-like`；NFLX 可练习 bearish `ABC/L1-L2-like`；JNJ 只能保留 `H2-like hypothesis`；DE 是 `H2-like boundary`；AMZN、META、NKE 以及 GOOGL、MSFT、XOM 更多用于识别父级转区间、晚趋势和 lineage 不清楚的反例。Round4 的 Daily 左侧只有约一年，因此所有新增案例的两年背景仍是 `pending`，没有一个 strict same-lineage 计数被冻结。
 
+### 7.5 Round5：两年 Daily 背景补齐后的独立练习
+
+Round5 使用 `cohr-revised-20260814/bars.json` 的 `COHR`、`SPY`、`QQQ`、`IWM`，先看至少两年 Daily 左侧，再看各自截断到历史日期的 Daily/4H/15m 无标签图。详细逐例字段和资产见[`Round5 两年 Daily 左侧背景与 ABC/H-L/三推视觉练习`](visual_recognition_round5_two_year_daily_2026-08-24_CN.md)。
+
+这轮 4 个标的、8 个 targeted 案例都完成了两年 Daily、EMA20/50/200、主要高低点和支撑阻力字段。COHR `2026-05-13` 是 `ABC + H1-like` 候选；SPY `2026-06-15` 和 IWM `2026-05-28` 是 H2-like 边界；QQQ `2026-07-17` 是 bearish L1/L2-like 的过渡边界。COHR、SPY、QQQ、IWM 的其余 targeted 图用于三推/区间重复或扩张/延续分流。由于首障碍拥挤、lineage/reset 仍有疑问、三个标的缺少 15m，Round5 没有冻结 strict same-lineage 计数，也没有新增可比正向样本；`no-new-positive` 保持不变。
+
 ## 当前结论
 
 ```text
@@ -200,6 +206,11 @@ useful_codex_trading_chart_references: 11
 approximate_h_l_visual_candidates_reviewed: 4
 round4_strict_same_lineage_freezes: 0
 round4_two_year_daily_complete_cases: 0
+round5_two_year_daily_symbols: 4
+round5_targeted_multitimeframe_cases: 8
+round5_two_year_daily_complete_cases: 8
+round5_strict_same_lineage_freezes: 0
+round5_new_comparable_positive_samples: 0
 new_comparable_positive_samples: 0
 no_new_positive: maintained
 scope: PA Research only; no scanner; no Execution Agent; no Codex Trading changes
