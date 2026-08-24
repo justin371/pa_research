@@ -123,6 +123,7 @@ Use the same distinction symmetrically for bullish and bearish studies:
 - 突破回踩/BOP 的主动入口见[`突破回踩 / BOP`](../patterns/06_breakout_pullback_bop/README.md)：突破接受后必须建立新合同，不能沿用突破前的反转或区间合同。
 - EMA is supporting context only; touching the EMA is not a pattern by itself.
 - 失败突破/高潮的主动 pattern 入口见[`失败突破与高潮`](../patterns/05_failed_breakout_climax/README.md)；它必须把测试、失败候选、小反转/区间、MTR 候选和 BOP 接受分开。
+- MTR 与三推/H3-L3 的边界复核见[`MTR 与三推/H3-L3 视觉边界复核`](../research/mtr_three_push_visual_boundary_audit_2026-08-24_CN.md)：三推描述原方向尝试，MTR 只在反向结构破坏、二次确认和空间同时成立时升级。
 
 ## Probability principles
 
