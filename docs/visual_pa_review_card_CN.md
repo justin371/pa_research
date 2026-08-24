@@ -1,10 +1,23 @@
 # PA 图表视觉复核卡
 
-状态：`visual-first / research tool`
+状态：`visual-first / research tool / canonical-output-v0.4`
 
 这是一张给“看懂完整图表的 PA 助手”使用的复核卡。它的用途是先筛选出**看起来像**某个 Price Action pattern 的候选，再用更完整的背景、位置、触发、风险和结果去优化。它不是量化扫描器、不是胜率评分器，也不是自动下单授权。
 
-第一轮筛选与第二轮交易优化的边界，先看[`PA Pattern 视觉筛选协议`](../research/visual_pattern_triage_protocol_CN.md)。本卡是进入第二轮后使用的完整复核卡；没有必要为每个“看起来像”的图形一开始就填满所有价格和 R/R 字段。
+第一轮筛选与第二轮交易优化的边界，先看[`PA Pattern 视觉筛选协议`](../research/visual_pattern_triage_protocol_CN.md)。跨 pattern 同时出现多个名字时，按[`Cross-Pattern 视觉优先级与冲突消解审计`](../research/cross_pattern_visual_priority_audit_2026-08-24_CN.md)只选一个主标签；本卡是进入第二轮后使用的完整复核卡，没有必要为每个“看起来像”的图形一开始就填满所有价格和 R/R 字段。
+
+## Canonical 输出合同
+
+每次完整图表复核都要把四件事分开：
+
+```text
+primary_pattern: 当前最能解释父级状态和交易合同的一个 pattern
+secondary_context: 只记录结构关系，不重复计算优势
+state_transition: BOP / failed_breakout / range_transition / MTR_candidate / none
+trade_state: research_candidate / research_positive_conditional / observation_only / valid_no_trade / pending
+```
+
+主标签不是“最漂亮的名字”，而是当前最先值得研究的合同。已经接受的 BOP 优先于旧的双顶、三推或 MTR；成熟区间边缘优先于区间中部的 ABC/H2；VCP 保留独立体系标签，不和 Brooks H/L 计数合并。`secondary_context` 可以写 `H2_within_ABC`、`double_bottom_at_range_edge` 或 `three_push_evidence_for_MTR`，但不把它们加成多个独立优势。
 
 ## 快速视觉初筛：先判断像不像
 
@@ -16,11 +29,26 @@
 A 腿：强方向 / 普通方向 / 不清楚
 B 腿：受控 / 深但后段受控 / 反向压力强 / 区间化 / 不清楚
 位置：主要支撑阻力、区间边缘、EMA、缺口、通道或中部
+primary_pattern:
+secondary_context:
+state_transition: none / pending / BOP / failed_breakout / range_transition / MTR_candidate
 第一阶段结论：值得深入 / 形态像但先观望 / 不是这个 pattern
 仍不确定：一句话写出计数、尺度或事件疑问
 ```
 
 这一轮允许价格、日期和端点只写区域，不要求测量 MM、精确 R/R 或冻结唯一 H1/H2/L1/L2。只有“值得深入”的候选，才继续填写本卡的订单、结构止损、第一障碍和粗略止盈；“形态像但先观望”也要保留，但不必为了它补齐所有数值。这样 PA Research 才是图表理解助手，而不是先把每张图压成量化输入。
+
+### 快筛停止条件
+
+出现以下任一项时，第一轮可以停止并输出 `observation_only` 或 `valid_no_trade`，不为填表继续下钻：
+
+- 父级明显是成熟区间中部，局部趋势形状没有位置优势；
+- A 腿、B 腿或 lineage 不清，且后续命名会依赖结果倒推；
+- 形态虽像，但触发前第一独立支撑/阻力肉眼已贴近；
+- 开盘跳空、财报或事件会改变原始成交合同；
+- 只能通过把结构止损压进正常波动，才能制造看起来漂亮的 R/R。
+
+只有新信息能改变主标签、状态切换、订单合同或首障碍时，才从快筛进入深审。
 
 ## 使用原则
 
@@ -277,6 +305,17 @@ space_to_first_obstacle: clearly_positive / borderline / blocked / unknown
 
 这些字段可以共存但有主次：`ABC + H2` 是父级与计数的关系，`three_push + MTR` 是证据与状态转换的关系，`failed_breakout → BOP` 是先后关系。输出时只保留一个当前交易合同，旧合同失效后必须重新冻结触发、成交、止损、首障碍和 R/R。
 
+## 11A. 多周期职责的最终裁决
+
+```text
+Daily: parent_state / 主要位置 / 主要高低点 / 事件与板块
+4H or 60m: A-B lineage / 中间结构 / 状态过渡
+1H: 接受、回测、较宽确认
+15m: 触发时序、开盘跳过、低周期跟随
+```
+
+15m 的漂亮 K 线不能创造 Daily 没有的背景、空间或主要支撑阻力。若改成独立 15m 短线，必须另写 `lower_thesis`、低周期止损、第一障碍、持有周期和订单合同；不能把低周期窄止损冒充高周期 R/R。不同周期的 H2/L2 不相加，必须写明 `Daily-H2` 或 `15m-H2`。
+
 ### 核心输出状态的统一写法
 
 核心八个目录的新记录优先使用下列状态；本卡旧案例中出现的 `research_ready`、`research_positive`、`invalidated`、`pending` 仍可保留，但在摘要中映射为下列标准：
@@ -298,7 +337,7 @@ space_to_first_obstacle: clearly_positive / borderline / blocked / unknown
 ```text
 ### [symbol] [date range] [timeframe] — [pattern]
 
-状态：pattern_like / research_ready / valid_no_trade / research_positive / invalidated / pending
+状态：pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
 
 背景：
 左侧主要支撑/阻力：
@@ -307,6 +346,9 @@ A 强度：strong / ordinary / unclear
 B 回调质量：
 H/L 计数及依据：
 形态分类：
+主标签：
+次标签/关系标签：
+状态切换：
 信号 K 与确认：
 订单分支与触发：
 结构止损与失效：
@@ -316,6 +358,10 @@ MM/AB=CD/缺口/EMA 等辅助：
 为什么值得研究或为什么不做：
 仍不确定的地方：
 ```
+
+一句话交付格式：
+
+> 主标签是 X，因为父级是 Y、位置在 Z，A/B 和接受/失败证据支持它；W 只是次标签，不重复计分。订单用 Q；由于首障碍、事件或成交几何，当前是候选、观察还是 `valid_no_trade`。
 
 ## 明确禁止的 shortcuts
 

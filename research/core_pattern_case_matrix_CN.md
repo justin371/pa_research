@@ -90,6 +90,8 @@ Head-and-Shoulders / Rounded 头肩与圆顶圆底边界复核见[`头肩与圆�
 
 跨 Pattern 视觉优先级与冲突复核见[`Cross-Pattern 视觉优先级与冲突消解审计`](cross_pattern_visual_priority_audit_2026-08-24_CN.md)。它规定父级状态、主要位置、A/B 压力、接受/失败、主标签/次标签和订单否决的顺序，避免同一价格簇被双重或多重计分。
 
+完整图表视觉复核工作流见[`完整图表视觉复核工作流边界审计`](visual_review_workflow_boundary_audit_2026-08-24_CN.md)，统一卡片见[`PA 图表视觉复核卡`](../docs/visual_pa_review_card_CN.md)：Daily/4H/1H/15m 的职责、快筛/深审停止条件和 canonical 输出字段已固定。
+
 H1/L1、H2/L2 与 ABC 的证据缺口审计见[`H1/L1、H2/L2 与 ABC 证据缺口审计`](h1_h2_abc_evidence_gap_audit_2026-08-23_CN.md)。本轮新增的是 CRWD 的深 B/H2 及 TSM 的 gap-reprice 订单分支；H1/L1 普通开放趋势纯净基准仍记为 `no-new-positive`，不再复制同质边界。
 
 H2/L2 的独立专项审计见[`H2/L2 第二次入场专项视觉证据审计`](h2_l2_visual_evidence_gap_audit_2026-08-24_CN.md)。最新结论是：多头 H2 为条件性覆盖，空头 L2 仍为 `no-new-positive`；低周期窄止损、高周期结构止损、静态 R/R 和真实路径必须分开。

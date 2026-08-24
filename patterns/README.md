@@ -114,3 +114,5 @@ Double Top / Double Bottom 双顶双底边界复核见[`双顶双底视觉边界
 Head-and-Shoulders / Rounded 头肩与圆顶圆底边界复核见[`头肩与圆顶圆底视觉边界复核`](../research/head_shoulders_rounded_visual_boundary_audit_2026-08-24_CN.md)：复杂双顶/底、真实颈线、圆形状态转移、普通旗形和 BOP 否定分开。
 
 跨 Pattern 视觉优先级与冲突复核见[`Cross-Pattern 视觉优先级与冲突消解审计`](../research/cross_pattern_visual_priority_audit_2026-08-24_CN.md)：先判父级和位置，再选主标签、次标签、状态切换和 `valid_no_trade`。
+
+完整图表统一复核卡见[`PA 图表视觉复核卡`](../docs/visual_pa_review_card_CN.md)，工作流边界演练见[`完整图表视觉复核工作流边界审计`](../research/visual_review_workflow_boundary_audit_2026-08-24_CN.md)：快筛先判断像不像，深审再处理订单、止损、首障碍和粗略 R/R。
