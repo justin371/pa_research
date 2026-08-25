@@ -2,14 +2,18 @@
 
 日期：`2026-08-24`；状态：`visual-research / provisional / not-statistical`
 
+本文件是`contract_scope: stage_1_fast_screen`的边界审计；完整候选仍必须补齐[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)中的方向、事件闸门、订单、结构止损和第一独立障碍字段。
+
 ## 区间先于计数
 
 成熟区间不是只看根数，而看上下沿反复、双方突破失败、重叠、中线缺乏接受和价格回到内部。20 根左右只能作成熟度提示。先冻结：
 
 ```text
+contract_scope: stage_1_fast_screen
+direction: long / short / no_valid_direction
 range_state / upper_zone / lower_zone / midpoint
 edge_attempt_1 / edge_failure_or_reentry / edge_attempt_2
-order / structural_stop / first_magnet / target_path
+order_branch / structural_stop / first_independent_obstacle / target_path
 ```
 
 区间内的 H1/H2/L1/L2 只描述同一边缘的尝试次数，不表示开放趋势的腿数；进入中部、接受区间外或建立新母级方向时计数重置。

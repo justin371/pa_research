@@ -1,6 +1,8 @@
 # ABC：趋势延续
 
-状态：`visual-research / provisional / primary`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录的 A/B/C 字段是差异字段。ABC 是母结构，方向必须单独写 `long`、`short` 或 `no_valid_direction`；H/L 只能作为 `internal_label`。
 
 ## 研究目的
 
@@ -58,7 +60,7 @@ ABC 的判断顺序是：
 
 ## 订单分支
 
-- `same_contract_stop`：C 的信号 K 外 stop，结构止损按父级失效位；
+- `branch_role: same_contract` + `order_branch: stop_confirmation`：C 的信号 K 外 stop，结构止损按父级失效位；
 - `low_cycle_confirmation`：低周期只确认高周期 ABC，不改变父级止损；
 - `limit_retest`：回测支撑/阻力的独立合同；
 - `reprice_after_gap`：开盘跳过旧触发后重新计算成交、止损、首障碍；

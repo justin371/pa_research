@@ -1,6 +1,8 @@
 # Triangle / 三角形、扩张三角形与区间内区间
 
-状态：`independent-pa / visual-research / provisional / not-quantitative`
+文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补两侧边界、压缩/扩张和突破接受或失败。三角形中部没有有效方向时必须写 `no_valid_direction`。
 
 三角形研究的是双向市场中的压缩、边界测试和状态切换。它不是两点连线、普通趋势旗形或区间中部的一次摆动。扩张三角形也不是自动的反转形态；方向必须由位置、突破接受/失败、跟随和风险合同决定。
 

@@ -1,7 +1,9 @@
 # 核心八个 Pattern 代表性案例矩阵 V0.1
 
 日期：2026-08-23  
-状态：`visual-research / case-matrix / not-statistical`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段、方向和状态分轴见[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。矩阵行不替代案例合同。
 
 ## 使用方式
 

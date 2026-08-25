@@ -2,6 +2,12 @@
 
 覆盖第 101–123 门课程。核心是把“看懂行情”转成可执行计划：交易类型、订单类型、初始风险、结构止损、仓位和出场管理必须在入场前彼此一致。
 
+```text
+source_type: PAHubCN_course_derived_note
+source_locator: course catalog entries 101-123; individual page/version not archived
+evidence_status: external_heuristic_not_validated
+```
+
 ## 逐课提炼
 
 ### 31A Swing Trading and Scalping

@@ -1,7 +1,9 @@
 # PA Pattern 覆盖审计（视觉研究阶段）
 
 日期：2026-08-23  
-状态：`visual-research / coverage-audit / not-quantitative`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段、方向和状态分轴见[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。覆盖表是研究导航，不替代案例的 `contract_scope`、`direction`、事件闸门或订单合同。
 
 ## 目的
 

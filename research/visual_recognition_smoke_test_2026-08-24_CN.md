@@ -1,6 +1,9 @@
 # PA 图表视觉识别冒烟验收（2026-08-24）
 
-状态：`smoke-test / acceptance-pending / visual-first`
+文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+视觉验收状态：`smoke_test / acceptance_pending`
+
+统一字段、方向和状态分轴见[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。
 
 ## 目的与边界
 
@@ -13,10 +16,12 @@
 每张图先输出以下字段，暂不填写订单、结构止损、第一障碍、R/R、评分或管理规则：
 
 ```text
+contract_scope: stage_1_fast_screen
 primary_pattern:
 secondary_context:
 state_transition:
 market_state:
+direction: long / short / no_valid_direction
 location:
 attempt_or_count:
 directly_visible_facts:
@@ -71,6 +76,8 @@ recognition_result:
 symbol: TSLA
 data_source: public Yahoo Finance Chart API via Jina Reader
 data_status: historical public data; not Futu; not live authorization
+asset_generated_date: 2026-08-24
+query_period_end: 2026-08-25 00:00 UTC
 latest_complete_rth_bar: 2026-08-21 16:00 America/New_York
 timeframes_seen: Daily (~2Y left context) / 4H-like / 1H / 15m
 event_context: unknown; this round does not declare event-clean
@@ -117,6 +124,8 @@ chart_scope: full two-year Daily context plus nested recent intraday windows
 symbols: AAPL / NVDA / SPY / RBLX
 data_source: public Yahoo Finance Chart API via Jina Reader
 data_status: historical public data; not Futu; not live authorization
+asset_generated_date: 2026-08-24
+query_period_end: 2026-08-25 00:00 UTC
 latest_complete_rth_bar: 2026-08-21 16:00 America/New_York
 timeframes_seen: Daily (~2Y left context) / 4H-like / 1H / 15m
 event_context: unknown; this round does not declare event-clean

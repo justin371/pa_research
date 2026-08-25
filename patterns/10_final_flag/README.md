@@ -1,6 +1,8 @@
 # Final Flag / 最终旗形
 
-状态：`independent-pa / visual-research / provisional / not-quantitative`
+文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补趋势末端、最后一次原方向尝试和状态分流。没有完整合同的内容只能标为 `historical_context_only`。
 
 Final Flag 是 Al Brooks PA 中的背景型结构：趋势已经走了相当一段，接近末端时出现小型反向回调或窄区间，最后一次原方向尝试可能失败，随后先出现小反转、平衡或交易区间。它不是“所有小旗形”的名称，也不是自动反转信号。
 

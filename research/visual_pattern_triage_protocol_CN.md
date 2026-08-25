@@ -1,9 +1,11 @@
 # PA Pattern 视觉筛选协议 v0.3
 
 日期：2026-08-23  
-状态：`visual-first / research protocol / not quantitative`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
 
 日线候选的范围、流动性、两年背景、财报窗口和 ABC/BOP 主标签先遵循 [`PA Research 日线选股规则 v0.1`](../docs/pa_research_daily_selection_rules_v0_1_CN.md)；本协议负责通过前置闸门后的视觉快筛与深审，不把 4H/1H/15m 倒灌成日线选股证据。
+
+输出字段统一遵循[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。快筛可以保留 `pending` 或 `unknown`，但不能省略方向字段或把快筛状态当作交易授权。
 
 ## 这份协议解决什么问题
 
@@ -36,10 +38,11 @@ PA Research 的第一阶段任务，是让助手从完整图表里筛出“看�
 symbol:
 review_window:
 timeframe_seen:
-data_status: historical / delayed / live-confirmed / incomplete
+data_status: historical / delayed / live_confirmed / incomplete
 chart_scope: full / partial
 market_state: trend / trading_range / transition / climax / unclear
 directional_bias: bull / bear / balanced / changing
+direction: long / short / no_valid_direction
 pattern_candidate: ABC-CONT / H1-H2-H3 / L1-L2-L3 / range-edge / MTR / other
 parent_leg:
 local_A_B_C_or_attempts:
@@ -105,7 +108,8 @@ stage_1_status: pattern_like / boundary / not_this_pattern / pending
 
 ```text
 signal_bar / confirmation_bar:
-order_branch: stop / stop-limit / limit-retest / market-close / observation-only
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
 trigger_zone:
 structural_stop_zone:
 first_independent_obstacle:
@@ -113,7 +117,7 @@ rough_space: clearly_positive / borderline / blocked / unknown
 measured_move_or_AB_CD:
 event_filter:
 sector_or_market_context:
-stage_2_status: research_ready / valid_no_trade / research_positive_conditional / pending
+stage_2_status: research_candidate / valid_no_trade / research_positive_conditional / pending
 ```
 
 第二轮仍然是人工研究，不是自动下单授权。第一障碍优先于 MM；结构止损不能为了改善 R/R 而任意缩窄。窄低周期止损和宽日线止损代表不同交易假设，不能混成一个结论。

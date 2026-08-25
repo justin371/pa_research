@@ -1,6 +1,8 @@
 # 市场状态与父级背景
 
-状态：`visual-research / provisional / cross-pattern / not-quantitative`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段、方向和状态分轴见[`PA Research 统一输出合同`](../../docs/pa_research_output_schema_v0_1_CN.md)。
 
 这是所有 PA pattern 的上游过滤层。先判断市场处于开放趋势、成熟交易区间、区间边缘、过渡还是高潮，再决定能否使用 ABC、H1/H2/L1/L2、MTR、失败突破或三推语言。
 
@@ -37,7 +39,7 @@ state: mature_range / developing_range / transition / not_range
 
 从区间下沿强力上涨到上沿，外观可能像 ABC 的第二上涨腿；只要父级仍是区间，它首先是区间摆动。`H2-like` 也只能记为边缘或区间尝试，不能自动升级为开放趋势 H2。
 
-区间中部优先 `observation-only / range_middle_no_trade`。若区间边缘反应后走到中线或另一边缘，旧边缘合同的目标已到达，不能继续用“第二腿”追价。中部再出现的局部突破通常没有足够位置优势。
+区间中部优先 `observation_only / range_middle_no_trade`。若区间边缘反应后走到中线或另一边缘，旧边缘合同的目标已到达，不能继续用“第二腿”追价。中部再出现的局部突破通常没有足够位置优势。
 
 ## 4. Second-leg trap
 
@@ -79,7 +81,8 @@ attempt_lineage:
 abc_allowed: yes / conditional / no
 second_leg_trap_risk: low / medium / high
 breakout_acceptance:
-first_obstacle:
+direction: long / short / no_valid_direction
+first_independent_obstacle:
 decision: trend-contract / range-contract / wait-for-acceptance / no-trade
 state_reset_condition:
 ```

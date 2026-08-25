@@ -1,7 +1,9 @@
 # Cross-Pattern / 跨 Pattern 视觉优先级与冲突消解审计
 
 日期：`2026-08-24`  
-状态：`visual-research / provisional / not-statistical`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段、方向和状态分轴见[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。
 
 同一段行情可能同时像 ABC、H2、双顶、三推、通道或 Final Flag。PA Research 的目标不是把所有名字都贴上去，而是选出一个主标签，保留必要的次标签，最后单独判断订单和空间是否允许交易。
 

@@ -1,0 +1,9 @@
+# PA Research Docs 索引
+
+- [`PA Research 日线选股规则 v0.1`](pa_research_daily_selection_rules_v0_1_CN.md)
+- [`PA Research 统一输出合同 v0.1`](pa_research_output_schema_v0_1_CN.md)
+- [`PA 图表视觉复核卡`](visual_pa_review_card_CN.md)
+- [`共同上下文`](common_context.md)
+- [`PA Research → Codex Trading 研究交接规范`](research_to_system_handoff_CN.md)
+
+这些文件只定义 PA Research 的研究、记录和边界合同；不包含量化扫描器、生产交易规则或 Execution Agent 连接。

@@ -1,6 +1,8 @@
 # PA 视觉助手：订单分支协议
 
-状态：`audited research protocol / not production`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+新案例的订单字段遵循[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)：`order_branch` 只写基础合同，`branch_role` 单独写反向 stop、角色转换回测或跳空重订。
 
 ## 目的
 
@@ -72,8 +74,10 @@ Stop-limit 不是普通 stop 的别名，而是另一份执行合同：
 ## 3. 订单分支的最低记录字段
 
 ```text
-pattern_state: pattern_like / research_ready / valid_no_trade / research_positive
-order_branch: stop / stop-limit / limit-retest / market-close / observation-only
+research_state: pattern_like / research_candidate / research_positive_conditional / valid_no_trade / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
 decision_time:
 signal_bar:
 trigger_price_or_zone:
@@ -82,6 +86,7 @@ structural_stop_zone:
 first_independent_obstacle:
 rough_space_to_obstacle:
 gap_or_event_state:
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 why_this_branch:
 what_would_cancel_it:
 ```

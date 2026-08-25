@@ -65,6 +65,8 @@ The main context questions are:
 
 For the current daily-selection phase, prioritize two separate primary families: ABC continuation and BOP breakout-pullback. The ABC pullback framework still owns H1/H2/H3 and L1/L2/L3 attempt studies; BOP remains a separate contract and must not be mixed into ABC/H-L counts or outcome statistics. Lower timeframes can only be reviewed after a Daily candidate is selected and must not change the Daily screening label.
 
+所有新记录的方向、BOP 状态、订单分支、事件闸门和研究/交易/交接状态统一按[`PA Research 统一输出合同 v0.1`](pa_research_output_schema_v0_1_CN.md)填写。`directional_bias` 只描述背景；当前研究合同必须另写 `direction: long / short / no_valid_direction`。
+
 - `A` is the directional impulse or trend leg; `B` is the pullback; `C` is the possible resumption leg.
 - `A` is also a retrospective structural label, not the date when live research begins. Once directional pressure is recognizable, immediately evaluate the next B pullback and H/L attempts. Do not wait for C to finish or for the whole ABC to become visually complete. Every case should record both the earliest recognizable A date and the actual decision/trigger date.
 - `H1`, `H2`, and `H3` are successive bull attempts within the same pullback context. `L1`, `L2`, and `L3` are the symmetric bear attempts.
@@ -143,7 +145,17 @@ Use the same distinction symmetrically for bullish and bearish studies:
 - 跨 Pattern 视觉优先级与冲突复核见[`Cross-Pattern 视觉优先级与冲突消解审计`](../research/cross_pattern_visual_priority_audit_2026-08-24_CN.md)：先判父级和位置，再选一个主标签，次标签只记录结构关系，订单与首障碍单独否决。
 - 完整图表统一复核卡见[`PA 图表视觉复核卡`](visual_pa_review_card_CN.md)，工作流边界演练见[`完整图表视觉复核工作流边界审计`](../research/visual_review_workflow_boundary_audit_2026-08-24_CN.md)：先快筛，只有有新信息或候选值得深入时才深审。
 
-The probability table is treated as conditional experience-based guidance, not guaranteed win rates. In particular:
+The probability table is treated as conditional experience-based guidance, not guaranteed win rates. It is a user-supplied educational heuristic, not a PA Research measurement; the source locator and validation boundary are recorded in [`probability principles`](../strategy/probability_principles_pages_1_7.md).
+
+```text
+source_type: user_supplied_educational_reference
+source_locator: Brooks Price Action probability table, pages 1-7
+source_version: not_provided
+source_as_of: unknown
+evidence_status: external_heuristic_not_validated
+```
+
+In particular:
 
 - In a trend, most reversal attempts fail; the working Brooks heuristic is about 80% failure.
 - In a trading range, most breakout attempts fail; the working Brooks heuristic is about 80% failure.

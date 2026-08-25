@@ -1,5 +1,7 @@
 # ABC / H-L1-3 统一决策矩阵
 
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
 ## 目的
 
 把目前已经研究过的多空案例放进同一套决策字段，检查哪些变量可以跨案例重复，哪些只是区间边缘、跳空、财报或低周期特殊情况。矩阵用于研究和筛选，不是胜率表，也不是自动交易规则。
@@ -8,9 +10,12 @@
 
 ## 统一字段
 
+本矩阵使用[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。每行的方向必须单独归一为 `long`、`short` 或 `no_valid_direction`；“多头/空头”文字不能被省略。
+
 | 字段 | 研究问题 |
 | --- | --- |
 | 背景 | 是开放趋势、区间边缘，还是区间中部？ |
+| 方向 | 当前研究合同是 `long`、`short` 还是 `no_valid_direction`？ |
 | A 腿 | 是否有方向性、扩张、低重叠和跟随？ |
 | B 腿 | 是受控回调，还是前强后弱/宽通道/反向趋势？ |
 | 计数 | H/L1、H/L2、H/L3 是否在同一回调内；C 启动后是否重置？ |

@@ -1,7 +1,9 @@
 # BOP 真实多日回踩候选审计（2026-08-24）
 
 日期：2026-08-24
-状态：`visual-research / BOP / no-new-positive / boundary-audit / not-statistical`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段、方向、BOP 状态和订单分支见[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。本审计只修改 PA Research，不创建量化扫描器、不连接 Execution Agent。
 
 ## 1. 本轮要找的不是哪一种突破
 
@@ -26,15 +28,21 @@
 每个候选只保留一个主标签：
 
 ```text
-primary_pattern: BOP / failed_breakout / range-edge / observation-only
+contract_scope: deep_review
+primary_pattern: BOP / failed_breakout / range_edge / other
+direction: long / short / no_valid_direction
 secondary_context: gap-and-go / former-double-top / H1-H2 / channel / triangle
-state_transition: none / breakout-acceptance / role-reversal / failed-BOP
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout
+bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation
 acceptance: close outside + follow-through + hold/retest evidence
 retest: intraday-only / single-session / multi-day / not-occurred
-order: close / stop-confirmation / limit-retest / reprice / no-trade
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role: same_contract / role_reversal_retest / gap_reprice / management
 structural_stop: role-conversion zone or parent invalidation, with buffer
-first_obstacle: first independent left-side level after actual fill
-trade_state: conditional / valid_no_trade / process-stop-first / pending
+first_independent_obstacle: first independent left-side level after actual fill
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+trade_state: conditional / valid_no_trade / observation_only / pending
+thesis_state: working / failed / invalidated / replaced / pending
 ```
 
 同一价格簇中的旧边界、EMA、缺口边缘和 MM 不重复计分。MM 只能在角色转换被接受、第一独立障碍已处理后升级目标，不能替代回踩证据。

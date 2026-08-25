@@ -1,7 +1,7 @@
 # 核心八个 Pattern 交叉一致性审计 V0.1
 
 日期：2026-08-23  
-状态：`visual-research / cross-pattern-audit / not-quantitative`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
 
 ## 目的
 
@@ -9,12 +9,14 @@
 
 逐图执行时使用[`PA 图表视觉复核卡`](../docs/visual_pa_review_card_CN.md)；本文件只负责八个目录之间的分层、切换和状态一致性。
 
+方向、BOP 专用字段、订单枚举和状态分轴统一见[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。本文件中的历史别名只用于解释，不作为新记录字段。
+
 审计结果先固定一个重要分层：
 
 1. **背景层**：趋势、交易区间、通道、过渡、高潮；
 2. **结构/计数层**：ABC、H1/L1、H2/L2、三推/H3-L3、区间边缘尝试；
 3. **状态转换层**：失败突破、BOP、MTR；
-4. **合同与风险层**：信号 K、触发、实际成交、结构止损、第一障碍、R/R、事件和 no-trade。
+4. **合同与风险层**：方向、信号 K、触发、实际成交、结构止损、第一障碍、R/R、事件和 no-trade。
 
 因此，H2 可以是 ABC 中的第二次尝试，三推可以是 MTR 的证据，失败突破之后也可以转成 BOP；这些是**有条件的交叉标注**，不是把多个 pattern 相加后就提高胜率。
 

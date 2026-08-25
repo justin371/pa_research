@@ -1,6 +1,8 @@
 # H1 / L1：第一次入场
 
-状态：`visual-research / provisional / priority-required`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补 H1/L1 的第一次有意义尝试。方向、事件闸门、订单合同、结构止损、首障碍和分轴状态不能省略。
 
 ## 研究目的
 

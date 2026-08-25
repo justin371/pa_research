@@ -1,6 +1,8 @@
 # Inside Bar / 两根 K 线反转
 
-状态：`independent-pa / visual-research / provisional / not-quantitative`
+文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补母 K、内包/IOI 和两根反转边界。严格内包定义不能替代事件、订单、止损和方向字段。
 
 这个目录把四种容易混淆的东西分开：严格 Inside Bar、二内包/IOI、两根 K 线反转，以及 H1/H2 或 L1/L2 的 setup—signal—trigger 序列。它们可以重叠，但任何一个名称都不能替代背景、位置、突破接受、订单和空间审计。
 

@@ -46,7 +46,8 @@ close_acceptance: accepted / rejected / unclear
 reentry_to_original_side:
 first_reverse_structure:
 second_confirmation:
-order_branch: reverse-stop / limit-retest / market-close / observation-only
+order_branch: stop_confirmation / limit_retest / market_close / observation_only
+branch_role: reverse_stop / role_reversal_retest / gap_reprice / management
 actual_fill_or_reprice:
 structural_stop:
 first_independent_obstacle:

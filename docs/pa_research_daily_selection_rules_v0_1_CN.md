@@ -1,9 +1,11 @@
 # PA Research 日线选股规则 v0.1
 
-日期：2026-08-24
-状态：`adopted / visual-research / daily-selection / not-quantitative`
+日期：2026-08-24；合同修订：2026-08-25
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
 
 这份文件是 PA Research 的日线候选筛选合同。它用于从美股日线图表中筛选少量值得继续研究的 ABC 和 BOP 候选，不是量化扫描器、生产交易规则或下单授权。
+
+统一字段、方向、BOP 状态、订单枚举和状态分轴见[`PA Research 统一输出合同 v0.1`](pa_research_output_schema_v0_1_CN.md)。本文件规定日线筛选内容；统一合同规定如何记录，二者不能互相省略。
 
 ## 0. 本次采纳前修正
 
@@ -141,19 +143,19 @@ C 必须重新朝 A 腿方向推进，并在有意义的位置出现明确的日
 
 | 状态 | 必要证据 | 输出处理 |
 | --- | --- | --- |
-| `breakout-acceptance-watch` | 日线强收盘越过边界，但尚未形成有效回踩 | 观察候选，不称为完整 BOP 回踩交易 |
-| `ordinary-BOP-pullback` | 突破后至少有后续日线接受；价格回到实际被突破区域，守住后重新向突破方向离开 | 可进入普通 BOP 候选，重建入场、止损、首障碍和空间 |
-| `failed-breakout` | 影线、无跟随或收盘重新接受回原区间 | 切换失败突破/区间边缘，不沿用 BOP thesis |
-| `gap-and-go / event-BOP` | 缺口或事件造成的突破、接受和重订 | 单独标记，不能与普通 BOP 混合统计 |
+| `acceptance_watch` | 日线强收盘越过边界，但尚未形成有效回踩 | 观察候选，不称为完整 BOP 回踩交易 |
+| `ordinary_pullback` | 突破后至少有后续日线接受；价格回到实际被突破区域，守住后重新向突破方向离开 | 可进入普通 BOP 候选，重建入场、止损、首障碍和空间 |
+| `failed_breakout` | 影线、无跟随或收盘重新接受回原区间 | 切换失败突破/区间边缘，不沿用 BOP thesis |
+| `gap_event` | 缺口或事件造成的突破、接受和重订 | 单独标记，不能与普通 BOP 混合统计 |
 
 日线突破后只有同日盘中回测、单根影线测试或低周期回测时，记录为同日/低周期合同，不能称为“多日 BOP 回踩”。
 
-回踩必须回到实际被突破的区域，而不是机械寻找某一根旧 K 线。回踩守住后要有重新离开和方向跟随；如果只是触及旧位但没有重新启动，保持 `pending / watch`。
+回踩必须回到实际被突破的区域，而不是机械寻找某一根旧 K 线。回踩守住后要有重新离开和方向跟随；如果只是触及旧位但没有重新启动，保持 `research_state: pattern_like`、`trade_state: pending`。
 
 ### 5.3 趋势线与牛旗分支
 
 - 三个逐步降低的高点可以形成趋势线候选，但三个点本身不自动证明成熟趋势线；必须确认测试有分离、位置有意义且不是区间噪音。
-- 突破趋势线后形成牛旗，牛旗向上突破可以单独标记为 `bull-flag-continuation-BOP`。
+- 突破趋势线后形成牛旗，牛旗向上突破可以单独标记为 `bull_flag_continuation`。
 - 牛旗分支必须确认价格没有日线收回趋势线下方；一旦重新接受到趋势线下方，原 BOP 观察失效或切换为其他状态。
 - 趋势线突破后，左侧最高点仍是重要首阻力。趋势线提前突破只有在到左侧最高点仍有足够空间时才保留；真正突破并守住左侧最高点后，才称为更完整的大级别 BOP。
 
@@ -162,6 +164,7 @@ C 必须重新朝 A 腿方向推进，并在有意义的位置出现明确的日
 突破接受后，原来的 H/L、三推、MTR 或区间合同必须废弃或重建。重新记录：
 
 ```text
+bop_state:
 breakout_boundary:
 acceptance_close:
 follow_through:
@@ -175,7 +178,7 @@ rough_space_to_first_obstacle:
 
 ## 6. 财报、缺口与异常事件
 
-- 已知财报在未来三个交易 session 内，所有新仓候选原则上排除；不只排除 BOP。状态写为 `valid_no_trade / event_pending`。
+- 已知财报在未来三个交易 session 内，所有新仓候选原则上排除；不只排除 BOP。记录 `event_context: earnings`、`earnings_next_three_sessions: yes`、`gate_result: valid_no_trade` 和 `trade_state: valid_no_trade`。
 - 财报后的大涨或大跌可以研究，但必须标记为 `earnings-driven` 或 `event-driven`，与普通 ABC、普通 BOP 分开记录和统计。
 - 异常跳空、重定价、宏观冲击、监管消息、并购或产品发布若改变了原有结构，不能直接套用普通 ABC/BOP；应重新核对边界、成交、止损、首障碍和 R/R。
 - 开盘跳过原触发时，原合同记为未成交或未知，不能沿用原价；只有实际回到旧结构区才另立 limit-retest/reprice 合同。
@@ -205,33 +208,62 @@ rough_space_to_first_obstacle:
 ```text
 symbol:
 review_date:
+contract_scope: daily_candidate
 data_source:
-data_status:
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
 completed_daily_bar_as_of:
 universe_type: US_common_stock
 average_dollar_volume_20d:
 earnings_next_three_sessions:
-sector_context:
-market_context:
+event_context:
+event_source_as_of:
+sector_reference:
+sector_state: aligned / mixed / counter / unknown
+market_reference:
+market_state: aligned / mixed / counter / unknown
+permission: long_allowed / short_allowed / both_allowed / no_direction / unknown
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 two_year_daily_context:
 major_highs_lows:
 support_resistance_and_role_zones:
 daily_ema20_50_200:
 parent_state:
-primary_pattern: ABC-CONT / BOP
-internal_label: H1 / H2 / L1 / L2 / H3-L3 / none
-special_subtype: ordinary / deep-but-late-controlled-B / bull-flag / earnings-driven / event-driven / gap-reprice / none
+direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP
+secondary_context:
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+lineage_status: same_lineage / reset / unclear / pending
+internal_label: H1 / H2 / L1 / L2 / H3_L3 / none / pending
+bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable
+breakout_boundary:
+acceptance_close:
+follow_through:
+retest_zone:
+role_reversal_held: yes / no / unclear / not_occurred
+special_subtype: ordinary / deep_late_controlled_B / bull_flag / earnings_driven / event_driven / gap_reprice / none
 key_breakout_or_structure_location:
 why_it_meets_the_rule:
 possible_daily_entry_trigger:
 structural_invalidation:
 first_independent_obstacle:
 rough_space_to_first_obstacle_R:
-status: research_candidate / watch / observation_only / valid_no_trade / pending
+signal_bar:
+confirmation_bar:
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
+document_status: draft / adopted / historical / research_only
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+thesis_state: working / failed / invalidated / replaced / pending
+handoff_status: research_only / not_ready / ready_for_system
 main_uncertainty_or_exclusion:
 ```
 
-输出文字必须区分事实和解释；历史或收盘后数据不能写成实时。形态很像但首障碍、事件、成交或止损不合格时，应保留为 `valid_no_trade` 或边界记录，而不是进入 3–5 只名单。
+`direction` 是每只候选必填字段；若父级、空间、事件或合同使当前没有可授权方向，写 `no_valid_direction`，不能只写“看多/看空倾向”。输出文字必须区分事实和解释；历史或收盘后数据不能写成实时。形态很像但首障碍、事件、成交或止损不合格时，应保留为 `research_state: observation_only` 或 `trade_state: valid_no_trade`，而不是进入 3–5 只名单。
 
 ## 9. 统计边界
 

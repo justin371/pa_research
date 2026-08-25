@@ -1,13 +1,31 @@
 # PA_Research
 
-Price Action research project.
+PA Research 是一个只读、视觉优先的 Price Action 研究仓库。它记录背景、支撑阻力、EMA20/50/200、ABC/H1-H2/L1-L2、BOP、三推及边界样本，不提供生产交易授权。
 
 当前日线选股合同：[`PA Research 日线选股规则 v0.1`](docs/pa_research_daily_selection_rules_v0_1_CN.md)。
 
-This repository will contain:
+统一输出字段：[`PA Research 统一输出合同 v0.1`](docs/pa_research_output_schema_v0_1_CN.md)。
 
-- Price Action rules
-- Wyckoff notes
-- META trading areas
-- Chart reviews
-- Backtesting code and results
+## 目录
+
+- [`docs/`](docs/README.md)：日线规则、视觉复核卡、共同上下文和研究交接边界；
+- [`patterns/`](patterns/README.md)：核心八个 PA pattern 与独立视觉主题；
+- [`foundations/`](foundations/README.md)：支撑阻力、事件闸门、订单合同和市场状态基础层；
+- [`research/`](research/README.md)：专项审计、历史案例、视觉验收资产与当前研究结论；
+- [`strategy/`](strategy/README.md)：研究优先级和候选案例清单；
+- [`knowledge/`](knowledge/README.md)：学习资料与方法论摘要；
+- [`pahubcn_courses/`](pahubcn_courses/README.md)：课程学习笔记与阅读边界。
+
+## 当前边界
+
+- 当前仓库没有量化扫描器、生产回测代码或 Execution Agent 连接；`Backtesting code and results` 仍是未来计划，不是现有证据。
+- Codex Trading 只作为明确标注的只读历史参考；PA Research 不复制其规则，不修改其仓库。
+- 当前结果审计保持 `no-new-positive`、`win_rate: not-computable`；形态候选不是胜率或下单授权。
+
+## 文档校验
+
+只读运行本地合同、索引、链接和边界校验：
+
+```powershell
+powershell -NoProfile -File .\scripts\validate_pa_research_docs.ps1
+```

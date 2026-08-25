@@ -1,6 +1,8 @@
 # Head-and-Shoulders / Rounded Top-Bottom / 头肩顶底与圆顶圆底
 
-状态：`independent-pa / visual-research / provisional / not-quantitative`
+文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补头肩/圆顶圆底、颈线和状态转移。三个点本身不产生方向或交易授权。
 
 头肩顶/底是把成熟趋势极端、复杂双顶/双底和颈线结构组织在一起的视觉语言，不是“三个高点/低点”的自动反转信号。圆顶/圆底则描述推进效率下降和控制权逐步转移，更像背景警报；两者都必须经过结构、确认和空间审计。
 

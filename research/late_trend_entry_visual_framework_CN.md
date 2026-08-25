@@ -133,7 +133,8 @@ signal_and_trigger:
 structural_stop:
 first_obstacle:
 rough_R_R:
-order_branch: stop / limit-retest / market-close / observation-only
+order_branch: stop_confirmation / limit_retest / market_close / observation_only
+branch_role: same_contract / role_reversal_retest / gap_reprice / management
 management: hold / partial / protect / exit / rebuild
 failure_condition:
 ```

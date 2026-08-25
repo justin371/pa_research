@@ -1,8 +1,10 @@
 # 常用高质量候选形态清单 V0.1
 
-状态：研究候选；尚未证明“高胜率”，尚未进入生产规则或程序化回测。
+文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
 
 本文件的目标是先建立形态目录，不急着把任何一个形态包装成自动交易系统。严格的三推楔形反转规则暂不冻结，但 H3/L3 的视觉候选、延续反例、区间边界和 no-trade 样本可以继续收集。
+
+完整案例字段必须遵循[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。本清单是研究优先级，不是 Codex Trading 实现队列；Codex Trading 的材料仅作只读历史图表参考。
 
 ## 1. 先统一几个名字
 
@@ -49,7 +51,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | --- | --- | --- | --- | --- | --- | --- |
 | A | `TPB-H2-L2` | 强趋势中的二次入场（目录见 [`H2/L2 第二次入场`](../patterns/02_h2_l2_second_entry/README.md)） | 方向性 A 腿之后，B 回调出现两次有意义的反向尝试；多头看 H2，空头看 L2 | 关键支撑/阻力被触及并守住；信号 K 后由下一根 K 线确认方向 | 前一腿等距、AB=CD 或下一道结构磁铁；先看第一障碍 | 区间中部、回调已接受反向结构、没有跟随、障碍太近 |
 | A | `ABC-CONT` | 强趋势 ABC 延续（目录见 [`ABC 趋势延续`](../patterns/03_abc_continuation/README.md)） | A 是可见的方向腿，B 是受控回调，C 恢复原方向；B 尚未演化成双向交易区间 | C 在结构位置形成方向性信号并得到确认 | `Leg1 = Leg2`、AB=CD、或 A 腿终点后的下一个独立磁铁 | A 其实是高潮/区间内脉冲；B 过度重叠；C 未恢复或重新跌回区间 |
-| A | `BOP-ABC` | 突破后的 ABC 回踩（目录见 [`突破回踩 / BOP`](../patterns/06_breakout_pullback_bop/README.md)） | 先有被接受的突破，随后 B 回踩突破区，C 再次离开突破区；gap-and-go 作为无回踩的独立分支 | 多头回踩守住旧高上方、空头守住旧低下方，并出现重新突破/确认；详见[`BOP / gap acceptance visual framework`](../research/bop_gap_acceptance_framework_CN.md) | 突破前区间高度、A 腿等距、下一道结构障碍 | 收盘重新接受回旧区间；突破没有跟随；回踩变成失败突破；开盘跳过后仍沿用旧成交价 |
+| A | `BOP` | 突破后的回踩（目录见 [`突破回踩 / BOP`](../patterns/06_breakout_pullback_bop/README.md)） | 先有被接受的突破，随后回踩突破区，再次离开突破区；`ABC_CONT` 只能作为 `secondary_context`；gap-and-go 作为无回踩的独立分支 | 多头回踩守住旧高上方、空头守住旧低下方，并出现重新突破/确认；详见[`BOP / gap acceptance visual framework`](../research/bop_gap_acceptance_framework_CN.md) | 突破前区间高度、A 腿等距、下一道结构障碍 | 收盘重新接受回旧区间；突破没有跟随；回踩变成失败突破；开盘跳过后仍沿用旧成交价 |
 | A | `RFB-SECOND` | 区间边缘失败突破后的二次入场（目录见 [`区间边缘二次入场`](../patterns/04_range_edge_second_entry/README.md)；框架见 [`range-edge framework`](../research/range_edge_second_entry_framework_CN.md)） | 价格在已知区间边缘刺破后重新进入区间；反向尝试再次失败 | 区间边缘重新收回后，出现方向一致的 H2/L2 或等价确认 | 区间边缘、区间高度和中点是目标参考，不预设一定到达 | 发生在区间中部；重新进入后没有跟随；区间边缘未被事先确认 |
 | A | `MTR-ABC` | 主要位置上的反转 ABC（目录见 [`MTR 趋势反转`](../patterns/07_mtr_reversal/README.md)） | 成熟趋势/通道出现 A-B-C 反转结构，同时有双顶/双底、趋势线破坏或失败突破证据 | 第二次反向尝试突破信号 K，并在结构失效点外设止损 | 先看最近磁铁，再看 AB=CD 或 measured move；目标是区域而非单点 | 只是趋势中的普通回调；反向突破没有接受；止损空间过大；详细视觉框架见[`MTR visual framework`](../research/mtr_visual_framework_CN.md) |
 | A | `FAILED-BREAKOUT-CLIMAX` | 失败突破与高潮反转候选（目录见 [`失败突破与高潮`](../patterns/05_failed_breakout_climax/README.md)） | 事前可见边界被越过但未被接受，或成熟趋势后出现扩张/高潮；只有叠加位置、反向结构破坏、第二次确认和空间时才升级为反转候选 | 默认等待反向 stop-confirmation；结构回测可作为独立 limit-retest 分支；若原方向重新接受突破，切换为 BOP；详见[`Failed breakout / climax reversal visual framework`](../research/failed_breakout_climax_visual_framework_CN.md) | 先看失败边界、最近磁铁和第一独立支撑/阻力；MM 只作接受后的后续目标 | 影线测试被误叫失败；高潮后直接摸顶/抄底；第一反向无跟随；第三推扩张被误叫楔形衰竭；原方向已 BOP 接受；首障碍太近 |
@@ -69,7 +71,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 
 ### 当前优先顺序
 
-当前核心实现队列是 `TPB-H1-L1`、`TPB-H2-L2`、`ABC-CONT`、`RFB-SECOND`、`FAILED-BREAKOUT-CLIMAX`、`BOP-ABC`、`MTR-ABC` 和 `THREE-PUSH-PRESSURE-STATE`。它们共同覆盖第一次/第二次入场、趋势 ABC、区间边缘、失败突破、突破回踩、主要反转和三推压力状态；三推仍不冻结成自动反转规则。
+当前研究优先级是 `TPB-H1-L1`、`TPB-H2-L2`、`ABC_CONT`、`RFB_SECOND`、`FAILED_BREAKOUT_CLIMAX`、`BOP`、`MTR` 和 `THREE_PUSH_PRESSURE_STATE`。这只是 PA Research 的研究排序，不是实现队列，不创建程序任务，也不改变 Codex Trading。
 
 八个目录的交叉关系不另造第九个 pattern；统一复核和切换入口见[`核心八个 Pattern 交叉一致性审计`](../research/core_pattern_cross_audit_CN.md)。
 代表性候选、边界和研究缺口见[`核心八个 Pattern 代表性案例矩阵`](../research/core_pattern_case_matrix_CN.md)。
@@ -219,10 +221,12 @@ EMA、AB=CD 和 measured move 都只能作为背景、位置、空间或目标�
 ## 5. 每个案例统一记录的字段
 
 ```text
+contract_scope: deep_review / historical_context_only
 symbol
 timeframe
-market_state              # trend / range / transition / climax
-direction
+data_source / data_status / as_of_time
+parent_state              # trend / range / transition / climax
+direction                  # long / short / no_valid_direction
 A_leg_origin / A_leg_end
 B_correction_start / B_correction_end
 B_leg_count
@@ -230,24 +234,30 @@ abc_mode                   # continuation / reversal / complex / unknown
 H_or_L_attempt             # H1 / H2 / H3 / L1 / L2 / L3
 location_and_left_structure
 signal_bar / confirmation_bar
+order_branch               # stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role
+actual_fill_or_open_skip
 AB_equals_CD               # absent / approximate / present / unknown
 measured_move_type
-first_obstacle
+first_independent_obstacle
 structural_stop
-invalidation
-outcome                    # continuation / reversal / failure / no-trade / pending
-evidence_status             # descriptive / research-candidate / replayed / validated
+structural_invalidation
+event_context / sector_state / market_state / permission / gate_result
+research_state              # pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state                 # not_authorized / conditional / valid_no_trade / observation_only / pending
+thesis_state / handoff_status
+outcome                     # continuation / reversal / failure / no_trade / pending
 ```
 
 ## 6. 研究边界与下一步
 
 - 本文件不声称任何固定胜率；胜率必须来自预先定义、跨标的、按时间切分的回放或回测。
 - `H1/H2/H3`、`L1/L2/L3`、操作性 ABC、AB=CD 和 measured move 先分栏记录，不能压成一个分数。
-- 先从 `TPB-H2-L2`、`ABC-CONT`、`BOP-ABC` 各挑代表性多空案例，做因果标注；再决定哪些值得程序化。
+- 先从 `TPB-H2-L2`、`ABC_CONT`、`BOP` 各挑代表性多空案例，做因果标注；是否值得交接必须另过研究交接规范的晋级闸门，不在本清单内创建实现任务。
 - 严格三推楔形反转规则保持暂停；继续保留 `H3-L3-COMPLEX` 的视觉候选、延续样本、区间边界和 no-trade 样本，不能把它们偷换成自动反转规则。这里的工作目标是视觉筛选与人工优化，不是建立量化扫描器。
 - 任何候选要进入交易系统，还必须通过现有市场许可、15 分钟触发、结构止损、第一障碍、成本和审计门槛。
 
-## 参考资料
+## 参考资料（只读，不是 PA Research 规则 authority）
 
 - [Al Brooks — Bar Counting: High and Low 1, 2, 3, and 4 Patterns and ABC Corrections](https://www.oreilly.com/library/view/trading-price-action/9781118172339/OEBPS/9781118172339_epub_c_17.htm)
 - [Al Brooks — Measured Moves Based on the Size of the First Leg](https://www.oreilly.com/library/view/trading-price-action/9781118172339/OEBPS/9781118172339_epub_c_07.htm)

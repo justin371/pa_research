@@ -1,6 +1,8 @@
 # 交易区间边缘二次入场
 
-状态：`visual-research / provisional / primary`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补区间上沿/下沿、边缘尝试和区间目标。`first_magnet` 只作为历史别名，新记录统一写 `first_independent_obstacle`。
 
 ## 研究目的
 
@@ -24,9 +26,10 @@ midpoint:
 edge_attempt_1:
 edge_failure_or_reentry:
 edge_attempt_2:
-order_branch: limit-edge / stop-confirmation / retest / observation-only
+order_branch: limit_retest / stop_confirmation / market_close / observation_only
+branch_role: role_reversal_retest / same_contract / management
 structural_stop:
-first_obstacle:
+first_independent_obstacle:
 target_path: midpoint / opposite_edge / independent_magnet
 second_leg_trap_risk:
 ```

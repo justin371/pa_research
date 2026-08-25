@@ -1,7 +1,9 @@
 # 优先 Pattern 代表性视觉候选矩阵（2026-08-24）
 
 日期：2026-08-24  
-状态：`visual-research / cross-pattern / conditional / not-statistical`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+本矩阵使用[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)；每个案例必须单独填写 `direction: long / short / no_valid_direction`，矩阵级别的状态不能替代行级状态。
 
 ## 1. 这张矩阵解决什么问题
 
@@ -21,16 +23,19 @@ PA Research 已经分别审计了 H1/L1、H2/L2、ABC、BOP、MTR/三推和交�
 ```text
 primary_pattern
 secondary_context
+direction
 parent_state
 state_transition
 A/B pressure
 signal_or_confirmation
-order_contract
+order_branch / branch_role / actual_fill_or_open_skip
 structural_stop
 first_independent_obstacle
 rough_RR
-event_sector_timeframe_gate
+event_sector_timeframe_gate / permission / gate_result
+research_state
 trade_state
+handoff_status
 ```
 
 主标签的裁决顺序：
@@ -118,10 +123,14 @@ A/B: strong A; deep but late-controlled B
 signal: setup/count bar and confirmation/trigger separated
 order: buy-stop above confirmation bar; low-cycle trigger separate
 structural_stop: below support cluster, not below one signal-K tail
-first_obstacle: prior-high cluster; space is borderline
+first_independent_obstacle: prior-high cluster; space is borderline
 rough_RR: first obstacle about 0.8R–1.0R; extended MM is not used to rescue it
 gate: event/sector/timeframe must be checked
-trade_state: research_positive_conditional / daily-valid-no-trade if strict obstacle branch
+direction: long
+research_state: research_positive_conditional
+trade_state: conditional / valid_no_trade if strict obstacle branch
+gate_result: conditional
+handoff_status: research_only
 ```
 
 如果父级已经是区间，则主标签改成 `range-edge reaction`；如果旧边界被强收盘接受，则改成 `BOP`；如果第三推扩张，则写 `continuation-or-climax`，不自动写成 MTR。每次只保留一个主标签。

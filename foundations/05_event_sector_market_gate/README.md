@@ -1,6 +1,8 @@
 # 财报 / 事件 / 板块 / 大盘前置闸门
 
-状态：`visual-research / provisional / cross-pattern-gate / not-quantitative`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一输出字段见[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)。本层的 `permission` 和 `gate_result` 是闸门字段，不是方向或交易授权的替代品。
 
 这是所有 PA pattern 进入深审前的共同背景层。它不是 pattern，也不是评分器；它决定候选是否可以进入形态审计、需要拆成事件样本，还是应该直接观望。
 
@@ -15,15 +17,15 @@
 
 ## 2. 数据状态
 
-每次复核先记录 `data_source`、`data_status`、`as_of_time` 和 `timeframes_available`。来源可以是 Futu OpenD、收盘后公开数据、图表截图或其他来源；状态必须写成 `historical`、`delayed`、`live-confirmed` 或 `incomplete`。
+每次复核先记录 `data_source`、`data_status`、`as_of_time` 和 `timeframes_seen`。来源可以是 Futu OpenD、收盘后公开数据、图表截图或其他来源；状态必须写成 `historical`、`delayed`、`live_confirmed` 或 `incomplete`。
 
-收盘后历史数据可以做视觉复核，但不能说成实时；Futu OpenD 只有在连接、权限和具体周期返回都确认后，才能标记 `live-confirmed`。数据不完整可以给 `pattern_like` 初筛，不能声称实际触发或成交已确认。
+收盘后历史数据可以做视觉复核，但不能说成实时；Futu OpenD 只有在连接、权限和具体周期返回都确认后，才能标记 `live_confirmed`。数据不完整可以给 `pattern_like` 初筛，不能声称实际触发或成交已确认。
 
 ## 3. 财报与重大事件
 
-- 已知财报在未来三个交易 session 内：不新开仓，不赌财报；候选为 `valid_no_trade` 或 `event_pending`。
+- 已知财报在未来三个交易 session 内：不新开仓，不赌财报；候选写 `gate_result: valid_no_trade` 或 `gate_result: pending`，并保留 `earnings_next_three_sessions: yes`。
 - 已有仓位的管理与新入场分开，不能把减仓/止损悄悄算成新交易。
-- 财报后的跳空、宏观冲击、监管消息、并购和产品发布标为 `event_driven`，不能与普通 PA K 线混作无事件基准。
+- 财报后的跳空、宏观冲击、监管消息、并购和产品发布记录为 `event_context: earnings / macro / gap / other`，不能与普通 PA K 线混作无事件基准。
 - 事件时间或影响不清楚时保留 `pending`，不凭结果删除事件字段。
 - 事件后强 A 可以说明重新定价，但不自动证明普通趋势延续或高胜率。
 
@@ -31,7 +33,7 @@
 
 ## 4. 板块与大盘许可
 
-记录相关 ETF/指数和状态：半导体优先 SOXX 或 SMH，其他行业使用最相关 ETF；市场通常参考 SPY、QQQ 或相关指数。状态使用 `aligned`、`mixed`、`countertrend` 或 `unclear`。
+记录相关 ETF/指数和状态：半导体优先 SOXX 或 SMH，其他行业使用最相关 ETF；市场通常参考 SPY、QQQ 或相关指数。状态使用 `aligned`、`mixed`、`counter` 或 `unknown`。
 
 - 板块与大盘顺势是许可/加分项，不是入场信号；
 - 两者不同步时写 `mixed`，不凭感觉合并；
@@ -64,23 +66,29 @@
 - 开盘跳过原 stop 后，成交、首障碍和 R/R 未重算；
 - 事件或板块通过，但第一独立障碍仍不足约 1R。
 
-输出可为 `pattern_like / observation_only`、`valid_no_trade`、`event_pending` 或 `conditional`，而不是强行给出入场。
+输出可为 `research_state: pattern_like / observation_only`、`gate_result: valid_no_trade / pending` 或 `trade_state: conditional`，而不是强行给出入场。
 
 ## 7. 统一闸门卡
 
 ```text
+contract_scope: deep_review
 data_source:
-data_status:
+data_status: historical / delayed / live_confirmed / incomplete
 as_of_time:
-timeframes_available:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+query_period_end:
+completed_bar_as_of:
+timeframes_seen:
 earnings_next_three_sessions: yes / no / unknown
 event_context: none / earnings / macro / gap / other / unknown
-event_driven: yes / no / pending
+event_source_as_of:
+direction: long / short / no_valid_direction
 sector_reference / sector_state:
 market_reference / market_state:
 parent_timeframe:
 lower_timeframe / lower_role:
-permission:
+permission: long_allowed / short_allowed / both_allowed / no_direction / unknown
 gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 

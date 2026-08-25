@@ -1,6 +1,8 @@
 # Support / Resistance / 支撑阻力视觉基础层
 
-状态：`visual-foundation / provisional / not-quantitative`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段、方向和状态分轴见[`PA Research 统一输出合同`](../../docs/pa_research_output_schema_v0_1_CN.md)。
 
 支撑阻力是所有 PA pattern 的位置、止损和首障碍过滤器，不是一个单独的买卖形态。它按区域而不是一条精确线记录；“强度”与“距离”必须分开判断。
 
@@ -69,10 +71,10 @@
 
 ## 订单、止损与首障碍
 
-- `stop-confirmation`：在结构区域反应后的信号 K 外等待；触发价必须和实际成交分开记录；
-- `limit-retest`：只有区域角色转换或边缘回测已冻结才使用；未回测不能假设成交；
-- `market/close`：强收盘后的晚确认分支，仍需检查首障碍与滑点；
-- `observation-only`：中部、区域未确认、影线未被接受、事件/跳空改变几何或首障碍拥挤。
+- `stop_confirmation`：在结构区域反应后的信号 K 外等待；触发价必须和实际成交分开记录；
+- `limit_retest`：只有区域角色转换或边缘回测已冻结才使用；未回测不能假设成交；
+- `market_close`：强收盘后的晚确认分支，仍需检查首障碍与滑点；
+- `observation_only`：中部、区域未确认、影线未被接受、事件/跳空改变几何或首障碍拥挤。
 
 结构止损放在能覆盖正常测试的区域外：支撑/阻力簇外、父级极端外或真正失效点外。不能为了得到好看的 R/R 把止损塞进区域内部。目标顺序是第一独立障碍 → 第二道结构区域/角色转换 → MM/AB=CD/区间高度。首障碍不足约 1R 记为 `valid_no_trade`，完整波段约 2R 是参考而非固定胜率门槛。
 

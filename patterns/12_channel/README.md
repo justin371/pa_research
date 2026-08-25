@@ -1,6 +1,8 @@
 # Channel / 通道
 
-状态：`independent-pa / visual-research / provisional / not-quantitative`
+文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补通道边界、推进/回调和状态切换。通道线不能替代结构止损、第一独立障碍或 `direction`。
 
 Channel 研究的是有方向的价格运行及其状态变化。它不是把任意两点连成两条线，也不是把交易区间中部的摆动重新命名为趋势。先判断通道是否已经被当时的证据确认，再决定 H/L、边缘交易、突破或反向分支。
 

@@ -2,6 +2,14 @@
 
 > Working reference extracted from the user's Brooks Price Action probability table. These are contextual/empirical heuristics, not guaranteed win rates or universal statistical claims.
 
+```text
+source_type: user_supplied_educational_reference
+source_locator: Brooks Price Action probability table, pages 1-7
+source_version: not_provided
+source_as_of: unknown
+evidence_status: external_heuristic_not_validated
+```
+
 ## How to use the numbers
 
 - Treat each percentage as conditional on the stated market context.

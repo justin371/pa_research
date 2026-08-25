@@ -1,8 +1,10 @@
 # PA 图表视觉复核卡
 
-状态：`visual-first / research tool / canonical-output-v0.5`
+文档状态：`document_status=adopted / research_state=research_only / handoff_status=not_ready / canonical-output-v0.6`
 
 日线候选筛选先遵循 [`PA Research 日线选股规则 v0.1`](pa_research_daily_selection_rules_v0_1_CN.md)；本卡中的 4H/1H/15m 仅适用于候选入选后的深审、确认或独立低周期合同。
+
+统一字段、方向、BOP 状态、订单枚举和状态分轴见[`PA Research 统一输出合同 v0.1`](pa_research_output_schema_v0_1_CN.md)。本卡是完整视觉复核的使用界面，不另造一套字段含义。
 
 这是一张给“看懂完整图表的 PA 助手”使用的复核卡。它的用途是先筛选出**看起来像**某个 Price Action pattern 的候选，再用更完整的背景、位置、触发、风险和结果去优化。它不是量化扫描器、不是胜率评分器，也不是自动下单授权。
 
@@ -38,10 +40,15 @@ left_context_review: complete / partial / unavailable
 每次完整图表复核都要把四件事分开：
 
 ```text
+contract_scope: deep_review / daily_candidate / historical_context_only
 primary_pattern: 当前最能解释父级状态和交易合同的一个 pattern
 secondary_context: 只记录结构关系，不重复计算优势
-state_transition: BOP / failed_breakout / range_transition / MTR_candidate / none
-trade_state: research_candidate / research_positive_conditional / observation_only / valid_no_trade / pending
+direction: long / short / no_valid_direction
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
 
 主标签不是“最漂亮的名字”，而是当前最先值得研究的合同。已经接受的 BOP 优先于旧的双顶、三推或 MTR；成熟区间边缘优先于区间中部的 ABC/H2；VCP 保留独立体系标签，不和 Brooks H/L 计数合并。`secondary_context` 可以写 `H2_within_ABC`、`double_bottom_at_range_edge` 或 `three_push_evidence_for_MTR`，但不把它们加成多个独立优势。
@@ -94,14 +101,24 @@ state_transition: none / pending / BOP / failed_breakout / range_transition / MT
 symbol:
 review_date:
 data_source:             # Futu OpenD / after-close public data / chart screenshot / other
-data_status:             # historical / delayed / live-confirmed / incomplete
+data_status:             # historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state:           # premarket / RTH / after_hours / historical_close / unknown
 timeframes_seen:         # Daily / 4H or 60m / 15m / other
 chart_scope:             # full context / partial context
 daily_context_window:    # >=2y / <2y / unavailable
 major_high_low_review:   # complete / partial / unavailable
 ema20_50_200_review:     # complete / partial / unavailable
 event_context:           # earnings / macro / gap / none known / unknown
+event_source_as_of:
 sector_context:
+sector_reference:
+sector_state:            # aligned / mixed / counter / unknown
+market_reference:
+market_state:            # aligned / mixed / counter / unknown
+permission:              # long_allowed / short_allowed / both_allowed / no_direction / unknown
+gate_result:              # pass / conditional / observation_only / valid_no_trade / pending
 ```
 
 如果只有结构化历史数据，没有足够的完整图表上下文，结论必须标为候选或数据审计，不能写成已经完成的视觉判断。历史数据也不能描述成实时行情。
@@ -218,9 +235,10 @@ h3_l3_state: exhaustion_candidate / short_reaction_candidate / continuation_or_c
 用最少的标签描述当前候选，允许并列：
 
 ```text
-pattern_family: TPB-H1/H2/H3 | L1/L2/L3 | ABC-CONT | RFB-SECOND | MTR-ABC | BOP-ABC | other
+pattern_family: TPB_H1_H2_H3 | L1_L2_L3 | ABC_CONT | RFB_SECOND | MTR | BOP | other
 abc_mode: continuation / range-edge reaction / reversal candidate / complex / unknown
 pattern_like_reason:
+bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable
 ```
 
 使用以下判断顺序：
@@ -254,10 +272,11 @@ follow_through_expected: yes / mixed / no / unknown
 
 ## 7. 订单分支：把“怎么看”和“怎么进”分开
 
-订单分支的可复用规则和跳空处理见 [`订单分支视觉协议`](../research/order_branch_visual_protocol_CN.md)；八个主动 pattern 的默认合同和 R/R 分流见[`八个 Pattern 的订单合同与 R/R 审计`](../research/order_contract_cross_pattern_audit_CN.md)。本卡只保留逐图填写字段，避免把 stop、stop-limit、limit-retest、收盘确认和观望混成一个入场结论。
+订单分支的可复用规则和跳空处理见 [`订单分支视觉协议`](../research/order_branch_visual_protocol_CN.md)；八个主动 pattern 的默认合同和 R/R 分流见[`八个 Pattern 的订单合同与 R/R 审计`](../research/order_contract_cross_pattern_audit_CN.md)。本卡只保留逐图填写字段，避免把基础订单类型和研究分支角色混成一个入场结论。
 
 ```text
-order_branch: stop / stop-limit / limit-retest / market-close / observation-only
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
 order_price_or_zone:
 why_this_order_branch:
 ```
@@ -350,7 +369,7 @@ Daily: parent_state / 主要位置 / 主要高低点 / 事件与板块
 
 ### 核心输出状态的统一写法
 
-核心八个目录的新记录优先使用下列状态；本卡旧案例中出现的 `research_ready`、`research_positive`、`invalidated`、`pending` 仍可保留，但在摘要中映射为下列标准：
+核心八个目录的新记录优先使用[`PA Research 统一输出合同 v0.1`](pa_research_output_schema_v0_1_CN.md)的 `research_state`。本卡旧案例中出现的 `research_ready`、`research_positive`、`invalidated`、`pending` 仍可保留，但在摘要中映射为下列标准；`trade_state`、`gate_result` 和 `handoff_status` 不得与 `research_state` 混用：
 
 | 标准状态 | 适用情形 | 旧写法映射 |
 | --- | --- | --- |
@@ -369,7 +388,14 @@ Daily: parent_state / 主要位置 / 主要高低点 / 事件与板块
 ```text
 ### [symbol] [date range] [timeframe] — [pattern]
 
-状态：pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+contract_scope:
+direction: long / short / no_valid_direction
+data_status:
+as_of_time:
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 
 背景：
 左侧主要支撑/阻力：
@@ -381,6 +407,7 @@ H/L 计数及依据：
 主标签：
 次标签/关系标签：
 状态切换：
+BOP 状态与突破/回踩区域：
 信号 K 与确认：
 订单分支与触发：
 结构止损与失效：

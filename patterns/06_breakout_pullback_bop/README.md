@@ -1,6 +1,8 @@
 # 突破回踩 / BOP
 
-状态：`visual-research / provisional / primary`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补突破接受、回踩、角色转换和跟随。`BOP` 是唯一主标签，ABC/H-L 只能作为 `secondary_context`。
 
 ## 研究目的
 
@@ -34,7 +36,8 @@ close_outside_boundary:
 follow_through:
 pullback_to_old_level: yes / no / not_yet
 role_reversal_accepted:
-order_branch: stop / market-close / limit-retest / observation-only
+order_branch: stop_confirmation / market_close / limit_retest / observation_only
+branch_role: same_contract / role_reversal_retest / gap_reprice / management
 actual_fill_or_open_skip:
 structural_stop:
 first_independent_obstacle:

@@ -160,7 +160,8 @@ tests: enough / insufficient / ambiguous
 location: upper_edge / lower_edge / middle / unknown
 breakout_state: not_confirmed / accepted / failed / gap_repriced
 second_entry: pending / present / not_applicable
-order_branch: stop / limit_retest / market_close / observation_only
+order_branch: stop_confirmation / limit_retest / market_close / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / management
 structural_stop: where and why
 first_obstacle: where and why
 rough_rr: wide / borderline / insufficient / not_frozen

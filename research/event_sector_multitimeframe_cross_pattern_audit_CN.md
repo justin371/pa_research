@@ -1,7 +1,9 @@
 # 财报、板块与多周期前置过滤 V0.1
 
 日期：2026-08-23  
-状态：`visual-research / cross-pattern-gate / not-quantitative`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段、方向和状态分轴见[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。
 
 ## 目的
 
@@ -30,14 +32,19 @@
 每次复核先写：
 
 ```text
+contract_scope: deep_review
 data_source: Futu OpenD / after-close public data / chart screenshot / other
-data_status: historical / delayed / live-confirmed / incomplete
+data_status: historical / delayed / live_confirmed / incomplete
 as_of_time:
-timeframes_available: Daily / 4H-like / 60m / 15m
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+completed_bar_as_of:
+timeframes_seen: Daily / 4H-like / 60m / 15m
+direction: long / short / no_valid_direction
 ```
 
 - 收盘后公开数据可以做历史视觉复核，但不能写成实时行情；
-- Futu OpenD 只有在连接、权限和具体返回周期都确认后，才可标记 `live-confirmed`；
+- Futu OpenD 只有在连接、权限和具体返回周期都确认后，才可标记 `live_confirmed`；
 - 浏览器或图表卡片只显示概览时，不能假装已经获得完整 15m/60m 触发；
 - 数据不完整时可以做 `pattern_like` 初筛，但不能声称实际订单已触发或成交。
 
@@ -55,10 +62,10 @@ timeframes_available: Daily / 4H-like / 60m / 15m
 
 ```text
 sector_reference: SOXX / SMH / XLV / XLF / XLY / other / unknown
-sector_state: aligned / mixed / countertrend / unclear
+sector_state: aligned / mixed / counter / unknown
 market_reference: SPY / QQQ / relevant_index / unknown
-market_state: aligned / mixed / countertrend / unclear
-permission: supportive / conditional / absent / unknown
+market_state: aligned / mixed / counter / unknown
+permission: long_allowed / short_allowed / both_allowed / no_direction / unknown
 ```
 
 - 半导体个股优先参考 SOXX 或 SMH；不要把两者的短线不同步假装成完全一致；
@@ -119,18 +126,18 @@ permission: supportive / conditional / absent / unknown
 
 ```text
 data_source:
-data_status:
+data_status: historical / delayed / live_confirmed / incomplete
 as_of_time:
 earnings_next_three_sessions: yes / no / unknown
 event_context: none / earnings / macro / gap / other / unknown
 sector_reference:
-sector_state: aligned / mixed / countertrend / unclear
+sector_state: aligned / mixed / counter / unknown
 market_reference:
-market_state: aligned / mixed / countertrend / unclear
+market_state: aligned / mixed / counter / unknown
 parent_timeframe: Daily / 4H-like / 60m
 lower_timeframe: 1H / 60m / 15m / none
 lower_role: confirmation / independent-contract / reprice / observation
-permission: supportive / conditional / absent / unknown
+permission: long_allowed / short_allowed / both_allowed / no_direction / unknown
 gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 

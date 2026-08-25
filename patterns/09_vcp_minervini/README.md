@@ -1,6 +1,8 @@
 # VCP / Volatility Contraction Pattern（Minervini）
 
-状态：`independent-system / visual-research / provisional / not-quantitative`
+文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补 VCP 的 T1/T2/T3、pivot 和收缩 lineage。VCP 仍是独立视觉研究主题，不与 Brooks pattern 或 BOP 统计合并。
 
 VCP 是 Mark Minervini / SEPA 体系中的独立主题。它不是 Al Brooks 的 H1/H2、L1/L2、ABC、三推或 BOP 的别名，也不计入 PA Research 的“核心八个”PA pattern。这个目录只负责把 VCP 的视觉结构、交易合同和边界写清楚；后续如果出现 PA 触发，只作为二次确认，不改写 VCP 的定义。
 

@@ -1,18 +1,22 @@
 # 订单类型与风险合同
 
-状态：`visual-research / provisional / cross-pattern / not-production`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段和枚举见[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)。本层只定义订单合同，不把研究状态、市场许可或 pattern 分支角色塞进 `order_branch`。
 
 同一个 PA pattern 可以有不同订单方式。视觉助手必须先判断形态、位置和空间，再选择订单合同；不能因为形态像，就假设成交，也不能用后续盈利补写原订单。
 
 ## 1. 五种基础合同
 
-| 合同 | 成交逻辑 | 适用情况 | 不能假设 |
+| Canonical `order_branch` | 成交逻辑 | 适用情况 | 不能假设 |
 | --- | --- | --- | --- |
 | `stop_confirmation` | 价格真实越过冻结触发价 | 信号 K 后等待方向继续 | 只碰到、后来盈利不等于成交 |
 | `limit_retest` | 价格真实回到预先定义的支撑/阻力区 | 旧边界、角色转换、缺口边缘回测 | 没回测不能记成交 |
 | `market_close` | 在强收盘/确认时按实际价成交 | 继续等待会改变合同且空间仍合理 | 强 K 自动授权市价，滑点不能忽略 |
 | `stop_limit` | 先触发，再在 limit 范围内成交 | 需要限制最差成交价 | 跳过 limit 仍算成交；可能完全不成交 |
 | `observation_only` | 不建立交易合同 | 形态像但空间、事件、数据或结构不合格 | 观望不是失败，后来盈利不能改写它 |
+
+新记录只使用上述下划线枚举。历史案例中的 `stop`、`limit-retest`、`market-close`、`reverse-stop` 和 `limit-edge` 作为别名保留，并分别映射到 `order_branch` 与 `branch_role`，不能再混写到同一个字段。
 
 ## 2. 方向语义必须准确
 
@@ -32,7 +36,8 @@ decision_time:
 timeframe_and_parent_contract:
 signal_bar:
 trigger_or_zone:
-order_branch: stop / limit-retest / market-close / stop-limit / observation-only
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
 actual_or_assumed_fill:
 original_order_status: pending / triggered / filled / opening-skip / not-filled / fill-unknown
 structural_stop_zone:

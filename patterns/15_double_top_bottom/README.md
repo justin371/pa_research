@@ -1,6 +1,8 @@
 # Double Top / Double Bottom / 双顶双底
 
-状态：`independent-pa / visual-research / provisional / not-quantitative`
+文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补两次有分离测试和父级关系。双顶/双底不是自动反转，方向、第二次确认和交易闸门必须独立记录。
 
 双顶/双底首先是“同一结构区域的两次有分离测试”，不是看到两个相近高点/低点就自动反转。它可以属于区间边缘、MTR、Final Flag 或普通回调中的局部结构；父级状态、位置、第二次确认和第一障碍决定是否值得交易。
 

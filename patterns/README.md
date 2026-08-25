@@ -1,8 +1,12 @@
 # PA Research 核心 PA Pattern 与独立体系目录
 
-状态：`visual-research / provisional / not-quantitative`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
 
-每日候选筛选统一遵循 [`PA Research 日线选股规则 v0.1`](../docs/pa_research_daily_selection_rules_v0_1_CN.md)：只用完成的 Daily K 线选股，重点为 ABC-CONT 与 BOP；4H/1H/15m 不能改变日线候选主标签。
+每日候选筛选统一遵循 [`PA Research 日线选股规则 v0.1`](../docs/pa_research_daily_selection_rules_v0_1_CN.md)：只用完成的 Daily K 线选股，重点为 `ABC_CONT` 与 `BOP`；4H/1H/15m 不能改变日线候选主标签。
+
+所有目录的新案例统一使用[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。本索引中的 pattern-specific “最小视觉协议”是差异字段，不是完整候选合同；每条记录仍必须有 `contract_scope`、`direction`、证据时间、事件/板块/大盘闸门、订单合同、结构止损、第一独立障碍和分轴状态。
+
+日线筛选优先级与全局研究优先级分开：日线只优先筛选 `ABC_CONT` 和 `BOP`；H2/L2 仍是全局 pattern 研究主线，但不覆盖日线主标签，也不代表已进入系统实现队列。
 
 这里是 PA Research 当前阶段的核心研究入口。目标是让视觉助手能够在完整图表上：
 
@@ -56,24 +60,28 @@
 每个目录都按同一套视觉顺序研究：
 
 ```text
-timeframe
+contract_scope
+timeframe / data_status / as_of_time
 parent_state / market_context
+direction: long / short / no_valid_direction
 left_structure_and_location
 directional_leg_or_range_edge
 lineage_and_attempt_count
-pattern_family / pattern_like_reason
+primary_pattern / secondary_context / pattern_like_reason
+state_transition / bop_state
 signal_bar_and_trigger / follow_through
-order_branch / actual_fill_or_open_skip
+order_branch / branch_role / actual_fill_or_open_skip
 structural_stop / invalidation
 first_independent_obstacle / rough_R_R
-event_and_sector_context
+event_sector_market_gate / permission / gate_result
+research_state / trade_state / thesis_state / handoff_status
 final_state / failure_or_no_trade_reason
 ```
 
 ## 范围边界
 
 - 这些目录是视觉研究和历史复核入口，不是量化扫描器，也不直接连接 Execution Agent。
-- `research/` 根目录中的案例正文暂不搬迁；目录只负责导航和研究合同。
+- `research/` 根目录中的案例正文暂不搬迁；由[`research/研究索引`](../research/README.md)负责导航，目录只负责 pattern 导航和研究合同。
 - Measured Move、AB=CD、EMA、缺口回补和 META 是位置、空间或汇合因素，不单独构成 pattern。
 - VCP、Final Flag、Opening Reversal、Channel、Inside Bar 与 Triangle 已建立独立研究目录，但都处于 `visual-research / provisional`，不计入核心八个。三推虽然可以成为 MTR 的证据，但在这里作为独立 pattern 单独实现。
 

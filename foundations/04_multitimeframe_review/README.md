@@ -1,6 +1,8 @@
 # Daily / 4H / 1H / 15m 多周期视觉复核
 
-状态：`visual-research / provisional / cross-timeframe / not-quantitative`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段、方向和状态分轴见[`PA Research 统一输出合同`](../../docs/pa_research_output_schema_v0_1_CN.md)。
 
 这是 PA Research 的多周期基础层。它不把低周期当成高周期的“放大镜答案”，而是先确定父级背景、位置和结构，再判断低周期是在确认同一笔交易、重新定价原订单，还是形成一笔独立短线。
 
@@ -54,7 +56,7 @@ time_horizon: intraday / short-term
 
 ### C. 周期冲突与重建
 
-Daily/4H 在主要阻力下形成双高、三推或高潮警报，而 15m 只有一次刺破；或者高周期在区间中部、低周期短暂扩张；或者低周期止损明显窄于父级结构风险时，默认 `observation-only / valid_no_trade`。
+Daily/4H 在主要阻力下形成双高、三推或高潮警报，而 15m 只有一次刺破；或者高周期在区间中部、低周期短暂扩张；或者低周期止损明显窄于父级结构风险时，默认 `observation_only / valid_no_trade`。
 
 等高周期接受/失败后再重建新合同。低周期不能悄悄覆盖父级方向、空间或止损。
 
@@ -106,10 +108,15 @@ Daily/4H 的 H/L、ABC、MTR、BOP 或区间边缘交易，止损要覆盖父级
 每次复核先写：
 
 ```text
+contract_scope: deep_review
 data_source: Futu OpenD / after-close public data / screenshot / other
-data_status: historical / delayed / live-confirmed / incomplete
+data_status: historical / delayed / live_confirmed / incomplete
 as_of_time:
-timeframes_available: Daily / 4H-like / 60m / 15m
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+completed_bar_as_of:
+timeframes_seen: Daily / 4H-like / 60m / 15m
+direction: long / short / no_valid_direction
 ```
 
 实时、延迟和历史数据不能混称；低周期不完整时可以做 `pattern_like` 初筛，但不能声称实际触发或成交已经确认。

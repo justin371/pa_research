@@ -1,6 +1,8 @@
 # 三推 / H3-L3：压力状态
 
-状态：`visual-research / provisional / primary`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补三推压力、lineage 和 H3/L3 状态。三推本身不冻结方向，反向合同必须另写 `direction`、`order_branch`、`structural_invalidation` 和 `gate_result`。
 
 ## 研究目的
 
@@ -33,11 +35,13 @@ location_and_left_structure:
 third_push_state: exhaustion / expansion-or-climax / range-repeat / channel-continuation
 first_reverse: none / touch / structural-break
 second_confirmation: yes / no / pending
-order_branch: stop / limit-retest / market-close / observation-only
+order_branch: stop_confirmation / limit_retest / market_close / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / management
 structural_stop:
-first_obstacle:
+first_independent_obstacle:
 rough_R_R: wide / borderline / insufficient / not-frozen
-status: research-candidate / short-reaction / continuation / valid-no-trade
+research_state: research_candidate / observation_only / valid_no_trade / pending
+thesis_state: working / failed / replaced / pending
 ```
 
 研究记录必须先填完 `lineage_status` 和 `third_push_state`，再讨论 H3/L3。若三次推进不能在当时被分开识别，标签写成 `not_h3_l3` 或 `new_lineage_pending`，不得用最终走势反推计数。

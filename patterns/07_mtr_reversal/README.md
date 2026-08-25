@@ -1,6 +1,8 @@
 # MTR：主要趋势反转
 
-状态：`visual-research / provisional / advanced`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补成熟趋势、结构破坏和第二次反向确认。MTR 不能单独冻结方向或交易授权。
 
 ## 研究目的
 
@@ -32,7 +34,8 @@ first_reverse_attempt:
 first_attempt_follow_through:
 second_reverse_attempt:
 structure_acceptance:
-order_branch: reverse-stop / limit-retest / market-close / observation-only
+order_branch: stop_confirmation / limit_retest / market_close / observation_only
+branch_role: reverse_stop / role_reversal_retest / gap_reprice / management
 structural_stop:
 first_independent_obstacle:
 rough_R_R:

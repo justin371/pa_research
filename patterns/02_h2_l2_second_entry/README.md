@@ -1,6 +1,8 @@
 # H2 / L2：第二次入场
 
-状态：`visual-research / provisional / primary`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录的 H2/L2 字段是差异字段。多头案例写 `direction: long`，空头案例写 `direction: short`，无法冻结方向时写 `no_valid_direction`。
 
 ## 研究目的
 
@@ -42,7 +44,7 @@ H2/L2 的“第二次”是同一回调中的第二次有意义的方向尝试�
 
 ## 订单分支
 
-- `same_contract_stop`：高周期信号 K 后用 stop 确认；高周期结构止损保持不变。
+- `branch_role: same_contract` + `order_branch: stop_confirmation`：高周期信号 K 后用 stop 确认；高周期结构止损保持不变。
 - `low_cycle_confirmation`：1H/15m 只改善时序；必须说明它确认的是同一 H2/L2 合同，还是新的短线合同。
 - `limit_retest`：回测支撑/阻力的限价分支单独记录，不能和原 stop 分支混算。
 - `observation_only`：第一障碍太近、跳空越过触发、事件窗口、结构止损过宽或 B 已失控时，保留形态但不交易。

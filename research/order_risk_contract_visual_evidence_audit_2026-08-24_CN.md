@@ -1,7 +1,9 @@
 # 订单类型与风险合同视觉证据审计
 
 日期：`2026-08-24`  
-状态：`visual-research / cross-pattern / provisional / not-production`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段、方向和状态分轴见[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。
 
 ## 审计目的
 
@@ -63,9 +65,11 @@ KLAC、QCOM 和 VRT 说明即使订单语义正确、信号 K 清楚，首障碍
 
 ```text
 decision_time:
+contract_scope: deep_review
+direction: long / short / no_valid_direction
 pattern_state:
 signal_bar:
-order_branch:
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 trigger_or_zone:
 actual_or_assumed_fill:
 original_order_status:

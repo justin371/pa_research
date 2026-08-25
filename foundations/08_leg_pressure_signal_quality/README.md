@@ -1,6 +1,8 @@
 # 强 A 腿、回调压力与优质信号 K
 
-状态：`visual-research / provisional / cross-pattern / not-quantitative`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段、方向和状态分轴见[`PA Research 统一输出合同`](../../docs/pa_research_output_schema_v0_1_CN.md)。
 
 这是 H1/H2、L1/L2、ABC、MTR 和三推共用的质量层。它不替代父级市场状态、位置、首障碍、事件或订单合同，而是回答：方向是否真的有力，反向压力是否减弱，信号 K 是否值得触发。
 
@@ -39,7 +41,8 @@ signal_bar_quality:
 trigger_and_follow_through:
 EMA20_50_location:
 volume_reference: supportive / neutral / adverse / unavailable
-first_obstacle:
+direction: long / short / no_valid_direction
+first_independent_obstacle:
 decision: candidate / conditional / wait / valid_no_trade
 ```
 

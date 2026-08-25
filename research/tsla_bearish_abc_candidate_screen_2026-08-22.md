@@ -12,6 +12,16 @@
 
 本文是候选筛选，不等于已经确认的交易规则。
 
+```text
+contract_scope: historical_context_only
+direction: short
+data_status: historical_close
+as_of_time: 2026-08-22
+research_state: research_candidate
+trade_state: not_authorized
+handoff_status: research_only
+```
+
 > **低周期精审边界（2026-08-23）**：完整 Daily/240m/15m 复核发现 `2026-03-09` 最低约 `381.40`，低于原筛选使用的 `2026-03-03` 低点 `385.39`。因此下面的 `2026-03-03` A 腿终点和 `365.42` MM 只能保留为早期画法，不能当成唯一、已经冻结的锚点。L1/L2、订单时序、双止损口径和 no-lookahead 审计见 [`TSLA A 锚点歧义审计`](tsla_bearish_abc_anchor_ambiguity_l1_l2_2026-02-11_2026-03-20.md)。
 
 ## 优先候选：`2026-02-11`–`2026-03-30`

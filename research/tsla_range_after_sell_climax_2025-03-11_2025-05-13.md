@@ -6,6 +6,14 @@
 
 本文是历史复盘，不构成实盘授权，也不把后来的上涨结果倒灌成早先已知信息。
 
+```text
+contract_scope: historical_context_only
+direction: no_valid_direction
+research_state: observation_only
+trade_state: not_authorized
+handoff_status: research_only
+```
+
 ## 一句话结论
 
 `2025-03-10` 的 measured-move 目标和左侧支撑汇合后，TSLA 没有立即进入一条干净的多头趋势，而是先在大约 `214–307` 的宽幅区域内反复震荡。`2025-04-22` 位于父级交易区间下沿，应该按区间下沿反应来研究，不能叫作 ABC 的第二腿。`2025-04-22`–`2025-04-29` 是从区间下沿摆动到上沿的一段强上涨，但仍然是区间内部摆动；只有 `2025-04-29`–`2025-05-07` 的小区间完成测试、`2025-05-08` 开始出现向上突破后，才可以重新评估是否形成新的第二腿或趋势延续。

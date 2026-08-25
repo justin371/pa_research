@@ -1,6 +1,8 @@
 # ABC + H/L 分层历史结果审计（2026-08-24）
 
-状态：`research-only / stratified-outcome-audit-v0.4 / pilot / not-statistical`
+文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段、方向和状态分轴见[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。
 
 ## 目的与范围
 
@@ -20,15 +22,18 @@
 每个样本先记录母结构，再记录局部尝试：
 
 ```text
-parent_pattern: ABC_CONTINUATION / not_abc / pending
+contract_scope: historical_context_only / deep_review
+parent_pattern: ABC_CONT / not_abc / pending
 parent_state: open_trend / range_edge / transition / event-or-gap / unclear
-side: bull / bear
+directional_bias: bull / bear / balanced / changing
+direction: long / short / no_valid_direction
 attempt: H1 / H2 / L1 / L2 / H3 / L3 / unclear
 lineage_group:
 review_timeframe:
 A_quality: strong-looking / directional / ordinary / unclear
 B_state: controlled / deep-late-controlled / uncontrolled / range-like / unclear
-trigger_contract: same-contract-stop / close-confirmation / low-cycle-confirmation / gap-reprice / limit-retest / observation-only
+order_branch: stop_confirmation / market_close / limit_retest / stop_limit / observation_only
+branch_role: same_contract / gap_reprice / lower_timeframe / management
 ```
 
 不能把下列分支混成一个统计样本：
@@ -135,8 +140,8 @@ evidence_status: comparable / conditional / excluded / dependent-lineage
 
 本轮只读检查了 Codex Trading 的两类历史材料，并按“只有有帮助的图才保留为参考”筛选：
 
-- `C:\Users\lwang\Documents\Codex\worktrees\trading\research\2026-08-13-legacy-process-register.json`：15 条历史 Daily 过程登记，标签包括 H1/H2/L1/L2/H3/L3。它引用的 `h-tpb-gen-20260813/bars.json` 和 `validation-fixed.json` 在当前 checkout 不存在，Git 对象历史中也没有可重放副本；这些登记行不计为图表案例，也不据此做视觉判断。
-- `C:\Users\lwang\Documents\Codex\worktrees\trading\research\2026-08-13-mrvl-tpb-case-review_CN.md` 与其 `bars.json`：可重建 MRVL 的无标签 Daily 图，用于直接视觉复核。该 Trading 数据集只有约一年 Daily 左侧，不足以替代 PA Research 要求的两年背景，因此两年高低点和 EMA 背景仍以 PA Research 的独立视觉资产复核。
+- `Codex Trading historical source snapshot: 2026-08-13-legacy-process-register.json`：15 条历史 Daily 过程登记，标签包括 H1/H2/L1/L2/H3/L3。它引用的 `h-tpb-gen-20260813/bars.json` 和 `validation-fixed.json` 在 PA Research 资产中不存在，也没有可重放副本；这些登记行不计为图表案例，也不据此做视觉判断。该名称只记录来源身份，不是本仓库的运行时路径依赖。
+- `Codex Trading historical source snapshot: 2026-08-13-mrvl-tpb-case-review_CN.md` 与其 `bars.json`：可重建 MRVL 的无标签 Daily 图，用于直接视觉复核。该 Trading 数据集只有约一年 Daily 左侧，不足以替代 PA Research 要求的两年背景，因此两年高低点和 EMA 背景仍以 PA Research 的独立视觉资产复核。该来源只读、不可替代 PA Research 规则，也不构成运行时依赖。
 
 这里采用“近似对应即可进入研究候选层”的宽松视觉标准，但不放宽限制条件。`H1/H2/L1/L2` 仍只是当前回调中的腿数描述；没有同一 lineage、结构位置、守住、确认和首障碍，就只能记作 `pattern_candidate` 或 `boundary_candidate`。
 
@@ -212,7 +217,7 @@ round5_two_year_daily_complete_cases: 8
 round5_strict_same_lineage_freezes: 0
 round5_new_comparable_positive_samples: 0
 new_comparable_positive_samples: 0
-no_new_positive: maintained
+conclusion: no-new-positive
 scope: PA Research only; no scanner; no Execution Agent; no Codex Trading changes
 ```
 

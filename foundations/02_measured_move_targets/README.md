@@ -1,6 +1,8 @@
 # Measured Move、AB=CD 与磁铁目标管理
 
-状态：`visual-research / provisional / cross-pattern / not-quantitative`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段、方向和状态分轴见[`PA Research 统一输出合同`](../../docs/pa_research_output_schema_v0_1_CN.md)。
 
 这是 PA Research 的第二个基础视觉层。它不把 MM 当成新的 K 线形态，也不把 AB=CD、缺口、EMA 或 50% 回调相加成机械评分。它的作用是：在已经有背景、结构和订单合同之后，帮助视觉助手判断空间、第一道障碍、目标层级和持仓管理。
 

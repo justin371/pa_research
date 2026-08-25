@@ -9,6 +9,14 @@
 - 数据：Futu OpenD 历史 QFQ，收盘后读取；不是实时行情，没有下单。
 - 目的：验证“强 A 之后，B 如果变成宽幅重叠区间，后续运动不能自动继承开放趋势 ABC 的 L1/L2 计数”。
 
+```text
+contract_scope: historical_context_only
+direction: no_valid_direction
+research_state: observation_only
+trade_state: not_authorized
+handoff_status: research_only
+```
+
 ## 2. 视觉结构
 
 ### A 腿：方向性足够清楚
@@ -38,6 +46,7 @@
 | pattern candidate | `range-transition boundary`，不是冻结的 `ABC-CONT` |
 | H/L count | `L1/L2 not frozen`；区间内尝试不能自动继承 |
 | order branch | `observation-only`；等待区间边缘或明确接受 |
+| structural invalidation | 未冻结；若重新研究，必须以区间边缘重新接受或明确突破接受重建合同 |
 | first obstacle | `146–149` 附近支撑簇，偏近 |
 | status | `boundary / not-open-trend-ABC / observation-only` |
 

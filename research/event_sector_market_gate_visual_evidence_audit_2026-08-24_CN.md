@@ -1,7 +1,9 @@
 # 财报 / 事件 / 板块 / 大盘视觉证据审计
 
 日期：`2026-08-24`  
-状态：`visual-research / cross-pattern-gate / provisional / not-statistical`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段、方向和状态分轴见[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。
 
 ## 审计目的
 
@@ -67,16 +69,16 @@ decision_timestamp:
 data_source / data_status / as_of_time:
 earnings_next_three_sessions:
 event_context:
-event_driven:
+direction: long / short / no_valid_direction
 sector_reference / sector_state:
 market_reference / market_state:
 permission:
 parent_state_and_location:
 pattern_and_attempt:
-order_branch:
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 actual_or_assumed_fill:
 structural_stop:
-first_obstacle:
+first_independent_obstacle:
 rough_R_R:
 gate_result:
 failure_condition:

@@ -1,7 +1,8 @@
 # 交易区间边缘二次入场：专项视觉证据审计（2026-08-24）
 
 日期：2026-08-24  
-状态：`visual-research / conditional / no-new-positive / not-statistical`
+状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+本审计采用[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)；本轮只修改 PA Research，不创建扫描器，也不连接 Execution Agent。
 
 ## 1. 本轮核心问题
 
@@ -27,9 +28,10 @@ left_major_levels:
 edge_attempt_1:
 edge_failure_or_reentry:
 edge_attempt_2:
-order_branch:
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role:
 structural_stop:
-first_magnet:
+first_independent_obstacle:
 target_path:
 second_leg_trap_risk:
 ```

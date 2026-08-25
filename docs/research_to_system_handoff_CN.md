@@ -16,6 +16,8 @@ Execution Agent（模拟/真实执行）
 
 研究阶段只更新 PA Research；Codex Trading 作为只读参考。当前不会因为一个案例看起来有价值，就把它复制成程序规则或交给执行层。
 
+记录字段的统一定义见[`PA Research 统一输出合同 v0.1`](pa_research_output_schema_v0_1_CN.md)。本文件只负责交接边界和晋级闸门，不重新定义方向、订单或研究状态。
+
 ## 两个 Repo 各自负责什么
 
 ### PA Research
@@ -39,11 +41,11 @@ Execution Agent（模拟/真实执行）
 
 Codex Trading 中已有的研究、代码和案例不在 PA Research 中整份复制；需要引用时记录来源、版本或链接，并只提炼对当前规则有用的证据。
 
-## 研究状态词汇
+## 交接状态词汇
 
-每个规则或案例必须有状态，避免“写进文件”被误解成“已经验证”：
+以下是 `handoff_status` 的成熟度词汇，避免“写进文件”被误解成“已经验证”。它不替代统一输出合同中的 `document_status`、`research_state`、`trade_state` 或 `gate_result`：
 
-| 状态 | 含义 | 能否进入 Codex Trading 实现 |
+| `handoff_status` | 含义 | 能否进入 Codex Trading 实现 |
 | --- | --- | --- |
 | `observation` | 图表上的观察，尚未形成完整规则 | 否 |
 | `hypothesis` | 有明确条件的研究假设 | 否 |
@@ -91,15 +93,15 @@ Codex Trading 中已有的研究、代码和案例不在 PA Research 中整份�
 
 ## 当前 PA Research 的交接状态
 
-| 规则/主题 | 当前状态 | 说明 |
-| --- | --- | --- |
-| `ABC-CORE` | `hypothesis` / `replayed` | A 强度、B 类型、C 重新计数和第一障碍规则已形成，但跨样本未验证 |
-| `TPB-H1/L1-STRONG-A` | `hypothesis` | 强 A 后受控 B 优先评估 H1/L1；仍需更多独立 lineage |
-| `TPB-H2/L2-DEEP-LATE-CONTROLLED-B` | `hypothesis` | 深 B 但后段受控，可研究 H2/L2；不是自动授权 |
-| `H3/L3` | `hypothesis` | L3 不等于三推衰竭；`2025-03-07/10` 与 `2026-03-26` 是延续风险反例/候选 |
-| `GAP-RETEST-ORDER-BRANCH` | `audited` | 跳空后回测是新订单分支，不能沿用原始 stop 的 R/R；尚未转系统 |
-| 三推楔形 | `hypothesis` | 需要逐推效率、位置和反向触发；不以“三次触碰”单独授权 |
-| BOP/突破交易 | `observation` | 暂时隔离，不进入当前 ABC 主线 |
+| 规则/主题 | `research_state` | `handoff_status` | 说明 |
+| --- | --- | --- | --- |
+| `ABC-CORE` | `research_candidate` | `research_only` | A 强度、B 类型、C 重新计数和第一障碍规则已形成，但跨样本未验证 |
+| `TPB-H1/L1-STRONG-A` | `research_candidate` | `research_only` | 强 A 后受控 B 优先评估 H1/L1；仍需更多独立 lineage |
+| `TPB-H2/L2-DEEP-LATE-CONTROLLED-B` | `research_candidate` | `research_only` | 深 B 但后段受控，可研究 H2/L2；不是自动授权 |
+| `H3/L3` | `pattern_like` | `research_only` | L3 不等于三推衰竭；`2025-03-07/10` 与 `2026-03-26` 是延续风险反例/候选 |
+| `GAP-RETEST-ORDER-BRANCH` | `research_candidate` | `not_ready` | 跳空后回测是新订单分支，不能沿用原始 stop 的 R/R；尚未转系统 |
+| 三推楔形 | `pattern_like` | `research_only` | 需要逐推效率、位置和反向触发；不以“三次触碰”单独授权 |
+| BOP/突破交易 | `research_candidate` | `not_ready` | BOP 已是日线筛选的独立研究族，但多日回踩正例仍为 `no_new_positive`，尚未进入系统交接 |
 
 ## 后续工作规则
 
@@ -108,4 +110,3 @@ Codex Trading 中已有的研究、代码和案例不在 PA Research 中整份�
 - 只有当本文件的交接字段和晋级闸门完整，才创建面向 Codex Trading 的实现任务。
 - 研究结论进入 Codex Trading 后，两个 Repo 的版本号和来源必须互相引用；实现结果不能反向改写原始研究结论。
 - 真实订单、账户连接和 Execution Agent 永远需要另行确认，不由研究文件隐式授权。
-

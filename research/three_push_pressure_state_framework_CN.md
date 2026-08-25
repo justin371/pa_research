@@ -133,7 +133,8 @@ same_lineage: yes / no / unclear
 push_state: exhaustion / expansion / range_repeat / channel_continuation
 first_reverse: none / touch / structural_break
 second_confirmation: yes / no / pending
-order_branch: stop / limit_retest / market_close / observation_only
+order_branch: stop_confirmation / limit_retest / market_close / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / management
 structural_stop: where and why
 first_obstacle: where and why
 rough_rr: wide / borderline / insufficient / not_frozen

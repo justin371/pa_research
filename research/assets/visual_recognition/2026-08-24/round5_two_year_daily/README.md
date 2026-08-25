@@ -1,12 +1,13 @@
 # Round5 两年 Daily 左侧背景视觉练习资产
 
-状态：`visual-research / unlabeled / two-year-background / practice-and-boundary-only`
+状态：`document_status=historical / contract_scope=historical_context_only / research_state=observation_only`
 
 ## 用途与来源
 
 本轮只保存没有 pattern 标注的历史 OHLC 图，用于 PA Research 的人工视觉复核。pattern、lineage、计数和边界结论写在研究记录中，不写入图像。
 
-- 来源：只读使用 Codex Trading 当前 checkout 的 `.local/research/replay/cohr-revised-20260814/bars.json`，只取 OHLC、成交量和时间周期；Codex Trading 不提供本轮规则。
+- 来源：只读使用 Codex Trading 历史 OHLC 快照 `cohr-revised-20260814/bars.json`，只取 OHLC、成交量和时间周期；本 README 不依赖本机 checkout 路径，Codex Trading 不提供本轮规则。
+- 资产生成日期：`2026-08-24`；来源窗口结束：`2026-08-13`。
 - 标的：`COHR`、`SPY`、`QQQ`、`IWM`。
 - Daily：`2021-01-04`–`2026-08-13`；每个截断案例的左侧 Daily 至少两年，EMA20/50/200 从截断日前可用 Daily 收盘递推计算。
 - 4H：约 `2026-01-02`–`2026-08-13`；COHR 另有 15m，三个指数标的的 15m 在该来源中不可用。

@@ -1,6 +1,8 @@
 # 趋势后段入场与追价过滤
 
-状态：`visual-research / provisional / cross-pattern / not-quantitative`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+统一字段、方向和状态分轴见[`PA Research 统一输出合同`](../../docs/pa_research_output_schema_v0_1_CN.md)。
 
 这不是新的 K 线形态，而是所有 PA pattern 共用的时机与空间过滤层。它回答：趋势可能继续时，当前价格是否仍值得新增仓位；如果不值得，应该等回调、改成突破接受合同，还是观望。
 
@@ -26,7 +28,7 @@
 | `late-expansion-or-climax-risk` | 连续扩张、跳空、远离均线/目标、实体放大或到目标后减速 | 不追极端；等两腿回调、二次入场、小区间或明确接受 |
 | `breakout-acceptance` | 主要阻力/支撑被强收盘越过，有跟随，回测守住新角色 | 旧合同结束，重新建立 BOP/回踩合同并重算成交、止损、首障碍和 R/R |
 
-另设 `late-no-space`：方向判断可能正确，但首障碍不足约 1R、结构止损过宽、事件/跳空改变成交，或父级在区间中部。此时 `observation-only / valid_no_trade` 是完整输出，不是漏判。
+另设 `late-no-space`：方向判断可能正确，但首障碍不足约 1R、结构止损过宽、事件/跳空改变成交，或父级在区间中部。此时 `observation_only / valid_no_trade` 是完整输出，不是漏判。
 
 ## 3. 视觉顺序
 
@@ -116,7 +118,8 @@ last_push: continuation | climax-risk | accepted-breakout | mixed
 pullback_available: yes | no
 same_contract_or_new_contract:
 signal_and_trigger:
-order_branch: stop | limit-retest | market-close | observation-only
+order_branch: stop_confirmation | limit_retest | market_close | observation_only
+branch_role: same_contract / role_reversal_retest / gap_reprice / management
 actual_fill_assumption:
 parent_structural_stop:
 low_cycle_stop_if_independent:

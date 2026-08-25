@@ -2,6 +2,12 @@
 
 覆盖第 69–100 门课程。重点不是背诵形态，而是判断趋势是否衰竭、市场是否先转入区间、反转是否有第二腿，以及交易的概率和盈亏是否匹配。
 
+```text
+source_type: PAHubCN_course_derived_note
+source_locator: course catalog entries 69-100; individual page/version not archived
+evidence_status: external_heuristic_not_validated
+```
+
 ## 逐课提炼
 
 ### 21A Reversals

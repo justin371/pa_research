@@ -1,6 +1,8 @@
 # 失败突破与高潮
 
-状态：`visual-research / provisional / primary`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补失败边界、重新接受和高潮/延续分流。`reverse-stop` 是历史分支别名，新记录拆成 `order_branch: stop_confirmation` + `branch_role: reverse_stop`。
 
 ## 研究目的
 
@@ -37,7 +39,8 @@ second_confirmation:
 structural_stop:
 first_independent_obstacle:
 rough_R_R:
-order_branch: reverse-stop / limit-retest / market-close / observation-only
+order_branch: stop_confirmation / limit_retest / market_close / observation_only
+branch_role: reverse_stop / role_reversal_retest / gap_reprice / same_contract / management
 original_direction_reaccepted:
 final_state: continuation / small-reversal / range / MTR-candidate / no-trade
 ```

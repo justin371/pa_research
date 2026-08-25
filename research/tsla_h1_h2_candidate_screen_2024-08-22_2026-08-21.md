@@ -10,6 +10,16 @@
 - 筛选状态：研究候选；不是回测结果、实盘计划或交易授权
 - 本轮没有加载 4H、1H 或 15 分钟数据，也没有执行订单
 
+```text
+contract_scope: historical_context_only
+direction: long
+data_status: historical_close
+as_of_time: 2026-08-21
+research_state: research_candidate
+trade_state: not_authorized
+handoff_status: research_only
+```
+
 ## 筛选标准
 
 按 PA Research 当前定义，先观察：
