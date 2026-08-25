@@ -12,7 +12,7 @@ It is not yet the live trading system and does not place orders. Mature rules ma
 
 完整图表的视觉判断是本项目最重要的能力和主要工作流。研究必须先回答“左侧发生了什么、当前处在趋势/区间/过渡的哪一部分、支撑阻力和压力如何组织”，再讨论 ABC、H/L 计数和订单。
 
-- Daily、4H/60m、15m 等周期用于建立层级背景和触发上下文；能看到的范围、周期和数据完整性必须写清楚。
+- 日线选股阶段只使用完成的 Daily K 线；4H/60m/15m 只在候选入选后的独立深审或订单合同中使用，不能改变日线候选主标签。能看到的范围、周期和数据完整性必须写清楚。
 - 多周期复核遵循[`Daily / 4H / 1H / 15m 分层框架`](../research/multitimeframe_visual_review_framework_CN.md)：Daily/4H/1H 先决定背景、父级结构、主要位置和结构止损，15m 默认只做确认；若低周期自成交易，必须另立合同，不能用窄止损改写高周期 thesis。
 - Futu OpenD、历史 K 线和计算结果只用于测量、核对时间顺序、量价、R/R 和执行细节；它们不能替代完整图表的结构解释。
 - 扫描器、指标或单个 K 线标签不能单独证明 ABC、H1/H2/H3、L1/L2/L3 或“高胜率”。
@@ -61,9 +61,9 @@ The main context questions are:
 4. Which Price Action pattern is forming?
 5. What is the entry trigger, stop, first obstacle, target, and invalidation?
 
-## Immediate research scope: ABC and H/L1-3
+## Immediate research scope: Daily ABC/BOP selection and H/L1-3
 
-For the current research phase, temporarily prioritize the ABC pullback framework and H1/H2/H3, L1/L2/L3 attempts. Breakout trading remains a separate later topic and should not be mixed into the current H/L count studies.
+For the current daily-selection phase, prioritize two separate primary families: ABC continuation and BOP breakout-pullback. The ABC pullback framework still owns H1/H2/H3 and L1/L2/L3 attempt studies; BOP remains a separate contract and must not be mixed into ABC/H-L counts or outcome statistics. Lower timeframes can only be reviewed after a Daily candidate is selected and must not change the Daily screening label.
 
 - `A` is the directional impulse or trend leg; `B` is the pullback; `C` is the possible resumption leg.
 - `A` is also a retrospective structural label, not the date when live research begins. Once directional pressure is recognizable, immediately evaluate the next B pullback and H/L attempts. Do not wait for C to finish or for the whole ABC to become visually complete. Every case should record both the earliest recognizable A date and the actual decision/trigger date.

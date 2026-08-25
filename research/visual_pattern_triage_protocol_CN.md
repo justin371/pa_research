@@ -3,6 +3,8 @@
 日期：2026-08-23  
 状态：`visual-first / research protocol / not quantitative`
 
+日线候选的范围、流动性、两年背景、财报窗口和 ABC/BOP 主标签先遵循 [`PA Research 日线选股规则 v0.1`](../docs/pa_research_daily_selection_rules_v0_1_CN.md)；本协议负责通过前置闸门后的视觉快筛与深审，不把 4H/1H/15m 倒灌成日线选股证据。
+
 ## 这份协议解决什么问题
 
 PA Research 的第一阶段任务，是让助手从完整图表里筛出“看起来像”的 Price Action pattern。它不是扫描器，也不是胜率模型。第一轮不需要精确价格、固定阈值、完整 15m 触发或精确 R/R；这些内容只在候选值得深入时再补。

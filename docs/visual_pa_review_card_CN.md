@@ -2,6 +2,8 @@
 
 状态：`visual-first / research tool / canonical-output-v0.5`
 
+日线候选筛选先遵循 [`PA Research 日线选股规则 v0.1`](pa_research_daily_selection_rules_v0_1_CN.md)；本卡中的 4H/1H/15m 仅适用于候选入选后的深审、确认或独立低周期合同。
+
 这是一张给“看懂完整图表的 PA 助手”使用的复核卡。它的用途是先筛选出**看起来像**某个 Price Action pattern 的候选，再用更完整的背景、位置、触发、风险和结果去优化。它不是量化扫描器、不是胜率评分器，也不是自动下单授权。
 
 第一轮筛选与第二轮交易优化的边界，先看[`PA Pattern 视觉筛选协议`](../research/visual_pattern_triage_protocol_CN.md)。跨 pattern 同时出现多个名字时，按[`Cross-Pattern 视觉优先级与冲突消解审计`](../research/cross_pattern_visual_priority_audit_2026-08-24_CN.md)只选一个主标签；本卡是进入第二轮后使用的完整复核卡，没有必要为每个“看起来像”的图形一开始就填满所有价格和 R/R 字段。
@@ -104,7 +106,7 @@ sector_context:
 
 如果只有结构化历史数据，没有足够的完整图表上下文，结论必须标为候选或数据审计，不能写成已经完成的视觉判断。历史数据也不能描述成实时行情。
 
-财报、板块与多周期的统一闸门见[`财报、板块与多周期前置过滤`](../research/event_sector_multitimeframe_cross_pattern_audit_CN.md)：财报前三个交易 session 不新开仓；板块和大盘只提供方向许可；Daily/4H/60m 决定父级，15m 默认只确认触发。
+财报、板块与多周期的统一闸门见[`财报、板块与多周期前置过滤`](../research/event_sector_multitimeframe_cross_pattern_audit_CN.md)：财报前三个交易 session 不新开仓；板块和大盘只提供方向许可；日线选股先由 Daily 决定父级，候选入选后才可用 4H/60m 做深审、1H/15m 做确认或另立低周期合同。
 
 ## 1. 背景：左边发生了什么？
 

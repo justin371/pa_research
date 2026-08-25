@@ -2,6 +2,8 @@
 
 状态：`visual-research / provisional / not-quantitative`
 
+每日候选筛选统一遵循 [`PA Research 日线选股规则 v0.1`](../docs/pa_research_daily_selection_rules_v0_1_CN.md)：只用完成的 Daily K 线选股，重点为 ABC-CONT 与 BOP；4H/1H/15m 不能改变日线候选主标签。
+
 这里是 PA Research 当前阶段的核心研究入口。目标是让视觉助手能够在完整图表上：
 
 1. 先识别背景、位置和左侧结构；
