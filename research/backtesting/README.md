@@ -2,7 +2,7 @@
 
 状态：`research_only / descriptive_only / not-validated`
 
-这里是 PA Research 的第一版 `backtesting.py` 适配层。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
+这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.0`）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
 
 ## 运行
 

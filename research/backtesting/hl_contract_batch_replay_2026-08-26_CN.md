@@ -47,10 +47,24 @@
 
 TSLA `2025-08-18` H1 和 `2025-08-21` H2 共享一个局部行情 lineage，不能因为两个日期或两个标签就当成两个独立样本。TSLA `2025-03-03` L1、TSLA `2024-03-12` L2、CRWD `2024-10-02` H2 使用独立 lineage 标识，但样本仍太少，且存在边界合同，不能验证规则。
 
-回放结果在合同冻结并提交后生成，运行元数据必须保留数据源、历史状态、成本和范围声明。回放器的 `results.csv` / `summary.json` / `run_metadata.json` 生成目录不提交为仓库运行产物；本报告在回放后补写实际结果。预期解释顺序是：先看合同是否有资格交易，再看是否成交，再看退出路径，最后才看描述性 `win_rate_pct`、`realized_R` 和分层结果；共享 lineage、空间 `blocked`、缺口跳过、观察样本和未完成路径不混入普通胜率。
+回放结果在合同冻结并提交后生成，运行元数据必须保留数据源、历史状态、成本和范围声明。回放器的 `results.csv` / `summary.json` / `run_metadata.json` 生成目录不提交为仓库运行产物；本报告在回放后补写实际结果。预期解释顺序是：先看合同是否有资格交易，再看是否成交，再看退出路径，最后才看描述性 `win_rate_pct`、`realized_R` 和分层结果；共享 lineage、空间闸门、缺口跳过、观察样本和未完成路径不混入普通胜率。
+
+## 实际回放结果
+
+运行参数：引擎 `0.3.0`、`backtesting.py 0.6.6`、历史状态、佣金 `0`、spread `0`；完整 JSON/CSV 输出位于外部 artifact 目录 `C:\Users\lwang\.codex\artifacts\pa-research-hl-batch-replay-20260826`，不作为仓库数据源。
+
+| 合同 | 成交/退出 | 结果 | 首障碍空间 | 解释 |
+| --- | --- | --- | --- | --- |
+| TSLA H1 `2025-08-18` | `8/19 336.27`；`8/20 326.50` 止损 | `loss / -1.00R` | `0.4299R / borderline` | `340.47` 在入场 K 线内触及，但止损/目标从入场 K 线收盘后才生效，不能把同 K 线触及写成胜利 |
+| TSLA H2 `2025-08-21` | `8/22 326.64`；`8/25 340.55` 目标 | `win / +1.0586R` | `1.0586R / positive` | 与 H1 共享 `TSLA-2025-08-local`；`326.64` 是已有 15m 确认价，Daily 仅作触发代理 |
+| TSLA L1 `2025-03-03` | `3/4` 开盘 `270.93` 跳过 `277.30`，按 `gap_policy=skip` | `opening-skip / no trade` | 预冻结约 `0.14R` | 原始 sell-stop 没有按 `277.30` 成交，不能用实际跳空后的价格回填旧合同 |
+| TSLA L2 `2024-03-12` | `3/13 172.41`；`3/26 182.87` 止损 | `loss / -1.00R` | `1.7839R / positive` | 后续确实有更低支撑，但结构止损先失效，属于 `process-stop-first` |
+| CRWD H2 `2024-10-02` | 未交易 | `observation_only` | 未计算 | EMA50 为 `flat`，不满足多头 H2 的 `up/up` 硬闸门；即使形态/空间看起来可研究，也不进入胜率分母 |
+
+汇总：`contract_count=5`、`eligible_contract_count=4`、`observation_only_count=1`、`filled_count=3`、`completed_trade_count=3`、`ambiguous_count=0`。技术性描述统计为 `win_rate_pct=33.33%`（`1/3`）、完成交易平均 `-0.3138R`、合计 `-0.9414R`；这三个完成交易包含同一 lineage 的 TSLA H1/H2，不能当成三个独立样本，也不能把 `33.33%` 称为规则胜率。
 
 ## 当前结论
 
-在回放完成前，本批只能声明：`5` 个合同已完成冻结前字段，`4` 个通过 EMA 方向闸门，`1` 个因 EMA50 走平保留为 `observation_only`；H1/H2 的共享 lineage 和 H1/L1 的第一障碍空间不足已经显式记录。即使后续路径出现盈利，也不会把这五行升级为验证样本；当前总体验证结论继续是 `no-new-positive`。
+回放没有产生新的正向验证证据。H2 的一次目标到达被同一 TSLA lineage 的 H1 失败样本依赖，L2 先止损后到更低支撑，L1 被开盘跳过，CRWD 被 EMA50 闸门排除，H1 的首障碍只有约 `0.43R`。因此本批结果只能标记为 `research_only / descriptive_only / not-validated`，总体验证结论继续是 `no-new-positive`，胜率和盈亏比均不能升级为已验证统计。
 
-下一步只是在冻结合同之后运行分层回放并把真实 `fill_status`、`exit_reason`、`trade_result`、`realized_R` 写入本文件；不修改规则、不扩展成扫描器、不连接执行层。
+后续如要继续，必须补充新的独立 lineage，并把 Daily 触发合同与 15m 确认合同分开记录；不修改规则、不扩展成扫描器、不连接执行层。
