@@ -21,6 +21,8 @@
 - 两年窗口内可见的主要高点、主要低点及其日期/价格区域；
 - 当前仍有效或反复测试的支撑、阻力、前高/前低和角色转换区；
 - Daily EMA20、EMA50、EMA200 的相对位置、斜率和价格所在侧；
+- 对 H1/H2/L1/L2，单独确认 Daily EMA20/50 的方向：多头两条均向上，空头两条均向下；走平、反向或不可见时不能冻结为普通高质量 H/L；
+- 标出回调结束是否靠近方向一致的 EMA20/50、前期低点/高点、支撑/阻力或角色转换区；多个独立来源重合时，在图上画出 META 区域；
 - 局部 4H/1H/15m 是否接近这些左侧结构，还是处在区间中部。
 
 ```text
@@ -30,6 +32,13 @@ major_lows:
 support_zones:
 resistance_zones:
 daily_ema20_50_200: above / mixed / below / unavailable
+daily_ema20_slope: up / flat / down / unknown
+daily_ema50_slope: up / flat / down / unknown
+h_l_ema_slope_gate: long_pass / short_pass / fail_flat_or_opposite / pending / not_applicable
+h_l_pullback_location:
+meta_confluence: present / absent / unknown
+meta_zone:
+meta_components:
 left_context_review: complete / partial / unavailable
 ```
 
@@ -108,8 +117,18 @@ session_state:           # premarket / RTH / after_hours / historical_close / un
 timeframes_seen:         # Daily / 4H or 60m / 15m / other
 chart_scope:             # full context / partial context
 daily_context_window:    # >=2y / <2y / unavailable
+market_cap_usd:
+market_cap_as_of:
+market_cap_source:
 major_high_low_review:   # complete / partial / unavailable
 ema20_50_200_review:     # complete / partial / unavailable
+daily_ema20_slope:       # up / flat / down / unknown
+daily_ema50_slope:       # up / flat / down / unknown
+h_l_ema_slope_gate:      # long_pass / short_pass / fail_flat_or_opposite / pending / not_applicable
+h_l_pullback_location:
+meta_confluence:         # present / absent / unknown
+meta_zone:
+meta_components:
 event_context:           # earnings / macro / gap / none known / unknown
 event_source_as_of:
 sector_context:
@@ -157,11 +176,11 @@ leg_scope: parent / local / both
 
 ### A 腿的视觉等级
 
-- `strong`：方向性实体明显、收盘接近极值、重叠少、有连续跟随或有效突破；
+- `strong`：优先表现为约 3–4 根连续同方向 Daily K 线，实体相对饱满、收盘接近极值、重叠少、有连续跟随或有效突破；跳空是加分项而非必要条件；
 - `ordinary`：方向存在，但实体、跟随和结构推进一般；
 - `unclear`：混合收盘、重叠很多、宽通道或明显处在区间中部。
 
-强 A 腿只提高 H1/L1 的研究优先级，不自动授权交易。普通或不清楚的 A 腿，优先观察 H2/L2，或者保留为 no-trade 对照。
+强 A 腿只提高 H1/L1 的研究优先级，不自动授权交易。普通或不清楚的 A 腿，优先观察 H2/L2，或者保留为 no-trade 对照；若价格后来到达成熟区间上沿/下沿的第三推，则转入独立 `range_edge_three_push` 分支，不要求强 A，但必须有边缘反向证据和空间。
 
 如果 A 腿包含财报跳空，记录为 `event-driven strong`，不能直接当成普通趋势样本。
 
@@ -212,6 +231,10 @@ count_reset_reason:
 - 如果出现新趋势腿、新区间或计数被结构打断，要说明 reset 原因；
 - `setup/count bar`、`signal bar`、`confirmation/trigger bar` 必须分开。
 
+- 多头 H1/H2 只有在 Daily EMA20、EMA50 均向上时，才可进入普通高质量趋势 H/L；空头 L1/L2 对称要求两条均线均向下；
+- 多头回调位置优先检查向上 EMA20/50、前期低点/支撑或前高角色转换；空头回调位置优先检查向下 EMA20/50、前期高点/阻力或前低角色转换；
+- 至少两个独立来源在同一位置重合时，记录 `META（Multiple Edge Trading Area）` 并在图上标为一个价格区域；不能把同一价格簇重复计算成多个优势，META 也不能代替信号或触发。
+
 ### H3/L3 三分流
 
 如果当前尝试被标为 H3/L3，额外填写：
@@ -223,11 +246,14 @@ third_push_follow_through: weakening / mixed / strengthening / unclear
 third_push_location:
 reverse_trigger_present: yes / no / unclear
 h3_l3_state: exhaustion_candidate / short_reaction_candidate / continuation_or_climax / not_h3_l3
+range_edge_three_push: yes / no / pending
+range_edge_side: upper / lower / none / pending
 ```
 
 - `exhaustion_candidate` 需要同一 lineage、压力效率下降、重要位置和反向触发；它也必须通过结构止损与第一障碍审计；
 - `short_reaction_candidate` 只表示支撑/阻力可能带来一次反应，不能升级成主要趋势反转；
 - `continuation_or_climax` 表示第三推仍在扩张或获得跟随，不能因为计数到 3 就逆势交易；
+- `range_edge_three_push` 表示第三推位于成熟区间上沿/下沿；上沿只研究空头、下沿只研究多头，第一反向触发可形成候选，强接受外侧则切换 BOP；区间中部仍为观察；
 - 若 lineage 不清楚、已经进入区间或结构被重置，使用 `not_h3_l3`，转回区间/过渡逻辑。
 
 ## 5. Pattern 分类

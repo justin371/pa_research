@@ -18,7 +18,8 @@ PA Research 是一个只读、视觉优先的 Price Action 研究仓库。它记
 
 ## 当前边界
 
-- 当前仓库没有量化扫描器、生产回测代码或 Execution Agent 连接；`Backtesting code and results` 仍是未来计划，不是现有证据。
+- 当前仓库包含一个仅供研究使用的 `backtesting.py` 冻结合同回放器；它不自动识别图形、不扫描股票、不获取行情、不提供生产交易授权，也不连接 Execution Agent。
+- 回放器只接受已经由人工完整看图并在结果发生前冻结的合同；当前已有案例尚未形成经过验证的胜率证据。
 - Codex Trading 只作为明确标注的只读历史参考；PA Research 不复制其规则，不修改其仓库。
 - 当前结果审计保持 `no-new-positive`、`win_rate: not-computable`；形态候选不是胜率或下单授权。
 

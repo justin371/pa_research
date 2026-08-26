@@ -5,5 +5,6 @@
 - [`PA 图表视觉复核卡`](visual_pa_review_card_CN.md)
 - [`共同上下文`](common_context.md)
 - [`PA Research → Codex Trading 研究交接规范`](research_to_system_handoff_CN.md)
+- [`冻结合同回放器（backtesting.py）`](../research/backtesting/README.md)
 
-这些文件只定义 PA Research 的研究、记录和边界合同；不包含量化扫描器、生产交易规则或 Execution Agent 连接。
+这些文件只定义 PA Research 的研究、记录和边界合同；回放器仍是人工合同的离线研究工具，不包含量化扫描器、生产交易规则或 Execution Agent 连接。

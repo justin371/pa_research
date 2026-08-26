@@ -6,7 +6,7 @@ This document is the shared working context for the PA Research project. It reco
 
 PA Research is the research and visual-structure layer. Its job is to study charts, organize Al Brooks Price Action concepts, compare examples, and turn observations into clear, testable hypotheses.
 
-It is not yet the live trading system and does not place orders. Mature rules may later be transferred to Codex Trading for implementation and backtesting, and only then considered for execution automation.
+It is not the live trading system and does not place orders. PA Research may use its local, research-only `backtesting.py` replay harness for manually frozen contracts; production implementation and execution automation remain outside this repository.
 
 ## Visual-first research doctrine
 
@@ -25,7 +25,7 @@ It is not yet the live trading system and does not place orders. Mature rules ma
 
 1. **视觉发现层**：在完整图表上先筛选“看起来像”的候选，优先判断背景、左侧结构、A/B/C、H/L1-3、位置和压力变化。此阶段允许保留模糊边界，粗略画出可能的入场、结构止损和目标区域，不宣称胜率。
 2. **结构优化层**：对筛出的优质候选，再核对同周期计数、信号 K、触发、主要支撑/阻力、事件边界和大致 R/R；把相似形态、失败形态和不应交易的形态并排比较。
-3. **程序验证层**：只有当视觉规则已经稳定、边界足够清楚，才考虑把少数规则交给 Codex Trading 做数据回放或量化测试。它不是当前阶段的默认工作流。
+3. **程序验证层**：只有当视觉规则已经稳定、边界足够清楚，才把少数人工冻结合同交给 PA Research 的 research-only `backtesting.py` 回放器做结果审计；这不等于自动识别或生产回测。任何 Codex Trading 交接仍需单独通过研究交接规范。
 
 因此，候选文件可以先用 `visual_candidate` 或 `pattern_like` 状态进入研究库；“看起来像”是筛选入口，不是最终规则，也不需要一开始就精确到固定阈值。
 
@@ -35,8 +35,8 @@ It is not yet the live trading system and does not place orders. Mature rules ma
 
 ## Repository boundaries
 
-- `PA Research`: research notes, source-aligned definitions, chart reviews, hypotheses, and validated rule specifications.
-- `Codex Trading`: programmatic research tools, Trading System implementation, backtesting, and Execution Agent work.
+- `PA Research`: research notes, source-aligned definitions, chart reviews, hypotheses, frozen-contract replay, and validated rule specifications.
+- `Codex Trading`: separate programmatic research tools, Trading System implementation, and any future execution-related work; it is not modified by this replay harness.
 - The reference material in the existing Codex Trading knowledge base is read-only during research unless a rule has matured and transfer work is explicitly in scope.
 - The one-way research-to-system boundary, status vocabulary, handoff fields, and promotion gates are defined in [`docs/research_to_system_handoff_CN.md`](research_to_system_handoff_CN.md). Creating a research file does not mean that the rule is ready for Codex Trading.
 
@@ -67,20 +67,22 @@ For the current daily-selection phase, prioritize two separate primary families:
 
 所有新记录的方向、BOP 状态、订单分支、事件闸门和研究/交易/交接状态统一按[`PA Research 统一输出合同 v0.1`](pa_research_output_schema_v0_1_CN.md)填写。`directional_bias` 只描述背景；当前研究合同必须另写 `direction: long / short / no_valid_direction`。
 
+当前日线股票池先限定为美国普通股、市值约 `$3B–$100B`，并通过 20 日平均成交额门槛；市值和时间戳必须进入证据头。ETF 只作市场/板块背景，不替代个股候选。
+
 - `A` is the directional impulse or trend leg; `B` is the pullback; `C` is the possible resumption leg.
 - `A` is also a retrospective structural label, not the date when live research begins. Once directional pressure is recognizable, immediately evaluate the next B pullback and H/L attempts. Do not wait for C to finish or for the whole ABC to become visually complete. Every case should record both the earliest recognizable A date and the actual decision/trigger date.
 - `H1`, `H2`, and `H3` are successive bull attempts within the same pullback context. `L1`, `L2`, and `L3` are the symmetric bear attempts.
 - A count is only meaningful when it belongs to the same timeframe and the same pullback leg. Do not combine a Daily H2 with a 15m H2 as if they were one count.
-- H3/L3 are the third-attempt research category. When the three attempts weaken, occur at a meaningful edge, and show pressure exhaustion, they may overlap with a three-push wedge/reversal. The number `3` alone does not prove a wedge or a reversal; in a strong trend, a third attempt can still continue.
+- H3/L3 are the third-attempt research category. When the three attempts weaken, occur at a meaningful edge, and show pressure exhaustion, they may overlap with a three-push wedge/reversal. A mature trading-range upper/lower edge is a separate `range_edge_three_push` route: its A leg may be ordinary or weak, while a range-middle third push remains observation-only. The number `3` alone does not prove a wedge or a reversal; in a strong trend, a third attempt can still continue.
 - For visual triage, classify a third attempt into three provisional states: **衰竭候选** (efficiency falls, follow-through weakens, location is meaningful, and a reverse trigger appears), **短线反应候选** (support/resistance produces a bounce or rejection but space or scale is limited), or **延续/高潮候选** (the third push expands, closes near the extreme, or gains follow-through). Only the first state can enter a reversal research audit, and even then it still needs a structural stop and first-obstacle check. The detailed gate and cases are in [`H3/L3 research gate`](../research/h3_l3_research_gate_CN.md) and [`H3/L3 visual comparison`](../research/h3_l3_visual_comparison_CN.md).
-- Inside a mature trading range, do not force ABC or H/L leg continuity onto every swing. Use the range's upper edge, lower edge, failed breakouts, tests, and second entries first. A range-edge reaction that visually resembles H2/L2 is not automatically a trend H2/L2.
+- Inside a mature trading range, do not force ABC or H/L leg continuity onto every swing. Use the range's upper edge, lower edge, failed breakouts, tests, and second entries first. A third push at the upper/lower edge can be a `range_edge_three_push` candidate after rejection and a reverse trigger; a range-middle third push remains observation-only. A range-edge reaction that visually resembles H2/L2 is not automatically a trend H2/L2.
 - The dedicated range-edge working framework is [`交易区间边缘二次入场与失败突破`](../research/range_edge_second_entry_framework_CN.md). It separates edge reversal, failed-breakout re-entry, range swing/second-leg trap, and range-middle no-trade; it is still provisional and not a production rule.
 - Only after a clear directional breakout/acceptance and a subsequent pullback/retest should a new first leg and second leg be evaluated as a trend-continuation structure. The initial range-edge trade and the later post-breakout second leg must remain separate hypotheses.
 - Do not count every small intrabar high/low. A count should represent a meaningful attempt at a relevant location, followed by a signal and confirmation review.
 - Keep setup/count bars separate from confirmation/trigger bars. H1/H2/H3 or L1/L2/L3 identify the attempt sequence; they do not authorize an order by themselves.
 - The current study order is: larger background → A pressure → B pressure → major/minor support-resistance → H/L attempt count → signal K → trigger → stop/invalidation → first obstacle and measured-move space.
 - For a live review, the sequence is not “find the completed A/B/C first.” It is: recognize A pressure while it is developing, start scanning the B pullback immediately, then decide whether the next H/L attempt is tradable. A later retrospective label must not erase an earlier valid decision window.
-- Candidate priority follows A-leg quality: when the trend and A leg are strong, the first valid H1/L1 signal K after a controlled pullback may be researched; when A is ordinary, overlapping, or ambiguous, H1/L1 is observation-only and preference shifts to H2/L2 after the first attempt fails or lacks follow-through. This is a research priority, not a guaranteed probability rule.
+- Candidate priority follows A-leg quality: when the trend and A leg are strong—preferably around 3–4 consecutive, full-bodied directional Daily bars with clear follow-through, with a gap as an optional plus—the first valid H1/L1 signal K after a controlled pullback may be researched; when A is ordinary, overlapping, or ambiguous, H1/L1 is observation-only and preference shifts to H2/L2 after the first attempt fails or lacks follow-through. A mature-range edge is an explicit exception: ordinary A can still feed a range-edge three-push candidate, but only after edge rejection, trigger, structural stop and space review. This is a research priority, not a guaranteed probability rule.
 - A complete chart may be used to audit the case, but the entry decision must be reconstructed from the bars, levels, event information, and space available at that timestamp. Later C-leg strength, measured-move completion, final target, or profit cannot upgrade an earlier setup retroactively. If the setup was not clear at the decision time, record a valid no-trade or hypothesis.
 
 ### Strong bearish A-leg filter
@@ -112,7 +114,7 @@ Use the same distinction symmetrically for bullish and bearish studies:
 - 区间边缘研究入口见[`交易区间边缘二次入场`](../patterns/04_range_edge_second_entry/README.md)：区间中部不继承趋势 ABC 腿计数，second-leg trap 单独审计。
 - Major trend reversals, now organized by the [`MTR visual framework`](../research/mtr_visual_framework_CN.md); they remain provisional and are not a production rule.
 - MTR 的主动入口见[`MTR 趋势反转`](../patterns/07_mtr_reversal/README.md)：成熟趋势、主要位置、结构破坏、第二次确认和空间必须分开审计。
-- 三推/H3-L3 的主动入口见[`三推 / H3-L3 压力状态`](../patterns/08_three_push_h3_l3/README.md)：先确认同一 lineage，再分流衰竭、扩张、区间重复测试和通道延续。
+- 三推/H3-L3 的主动入口见[`三推 / H3-L3 压力状态`](../patterns/08_three_push_h3_l3/README.md)：先确认同一 lineage 或同一成熟区间边缘，再分流衰竭、扩张、区间边缘候选、区间中部重复测试和通道延续。
 - Head-and-shoulders and rounded tops/bottoms are organized by the [`头肩顶/底与圆顶/圆底视觉边界框架`](../research/head_shoulders_rounded_top_bottom_visual_framework_CN.md)：头肩先作为复杂双顶/双底或 MTR 候选，圆顶/圆底先作为控制权转移警报，不因外形自动入场。
 - Final flags, breakouts, channels, wedges, measured moves, opening reversals, failed breakouts, climaxes, double tops/bottoms, three-push variations, inside bars, triangles, and magnets/support-resistance, following Brooks' flexible pattern language. Final Flag 的工作框架见[`Final Flag visual framework`](../research/final_flag_visual_framework_CN.md)；开盘反转的视觉框架见[`Opening Reversal visual framework`](../research/opening_reversal_visual_framework_CN.md)；紧/宽通道的视觉框架见[`Channel visual framework`](../research/channel_visual_framework_CN.md)；失败突破与高潮反转的视觉框架见[`Failed breakout / climax reversal visual framework`](../research/failed_breakout_climax_visual_framework_CN.md)；双顶/双底、MTR 与 Final Flag 的对照入口见[`Double top/bottom, MTR and Final Flag comparison`](../research/double_top_bottom_mtr_final_flag_comparison_CN.md)；三推/H3-L3 的压力状态见[`Three-push / H3-L3 pressure-state framework`](../research/three_push_pressure_state_framework_CN.md)；Inside Bar / 两根 K 线反转的视觉框架见[`Inside Bar / two-bar reversal visual framework`](../research/inside_bar_two_bar_reversal_visual_framework_CN.md)；三角形与扩张三角形的视觉框架见[`Triangle / expanding triangle visual framework`](../research/triangle_expanding_range_visual_framework_CN.md)。
 - Measured Move and AB=CD are space and target tools, not standalone entry signals. The cross-pattern target order is [`Measured Move、磁铁与目标层级视觉管理框架`](../research/measured_move_magnet_target_hierarchy_CN.md)：先看第一独立障碍，只有结构被接受后才把 MM 当主要延伸目标。
@@ -123,7 +125,7 @@ Use the same distinction symmetrically for bullish and bearish studies:
 - 开放趋势、成熟区间、区间边缘、过渡、高潮和 second-leg trap 的父级分类见[`Market State / Context`](../foundations/07_market_state_context/README.md)，专项审计见[`市场状态与父级背景视觉证据审计`](../research/market_state_context_visual_evidence_audit_2026-08-24_CN.md)。先判状态再数 H/L 或 ABC；区间中部默认观望，突破接受后重建新合同。
 - 强 A、B 回调压力、优质 signal K 与买卖压力不对称见[`Leg Pressure / Signal Quality`](../foundations/08_leg_pressure_signal_quality/README.md)，专项审计见[`强 A 腿与信号 K 视觉证据审计`](../research/leg_pressure_signal_quality_visual_evidence_audit_2026-08-24_CN.md)。深 B 不自动否决，量缩只是非必要参考；setup、signal、trigger 和 follow-through 必须分开。
 - 突破回踩/BOP 的主动入口见[`突破回踩 / BOP`](../patterns/06_breakout_pullback_bop/README.md)：突破接受后必须建立新合同，不能沿用突破前的反转或区间合同。
-- EMA is supporting context only; touching the EMA is not a pattern by itself.
+- EMA 触碰本身不是 pattern；但对高质量日线 H1/H2/L1/L2，EMA20/50 的方向性斜率是方向闸门：多头两条均向上，空头两条均向下。走平、反向或不可见时只能保留为边界/待定，不能进入普通高质量 H/L。
 - 失败突破/高潮的主动 pattern 入口见[`失败突破与高潮`](../patterns/05_failed_breakout_climax/README.md)；它必须把测试、失败候选、小反转/区间、MTR 候选和 BOP 接受分开。
 - MTR 与三推/H3-L3 的边界复核见[`MTR 与三推/H3-L3 视觉边界复核`](../research/mtr_three_push_visual_boundary_audit_2026-08-24_CN.md)：三推描述原方向尝试，MTR 只在反向结构破坏、二次确认和空间同时成立时升级。
 - H1/L1 第一次入场的边界复核见[`H1/L1 第一次入场视觉边界复核`](../research/h1_l1_first_entry_visual_boundary_audit_2026-08-24_CN.md)：设置 K、确认 K、触发、首障碍与 H2/L2 fallback 必须分开。
@@ -178,7 +180,8 @@ In particular:
 ## H1/H2 quality definition (research candidate)
 
 - Separate the H1/H2 count from the quality of a tradable setup. A small local high break in the middle of a range may be recorded as a low-quality count, but it is not automatically a trade.
-- Give priority to higher-timeframe background, structural location, and pressure asymmetry. The preferred location is a pre-existing support, EMA20/EMA50 test with directional acceptance, breakout retest, range edge, gap edge, or META confluence zone.
+- Give priority to higher-timeframe background, structural location, and pressure asymmetry. For Daily H1/H2, require Daily EMA20 and EMA50 to slope upward; for Daily L1/L2, require both to slope downward. The preferred bullish pullback location is a rising EMA20/EMA50, prior low/support or prior-high role reversal; the preferred bearish pullback location is a falling EMA20/EMA50, prior high/resistance or prior-low role reversal. A pre-existing breakout retest, range edge, gap edge, or META confluence zone can add context, but an EMA touch alone is not a setup.
+- META（Multiple Edge Trading Area）表示至少两个独立来源在同一价格区域汇聚，例如方向一致的 EMA、前高/前低、支撑/阻力、角色转换或缺口边缘。把它画成一个区域并记录组成来源；它只增强合格候选的质量，不覆盖 EMA 方向闸门、信号、首障碍、事件或结构止损。
 - A stronger candidate has weak, overlapping pullback selling and a signal K that either closes strongly near its high or rejects lower prices at support and then confirms above its high. A doji or long lower tail alone is insufficient.
 - Keep the setup/count bar separate from the confirmation/trigger bar. A strong confirmation bar cannot retroactively make a large opposite-direction setup bar a high-quality bullish signal; classify that sequence as conditional until the bar sequence, location, and follow-through are reviewed together.
 - Treat a strong bear pullback, range-middle location, late climax, nearby major resistance, poor space, and event risk as downgrade or no-trade evidence.

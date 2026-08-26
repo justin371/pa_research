@@ -4,13 +4,15 @@
 
 统一字段、方向和状态分轴见[`PA Research 统一输出合同`](../../docs/pa_research_output_schema_v0_1_CN.md)。
 
-这是 H1/H2、L1/L2、ABC、MTR 和三推共用的质量层。它不替代父级市场状态、位置、首障碍、事件或订单合同，而是回答：方向是否真的有力，反向压力是否减弱，信号 K 是否值得触发。
+这是 H1/H2、L1/L2、ABC、MTR 和三推共用的质量层。它不替代父级市场状态、位置、首障碍、事件或订单合同，而是回答：方向是否真的有力，反向压力是否减弱，信号 K 是否值得触发。强 A 的优先级规则主要服务 ABC/H1/L1；区间边缘三推是例外路径，不要求 A 腿达到强 A。
 
 ## 1. 强 A 腿
 
-优先观察方向明确、收盘靠近极值、实体有连续性、K 线重叠较少、回调没有立即收回关键突破的 A。跳空或连续强 K 可以增加方向证据，但单根大 K 也可能是高潮，必须看左侧位置和后续接受。
+优先观察方向明确、收盘靠近极值、实体有连续性、K 线重叠较少、回调没有立即收回关键突破的 A。对强 A→H1/L1 路径，优先寻找同方向约 3–4 根连续 Daily K 线、实体相对饱满、收盘持续推进且有跟随；中间出现跳空时方向证据更强，但跳空不是必要条件。
 
-普通小腿、重叠宽通道、反复穿越 EMA 或靠近主要障碍的 A，先标为 `ordinary_or_boundary`，不因为后续结果倒推为强 A。
+跳空或连续强 K 可以增加方向证据，但单根大 K 也可能是高潮，财报/异常事件跳空必须单独标记，不能直接并入普通强 A。
+
+普通小腿、重叠宽通道、反复穿越 EMA 或靠近主要障碍的 A，先标为 `ordinary_or_boundary`，不因为后续结果倒推为强 A。若此类 A 后经过多次回调抵达成熟区间上沿/下沿，可转入 `range_edge_three_push` 研究，不应因不满足强 A 而直接丢弃，也不能把它当成强 A 后 H1/L1。
 
 ## 2. B 回调压力
 
@@ -26,7 +28,7 @@
 
 分开记录 `setup`、`signal_bar`、`trigger`、`follow_through`。优质多头信号 K 可以是收盘扎实的阳线，或先下探后收回的长下影/doji；空头反之。更有价值的是它发生在关键支撑/阻力或 EMA20/50 附近，并且没有被首障碍立即抵消。
 
-EMA 只是汇合项，不是形态本身。成交量回调收缩是重要参考、不是必要条件；没有量也不能自动否决，有量也不能自动证明方向。
+EMA 触碰只是汇合项，不是形态本身；但高质量日线 H1/H2/L1/L2 采用方向性斜率闸门：多头 EMA20/50 均向上，空头 EMA20/50 均向下。成交量回调收缩是重要参考、不是必要条件；没有量也不能自动否决，有量也不能自动证明方向。
 
 ## 4. 工作复核卡
 
@@ -40,6 +42,13 @@ setup:
 signal_bar_quality:
 trigger_and_follow_through:
 EMA20_50_location:
+EMA20_slope: up / flat / down / unknown
+EMA50_slope: up / flat / down / unknown
+h_l_ema_slope_gate: long_pass / short_pass / fail_flat_or_opposite / pending / not_applicable
+pullback_location:
+meta_confluence: present / absent / unknown
+meta_zone:
+meta_components:
 volume_reference: supportive / neutral / adverse / unavailable
 direction: long / short / no_valid_direction
 first_independent_obstacle:

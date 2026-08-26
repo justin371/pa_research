@@ -1,0 +1,72 @@
+# PA Research 冻结合同回放器
+
+状态：`research_only / descriptive_only / not-validated`
+
+这里是 PA Research 的第一版 `backtesting.py` 适配层。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
+
+## 运行
+
+在仓库根目录创建临时虚拟环境或使用已准备好的 Python 环境，安装固定依赖：
+
+```powershell
+py -3 -m pip install -r .\requirements-backtesting.txt
+py -3 .\scripts\pa_research_backtest.py `
+  --prices .\research\backtesting\prices.example.csv `
+  --contracts .\research\backtesting\contracts.example.csv `
+  --output-dir .\research\backtesting\example-output
+```
+
+程序写出：
+
+- `results.csv`：每个冻结合同一行，包含成交、退出、空间、`realized_R` 和证据状态；
+- `summary.json`：按 pattern、方向、订单分支、事件状态、EMA 斜率闸门和 META 的描述性分层；
+- `run_metadata.json`：数据源、时间状态、成本和 PA Research 范围声明。
+
+## 输入合同
+
+价格文件必须包含 `Date,Open,High,Low,Close`，可以包含 `Symbol,Volume`。多标的文件用 `Symbol` 分组；单标的文件必须在命令行传 `--symbol`。程序不会替代数据源、复权、公司行动或两年图表审查。
+
+合同文件的通用字段必须包含：
+
+```text
+sample_id,symbol,decision_date,direction,primary_pattern,internal_label,
+order_branch,entry_trigger,structural_stop,first_obstacle,target_price,
+max_hold_bars,gap_policy,label_source,daily_context_window,
+major_high_low_review,ema20_50_200_review,event_context,contract_frozen
+```
+
+对于 `internal_label=H1/H2/L1/L2`，还必须填写以下人工看图字段：
+
+```text
+daily_ema20_slope,daily_ema50_slope,h_l_ema_slope_gate,
+h_l_pullback_location,meta_confluence,meta_zone,meta_components
+```
+
+多头 H1/H2 只有在 Daily EMA20、EMA50 都为 `up` 且
+`h_l_ema_slope_gate=long_pass` 时才进入回放；空头 L1/L2 对称要求两条均线都为
+`down` 且闸门为 `short_pass`。`fail_flat_or_opposite` 会保留为
+`observation_only` 并跳过成交，不进入胜率分母；`pending` 会保留为未证实状态。
+`meta_confluence=present` 时，`meta_zone` 和至少两个以分号、逗号、`|` 或 `+`
+分隔的独立来源必须同时存在。META 只用于记录和结果分层，不能代替触发、空间或结构止损。
+
+第一版支持：
+
+- `stop_confirmation`：在 `decision_date` 收盘后提交 stop；
+- `limit_retest`：在 `decision_date` 收盘后提交 limit；
+- `market_close`：在 `decision_date` 收盘成交；此分支的 `gap_policy` 必须为 `not_applicable`。
+
+`label_source` 必须为 `human_chart_review`，并且必须有 `>=2y` Daily 背景、完整重要高低点审查和完整 EMA20/50/200 审查。`target_price`、结构止损、最大持有 K 线数必须在结果发生前冻结，否则不能进入胜率分母。
+
+## 关键执行边界
+
+1. 订单只从 `decision_date` 之后开始生效；程序不读取未来结果来创建 pattern 标签。
+2. `gap_policy=skip` 遇到第一根 K 线开盘跳过触发位时记录 `opening-skip`；`accept_open` 记录实际开盘成交；两者不混算。
+3. 止损和目标在入场 K 线完成后才挂入，避免把入场 K 线内无法确定的先后顺序伪装成结果。
+4. 后续 K 线同时触及止损和目标时，结果标记为 `ambiguous_intrabar`，不进入胜率分母。
+5. 结果使用 `backtesting.py` 的交易记录，并以净 PnL 除以结构风险计算 `realized_R`；手续费和 spread 由命令行传入并写入元数据。
+6. 第一障碍空间只做事前几何字段，不自动授权、不自动排除，也不把首障碍到达改写成胜利。
+7. 回放器不计算 EMA 斜率或自动寻找 META；这些字段必须来自回放前的人工图表审查，并在结果中原样保留。
+
+## 目前不能说明什么
+
+这个工具不是图表识别器、量化扫描器或生产交易系统。它只能回答：在人工冻结的同一入场/止损/目标/时间合同下，历史价格路径如何结束。样本不足、合同不一致、共享 lineage、事件分层或未解决的同 K 线冲突，都只能做描述性统计；当前 PA Research 的总体验证状态仍是 `no-new-positive`、`win_rate: not-computable`。

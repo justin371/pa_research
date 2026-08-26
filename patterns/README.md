@@ -27,7 +27,7 @@
 | 5 | [`失败突破与高潮`](05_failed_breakout_climax/README.md) | 失败接受、高潮后小反转/区间和 no-trade 分流 |
 | 6 | [`突破回踩 / BOP`](06_breakout_pullback_bop/README.md) | 突破被接受后的回踩与新交易合同 |
 | 7 | [`MTR 趋势反转`](07_mtr_reversal/README.md) | 高级形态；需要位置、结构破坏和第二次确认 |
-| 8 | [`三推 / H3-L3 压力状态`](08_three_push_h3_l3/README.md) | 第三次测试的衰竭、扩张、区间重复测试和延续分流 |
+| 8 | [`三推 / H3-L3 压力状态`](08_three_push_h3_l3/README.md) | 第三次测试的衰竭、扩张、区间边缘候选、区间中部观察和延续分流 |
 
 ## 独立体系主题
 
@@ -95,7 +95,7 @@ final_state / failure_or_no_trade_reason
 
 订单语义和 R/R 的跨 pattern 规则见[`八个 Pattern 的订单合同与 R/R 审计`](../research/order_contract_cross_pattern_audit_CN.md)。
 
-MTR 与三推/H3-L3 的边界复核见[`MTR 与三推/H3-L3 视觉边界复核`](../research/mtr_three_push_visual_boundary_audit_2026-08-24_CN.md)：三推是压力观察入口，MTR 需要控制权改变和反向二次确认。
+MTR 与三推/H3-L3 的边界复核见[`MTR 与三推/H3-L3 视觉边界复核`](../research/mtr_three_push_visual_boundary_audit_2026-08-24_CN.md)：三推是压力观察入口；成熟区间边缘的第三推可以先成为独立反转候选，MTR 仍需要控制权改变和反向二次确认。
 
 H1/L1 第一次入场的边界复核见[`H1/L1 第一次入场视觉边界复核`](../research/h1_l1_first_entry_visual_boundary_audit_2026-08-24_CN.md)：强 A 和受控 B 只是筛选入口，第一次失败要保留 H2/L2 或 no-trade 分支。
 

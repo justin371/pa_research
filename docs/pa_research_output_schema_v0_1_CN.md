@@ -1,6 +1,6 @@
 # PA Research 统一输出合同 v0.1
 
-日期：2026-08-25
+日期：2026-08-25；合同修订：2026-08-26
 文档状态：`adopted / research-only / not-quantitative`
 
 ## 目的与适用范围
@@ -34,11 +34,17 @@ as_of_time:
 timezone:
 session_state: premarket / RTH / after_hours / historical_close / unknown
 completed_bar_as_of:
+market_cap_usd:
+market_cap_as_of:
+market_cap_source:
 timeframes_seen:
 chart_scope: full / partial
 daily_context_window: >=2y / <2y / unavailable
 major_high_low_review: complete / partial / unavailable
 ema20_50_200_review: complete / partial / unavailable
+daily_ema20_slope: up / flat / down / unknown
+daily_ema50_slope: up / flat / down / unknown
+h_l_ema_slope_gate: long_pass / short_pass / fail_flat_or_opposite / pending / not_applicable
 
 event_context: none / earnings / macro / gap / other / unknown
 event_source_as_of:
@@ -63,9 +69,17 @@ left_structure_and_location:
 major_highs_lows:
 support_resistance_and_role_zones:
 daily_ema20_50_200:
+daily_ema20_slope: up / flat / down / unknown
+daily_ema50_slope: up / flat / down / unknown
+h_l_ema_slope_gate: long_pass / short_pass / fail_flat_or_opposite / pending / not_applicable
+h_l_pullback_location:
+meta_confluence: present / absent / unknown
+meta_zone:
+meta_components:
 
 primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
 secondary_context:
+range_edge_three_push: yes / no / pending
 state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
 lineage_status: same_lineage / reset / unclear / pending
 internal_label: H1 / H2 / L1 / L2 / H3_L3 / none / pending
@@ -79,6 +93,10 @@ pattern_like_reason:
 - 区间中部、父级冲突、方向未冻结或没有有效交易方向写 `no_valid_direction`。
 
 同一案例可以有 `directional_bias: bull`，但因首障碍或事件闸门不合格而写 `direction: no_valid_direction`。不能用后续涨跌倒推方向。
+
+对于 `internal_label: H1 / H2` 的多头候选，`h_l_ema_slope_gate` 必须为 `long_pass`（Daily EMA20、EMA50 均向上）；对于 `internal_label: L1 / L2` 的空头候选，必须为 `short_pass`（两条均向下）。走平、反向或资料不足时分别记录为 `fail_flat_or_opposite` 或 `pending`，不能写成普通高质量 H/L。`meta_confluence: present` 只表示多个独立来源在同一回调区域汇聚，不是自动触发器。
+
+`primary_pattern: H3_L3` 时，必须额外区分 `range_edge_three_push: yes`、`no` 或 `pending`。区间边缘三推允许 A 腿普通或偏弱，但必须记录上沿/下沿位置、反向确认和区间外接受分流；区间中部重复测试不能凭次数升级。
 
 ## 三、BOP 专用字段
 
@@ -140,10 +158,21 @@ contract_scope:
 direction:
 data_status:
 as_of_time:
+market_cap_usd:
+market_cap_as_of:
+market_cap_source:
 parent_state:
 primary_pattern:
 secondary_context:
+range_edge_three_push:
 internal_label:
+daily_ema20_slope:
+daily_ema50_slope:
+h_l_ema_slope_gate:
+h_l_pullback_location:
+meta_confluence:
+meta_zone:
+meta_components:
 key_breakout_or_structure_location:
 why_it_meets_or_fails_the_rule:
 possible_entry_trigger:

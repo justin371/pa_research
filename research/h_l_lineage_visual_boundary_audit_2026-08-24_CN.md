@@ -1,6 +1,6 @@
 # H/L lineage 与三推状态视觉边界复核（2026-08-24）
 
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`；边缘三推修订：`2026-08-26`
 
 统一字段、方向和状态分轴见[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。本阶段只做视觉识别，不冻结订单合同。
 
@@ -98,7 +98,7 @@ state_result: pattern_candidate / boundary_candidate / observation_only / pendin
 | --- | --- | --- |
 | `exhaustion-candidate` | 同一 lineage、效率下降、重要位置、第一反向压力 | `three-push / H3-L3 candidate`，等待更强反向证据 |
 | `expansion-or-climax` | 第三推更长/更快、实体或跳空扩大、收盘和跟随增强 | 原方向仍有控制；不是自动反转 |
-| `range-repeat` | 三次测试都在双向边缘附近，外侧没有持续接受 | 转区间边缘逻辑；写 `not_h3_l3` 或观察 |
+| `range-repeat` | 三次测试都在双向边缘附近，外侧没有持续接受 | 若第三推在上沿/下沿并有拒绝，可写 `range_edge_three_push_candidate`；中部或 lineage 不清仍写 `not_h3_l3` 或观察 |
 | `channel-continuation` | 推进沿通道继续，边界未破坏 | 顺势结构候选；不自动升级 MTR |
 | `unclear` | 三段无法在主周期独立分开 | `pending`，不得用三点命名楔形 |
 

@@ -1,6 +1,6 @@
 # PA Research 日线选股规则 v0.1
 
-日期：2026-08-24；合同修订：2026-08-25
+日期：2026-08-24；合同修订：2026-08-25；三推与股票池修订：2026-08-26；H/L EMA 方向与 META 修订：2026-08-26
 文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
 
 这份文件是 PA Research 的日线候选筛选合同。它用于从美股日线图表中筛选少量值得继续研究的 ABC 和 BOP 候选，不是量化扫描器、生产交易规则或下单授权。
@@ -19,12 +19,17 @@
 - 4H/1H/15m 从日线选股中移除，只能在候选入选后做独立深审或订单确认；
 - 将“足够空间”具体化为到第一独立障碍约至少 1R 的粗略几何闸门；
 - 将 H1/H2/L1/L2、H3/L3、普通 BOP 和特殊事件分支明确分层，避免重复统计。
+- 将“强 A → 受控 B → H1/L1 优先”和“普通/偏弱 A → 多次回调 → 区间边缘三推”明确为两条不同筛选路径；后者不因 A 腿不够强而自动否决。
+- 将成熟交易区间的第三推分成“区间边缘候选”和“区间中部观察”；区间边缘反转候选仍须等待反向确认，不能把第三推本身当作入场。
+- 将 H1/H2/L1/L2 的日线 EMA20/50 方向纳入高质量候选闸门：多头两条均向上，空头两条均向下；走平或反向时最多保留为 `pattern_like / observation_only`，不进入普通高质量 H/L。
+- 将多区域共振明确记录为 META（Multiple Edge Trading Area）质量增强项：至少两个独立结构来源在同一回调区域汇聚；META 只能提高合格候选的优先级，不能替代方向、信号、空间或结构止损。
 
 ## 1. 选股范围与阶段边界
 
 ### 1.1 标的范围
 
 - 默认只筛选美国交易所上市的普通股票；股票代码、ETF、指数控制标的不能混在同一候选统计中。
+- 当前股票池默认限定为市值约 30 亿至 1,000 亿美元（`$3B–$100B`，按复核时点）；市值、时间戳和来源必须记录。市值低于/高于范围，或市值证据缺失的标的，不进入高质量每日候选。
 - ETF 或指数可以作为大盘/板块背景对照，但不能替代个股候选。
 - 只使用已经完成的 Daily K 线进行选股；未完成的当日 K 线只能标为观察，不得当作收盘确认。
 - 选股阶段不使用 4H、1H 或 15m 参与候选入选、形态计数或日线主标签。
@@ -39,6 +44,8 @@
 - Daily EMA20、EMA50、EMA200 的相对位置、斜率和价格所在侧；
 - 当前属于开放趋势、成熟区间、区间边缘、过渡还是高潮；
 - 个股所属板块和大盘是否支持、混合或明显反向。
+
+对于 H1/H2/L1/L2，高质量方向还必须满足日线 EMA 斜率闸门：多头 H1/H2 要求 EMA20 和 EMA50 都向上；空头 L1/L2 要求 EMA20 和 EMA50 都向下。任一均线走平、反向或斜率不可见时，不能把该 H/L 当作普通高质量候选；斜率不可见记为 `pending`，走平/反向最多记为 `pattern_like / observation_only`。EMA 触碰本身仍不是形态或触发。
 
 两年背景、重要高低点或 EMA20/50/200 不可见时，最多输出 `pattern_like / pending`，不能进入高质量候选列表。EMA 只提供背景和汇合，不单独构成形态或触发。
 
@@ -56,6 +63,8 @@
 
 1. `ABC-CONT`：方向性 A 腿、受控 B 回调、C 恢复原方向；
 2. `BOP`：事前可见边界被日线接受，回踩守住后重新离开。
+
+ABC 内部优先使用“强 A → 受控 B → H1/L1 → 必要时 H2/L2”的路径；三推/H3-L3 另设“区间边缘三推”研究分支。后者允许 A 腿普通、重叠较多或经历多次回调，但第三推必须到达已确认的区间上沿/下沿，不能只是区间中部摆动。
 
 ABC、H1/H2、L1/L2、三推 H3/L3 和 BOP 的结果必须分层记录。`ABC + H2` 是母结构与内部尝试的关系，不是两个独立优势；突破接受后主标签必须切换为 BOP，不再按普通 ABC-H1/H2 统计。
 
@@ -86,11 +95,13 @@ ABC、H1/H2、L1/L2、三推 H3/L3 和 BOP 的结果必须分层记录。`ABC + 
 - 收盘多数朝推进方向，且有跟随；
 - K 线重叠有限，反向压力没有持续接受。
 
-缓慢爬升、重叠严重、频繁双向回撤或宽慢通道，不作为普通强 A。可以保留为 `ordinary-A / boundary`，但不应进入优先候选。
+强 A 的优先视觉条件是：多头约 3–4 根连续阳线、空头约 3–4 根连续阴线，实体相对饱满，收盘持续靠近推进方向极值，重叠有限并有跟随；推进之间出现跳空时方向证据更强，但跳空不是必要条件，也不能用财报/异常事件跳空冒充普通 A。
+
+缓慢爬升、重叠严重、频繁双向回撤或宽慢通道，不作为普通强 A。可以保留为 `ordinary-A / boundary`，但不应进入强 A→H1/L1 优先路径。强 A 只改变 H1/L1 的研究优先级，不单独授权交易；A 腿普通时，优先等待 H2/L2，或转入下方的区间边缘三推分支。
 
 ### 3.2 B 腿：看控制权变化，不只看深度
 
-B 默认应是受控回调：反向压力后段减弱，在支撑/阻力、EMA20/EMA50 或角色转换区附近稳定，没有形成成熟双向交易区间，也没有完全吞没 A 的结构意义。
+B 默认应是受控回调：价格回到前期高点/低点、突破位或明确支撑/阻力，回调 K 线实体相对较小、重叠或影线增加、表现出犹豫，反向压力后段减弱；同时没有形成成熟双向交易区间，也没有完全吞没 A 的结构意义。
 
 深度或持续时间本身不是自动否决条件，必须分层：
 
@@ -98,7 +109,7 @@ B 默认应是受控回调：反向压力后段减弱，在支撑/阻力、EMA20
 - `deep-but-late-controlled-B`：前段较深或较强，后段明显稳定，降级研究 H2/L2 或条件 ABC；不能与普通 B 混合统计；
 - `uncontrolled-B`：反向压力继续扩张、关键结构被接受、A 几乎被吞没，或已经形成新趋势/宽区间；旧 ABC 结束，排除。
 
-B 进入成熟交易区间后，后续区间中部摆动不能继续继承原 ABC 或 H/L 计数；应切换到区间边缘/失败突破逻辑。
+B 进入成熟交易区间后，后续区间中部摆动不能继续继承原 ABC 或 H/L 计数；区间中部仍应观察。若多次推进最终到达已确认的区间上沿/下沿，则可以切换到区间边缘三推/失败突破逻辑，而不是因为已经区间化就自动排除。
 
 ### 3.3 C 腿：必须恢复方向
 
@@ -118,6 +129,14 @@ C 必须重新朝 A 腿方向推进，并在有意义的位置出现明确的日
 - 如果 A/C 到达左侧前高或前低后停顿，H1/L1 不自动入场；首障碍贴近触发时直接 `valid_no_trade`。
 - 如果价格有效突破并接受左侧前高/前低，主标签切换为 BOP，旧 ABC-H1/H2 合同结束。
 
+### 3.5 H1/H2/L1/L2 的 EMA 方向、回调位置与 META
+
+- 多头 H1/H2 必须位于开放上涨趋势中，且 Daily EMA20、EMA50 均向上；空头 L1/L2 必须位于开放下跌趋势中，且 Daily EMA20、EMA50 均向下。任一均线走平或向反方向运动时，不进入普通高质量 H/L。
+- 多头 B 回调结束/尝试位置，优先靠近向上运行的 EMA20 或 EMA50，或靠近前期低点、支撑、前高突破后的角色转换区；空头 L1/L2 的回调结束/尝试位置，优先靠近向下运行的 EMA20 或 EMA50，或靠近前期高点、阻力、前低跌破后的角色转换区。
+- “靠近 EMA”必须同时看到价格在该区域得到支撑/阻力、拒绝或方向性收复；单纯触碰 EMA、远离 EMA 追价或一根 K 线短暂穿越，不能单独成立 H/L。
+- 如果 EMA、前高/前低、支撑/阻力、角色转换、缺口边缘或其他独立结构在同一回调区域重合，应在图上标出 META 区域并记录组成来源。META 是质量增强和排序因素，不是自动触发器，也不能覆盖 EMA 斜率闸门、首障碍、事件或结构止损。
+- 同一价格簇中的多个标签只算一个 META 位置；不能把同一前高、EMA 和支撑重复计成多个独立优势。
+
 ## 4. ABC 内部计数
 
 - H1、H2 是同一 Daily 回调 lineage 内向上的第一次、第二次有意义尝试；L1、L2 对称。
@@ -125,6 +144,20 @@ C 必须重新朝 A 腿方向推进，并在有意义的位置出现明确的日
 - 新极值、结构性穿越、父级重建或 B 区间化时，先检查计数是否重置；不能用后续走势把新 H1/L1 追记成旧 H2/L2。
 - H3/L3 按三推楔形/第三次压力状态单独识别和统计，不作为普通第三次 H/L 尝试。
 - 在证据尚未冻结时使用 `H1-like / H2-like / L1-like / L2-like`，不要把候选标签写成已经确认的交易合同。
+
+### 4.1 区间边缘三推分支（不要求强 A）
+
+这是与强 A→H1/L1 路径并列的独立研究路径：
+
+- A 腿可以普通、偏弱、重叠较多，或经历较多次回调；不能用强 A 标准把它自动排除；
+- 必须先确认父级是成熟交易区间，并且第三推到达可由两年以上 Daily 左侧确认的上沿/下沿、前期支撑/阻力或角色转换区；
+- 第三推在区间中部时仍是 `range_middle_no_trade / observation_only`，不能因为“数到三”提高等级；
+- 第三推在上沿附近可研究空头反转候选，在下沿附近可研究多头反转候选，但必须出现拒绝、假突破重新回区间或反向信号 K；
+- 第一反向确认可以建立 `range_edge_three_push_candidate`，不必先把它升级为 MTR；MTR/主要趋势反转仍需结构破坏、第二次确认和接受；
+- 若第三推强势收在区间外并获得接受，原反转假设失效，切换为 BOP/趋势延续研究；
+- 结构止损放在第三推极端/区间边界外，第一目标先看区间中线或最近独立障碍；首障碍不足约 1R 时记为 `valid_no_trade`。
+
+区间边缘三推必须与趋势/通道三推、区间中部重复测试分开记录和统计。它是位置优势候选，不是已经验证的高胜率规则。
 
 ## 5. BOP 突破回踩
 
@@ -189,7 +222,7 @@ rough_space_to_first_obstacle:
 下列任一项成立，原则上不进入高质量候选：
 
 - A 腿推动力不足，或只能靠事后结果解释；
-- B 腿失控、过度扩张、完全吞没 A，或已成熟为双向区间；
+- B 腿失控、过度扩张、完全吞没 A，或三推发生在成熟区间中部；成熟区间本身不自动否决区间边缘三推，但必须切换到 4.1 分支；
 - C 没有恢复方向、反复失败或没有可说明的日线信号；
 - 突破只有影线、没有接受，或很快收回原区间；
 - 前方第一独立障碍不足约 1R；
@@ -198,6 +231,7 @@ rough_space_to_first_obstacle:
 - 未来三个交易 session 内有财报，或重大事件未核对；
 - 两年 Daily 左侧、EMA20/50/200 或重要高低点不可见；
 - 依赖 4H/1H/15m 才能成立，而日线本身不支持；
+- H1/H2 的 Daily EMA20/50 不是同时向上，或 L1/L2 的 Daily EMA20/50 不是同时向下；
 - 事件跳空、重订价、同日回测或特殊订单合同未单独标记；
 - 形态只能靠后见之明命名，无法在当时明确识别。
 
@@ -216,6 +250,9 @@ timezone:
 session_state: premarket / RTH / after_hours / historical_close / unknown
 completed_daily_bar_as_of:
 universe_type: US_common_stock
+market_cap_usd:
+market_cap_as_of:
+market_cap_source:
 average_dollar_volume_20d:
 earnings_next_three_sessions:
 event_context:
@@ -230,6 +267,13 @@ two_year_daily_context:
 major_highs_lows:
 support_resistance_and_role_zones:
 daily_ema20_50_200:
+daily_ema20_slope: up / flat / down / unknown
+daily_ema50_slope: up / flat / down / unknown
+h_l_ema_slope_gate: long_pass / short_pass / fail_flat_or_opposite / pending / not_applicable
+h_l_pullback_location:
+meta_confluence: present / absent / unknown
+meta_zone:
+meta_components:
 parent_state:
 direction: long / short / no_valid_direction
 primary_pattern: ABC_CONT / BOP
@@ -237,6 +281,7 @@ secondary_context:
 state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
 lineage_status: same_lineage / reset / unclear / pending
 internal_label: H1 / H2 / L1 / L2 / H3_L3 / none / pending
+range_edge_three_push: yes / no / pending
 bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable
 breakout_boundary:
 acceptance_close:
@@ -270,7 +315,8 @@ main_uncertainty_or_exclusion:
 这份规则只定义选股和分层，不宣称胜率。后续结果必须至少分开统计：
 
 - `ABC-CONT`、H1、H2、L1、L2；
-- 三推 H3/L3；
+- H/L 的 EMA20/50 方向通过、走平/反向边界，以及 META 共振存在/缺失；
+- 趋势/通道三推 H3/L3、区间边缘三推、区间中部重复测试；
 - 普通 BOP、牛旗延续 BOP、财报/事件 BOP、缺口重订；
 - `filled`、`no-fill`、`opening-skip`、`valid_no_trade` 和不同走势 lineage。
 
@@ -284,5 +330,6 @@ main_uncertainty_or_exclusion:
 - [财报/事件/板块/大盘前置闸门](../foundations/05_event_sector_market_gate/README.md)：事件与市场背景；
 - [BOP 真实多日回踩候选审计](../research/bop_multiday_pullback_candidate_audit_2026-08-24_CN.md)：普通多日 BOP 的当前证据缺口；
 - [ABC + H/L 分层历史结果审计](../research/abc_hl_stratified_outcome_audit_2026-08-24_CN.md)：结果字段和统计边界。
+- [三推/H3-L3 压力状态框架](../research/three_push_pressure_state_framework_CN.md)：区间边缘三推与区间中部重复测试的分流。
 
 研究边界：只更新 PA Research；不修改 Codex Trading，不创建量化扫描器，不连接 Execution Agent。
