@@ -17,6 +17,8 @@
 
 - [`PA Research 冻结合同回放器`](backtesting/README.md)：使用固定版本 `backtesting.py` 回放人工冻结的入场、止损、目标和时间合同；不自动识别 pattern，不创建扫描器，不连接 Execution Agent。
 - [`H/L 首批真实样本准入审计`](backtesting/first_hl_sample_intake_2026-08-26_CN.md)：首轮两年 Daily 案例、EMA20/50 闸门、META、首障碍和合同冻结检查；当前仍为 `strict_h_l_contracts_frozen: 0 / no-new-positive`。
+- [`H/L 首批合同回放审计`](backtesting/hl_contract_batch_replay_2026-08-26_CN.md)：第一批人工冻结的 H1/H2/L1/L2 合同、两年 Daily 图和分层回放；共享 lineage、空间闸门和失败 EMA 闸门均单独保留，结论仍为 `no-new-positive`。
+- [`H/L 首批人工看图合同资产`](assets/visual_recognition/2026-08-26/hl_contract_batch/README.md)：本批五张两年 Daily 图及来源、时区和历史数据边界。
 
 ## 优先研究矩阵与专项框架
 

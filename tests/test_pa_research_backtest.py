@@ -236,6 +236,20 @@ class PaResearchBacktestTests(unittest.TestCase):
         self.assertEqual(summary["groups"][0]["h_l_ema_slope_gate"], "long_pass")
         self.assertEqual(summary["groups"][0]["meta_confluence"], "present")
 
+    def test_result_and_summary_preserve_lineage(self):
+        prices = make_prices(
+            [
+                ("2026-01-01", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-02", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-03", 9.5, 10.5, 9.5, 10.2),
+                ("2026-01-04", 10.2, 12.5, 10.1, 12.2),
+            ]
+        )
+        result = run_contract(make_contract(lineage_id="LINEAGE-1"), prices)
+        self.assertEqual(result["lineage_id"], "LINEAGE-1")
+        summary = build_summary([result])
+        self.assertEqual(summary["groups"][0]["lineage_id"], "LINEAGE-1")
+
     def test_summary_is_descriptive_only(self):
         results = [
             {"primary_pattern": "ABC_CONT", "internal_label": "H1", "direction": "long", "order_branch": "stop_confirmation", "event_context": "none", "fill_status": "filled", "trade_result": "win", "realized_R": 2.0, "ambiguous_intrabar": "no"},

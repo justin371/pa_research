@@ -23,7 +23,7 @@ import pandas as pd
 from backtesting import Backtest, Strategy
 
 
-ENGINE_VERSION = "0.2.0"
+ENGINE_VERSION = "0.3.0"
 SUPPORTED_DIRECTIONS = {"long", "short"}
 SUPPORTED_PATTERNS = {"ABC_CONT", "BOP", "H1_L1", "H2_L2", "H3_L3", "RFB", "MTR", "other"}
 SUPPORTED_LABELS = {"H1", "H2", "L1", "L2", "H3_L3", "none", "pending"}
@@ -105,6 +105,7 @@ class BacktestContract:
     ema20_50_200_review: str
     event_context: str
     contract_frozen: str
+    lineage_id: str = ""
     daily_ema20_slope: str = ""
     daily_ema50_slope: str = ""
     h_l_ema_slope_gate: str = ""
@@ -139,6 +140,7 @@ class BacktestContract:
             ema20_50_200_review=_as_string(row.get("ema20_50_200_review")).lower(),
             event_context=_as_string(row.get("event_context")).lower(),
             contract_frozen=_as_string(row.get("contract_frozen")).lower(),
+            lineage_id=_as_string(row.get("lineage_id")),
             daily_ema20_slope=_as_string(row.get("daily_ema20_slope")).lower(),
             daily_ema50_slope=_as_string(row.get("daily_ema50_slope")).lower(),
             h_l_ema_slope_gate=_as_string(row.get("h_l_ema_slope_gate")).lower(),
@@ -492,6 +494,7 @@ def _base_result(contract: BacktestContract, *, fill_status: str, reason: str) -
         "direction": contract.direction,
         "primary_pattern": contract.primary_pattern,
         "internal_label": contract.internal_label,
+        "lineage_id": contract.lineage_id,
         "daily_ema20_slope": contract.daily_ema20_slope,
         "daily_ema50_slope": contract.daily_ema50_slope,
         "h_l_ema_slope_gate": contract.h_l_ema_slope_gate,
@@ -882,6 +885,7 @@ def _aggregate_group(group: pd.DataFrame) -> dict[str, Any]:
         "primary_pattern": group["primary_pattern"].iloc[0],
         "internal_label": group["internal_label"].iloc[0],
         "direction": group["direction"].iloc[0],
+        "lineage_id": group["lineage_id"].iloc[0],
         "daily_ema20_slope": group["daily_ema20_slope"].iloc[0],
         "daily_ema50_slope": group["daily_ema50_slope"].iloc[0],
         "h_l_ema_slope_gate": group["h_l_ema_slope_gate"].iloc[0],
@@ -926,6 +930,7 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         }
 
     stratification_columns = [
+        "lineage_id",
         "daily_ema20_slope",
         "daily_ema50_slope",
         "h_l_ema_slope_gate",
@@ -963,6 +968,7 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             "results are descriptive and do not establish a validated win rate",
             "same-bar stop/target ambiguity is excluded from the win-rate denominator",
             "each contract must be frozen before its outcome and must carry >=2y Daily context evidence",
+            "lineage_id is preserved for dependence control; contracts sharing a lineage are not independent samples",
             "H1/H2/L1/L2 require the matching Daily EMA20/EMA50 slope gate; failed gates remain observation_only and are excluded",
             "META is recorded and stratified as a confluence field; it is not an entry trigger or authorization",
         ],

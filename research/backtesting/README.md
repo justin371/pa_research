@@ -19,7 +19,7 @@ py -3 .\scripts\pa_research_backtest.py `
 程序写出：
 
 - `results.csv`：每个冻结合同一行，包含成交、退出、空间、`realized_R` 和证据状态；
-- `summary.json`：按 pattern、方向、订单分支、事件状态、EMA 斜率闸门和 META 的描述性分层；
+- `summary.json`：按 pattern、方向、订单分支、事件状态、`lineage_id`、EMA 斜率闸门和 META 的描述性分层；
 - `run_metadata.json`：数据源、时间状态、成本和 PA Research 范围声明。
 
 ## 输入合同
@@ -32,7 +32,7 @@ py -3 .\scripts\pa_research_backtest.py `
 sample_id,symbol,decision_date,direction,primary_pattern,internal_label,
 order_branch,entry_trigger,structural_stop,first_obstacle,target_price,
 max_hold_bars,gap_policy,label_source,daily_context_window,
-major_high_low_review,ema20_50_200_review,event_context,contract_frozen
+major_high_low_review,ema20_50_200_review,event_context,contract_frozen,lineage_id
 ```
 
 对于 `internal_label=H1/H2/L1/L2`，还必须填写以下人工看图字段：
@@ -56,6 +56,10 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 - `market_close`：在 `decision_date` 收盘成交；此分支的 `gap_policy` 必须为 `not_applicable`。
 
 `label_source` 必须为 `human_chart_review`，并且必须有 `>=2y` Daily 背景、完整重要高低点审查和完整 EMA20/50/200 审查。`target_price`、结构止损、最大持有 K 线数必须在结果发生前冻结，否则不能进入胜率分母。
+
+`lineage_id` 是可选但建议填写的依赖控制字段：共享同一父级行情、A/B 回调或局部尝试 lineage 的合同可以分别保留，但不能因为触发日期不同就当成独立统计样本。回放器只保留并分层该字段，不替研究者决定哪些样本独立。
+
+本批冻结合同见 [`hl_contracts_2026-08-26.csv`](hl_contracts_2026-08-26.csv)，历史价格快照见 [`hl_contract_batch_prices_2026-08-26.csv`](hl_contract_batch_prices_2026-08-26.csv)，人工图表资产和来源边界见 [`H/L 首批人工看图合同资产`](../assets/visual_recognition/2026-08-26/hl_contract_batch/README.md)。
 
 ## 关键执行边界
 
