@@ -16,6 +16,7 @@
 ## 冻结合同回放
 
 - [`PA Research 冻结合同回放器`](backtesting/README.md)：使用固定版本 `backtesting.py` 回放人工冻结的入场、止损、目标和时间合同；不自动识别 pattern，不创建扫描器，不连接 Execution Agent。
+- [`H/L 首批真实样本准入审计`](backtesting/first_hl_sample_intake_2026-08-26_CN.md)：首轮两年 Daily 案例、EMA20/50 闸门、META、首障碍和合同冻结检查；当前仍为 `strict_h_l_contracts_frozen: 0 / no-new-positive`。
 
 ## 优先研究矩阵与专项框架
 
