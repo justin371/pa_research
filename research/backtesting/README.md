@@ -67,6 +67,10 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 
 本轮大样本回放审计见 [`hl_large_replay_2026-08-27_CN.md`](hl_large_replay_2026-08-27_CN.md)。其 `76.47%` 仅是 17 条完成成交的描述性胜率；严格空间合格完成样本只有 1 条，当前 `validated win-rate` 仍为 `not-computable`，结论保持 `no-new-positive`。
 
+下一批 H/L 人工冻结合同见 [`hl_next_contracts_2026-08-27.csv`](hl_next_contracts_2026-08-27.csv)，历史价格快照见 [`hl_next_prices_2026-08-27.csv`](hl_next_prices_2026-08-27.csv)，冻结前人工选择和事件分层记录见 [`hl_next_selection_2026-08-27_CN.md`](hl_next_selection_2026-08-27_CN.md)，图表资产和来源边界见 [`H/L 下一批人工看图回放资产`](../assets/visual_recognition/2026-08-27/hl_next_backtest/README.md)。本批包含 5 条合同：3 条普通非事件、2 条事件驱动；全部通过事前 `>=1R` 空间字段，但只有 2 条成交完成，1 胜 1 负，描述性胜率 `50.00%`，60% 目标仍未验证。
+
+下一批分层回放审计见 [`hl_next_replay_2026-08-27_CN.md`](hl_next_replay_2026-08-27_CN.md)。普通非事件组 3 条均为 opening-skip、没有完成成交分母；事件组 2 条为 1 胜 1 负。事件组与普通组不混算，当前结论继续为 `no-new-positive`。
+
 ## 关键执行边界
 
 1. 订单只从 `decision_date` 之后开始生效；程序不读取未来结果来创建 pattern 标签。

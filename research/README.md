@@ -24,6 +24,8 @@
 - [`H/L 大样本人工合同冻结记录`](backtesting/hl_large_selection_2026-08-27_CN.md)：COHR、RBLX、MAR 三标的、37 条人工冻结 H1/H2/L1/L2 合同和用户修正后的 60% 待检验目标。
 - [`H/L 大样本回测人工看图资产`](assets/visual_recognition/2026-08-27/hl_large_backtest/README.md)：23 张 Matplotlib 两年 Daily 背景/局部序列图；无 pattern 标签和结果标记。
 - [`H/L 大样本回放审计`](backtesting/hl_large_replay_2026-08-27_CN.md)：37 条冻结合同的描述性回放、60% 目标检验、严格 `>=1R` 空间子集和 `no-new-positive` 结论。
+- [`H/L 下一批人工合同冻结记录`](backtesting/hl_next_selection_2026-08-27_CN.md)：ZS、DDOG 两个中等至大型市值标的的 5 条 H1/L1 人工冻结合同；包含两年 Daily 背景、EMA20/50 闸门、重要高低点、事件隔离和首障碍空间。
+- [`H/L 下一批分层回放审计`](backtesting/hl_next_replay_2026-08-27_CN.md)：3 条普通非事件与 2 条事件驱动合同的独立回放；2 条完成成交为 1 胜 1 负，60% 目标仍未验证，结论保持 `no-new-positive`。
 
 ## 优先研究矩阵与专项框架
 
