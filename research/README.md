@@ -31,6 +31,8 @@
 - [`H/L 下一批（二）人工看图回放资产`](assets/visual_recognition/2026-08-27/hl_next2_backtest/README.md)：TOL、VEEV 的冻结前两年 Daily 图，以及 PHM H2-like/EMA 闸门拒绝边界图；Matplotlib 只负责渲染。
 - [`H/L 下一批（三）人工候选边界审计`](backtesting/hl_next3_selection_2026-08-27_CN.md)：18 个候选的两年 Daily、重要高低点、支撑阻力、EMA20/50/200、事件、lineage、B 质量和空间复核；新合格交易合同为 0。
 - [`H/L 下一批（三）回放状态审计`](backtesting/hl_next3_replay_2026-08-27_CN.md)：无合格合同，不创建占位回放分母；胜率不可计算，60% 继续待检验，结论保持 `no-new-positive`。
+- [`H/L 下一批（四）人工合同冻结记录`](backtesting/hl_next4_selection_2026-08-27_CN.md)：24 个新市值约 `$3B–$100B` 美国普通股的两年 Daily 人工复核；仅 CBOE、ROST 的 2 条 `long / H1` 通过全部 strong-A、controlled-B、EMA、事件、lineage 和 `>=1R` 闸门。
+- [`H/L 下一批（四）分层回放审计`](backtesting/hl_next4_replay_2026-08-27_CN.md)：2 条合同均成交但均未到达第一障碍，0 胜 2 负、`-1.5090R`；95% Wilson 区间约 `0.00%–65.76%`，60% 目标未验证，结论保持 `no-new-positive`。
 
 ## 优先研究矩阵与专项框架
 

@@ -9,7 +9,7 @@
 - 原始 OHLC K 线、EMA20/50/200 和原始成交量；
 - 源时区 `America/New_York`。
 
-图上不显示 H1/L1 标签、入场位、止损、第一障碍或回放结果。标签和合同参数在回放前写入 [`hl_next_contracts_2026-08-27.csv`](../../../backtesting/hl_next_contracts_2026-08-27.csv)，不从结果反推。
+图上不显示 H1/L1 标签、入场位、止损、第一障碍或回放结果。标签和合同参数在回放前写入 [`hl_next_contracts_2026-08-27.csv`](../../../../backtesting/hl_next_contracts_2026-08-27.csv)，不从结果反推。
 
 ## 图像清单
 

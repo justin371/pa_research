@@ -9,7 +9,7 @@
 - EMA20、EMA50、EMA200；
 - 原始 K 线和日期轴。
 
-图中没有 H1/H2/L1/L2 标签、入场标记、止损标记或结果标记。标签和风险合同写入回测前的 [`hl_large_contracts_2026-08-27.csv`](../../../backtesting/hl_large_contracts_2026-08-27.csv)，不能从回放结果反向修改。
+图中没有 H1/H2/L1/L2 标签、入场标记、止损标记或结果标记。标签和风险合同写入回测前的 [`hl_large_contracts_2026-08-27.csv`](../../../../backtesting/hl_large_contracts_2026-08-27.csv)，不能从回放结果反向修改。
 
 ## 数据边界
 

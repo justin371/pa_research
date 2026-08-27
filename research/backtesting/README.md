@@ -77,6 +77,10 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 
 下一批（三）人工候选边界审计见 [`hl_next3_selection_2026-08-27_CN.md`](hl_next3_selection_2026-08-27_CN.md)，回放状态见 [`hl_next3_replay_2026-08-27_CN.md`](hl_next3_replay_2026-08-27_CN.md)。本批人工复核 18 个决策日，但没有同时通过普通非事件、清晰 H/L lineage、EMA20/50 闸门和 `>=1R` 首障碍空间的新合同；因此交易回放分母为 0，胜率不可计算，结论继续为 `no-new-positive`。Matplotlib `3.10.9` 已安装并固定，不为本批重复安装。
 
+下一批（四）人工冻结合同见 [`hl_next4_contracts_2026-08-27.csv`](hl_next4_contracts_2026-08-27.csv)，历史价格快照见 [`hl_next4_prices_2026-08-27.csv`](hl_next4_prices_2026-08-27.csv)，冻结前人工选择和 24 只新普通股的两年 Daily 审查见 [`hl_next4_selection_2026-08-27_CN.md`](hl_next4_selection_2026-08-27_CN.md)。本批只冻结 CBOE、ROST 两条普通非事件口径下的 `long / H1`；H2/L1/L2 没有合格新正例。
+
+下一批（四）分层回放审计见 [`hl_next4_replay_2026-08-27_CN.md`](hl_next4_replay_2026-08-27_CN.md)。两条合同均成交但均未到达第一障碍，0 胜 2 负、描述性胜率 `0.00%`、总计 `-1.5090R`；95% Wilson 区间约 `0.00%–65.76%`，60% 目标继续待检验，结论保持 `no-new-positive`。Matplotlib `3.10.9` 只用于人工图表渲染，不识别 pattern、不创建扫描器、不连接 Execution Agent。
+
 ## 关键执行边界
 
 1. 订单只从 `decision_date` 之后开始生效；程序不读取未来结果来创建 pattern 标签。
