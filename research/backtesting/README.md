@@ -1,8 +1,8 @@
 # PA Research 冻结合同回放器
 
-状态：`research_only / descriptive_only / not-validated`
+状态：`research_only / descriptive_only / not-validated / no-new-positive`
 
-这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.0`）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
+这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.1`）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
 
 ## 运行
 
@@ -65,6 +65,8 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 
 本轮大样本冻结合同见 [`hl_large_contracts_2026-08-27.csv`](hl_large_contracts_2026-08-27.csv)，历史价格快照见 [`hl_large_prices_2026-08-27.csv`](hl_large_prices_2026-08-27.csv)，冻结前人工筛选记录见 [`hl_large_selection_2026-08-27_CN.md`](hl_large_selection_2026-08-27_CN.md)，图表资产和来源边界见 [`H/L 大样本回测人工看图资产`](../assets/visual_recognition/2026-08-27/hl_large_backtest/README.md)。本轮仍是独立研究批次；目标胜率为用户修正后的 `60%`，不是生产规则或已验证结果。
 
+本轮大样本回放审计见 [`hl_large_replay_2026-08-27_CN.md`](hl_large_replay_2026-08-27_CN.md)。其 `76.47%` 仅是 17 条完成成交的描述性胜率；严格空间合格完成样本只有 1 条，当前 `validated win-rate` 仍为 `not-computable`，结论保持 `no-new-positive`。
+
 ## 关键执行边界
 
 1. 订单只从 `decision_date` 之后开始生效；程序不读取未来结果来创建 pattern 标签。
@@ -77,4 +79,4 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 
 ## 目前不能说明什么
 
-这个工具不是图表识别器、量化扫描器或生产交易系统。它只能回答：在人工冻结的同一入场/止损/目标/时间合同下，历史价格路径如何结束。样本不足、合同不一致、共享 lineage、事件分层或未解决的同 K 线冲突，都只能做描述性统计；当前 PA Research 的总体验证状态仍是 `no-new-positive`、`win_rate: not-computable`。
+这个工具不是图表识别器、量化扫描器或生产交易系统。它只能回答：在人工冻结的同一入场/止损/目标/时间合同下，历史价格路径如何结束。样本不足、合同不一致、共享 lineage、事件分层或未解决的同 K 线冲突，都只能做描述性统计；当前 PA Research 的总体验证状态仍是 `no-new-positive`、`validated win-rate: not-computable`。

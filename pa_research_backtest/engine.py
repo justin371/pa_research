@@ -23,7 +23,7 @@ import pandas as pd
 from backtesting import Backtest, Strategy
 
 
-ENGINE_VERSION = "0.3.0"
+ENGINE_VERSION = "0.3.1"
 SUPPORTED_DIRECTIONS = {"long", "short"}
 SUPPORTED_PATTERNS = {"ABC_CONT", "BOP", "H1_L1", "H2_L2", "H3_L3", "RFB", "MTR", "other"}
 SUPPORTED_LABELS = {"H1", "H2", "L1", "L2", "H3_L3", "none", "pending"}
@@ -592,6 +592,30 @@ def _space_gate(space_r: float | None) -> str:
     return "positive"
 
 
+def _classify_protective_exit(contract: BacktestContract, exit_price: float) -> str:
+    """Classify a non-time exit even when the exit bar gaps through a level.
+
+    backtesting.py fills a stop/limit protective order at the opening price
+    when the opening bar gaps through that order.  Comparing the reported
+    exit price for exact equality therefore mislabels valid target/stop exits
+    as ``data_end``.  Same-bar stop/target conflicts are handled separately by
+    ``_find_ambiguous_bar`` before this helper is called.
+    """
+
+    tolerance = 1e-9
+    if contract.direction == "long":
+        if exit_price >= contract.target_price - tolerance:
+            return "target"
+        if exit_price <= contract.structural_stop + tolerance:
+            return "stop"
+    else:
+        if exit_price <= contract.target_price + tolerance:
+            return "target"
+        if exit_price >= contract.structural_stop - tolerance:
+            return "stop"
+    return "data_end"
+
+
 def run_contract(
     contract: BacktestContract,
     prices: pd.DataFrame,
@@ -778,12 +802,7 @@ def run_contract(
             trade_result = "scratch"
         evidence_status = "comparable"
     else:
-        if math.isclose(exit_price, contract.target_price, rel_tol=1e-9, abs_tol=1e-9):
-            exit_reason = "target"
-        elif math.isclose(exit_price, contract.structural_stop, rel_tol=1e-9, abs_tol=1e-9):
-            exit_reason = "stop"
-        else:
-            exit_reason = "data_end"
+        exit_reason = _classify_protective_exit(contract, exit_price)
         if exit_reason == "data_end":
             path_result = "incomplete-horizon"
             trade_result = "pending"

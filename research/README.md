@@ -23,6 +23,7 @@
 - [`H/L 首批人工看图合同资产`](assets/visual_recognition/2026-08-26/hl_contract_batch/README.md)：本批五张两年 Daily 图及来源、时区和历史数据边界。
 - [`H/L 大样本人工合同冻结记录`](backtesting/hl_large_selection_2026-08-27_CN.md)：COHR、RBLX、MAR 三标的、37 条人工冻结 H1/H2/L1/L2 合同和用户修正后的 60% 待检验目标。
 - [`H/L 大样本回测人工看图资产`](assets/visual_recognition/2026-08-27/hl_large_backtest/README.md)：23 张 Matplotlib 两年 Daily 背景/局部序列图；无 pattern 标签和结果标记。
+- [`H/L 大样本回放审计`](backtesting/hl_large_replay_2026-08-27_CN.md)：37 条冻结合同的描述性回放、60% 目标检验、严格 `>=1R` 空间子集和 `no-new-positive` 结论。
 
 ## 优先研究矩阵与专项框架
 

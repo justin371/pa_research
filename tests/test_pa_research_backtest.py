@@ -144,6 +144,36 @@ class PaResearchBacktestTests(unittest.TestCase):
         self.assertEqual(result["trade_result"], "win")
         self.assertAlmostEqual(result["realized_R"], 2.0)
 
+    def test_target_gap_after_entry_is_a_completed_target(self):
+        prices = make_prices(
+            [
+                ("2026-01-01", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-02", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-03", 9.5, 10.5, 9.5, 10.2),
+                ("2026-01-04", 13.0, 13.5, 12.5, 13.2),
+            ]
+        )
+        result = run_contract(make_contract(), prices)
+        self.assertEqual(result["fill_status"], "filled")
+        self.assertEqual(result["exit_reason"], "target")
+        self.assertEqual(result["trade_result"], "win")
+        self.assertAlmostEqual(result["realized_R"], 3.0)
+
+    def test_stop_gap_after_entry_is_a_completed_stop(self):
+        prices = make_prices(
+            [
+                ("2026-01-01", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-02", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-03", 9.5, 10.5, 9.5, 10.2),
+                ("2026-01-04", 8.0, 8.5, 7.5, 8.2),
+            ]
+        )
+        result = run_contract(make_contract(), prices)
+        self.assertEqual(result["fill_status"], "filled")
+        self.assertEqual(result["exit_reason"], "stop")
+        self.assertEqual(result["trade_result"], "loss")
+        self.assertAlmostEqual(result["realized_R"], -2.0)
+
     def test_same_bar_stop_target_is_excluded(self):
         prices = make_prices(
             [
