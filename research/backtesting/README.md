@@ -71,6 +71,10 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 
 下一批分层回放审计见 [`hl_next_replay_2026-08-27_CN.md`](hl_next_replay_2026-08-27_CN.md)。普通非事件组 3 条均为 opening-skip、没有完成成交分母；事件组 2 条为 1 胜 1 负。事件组与普通组不混算，当前结论继续为 `no-new-positive`。
 
+下一批（二）人工冻结合同见 [`hl_next2_contracts_2026-08-27.csv`](hl_next2_contracts_2026-08-27.csv)，历史价格快照见 [`hl_next2_prices_2026-08-27.csv`](hl_next2_prices_2026-08-27.csv)，冻结前人工选择和 H2/L2 边界记录见 [`hl_next2_selection_2026-08-27_CN.md`](hl_next2_selection_2026-08-27_CN.md)，图表资产和来源边界见 [`H/L 下一批（二）人工看图回放资产`](../assets/visual_recognition/2026-08-27/hl_next2_backtest/README.md)。本批冻结 2 条普通非事件 H1（TOL、VEEV）；H2/L2 没有合格新正例，未为凑样本加入。
+
+下一批（二）分层回放审计见 [`hl_next2_replay_2026-08-27_CN.md`](hl_next2_replay_2026-08-27_CN.md)。2 条合同均成交并到达第一障碍，描述性结果 2 胜 0 负、100.00%、总计 +2.5925R；95% Wilson 区间约 34.24%–100.00%，样本不足，60% 仍未验证，结论保持 `no-new-positive`。
+
 ## 关键执行边界
 
 1. 订单只从 `decision_date` 之后开始生效；程序不读取未来结果来创建 pattern 标签。

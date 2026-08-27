@@ -26,6 +26,9 @@
 - [`H/L 大样本回放审计`](backtesting/hl_large_replay_2026-08-27_CN.md)：37 条冻结合同的描述性回放、60% 目标检验、严格 `>=1R` 空间子集和 `no-new-positive` 结论。
 - [`H/L 下一批人工合同冻结记录`](backtesting/hl_next_selection_2026-08-27_CN.md)：ZS、DDOG 两个中等至大型市值标的的 5 条 H1/L1 人工冻结合同；包含两年 Daily 背景、EMA20/50 闸门、重要高低点、事件隔离和首障碍空间。
 - [`H/L 下一批分层回放审计`](backtesting/hl_next_replay_2026-08-27_CN.md)：3 条普通非事件与 2 条事件驱动合同的独立回放；2 条完成成交为 1 胜 1 负，60% 目标仍未验证，结论保持 `no-new-positive`。
+- [`H/L 下一批（二）人工合同冻结记录`](backtesting/hl_next2_selection_2026-08-27_CN.md)：TOL、VEEV 两条普通非事件 H1 合同、两年 Daily 视觉背景、EMA20/50 闸门、事件隔离、首障碍空间和 H2/L2 边界排除记录。
+- [`H/L 下一批（二）分层回放审计`](backtesting/hl_next2_replay_2026-08-27_CN.md)：2 条 H1 合同均成交并到达第一障碍，描述性 2 胜 0 负；只有两个 lineage，Wilson 下界约 34.24%，60% 目标仍未验证，结论保持 `no-new-positive`。
+- [`H/L 下一批（二）人工看图回放资产`](assets/visual_recognition/2026-08-27/hl_next2_backtest/README.md)：TOL、VEEV 的冻结前两年 Daily 图，以及 PHM H2-like/EMA 闸门拒绝边界图；Matplotlib 只负责渲染。
 
 ## 优先研究矩阵与专项框架
 
