@@ -33,6 +33,8 @@
 - [`H/L 下一批（三）回放状态审计`](backtesting/hl_next3_replay_2026-08-27_CN.md)：无合格合同，不创建占位回放分母；胜率不可计算，60% 继续待检验，结论保持 `no-new-positive`。
 - [`H/L 下一批（四）人工合同冻结记录`](backtesting/hl_next4_selection_2026-08-27_CN.md)：24 个新市值约 `$3B–$100B` 美国普通股的两年 Daily 人工复核；仅 CBOE、ROST 的 2 条 `long / H1` 通过全部 strong-A、controlled-B、EMA、事件、lineage 和 `>=1R` 闸门。
 - [`H/L 下一批（四）分层回放审计`](backtesting/hl_next4_replay_2026-08-27_CN.md)：2 条合同均成交但均未到达第一障碍，0 胜 2 负、`-1.5090R`；95% Wilson 区间约 `0.00%–65.76%`，60% 目标未验证，结论保持 `no-new-positive`。
+- [`H/L 下一批（五）人工合同冻结记录`](backtesting/hl_next5_selection_2026-08-27_CN.md)：12 只新市值约 `$3B–$100B` 美国普通股的两年 Daily 人工复核；仅冻结 MCHP、NDAQ 的 6 条 `short / L1` 合同，没有合格的新 H2 或 L2 正例。
+- [`H/L 下一批（五）分层回放审计`](backtesting/hl_next5_replay_2026-08-27_CN.md)：6 条人工合同中 5 条成交并完成，3 胜 2 负、合并描述性 `60.00%`、`+3.4812R`；普通、财报邻近和财报驱动分层不混算，60% 目标未验证，结论保持 `no-new-positive`。
 
 ## 优先研究矩阵与专项框架
 

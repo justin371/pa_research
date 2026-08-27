@@ -81,6 +81,10 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 
 下一批（四）分层回放审计见 [`hl_next4_replay_2026-08-27_CN.md`](hl_next4_replay_2026-08-27_CN.md)。两条合同均成交但均未到达第一障碍，0 胜 2 负、描述性胜率 `0.00%`、总计 `-1.5090R`；95% Wilson 区间约 `0.00%–65.76%`，60% 目标继续待检验，结论保持 `no-new-positive`。Matplotlib `3.10.9` 只用于人工图表渲染，不识别 pattern、不创建扫描器、不连接 Execution Agent。
 
+下一批（五）人工冻结合同见 [`hl_next5_contracts_2026-08-27.csv`](hl_next5_contracts_2026-08-27.csv)，历史价格快照见 [`hl_next5_prices_2026-08-27.csv`](hl_next5_prices_2026-08-27.csv)，冻结前人工选择记录见 [`hl_next5_selection_2026-08-27_CN.md`](hl_next5_selection_2026-08-27_CN.md)。本批从 12 只新市值约 `$3B–$100B` 的美国普通股中，仅冻结 MCHP、NDAQ 两个标的的 6 条 `short / L1` 合同；没有为凑数量加入 H2 或 L2。
+
+下一批（五）分层回放审计见 [`hl_next5_replay_2026-08-27_CN.md`](hl_next5_replay_2026-08-27_CN.md)。6 条合同中 5 条成交并完成，3 胜 2 负，合并描述性胜率 `60.00%`、总计 `+3.4812R`；普通非事件组为 2 胜 1 负，财报邻近与财报驱动样本单独统计。样本极小、4/5 完成交易来自 NDAQ，且无 H2/L2 对照，60% 仍未验证，结论保持 `no-new-positive`。Matplotlib `3.10.9` 只用于两年 Daily 图表人工审阅和渲染，回放使用固定的 `backtesting.py 0.6.6`；不识别 pattern、不创建扫描器、不连接 Execution Agent。
+
 ## 关键执行边界
 
 1. 订单只从 `decision_date` 之后开始生效；程序不读取未来结果来创建 pattern 标签。
