@@ -21,6 +21,8 @@
 - [`H/L 第二批合同回放审计`](backtesting/hl_contract_batch2_replay_2026-08-26_CN.md)：第二批三个独立 lineage 的 H2/L1 合同、两年 Daily 图、EMA 闸门、空间边界和分层回放；结论继续单独维护 `no-new-positive`。
 - [`H/L 第二批人工看图合同资产`](assets/visual_recognition/2026-08-26/hl_contract_batch2/README.md)：KLAC、TSM、ADBE 三张两年 Daily 图及公共历史数据来源边界。
 - [`H/L 首批人工看图合同资产`](assets/visual_recognition/2026-08-26/hl_contract_batch/README.md)：本批五张两年 Daily 图及来源、时区和历史数据边界。
+- [`H/L 大样本人工合同冻结记录`](backtesting/hl_large_selection_2026-08-27_CN.md)：COHR、RBLX、MAR 三标的、37 条人工冻结 H1/H2/L1/L2 合同和用户修正后的 60% 待检验目标。
+- [`H/L 大样本回测人工看图资产`](assets/visual_recognition/2026-08-27/hl_large_backtest/README.md)：23 张 Matplotlib 两年 Daily 背景/局部序列图；无 pattern 标签和结果标记。
 
 ## 优先研究矩阵与专项框架
 

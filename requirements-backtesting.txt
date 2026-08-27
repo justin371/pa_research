@@ -1,2 +1,4 @@
 # Research-only replay dependency; pin the reviewed upstream release.
 backtesting==0.6.6
+# Optional research-review renderer; used for human chart audit assets only.
+matplotlib==3.10.9

@@ -63,6 +63,8 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 
 第二批冻结合同见 [`hl_contracts_batch2_2026-08-26.csv`](hl_contracts_batch2_2026-08-26.csv)，历史价格快照见 [`hl_contract_batch2_prices_2026-08-26.csv`](hl_contract_batch2_prices_2026-08-26.csv)，人工图表资产和来源边界见 [`H/L 第二批人工看图合同资产`](../assets/visual_recognition/2026-08-26/hl_contract_batch2/README.md)。第二批仍是独立研究批次，不与首批结果合并为已验证胜率。
 
+本轮大样本冻结合同见 [`hl_large_contracts_2026-08-27.csv`](hl_large_contracts_2026-08-27.csv)，历史价格快照见 [`hl_large_prices_2026-08-27.csv`](hl_large_prices_2026-08-27.csv)，冻结前人工筛选记录见 [`hl_large_selection_2026-08-27_CN.md`](hl_large_selection_2026-08-27_CN.md)，图表资产和来源边界见 [`H/L 大样本回测人工看图资产`](../assets/visual_recognition/2026-08-27/hl_large_backtest/README.md)。本轮仍是独立研究批次；目标胜率为用户修正后的 `60%`，不是生产规则或已验证结果。
+
 ## 关键执行边界
 
 1. 订单只从 `decision_date` 之后开始生效；程序不读取未来结果来创建 pattern 标签。
