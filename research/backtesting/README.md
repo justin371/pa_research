@@ -75,6 +75,8 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 
 下一批（二）分层回放审计见 [`hl_next2_replay_2026-08-27_CN.md`](hl_next2_replay_2026-08-27_CN.md)。2 条合同均成交并到达第一障碍，描述性结果 2 胜 0 负、100.00%、总计 +2.5925R；95% Wilson 区间约 34.24%–100.00%，样本不足，60% 仍未验证，结论保持 `no-new-positive`。
 
+下一批（三）人工候选边界审计见 [`hl_next3_selection_2026-08-27_CN.md`](hl_next3_selection_2026-08-27_CN.md)，回放状态见 [`hl_next3_replay_2026-08-27_CN.md`](hl_next3_replay_2026-08-27_CN.md)。本批人工复核 18 个决策日，但没有同时通过普通非事件、清晰 H/L lineage、EMA20/50 闸门和 `>=1R` 首障碍空间的新合同；因此交易回放分母为 0，胜率不可计算，结论继续为 `no-new-positive`。Matplotlib `3.10.9` 已安装并固定，不为本批重复安装。
+
 ## 关键执行边界
 
 1. 订单只从 `decision_date` 之后开始生效；程序不读取未来结果来创建 pattern 标签。
