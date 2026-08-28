@@ -10,6 +10,8 @@
 
 ## 共同图表范围前置
 
+该入口的证据头还必须记录 `data_status: historical / delayed / live_confirmed / incomplete`、`as_of_time`、`chart_scope` 和 `timeframes_seen`；历史、延迟、实时已确认与不完整不能互换。
+
 进入失败突破/高潮判断前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点、主要低点、支撑阻力、前高/前低、EMA20/50/200、当前父级状态和第一独立障碍。再核对强 A 与受控 B；涉及 H/L 时，Daily EMA20/50 必须与方向一致。缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`，不能凭一根扩张 K 或局部影线升级为可交易反转。
 
 ## 视觉定义
@@ -46,8 +48,10 @@ rough_R_R:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: reverse_stop / role_reversal_retest / gap_reprice / same_contract / management
 original_direction_reaccepted:
-final_state: continuation / small-reversal / range / MTR-candidate / no-trade
+breakout_climax_state: continuation / small_reversal / range / mtr_candidate / pending
 ```
+
+`breakout_climax_state` 只是本目录的 pattern-specific 分流；最终研究、交易、闸门和交接结论仍必须分别填写 canonical `research_state`、`trade_state`、`gate_result` 和 `handoff_status`。
 
 ## 与相邻 pattern 的边界
 

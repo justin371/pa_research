@@ -19,6 +19,27 @@ It is not the live trading system and does not place orders. PA Research may use
 - 如果只能取得结构化数据而没有足够的图表上下文，结论必须标为“数据审计/候选”，不能写成完整视觉判断。
 - 研究文件应把“视觉结构判断”和“数值核验”分栏记录，避免为了方便回测而把主观结构偷偷改写成伪精确阈值。
 
+### Common visual preflight
+
+每个 pattern 入口都先使用同一套视觉前置：查看同一标的至少两年的 Daily 左侧（图表支持时），标出重要高点/低点、支撑阻力、EMA20/50/200、父级位置和第一独立障碍；再判断 A 腿是否强、B 回调是否受控。共同证据头至少保留以下 canonical 字段：
+
+```text
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timeframes_seen:
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
+major_highs_lows:
+daily_ema20_50_200:
+a_leg_quality: strong / ordinary / unclear / event_driven
+b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear
+first_independent_obstacle:
+```
+
+`data_status`、时间戳和 `chart_scope` 描述证据是否可用，不能用局部图或后续走势补写缺失的两年背景。批次级 `two_year_chart_coverage` 只是覆盖摘要；逐标的仍必须填写 `daily_context_window` 和两个 review 完整度字段。独立主题可以把强 A/受控 B 作为背景对照，但不因此继承 ABC/H-L 计数。
+
 ## Research phases: visual discovery before quantification
 
 当前阶段不是量化建模，而是建立一个真正看得懂 Price Action 图表的研究助手。研究顺序分三层：

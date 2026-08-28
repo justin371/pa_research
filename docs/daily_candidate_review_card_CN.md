@@ -90,7 +90,8 @@ market_state: aligned / mixed / counter / unknown
 
 ```text
 daily_context_window: >=2y / <2y / unavailable
-chart_scope: full_2y_plus_local_zoom / partial / unavailable
+chart_scope: full / partial / unavailable
+timeframes_seen:
 major_high_low_review: complete / partial / unavailable
 major_highs:
 major_lows:
@@ -101,6 +102,8 @@ leftmost_relevant_obstacle:
 
 daily_ema20_slope: up / flat / down / unknown
 daily_ema50_slope: up / flat / down / unknown
+ema20_50_200_review: complete / partial / unavailable
+daily_ema20_50_200:
 daily_ema200_context:
 price_vs_ema20_50_200:
 h_l_ema_slope_gate: long_pass / short_pass / fail_flat_or_opposite / pending / not_applicable
@@ -109,6 +112,8 @@ h_l_pullback_location:
 parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 left_context_summary:
 ```
+
+`two_year_chart_coverage` 是批次级覆盖摘要；逐标的必须以 `daily_context_window`、`chart_scope`、`major_high_low_review` 和 `ema20_50_200_review` 记录实际证据。`major_highs`/`major_lows` 是 canonical `major_highs_lows` 的细分，`price_vs_ema20_50_200` 是 `daily_ema20_50_200` 的补充描述，不能替代审查完整度字段。
 
 左侧高点/低点至少要记录日期或价格区域，并说明它是单次极值、反复测试、区间边界还是角色转换。多个相近价格的阻力要合并成一个阻力簇，不能用同一位置重复计算空间。
 
@@ -168,10 +173,11 @@ space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / 
 research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
 trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
 gate_result: pass / conditional / observation_only / valid_no_trade / pending
-final_state:
 failure_or_no_trade_reason:
 main_uncertainty_or_exclusion:
 ```
+
+本卡不再使用含义不明确的 `final_state` 别名；`research_state`、`trade_state` 和 `gate_result` 必须各自保留，批次汇总另用下方的分类列表表达。
 
 建议按以下顺序输出，防止把形态和交易混成一个结论：
 

@@ -12,6 +12,10 @@
 
 ## 图表范围前置
 
+该入口的证据头还必须记录 `data_status: historical / delayed / live_confirmed / incomplete`、`as_of_time`、`chart_scope` 和 `timeframes_seen`；历史、延迟、实时已确认与不完整不能互换。
+
+开放趋势/通道路径的 A/B 背景分别记录为 `a_leg_quality` 与 `b_leg_class`；区间边缘路径允许普通 A，但仍必须记录边缘位置、反向拒绝和空间。
+
 三推或 H3/L3 命名前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录主要高点、主要低点、支撑阻力和 EMA20/50/200，再回到局部周期分隔三次推进。统一的母腿、lineage 和 reset 账本见[`H/L lineage 与三推状态视觉边界复核`](../../research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md)；两年背景或主周期分隔缺失时不得冻结三推/H3/L3。
 
 ## 视觉定义

@@ -61,11 +61,11 @@
 
 ```text
 contract_scope
-timeframe / data_status / as_of_time
-parent_state / market_context
+timeframes_seen / data_status / as_of_time / timezone / session_state / chart_scope
+parent_state / market_context_id
 direction: long / short / no_valid_direction
-left_structure_and_location
-directional_leg_or_range_edge
+left_structure_and_location / major_highs_lows / support_resistance_and_role_zones
+daily_ema20_50_200 / a_leg_quality / b_leg_class / b_leg_location
 lineage_status / lineage_id / internal_label / range_edge_three_push
 daily_context_window / major_high_low_review / ema20_50_200_review
 daily_ema20_slope / daily_ema50_slope / h_l_ema_slope_gate / h_l_pullback_location
@@ -77,7 +77,7 @@ structural_stop / structural_invalidation
 first_independent_obstacle / rough_space_to_first_obstacle_R / space_status / rough_R_R
 event_context / event_bucket / sector_state / market_state / permission / gate_result
 research_state / trade_state / thesis_state / handoff_status
-final_state / failure_or_no_trade_reason
+main_uncertainty_or_exclusion / failure_or_no_trade_reason
 ```
 
 ## 范围边界
@@ -100,6 +100,8 @@ final_state / failure_or_no_trade_reason
 16 个目录的完整入口、独立主题边界和 canonical `primary_pattern`/`internal_label`/`state_transition` 映射见[`Pattern 索引、别名与主次标签边界审计`](../research/pattern_index_alias_boundary_audit_2026-08-29_CN.md)。
 
 16 个目录的两年 Daily 左侧、重要高低点、EMA20/50/200、强 A/受控 B、位置和首障碍共同前置证据见[`Pattern 视觉复核前置证据审计`](../research/pattern_visual_preflight_audit_2026-08-29_CN.md)。
+
+共同视觉前置字段的 canonical 名称、批次级与逐标的覆盖边界见[`共同视觉前置字段一致性审计`](../research/common_visual_preflight_field_consistency_audit_2026-08-29_CN.md)。
 
 16 个目录的案例入口、条件/边界/no-trade 文案和 canonical `valid_no_trade` 状态见[`Pattern 案例入口与状态一致性审计`](../research/pattern_case_entry_status_audit_2026-08-29_CN.md)。
 

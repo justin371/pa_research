@@ -16,6 +16,7 @@
 - [`Pattern 索引、别名与主次标签边界审计`](../research/pattern_index_alias_boundary_audit_2026-08-29_CN.md)：核对 16 个 pattern 目录入口、核心/独立层级和 canonical 主次标签边界。
 - [`Pattern 视觉复核前置证据审计`](../research/pattern_visual_preflight_audit_2026-08-29_CN.md)：核对完整图表左侧、EMA、强 A/受控 B、位置与首障碍的共同前置证据。
 - [`Pattern 案例入口与状态一致性审计`](../research/pattern_case_entry_status_audit_2026-08-29_CN.md)：核对 16 个 pattern 的案例入口、条件/边界/no-trade 文案和状态别名。
+- [`共同视觉前置字段一致性审计`](../research/common_visual_preflight_field_consistency_audit_2026-08-29_CN.md)：统一两年 Daily 左侧、重要高低点、EMA、A/B 质量、位置/空间和 `data_status` 的字段边界。
 - [`Pattern 状态轴、字段与枚举一致性审计`](../research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md)：核对统一状态轴、字段命名和 pattern-specific 模板边界。
 
 Codex Trading 的链接或历史材料只作为用户指定的只读参考；本目录不导入其规则、代码、实现状态或执行能力。

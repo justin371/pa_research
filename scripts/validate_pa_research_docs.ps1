@@ -1,4 +1,5 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
+# Keep this script UTF-8-with-BOM encoded for Windows PowerShell 5.1 compatibility.
 param(
     [string]$RepoRoot
 )
@@ -40,6 +41,11 @@ function Get-TrimmedText {
         return ''
     }
     return $text
+}
+
+function Get-Utf8Text {
+    param([Parameter(Mandatory)][string]$Path)
+    return [System.IO.File]::ReadAllText($Path, [System.Text.UTF8Encoding]::new($false))
 }
 
 function Test-FiniteNumber {
@@ -144,6 +150,7 @@ $requiredFiles = @(
     'docs/pa_research_daily_selection_rules_v0_1_CN.md',
     'docs/visual_pa_review_card_CN.md',
     'docs/daily_candidate_review_card_CN.md',
+    'docs/common_context.md',
     'patterns/README.md',
     'patterns/08_three_push_h3_l3/README.md',
     'foundations/README.md',
@@ -174,6 +181,7 @@ $requiredFiles = @(
     'research/pattern_visual_preflight_audit_2026-08-29_CN.md',
     'research/pattern_case_entry_status_audit_2026-08-29_CN.md',
     'research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md',
+    'research/common_visual_preflight_field_consistency_audit_2026-08-29_CN.md',
     'research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
@@ -196,7 +204,7 @@ $markdownFiles = Get-ChildItem -LiteralPath $repoRoot -Recurse -File -Filter '*.
 }
 foreach ($file in $markdownFiles) {
     $relativePath = $file.FullName.Substring($repoRoot.Length + 1)
-    $content = Get-Content -LiteralPath $file.FullName -Raw
+    $content = Get-Utf8Text -Path $file.FullName
 
     foreach ($match in [regex]::Matches($content, '(?<!\!)\[[^\]]*\]\(([^)\r\n]+)\)|!\[[^\]]*\]\(([^)\r\n]+)\)')) {
         $target = if ($match.Groups[1].Success) { $match.Groups[1].Value } else { $match.Groups[2].Value }
@@ -212,6 +220,10 @@ foreach ($file in $markdownFiles) {
 $canonicalChecks = @{
     'docs/pa_research_output_schema_v0_1_CN.md' = @(
         'document_maturity: provisional',
+        'chart_scope: full / partial / unavailable',
+        'a_leg_quality: strong / ordinary / unclear / event_driven',
+        'b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear',
+        'b_leg_location:',
         'direction: long / short / no_valid_direction',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'event_bucket:',
@@ -239,6 +251,16 @@ $canonicalChecks = @{
         'contract_scope:'
     )
     'docs/pa_research_daily_selection_rules_v0_1_CN.md' = @(
+        'completed_bar_as_of:',
+        'avg_20d_dollar_volume_usd:',
+        'daily_context_window: >=2y / <2y / unavailable',
+        'chart_scope: full / partial / unavailable',
+        'major_high_low_review: complete / partial / unavailable',
+        'ema20_50_200_review: complete / partial / unavailable',
+        'a_leg_quality: strong / ordinary / unclear / event_driven',
+        'b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear',
+        'why_it_meets_or_fails_the_rule:',
+        'possible_entry_trigger:',
         'direction: long / short / no_valid_direction',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'event_bucket:',
@@ -248,6 +270,11 @@ $canonicalChecks = @{
         'contract_scope:'
     )
     'docs/visual_pa_review_card_CN.md' = @(
+        'chart_scope:             # full / partial / unavailable',
+        'event_context:           # none / earnings / macro / gap / other / unknown',
+        'a_leg_quality: strong / ordinary / unclear / event_driven',
+        'b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear',
+        'b_leg_location:',
         'direction: long / short / no_valid_direction',
         'state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
@@ -255,6 +282,10 @@ $canonicalChecks = @{
         'contract_scope:'
     )
     'docs/daily_candidate_review_card_CN.md' = @(
+        'chart_scope: full / partial / unavailable',
+        'timeframes_seen:',
+        'ema20_50_200_review: complete / partial / unavailable',
+        'daily_ema20_50_200:',
         'universe_coverage: complete / partial / discovery_only / unknown',
         'avg_20d_dollar_volume_usd:',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
@@ -278,6 +309,9 @@ $canonicalChecks = @{
         'handoff_status:'
     )
     'patterns/README.md' = @(
+        'timeframes_seen / data_status / as_of_time / timezone / session_state / chart_scope',
+        'left_structure_and_location / major_highs_lows / support_resistance_and_role_zones',
+        'daily_ema20_50_200 / a_leg_quality / b_leg_class / b_leg_location',
         'lineage_status / lineage_id / internal_label / range_edge_three_push',
         'daily_context_window / major_high_low_review / ema20_50_200_review',
         'signal_bar / confirmation_bar / new_trigger / follow_through',
@@ -289,6 +323,21 @@ $canonicalChecks = @{
         'mtr_state: reversal_attempt / mtr_candidate / mtr_confirmed_for_research / failed_mtr_thesis',
         'thesis_state: working / failed / invalidated / replaced / pending'
     )
+    'patterns/05_failed_breakout_climax/README.md' = @(
+        'breakout_climax_state: continuation / small_reversal / range / mtr_candidate / pending',
+        'canonical `research_state`'
+    )
+    'docs/common_context.md' = @(
+        '### Common visual preflight',
+        'data_status: historical / delayed / live_confirmed / incomplete',
+        'chart_scope: full / partial / unavailable',
+        'daily_context_window: >=2y / <2y / unavailable',
+        'major_high_low_review: complete / partial / unavailable',
+        'ema20_50_200_review: complete / partial / unavailable',
+        'a_leg_quality: strong / ordinary / unclear / event_driven',
+        'b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear',
+        'first_independent_obstacle:'
+    )
     'research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md' = @(
         'direction: long / short / no_valid_direction',
         'parent_state: open_trend / trading_range / range_edge / transition / climax / unclear',
@@ -299,7 +348,7 @@ $canonicalChecks = @{
 foreach ($entry in $canonicalChecks.GetEnumerator()) {
     $absolutePath = Join-Path -Path $repoRoot -ChildPath ($entry.Key -replace '/', '\')
     if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
-    $content = Get-Content -LiteralPath $absolutePath -Raw
+    $content = Get-Utf8Text -Path $absolutePath
     foreach ($token in $entry.Value) {
         if (-not $content.Contains($token)) {
             Add-ValidationError "missing canonical token '$token': $($entry.Key)"
@@ -309,7 +358,7 @@ foreach ($entry in $canonicalChecks.GetEnumerator()) {
 
 $patternCaseEntryAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/pattern_case_entry_status_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $patternCaseEntryAuditPath -PathType Leaf) {
-    $patternCaseEntryAuditContent = Get-Content -LiteralPath $patternCaseEntryAuditPath -Raw
+    $patternCaseEntryAuditContent = Get-Utf8Text -Path $patternCaseEntryAuditPath
     foreach ($token in @(
         'valid_no_trade',
         'no-new-positive',
@@ -345,7 +394,7 @@ $patternCaseReadmeRelativePaths = @(
 )
 $patternStateAxisAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $patternStateAxisAuditPath -PathType Leaf) {
-    $patternStateAxisAuditContent = Get-Content -LiteralPath $patternStateAxisAuditPath -Raw
+    $patternStateAxisAuditContent = Get-Utf8Text -Path $patternStateAxisAuditPath
     foreach ($token in @(
         'state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate',
         'no-new-positive',
@@ -363,7 +412,26 @@ if (Test-Path -LiteralPath $patternStateAxisAuditPath -PathType Leaf) {
 foreach ($relativePath in $patternCaseReadmeRelativePaths) {
     $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
     if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
-    $content = Get-Content -LiteralPath $absolutePath -Raw
+    $content = Get-Utf8Text -Path $absolutePath
+    foreach ($token in @(
+        'data_status: historical / delayed / live_confirmed / incomplete',
+        'as_of_time',
+        'chart_scope',
+        'timeframes_seen',
+        '至少两年的 Daily 左侧背景',
+        'EMA20/50/200',
+        'pending'
+    )) {
+        if (-not $content.Contains($token)) {
+            Add-ValidationError "pattern README missing common visual preflight token '$token': $relativePath"
+        }
+    }
+    if ($content -notmatch '重要高点|主要高点' -or $content -notmatch '重要低点|主要低点') {
+        Add-ValidationError "pattern README missing major high/low preflight wording: $relativePath"
+    }
+    if ($content -notmatch '第一独立障碍|first_independent_obstacle|首障碍') {
+        Add-ValidationError "pattern README missing first-obstacle preflight wording: $relativePath"
+    }
     if ($content -match '(?<![\w-])valid(?:-| )no-trade(?![\w-])') {
         Add-ValidationError "legacy valid-no-trade status alias in active pattern README: $relativePath"
     }
@@ -372,6 +440,10 @@ foreach ($relativePath in $patternCaseReadmeRelativePaths) {
     }
     if ($content -match '(?<![A-Za-z_])no_trade(?![A-Za-z_])') {
         Add-ValidationError "legacy no_trade status alias in active pattern README: $relativePath"
+    }
+    if ($relativePath -eq 'patterns/05_failed_breakout_climax/README.md' -and
+        $content -match '(?m)^final_state:') {
+        Add-ValidationError 'pattern 05 retains ambiguous final_state field; use breakout_climax_state plus canonical state axes'
     }
 }
 
@@ -385,7 +457,7 @@ $corePatternOrderBranchRelativePaths = @(
 foreach ($relativePath in $corePatternOrderBranchRelativePaths) {
     $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
     if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
-    $content = Get-Content -LiteralPath $absolutePath -Raw
+    $content = Get-Utf8Text -Path $absolutePath
     if ($content -notmatch '(?m)^order_branch:.*\bstop_limit\b') {
         Add-ValidationError "core pattern order_branch omits research stop_limit: $relativePath"
     }
@@ -393,7 +465,7 @@ foreach ($relativePath in $corePatternOrderBranchRelativePaths) {
 
 $rangeEdgeReadmePath = Join-Path -Path $repoRoot -ChildPath 'patterns/04_range_edge_second_entry/README.md'
 if (Test-Path -LiteralPath $rangeEdgeReadmePath -PathType Leaf) {
-    $rangeEdgeReadmeContent = Get-Content -LiteralPath $rangeEdgeReadmePath -Raw
+    $rangeEdgeReadmeContent = Get-Utf8Text -Path $rangeEdgeReadmePath
     if ($rangeEdgeReadmeContent -notmatch 'IWM 2024-04-17' -or
         $rangeEdgeReadmeContent -notmatch 'range_edge_second_entry_framework_CN\.md') {
         Add-ValidationError 'IWM range-edge case is missing its framework entry link'
@@ -402,7 +474,7 @@ if (Test-Path -LiteralPath $rangeEdgeReadmePath -PathType Leaf) {
 
 $researchReadmePath = Join-Path -Path $repoRoot -ChildPath 'research/README.md'
 if (Test-Path -LiteralPath $researchReadmePath -PathType Leaf) {
-    $researchReadmeContent = Get-Content -LiteralPath $researchReadmePath -Raw
+    $researchReadmeContent = Get-Utf8Text -Path $researchReadmePath
     if ($researchReadmeContent -match 'no_new_positive') {
         Add-ValidationError 'research README contains non-canonical no_new_positive alias'
     }
@@ -549,7 +621,7 @@ foreach ($duplicate in @($intakeIdRecords | Group-Object intake_id | Where-Objec
 
 $freezeReviewPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/abc_bop_candidate_freeze_review_2026-08-28_CN.md'
 if (Test-Path -LiteralPath $freezeReviewPath -PathType Leaf) {
-    $freezeReviewContent = Get-Content -LiteralPath $freezeReviewPath -Raw
+    $freezeReviewContent = Get-Utf8Text -Path $freezeReviewPath
     foreach ($token in @('NFLX', 'TSM', 'contract_frozen=no', 'no-new-positive', 'max_hold_bars', 'do_not_replay')) {
         if (-not $freezeReviewContent.Contains($token)) {
             Add-ValidationError "missing ABC/BOP freeze-review token '$token'"
@@ -559,7 +631,7 @@ if (Test-Path -LiteralPath $freezeReviewPath -PathType Leaf) {
 
 $bullishCandidateAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/abc_bullish_candidate_contract_audit_2026-08-28_CN.md'
 if (Test-Path -LiteralPath $bullishCandidateAuditPath -PathType Leaf) {
-    $bullishCandidateAuditContent = Get-Content -LiteralPath $bullishCandidateAuditPath -Raw
+    $bullishCandidateAuditContent = Get-Utf8Text -Path $bullishCandidateAuditPath
     foreach ($token in @('V', 'NVDA', 'KLAC', 'CRWD', 'contract_frozen=no', 'no-new-positive', 'max_hold_bars', 'ABC_CONT')) {
         if (-not $bullishCandidateAuditContent.Contains($token)) {
             Add-ValidationError "missing bullish ABC candidate-audit token '$token'"
@@ -569,7 +641,7 @@ if (Test-Path -LiteralPath $bullishCandidateAuditPath -PathType Leaf) {
 
 $crossPatternAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/cross_pattern_statistics_isolation_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $crossPatternAuditPath -PathType Leaf) {
-    $crossPatternAuditContent = Get-Content -LiteralPath $crossPatternAuditPath -Raw
+    $crossPatternAuditContent = Get-Utf8Text -Path $crossPatternAuditPath
     foreach ($token in @('ABC_CONT', 'BOP', 'H1', 'H2', 'L1', 'L2', 'H3', 'L3', 'lineage_id', 'no-new-positive')) {
         if (-not $crossPatternAuditContent.Contains($token)) {
             Add-ValidationError "missing cross-pattern isolation-audit token '$token'"
@@ -579,7 +651,7 @@ if (Test-Path -LiteralPath $crossPatternAuditPath -PathType Leaf) {
 
 $eventSpaceAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/event_space_eligibility_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $eventSpaceAuditPath -PathType Leaf) {
-    $eventSpaceAuditContent = Get-Content -LiteralPath $eventSpaceAuditPath -Raw
+    $eventSpaceAuditContent = Get-Utf8Text -Path $eventSpaceAuditPath
     foreach ($token in @('event_bucket', 'ordinary_non_event', 'event_unverified_or_pending', 'space_status', 'unknown_contract_space', 'strict_ge_1R', 'no-new-positive')) {
         if (-not $eventSpaceAuditContent.Contains($token)) {
             Add-ValidationError "missing event/space eligibility-audit token '$token'"
@@ -589,7 +661,7 @@ if (Test-Path -LiteralPath $eventSpaceAuditPath -PathType Leaf) {
 
 $replayOutcomeAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/replay_outcome_denominator_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $replayOutcomeAuditPath -PathType Leaf) {
-    $replayOutcomeAuditContent = Get-Content -LiteralPath $replayOutcomeAuditPath -Raw
+    $replayOutcomeAuditContent = Get-Utf8Text -Path $replayOutcomeAuditPath
     foreach ($token in @('win_rate_eligible', 'completed_trade_count', 'incomplete-horizon', 'opening-skip', 'ambiguous_intrabar', 'first_obstacle_hit', 'realized_R', 'max_hold_bars', 'no-new-positive')) {
         if (-not $replayOutcomeAuditContent.Contains($token)) {
             Add-ValidationError "missing replay outcome-audit token '$token'"
@@ -599,7 +671,7 @@ if (Test-Path -LiteralPath $replayOutcomeAuditPath -PathType Leaf) {
 
 $replayLineageAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/replay_lineage_independence_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $replayLineageAuditPath -PathType Leaf) {
-    $replayLineageAuditContent = Get-Content -LiteralPath $replayLineageAuditPath -Raw
+    $replayLineageAuditContent = Get-Utf8Text -Path $replayLineageAuditPath
     foreach ($token in @('lineage_id', 'market_context_id', 'duplicate_result', 'sample_id', 'results.csv', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $replayLineageAuditContent.Contains($token)) {
             Add-ValidationError "missing replay lineage-independence-audit token '$token'"
@@ -609,7 +681,7 @@ if (Test-Path -LiteralPath $replayLineageAuditPath -PathType Leaf) {
 
 $replayProvenanceAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/replay_provenance_reproducibility_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $replayProvenanceAuditPath -PathType Leaf) {
-    $replayProvenanceAuditContent = Get-Content -LiteralPath $replayProvenanceAuditPath -Raw
+    $replayProvenanceAuditContent = Get-Utf8Text -Path $replayProvenanceAuditPath
     foreach ($token in @('engine_version', 'engine_source_sha256', 'results_file_sha256', 'replay2', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $replayProvenanceAuditContent.Contains($token)) {
             Add-ValidationError "missing replay provenance-reproducibility-audit token '$token'"
@@ -619,7 +691,7 @@ if (Test-Path -LiteralPath $replayProvenanceAuditPath -PathType Leaf) {
 
 $frozenContractFieldAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/frozen_contract_field_partition_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $frozenContractFieldAuditPath -PathType Leaf) {
-    $frozenContractFieldAuditContent = Get-Content -LiteralPath $frozenContractFieldAuditPath -Raw
+    $frozenContractFieldAuditContent = Get-Utf8Text -Path $frozenContractFieldAuditPath
     foreach ($token in @('hl_contracts_2026-08-26.csv', 'contract_state', 'space_status', 'strict_ge_1R', 'observation-only', 'ABC_CONT', 'BOP', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $frozenContractFieldAuditContent.Contains($token)) {
             Add-ValidationError "missing frozen-contract-field-audit token '$token'"
@@ -629,7 +701,7 @@ if (Test-Path -LiteralPath $frozenContractFieldAuditPath -PathType Leaf) {
 
 $preEntryResultIsolationAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $preEntryResultIsolationAuditPath -PathType Leaf) {
-    $preEntryResultIsolationAuditContent = Get-Content -LiteralPath $preEntryResultIsolationAuditPath -Raw
+    $preEntryResultIsolationAuditContent = Get-Utf8Text -Path $preEntryResultIsolationAuditPath
     foreach ($token in @('event_context', 'pre_entry_space_R', 'pre_entry_provenance_status', 'pre_entry_provenance_incomplete', 'first_obstacle_hit', 'realized_R', 'contract_eligibility_mismatch_count', 'event_bucket_mismatch_count', 'contract_space_bucket_mismatch_count', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $preEntryResultIsolationAuditContent.Contains($token)) {
             Add-ValidationError "missing pre-entry/result-isolation-audit token '$token'"
@@ -639,7 +711,7 @@ if (Test-Path -LiteralPath $preEntryResultIsolationAuditPath -PathType Leaf) {
 
 $legacyResultProvenanceAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/legacy_result_provenance_completeness_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $legacyResultProvenanceAuditPath -PathType Leaf) {
-    $legacyResultProvenanceAuditContent = Get-Content -LiteralPath $legacyResultProvenanceAuditPath -Raw
+    $legacyResultProvenanceAuditContent = Get-Utf8Text -Path $legacyResultProvenanceAuditPath
     foreach ($token in @('pre_entry_provenance_status', 'pre_entry_provenance_missing_fields', 'completed_trade_count', 'pre_entry_provenance_incomplete', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $legacyResultProvenanceAuditContent.Contains($token)) {
             Add-ValidationError "missing legacy-result-provenance-audit token '$token'"
@@ -649,7 +721,7 @@ if (Test-Path -LiteralPath $legacyResultProvenanceAuditPath -PathType Leaf) {
 
 $artifactSchemaRoundtripAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/artifact_schema_roundtrip_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $artifactSchemaRoundtripAuditPath -PathType Leaf) {
-    $artifactSchemaRoundtripAuditContent = Get-Content -LiteralPath $artifactSchemaRoundtripAuditPath -Raw
+    $artifactSchemaRoundtripAuditContent = Get-Utf8Text -Path $artifactSchemaRoundtripAuditPath
     foreach ($token in @('results.csv', 'summary.json', 'run_metadata.json', 'summary_provenance', 'result_columns', 'pre_entry_provenance_status', 'contract_eligibility_mismatch_count', 'event_bucket_mismatch_count', 'contract_space_bucket_mismatch_count', 'historical', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $artifactSchemaRoundtripAuditContent.Contains($token)) {
             Add-ValidationError "missing artifact-schema-roundtrip-audit token '$token'"
@@ -659,7 +731,7 @@ if (Test-Path -LiteralPath $artifactSchemaRoundtripAuditPath -PathType Leaf) {
 
 $historicalReplayResultLogAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/historical_replay_result_log_provenance_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $historicalReplayResultLogAuditPath -PathType Leaf) {
-    $historicalReplayResultLogAuditContent = Get-Content -LiteralPath $historicalReplayResultLogAuditPath -Raw
+    $historicalReplayResultLogAuditContent = Get-Utf8Text -Path $historicalReplayResultLogAuditPath
     foreach ($token in @('external_results_files=13', 'external_result_rows=88', 'unique_sample_ids=63', 'duplicate_sample_id_groups=13', 'rows_in_duplicate_groups=38', 'extra_duplicate_rows=25', 'current_valid=0', 'historical_incomplete=13', 'invalid=0', 'historical_exit_code=2', 'journal/', 'trade_log/', 'transaction/', 'ledger/', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $historicalReplayResultLogAuditContent.Contains($token)) {
             Add-ValidationError "missing historical replay/result-log provenance audit token '$token'"
@@ -669,7 +741,7 @@ if (Test-Path -LiteralPath $historicalReplayResultLogAuditPath -PathType Leaf) {
 
 $unifiedOutputStateAxisAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/unified_output_state_axis_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $unifiedOutputStateAxisAuditPath -PathType Leaf) {
-    $unifiedOutputStateAxisAuditContent = Get-Content -LiteralPath $unifiedOutputStateAxisAuditPath -Raw
+    $unifiedOutputStateAxisAuditContent = Get-Utf8Text -Path $unifiedOutputStateAxisAuditPath
     foreach ($token in @('document_maturity', 'attempt_direction', 'Daily', '4H', '15m', 'lineage_id', 'event_bucket', 'space_status', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $unifiedOutputStateAxisAuditContent.Contains($token)) {
             Add-ValidationError "missing unified-output state-axis audit token '$token'"
@@ -679,7 +751,7 @@ if (Test-Path -LiteralPath $unifiedOutputStateAxisAuditPath -PathType Leaf) {
 
 $patternIndexAliasBoundaryAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/pattern_index_alias_boundary_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $patternIndexAliasBoundaryAuditPath -PathType Leaf) {
-    $patternIndexAliasBoundaryAuditContent = Get-Content -LiteralPath $patternIndexAliasBoundaryAuditPath -Raw
+    $patternIndexAliasBoundaryAuditContent = Get-Utf8Text -Path $patternIndexAliasBoundaryAuditPath
     foreach ($token in @('01_h1_l1_first_entry', '02_h2_l2_second_entry', '03_abc_continuation', '04_range_edge_second_entry', '05_failed_breakout_climax', '06_breakout_pullback_bop', '07_mtr_reversal', '08_three_push_h3_l3', '09_vcp_minervini', '10_final_flag', '11_opening_reversal', '12_channel', '13_inside_bar_two_bar_reversal', '14_triangle_expanding_range', '15_double_top_bottom', '16_head_shoulders_rounded', 'primary_pattern: ABC_CONT', 'internal_label=H1 / L1', 'internal_label=H2 / L2', 'internal_label=H3 / L3', 'state_transition', 'no-new-positive', 'validated win-rate: not-computable', 'PA Research only', 'no Codex Trading', 'no quantitative scanner', 'no Execution Agent')) {
         if (-not $patternIndexAliasBoundaryAuditContent.Contains($token)) {
             Add-ValidationError "missing pattern-index-alias-boundary-audit token '$token'"
@@ -689,10 +761,34 @@ if (Test-Path -LiteralPath $patternIndexAliasBoundaryAuditPath -PathType Leaf) {
 
 $patternVisualPreflightAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/pattern_visual_preflight_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $patternVisualPreflightAuditPath -PathType Leaf) {
-    $patternVisualPreflightAuditContent = Get-Content -LiteralPath $patternVisualPreflightAuditPath -Raw
+    $patternVisualPreflightAuditContent = Get-Utf8Text -Path $patternVisualPreflightAuditPath
     foreach ($token in @('daily_context_window: >=2y / <2y / unavailable', 'major_highs', 'major_lows', 'daily_ema20_50_200', 'A_quality: strong', 'B_quality: controlled', 'first_independent_obstacle', 'no-new-positive', 'validated win-rate: not-computable', 'PA Research only', 'no Codex Trading', 'no quantitative scanner', 'no Execution Agent')) {
         if (-not $patternVisualPreflightAuditContent.Contains($token)) {
             Add-ValidationError "missing pattern-visual-preflight-audit token '$token'"
+        }
+    }
+}
+
+$commonVisualPreflightAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/common_visual_preflight_field_consistency_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $commonVisualPreflightAuditPath -PathType Leaf) {
+    $commonVisualPreflightAuditContent = Get-Utf8Text -Path $commonVisualPreflightAuditPath
+    foreach ($token in @(
+        'chart_scope: full / partial / unavailable',
+        'daily_context_window: >=2y / <2y / unavailable',
+        'major_high_low_review: complete / partial / unavailable',
+        'ema20_50_200_review: complete / partial / unavailable',
+        'a_leg_quality: strong / ordinary / unclear / event_driven',
+        'b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear',
+        'first_independent_obstacle:',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
+    )) {
+        if (-not $commonVisualPreflightAuditContent.Contains($token)) {
+            Add-ValidationError "missing common-visual-preflight audit token '$token'"
         }
     }
 }
@@ -1016,7 +1112,7 @@ $activeMarkdownFiles = foreach ($root in $activeRoots) {
 }
 foreach ($file in $activeMarkdownFiles) {
     $relativePath = $file.FullName.Substring($repoRoot.Length + 1)
-    $content = Get-Content -LiteralPath $file.FullName -Raw
+    $content = Get-Utf8Text -Path $file.FullName
     if ($content -match '(?i)BOP-ABC|same_contract_stop') {
         Add-ValidationError "legacy pattern/status token in active contract: $relativePath"
     }

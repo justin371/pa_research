@@ -50,7 +50,7 @@ market_cap_usd:
 market_cap_as_of:
 market_cap_source:
 timeframes_seen:
-chart_scope: full / partial
+chart_scope: full / partial / unavailable
 daily_context_window: >=2y / <2y / unavailable
 major_high_low_review: complete / partial / unavailable
 ema20_50_200_review: complete / partial / unavailable
@@ -71,6 +71,8 @@ gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 
 `as_of_time`、时区、session 和 `completed_bar_as_of` 必须能区分报告生成时间、查询窗口结束时间和实际可用的最新完整 K 线。历史数据不能写成实时数据。
+
+`chart_scope` 描述整张图表的可见完整度；`daily_context_window` 单独描述 Daily 左侧是否覆盖至少两年。批次卡中的 `two_year_chart_coverage` 只表示该批次的汇总覆盖率，不能替代逐标的 `daily_context_window`。`a_leg_quality` 和 `b_leg_class` 是共同的 A/B 视觉质量字段；独立主题可以记录它们作为背景对照，但不能因此继承 ABC/H-L 计数。
 
 每日批次记录还应使用[`每日候选批次与图表审查卡`](daily_candidate_review_card_CN.md)补充以下证据。它们是候选池和视觉审查字段，不会把回放合同变成扫描器输入：
 
@@ -103,6 +105,9 @@ daily_ema20_slope: up / flat / down / unknown
 daily_ema50_slope: up / flat / down / unknown
 h_l_ema_slope_gate: long_pass / short_pass / fail_flat_or_opposite / pending / not_applicable
 h_l_pullback_location:
+a_leg_quality: strong / ordinary / unclear / event_driven
+b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear
+b_leg_location:
 meta_confluence: present / absent / unknown
 meta_zone:
 meta_components:
@@ -227,32 +232,74 @@ handoff_status: research_only / not_ready / ready_for_system
 ### [symbol] [review_date] — [primary_pattern]
 
 contract_scope:
+symbol:
+review_date:
+data_source:
 direction:
 data_status:
 as_of_time:
+timezone:
+session_state:
+timeframes_seen:
+chart_scope:
+daily_context_window:
+major_high_low_review:
+ema20_50_200_review:
 market_cap_usd:
 market_cap_as_of:
 market_cap_source:
 parent_state:
+directional_bias:
 primary_pattern:
 secondary_context:
 range_edge_three_push:
 internal_label:
+state_transition:
+lineage_status:
+lineage_id:
+market_context_id:
+major_highs_lows:
+support_resistance_and_role_zones:
+daily_ema20_50_200:
 daily_ema20_slope:
 daily_ema50_slope:
 h_l_ema_slope_gate:
 h_l_pullback_location:
+a_leg_quality:
+b_leg_class:
+b_leg_location:
 meta_confluence:
 meta_zone:
 meta_components:
+event_context:
+event_bucket:
+event_source_as_of:
+earnings_next_three_sessions:
+sector_reference:
+sector_state:
+market_reference:
+market_state:
+permission:
 key_breakout_or_structure_location:
 why_it_meets_or_fails_the_rule:
 possible_entry_trigger:
+signal_bar:
+confirmation_bar:
+new_trigger:
+order_branch:
+branch_role:
+actual_fill_or_open_skip:
+structural_stop:
 structural_invalidation:
 first_independent_obstacle:
 rough_space_to_first_obstacle_R:
+pre_entry_space_R:
+space_status:
+rough_R_R:
+target_layers:
 research_state:
 trade_state:
+thesis_state:
 gate_result:
 handoff_status:
 main_uncertainty_or_exclusion:

@@ -8,6 +8,8 @@ Channel 研究的是有方向的价格运行及其状态变化。它不是把任
 
 ## 共同图表范围前置
 
+该入口的证据头还必须记录 `data_status: historical / delayed / live_confirmed / incomplete`、`as_of_time`、`chart_scope` 和 `timeframes_seen`；历史、延迟、实时已确认与不完整不能互换。
+
 进入 Channel 判断前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点、主要低点、支撑阻力、前高/前低、EMA20/50/200、当前父级状态和第一独立障碍。强 A 与受控 B 用于判断通道的方向性和压力变化；通道边界仍按本目录独立定义。缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`，不能凭两点连线或局部通道升级为可交易候选。
 
 ## 最小定义

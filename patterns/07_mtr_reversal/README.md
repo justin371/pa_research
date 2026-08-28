@@ -10,6 +10,10 @@
 
 ## 共同图表范围前置
 
+该入口的证据头还必须记录 `data_status: historical / delayed / live_confirmed / incomplete`、`as_of_time`、`chart_scope` 和 `timeframes_seen`；历史、延迟、实时已确认与不完整不能互换。
+
+原趋势 A 的质量和反向 B 的类别分别记录为 `a_leg_quality` 与 `b_leg_class`；它们只描述背景压力，不替代 MTR 的结构破坏、接受、第二次确认或 canonical 状态轴。
+
 进入 MTR 判断前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点、主要低点、支撑阻力、前高/前低、EMA20/50/200、当前父级状态和第一独立障碍。再核对原趋势 A 的推动力、反向 B 的受控程度和控制权变化；涉及 H/L 时，Daily EMA20/50 必须与方向一致。缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`，不能凭局部双顶、三推或一根大反向 K 升级为 MTR。
 
 ## 视觉定义

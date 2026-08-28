@@ -115,7 +115,7 @@ as_of_time:
 timezone:
 session_state:           # premarket / RTH / after_hours / historical_close / unknown
 timeframes_seen:         # Daily / 4H or 60m / 15m / other
-chart_scope:             # full context / partial context
+chart_scope:             # full / partial / unavailable
 daily_context_window:    # >=2y / <2y / unavailable
 market_cap_usd:
 market_cap_as_of:
@@ -129,7 +129,7 @@ h_l_pullback_location:
 meta_confluence:         # present / absent / unknown
 meta_zone:
 meta_components:
-event_context:           # earnings / macro / gap / none known / unknown
+event_context:           # none / earnings / macro / gap / other / unknown
 event_source_as_of:
 sector_context:
 sector_reference:
@@ -206,10 +206,11 @@ leg_scope: parent / local / both
 - 是否出现第二腿陷阱，或已经变成双向交易区间。
 
 ```text
-B_quality: controlled / controlled-late / strong-counterpressure / range-like / unclear
-B_leg_count: 1 / 2 / 3+ / unclear
+a_leg_quality: strong / ordinary / unclear / event_driven
+b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear
+b_leg_count: 1 / 2 / 3+ / unclear
 pressure_asymmetry:
-location_of_B_end:
+b_leg_location:
 ```
 
 ## 4. H/L 计数：只数有意义的尝试
@@ -417,9 +418,19 @@ Daily: parent_state / 主要位置 / 主要高低点 / 事件与板块
 ### [symbol] [date range] [timeframe] — [pattern]
 
 contract_scope:
+symbol:
+review_date:
+data_source:
 direction: long / short / no_valid_direction
 data_status:
 as_of_time:
+timezone:
+session_state:
+timeframes_seen:
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
 research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
 trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
 gate_result: pass / conditional / observation_only / valid_no_trade / pending
@@ -427,9 +438,11 @@ handoff_status: research_only / not_ready / ready_for_system
 
 背景：
 左侧主要支撑/阻力：
+重要高点/低点与 EMA20/50/200：
 母腿与局部 A 腿：
-A 强度：strong / ordinary / unclear
-B 回调质量：
+a_leg_quality: strong / ordinary / unclear / event_driven
+b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear
+B 回调位置：
 H/L 计数及依据：
 形态分类：
 主标签：

@@ -8,6 +8,8 @@ Final Flag 是 Al Brooks PA 中的背景型结构：趋势已经走了相当一�
 
 ## 共同图表范围前置
 
+该入口的证据头还必须记录 `data_status: historical / delayed / live_confirmed / incomplete`、`as_of_time`、`chart_scope` 和 `timeframes_seen`；历史、延迟、实时已确认与不完整不能互换。
+
 进入 Final Flag 判断前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点、主要低点、支撑阻力、前高/前低、EMA20/50/200、当前父级状态和第一独立障碍。强 A 与受控 B 用于判断趋势是否成熟、回调是否受控；Final Flag 仍按本目录独立定义，不自动改写成 H/L、ABC 或 MTR。缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`，不能凭末端小旗形升级为可交易候选。
 
 ## 最小定义

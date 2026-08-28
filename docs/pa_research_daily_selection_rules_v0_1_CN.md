@@ -248,12 +248,12 @@ data_status: historical / delayed / live_confirmed / incomplete
 as_of_time:
 timezone:
 session_state: premarket / RTH / after_hours / historical_close / unknown
-completed_daily_bar_as_of:
+completed_bar_as_of:
 universe_type: US_common_stock
 market_cap_usd:
 market_cap_as_of:
 market_cap_source:
-average_dollar_volume_20d:
+avg_20d_dollar_volume_usd:
 earnings_next_three_sessions:
 event_context:
 event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
@@ -264,7 +264,11 @@ market_reference:
 market_state: aligned / mixed / counter / unknown
 permission: long_allowed / short_allowed / both_allowed / no_direction / unknown
 gate_result: pass / conditional / observation_only / valid_no_trade / pending
-two_year_daily_context:
+timeframes_seen: Daily
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
 major_highs_lows:
 support_resistance_and_role_zones:
 daily_ema20_50_200:
@@ -272,6 +276,9 @@ daily_ema20_slope: up / flat / down / unknown
 daily_ema50_slope: up / flat / down / unknown
 h_l_ema_slope_gate: long_pass / short_pass / fail_flat_or_opposite / pending / not_applicable
 h_l_pullback_location:
+a_leg_quality: strong / ordinary / unclear / event_driven
+b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear
+b_leg_location:
 meta_confluence: present / absent / unknown
 meta_zone:
 meta_components:
@@ -291,8 +298,8 @@ retest_zone:
 role_reversal_held: yes / no / unclear / not_occurred
 special_subtype: ordinary / deep_late_controlled_B / bull_flag / earnings_driven / event_driven / gap_reprice / none
 key_breakout_or_structure_location:
-why_it_meets_the_rule:
-possible_daily_entry_trigger:
+why_it_meets_or_fails_the_rule:
+possible_entry_trigger:
 structural_invalidation:
 first_independent_obstacle:
 rough_space_to_first_obstacle_R:
