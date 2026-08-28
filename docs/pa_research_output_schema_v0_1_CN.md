@@ -1,6 +1,6 @@
 # PA Research 统一输出合同 v0.1
 
-日期：2026-08-25；合同修订：2026-08-26；批次证据字段修订：2026-08-28；回放结果口径修订：2026-08-29
+日期：2026-08-25；合同修订：2026-08-26；批次证据字段修订：2026-08-28；回放结果口径修订：2026-08-29；样本独立性字段修订：2026-08-29
 文档状态：`adopted / research-only / not-quantitative`
 
 ## 目的与适用范围
@@ -100,6 +100,8 @@ secondary_context:
 range_edge_three_push: yes / no / pending
 state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
 lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
+market_context_id:
 internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 pattern_like_reason:
 ```
@@ -113,6 +115,10 @@ pattern_like_reason:
 同一案例可以有 `directional_bias: bull`，但因首障碍或事件闸门不合格而写 `direction: no_valid_direction`。不能用后续涨跌倒推方向。
 
 对于 `internal_label: H1 / H2` 的多头候选，`h_l_ema_slope_gate` 必须为 `long_pass`（Daily EMA20、EMA50 均向上）；对于 `internal_label: L1 / L2` 的空头候选，必须为 `short_pass`（两条均向下）。走平、反向或资料不足时分别记录为 `fail_flat_or_opposite` 或 `pending`，不能写成普通高质量 H/L。`meta_confluence: present` 只表示多个独立来源在同一回调区域汇聚，不是自动触发器。
+
+`lineage_id` 是样本依赖控制的规范标识：同一父级结构、同一 A/B 回调或同一局部尝试的替代标签必须使用同一个 ID；不能因为决策日或 H1/H2、L1/L2 标签不同就另造独立样本。大小写和首尾空格不构成不同 lineage。`lineage_id` 不会替研究者自动识别结构，缺失或共享时只能保留描述性结果。
+
+`market_context_id` 是可选的人工市场状态依赖标识，用于记录多只股票共享的同一市场/板块状态；它不是行情扫描器，也不由回放器推断。缺失、共享或与其他记录的持仓区间重叠时，回放器可以保留逐行描述值，但不得输出 independence-adjusted 胜率。没有该字段不等于市场状态已经独立。
 
 `primary_pattern: H3_L3` 时，`internal_label` 必须明确写成 `H3`（多头第三次尝试）或 `L3`（空头第三次尝试），不得使用含混的 `H3_L3`；还必须额外区分 `range_edge_three_push: yes`、`no` 或 `pending`。区间边缘三推允许 A 腿普通或偏弱，但必须记录上沿/下沿位置、反向确认和区间外接受分流；区间中部重复测试不能凭次数升级。
 
@@ -161,6 +167,8 @@ main_uncertainty_or_exclusion:
 ```text
 fill_status: filled / no-fill / opening-skip / unproven / not-traded
 evidence_status: comparable / excluded / excluded_incomplete_horizon / excluded_ambiguous / observation_only
+sample_id:
+market_context_id:
 win_rate_eligible: yes / no
 trade_result: win / loss / scratch / pending / not-applicable
 path_result: target-reached / invalidated / first-obstacle-reached / time_exit / incomplete-horizon / ambiguous / ...
@@ -168,11 +176,17 @@ ambiguous_intrabar: yes / no
 first_obstacle_hit: yes / no / unknown
 realized_R:
 bars_held:
+entry_date:
+exit_date:
 ```
 
 `first_obstacle_hit` 是路径过程字段，不是胜负标签；触及首障碍不能自动写成 `win`。若首障碍只出现在未解决的 stop/target 歧义路径上，应写 `unknown`。`realized_R` 只有在成交、路径完成、无未解决歧义且 `win_rate_eligible=yes` 时才可进入可比结果。`opening-skip`、`no-fill`、`observation_only`、`incomplete-horizon`、`ambiguous_intrabar` 和 `pending` 不进入胜率分母。`max_hold_bars` 表示实际交易 `entry_bar` 之后允许观察的完整 K 线数；非 `market_close` 的时间退出在观察窗口结束后的下一根 K 线开盘成交，因此 `bars_held` 这个 backtesting.py 的 entry/exit bar 索引距离可能比 `max_hold_bars` 多 1，不能把该执行索引差异误读成额外的自由持仓。`market_close` 按收盘时间索引计数；如果数据末尾没有可执行的时间退出价格，则必须标为 `incomplete-horizon`。
 
-`summary.json` 的 `completed_trade_count` 只统计同时满足 `win_rate_eligible=yes`、`trade_result=win/loss/scratch`、`evidence_status=comparable`、`fill_status=filled`、无歧义/未完成 horizon 且有有限 `realized_R` 的行。`win_rate_eligible_count` 是结果旗标数量，不应在旗标与结果不一致时直接当作分母；`win_rate_eligibility_mismatch_count`、`win_rate_guard_exclusion_count` 和互斥的 `outcome_bucket_counts` 必须保留用于审计。
+`summary.json` 的 `completed_trade_count` 只统计同时满足 `win_rate_eligible=yes`、`trade_result=win/loss/scratch`、`evidence_status=comparable`、`fill_status=filled`、无歧义/未完成 horizon、非重复结果且有有限 `realized_R` 的行。`win_rate_eligible_count` 是结果旗标数量，不应在旗标与结果不一致时直接当作分母；`win_rate_eligibility_mismatch_count`、`win_rate_guard_exclusion_count` 和互斥的 `outcome_bucket_counts` 必须保留用于审计。
+
+摘要还必须报告 `unique_sample_id_count`、`missing_sample_id_count`、重复 sample/合同族的 group/row/extra 计数、`unique_lineage_count`、共享 lineage 计数、`unique_market_context_count`、缺失/共享市场状态计数，以及同一标的持仓区间重叠计数。相同 `sample_id` 或同一合同族的重复行全部标记为 `duplicate_result`，不任意保留其中一份；不同 `lineage_id` 也不自动证明样本独立。`independence_status` 和 `independence_statistics_status` 必须明确说明缺失或依赖来源。
+
+运行元数据应保留 `price_file_sha256`、`contract_file_sha256` 和 `result_set_sha256`。这些指纹用于识别同一输入的重复 artifact 或同一 sample_id 的不同版本；它们是审计 provenance，不是交易信号。旧的、缺少这些字段的 `summary.json` 只能作为历史描述，不能与新摘要拼接成验证结果。
 
 ## 五、状态轴与交接轴
 

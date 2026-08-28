@@ -9,6 +9,7 @@ the research record, not a label inferred by this program.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import re
@@ -23,7 +24,7 @@ import pandas as pd
 from backtesting import Backtest, Strategy
 
 
-ENGINE_VERSION = "0.3.3"
+ENGINE_VERSION = "0.3.4"
 SUPPORTED_DIRECTIONS = {"long", "short"}
 SUPPORTED_PATTERNS = {"ABC_CONT", "BOP", "H1_L1", "H2_L2", "H3_L3", "RFB", "MTR", "other"}
 SUPPORTED_LABELS = {"H1", "H2", "L1", "L2", "H3", "L3", "none", "pending"}
@@ -116,6 +117,7 @@ class BacktestContract:
     event_context: str
     contract_frozen: str
     lineage_id: str = ""
+    market_context_id: str = ""
     daily_ema20_slope: str = ""
     daily_ema50_slope: str = ""
     h_l_ema_slope_gate: str = ""
@@ -153,6 +155,7 @@ class BacktestContract:
             event_context=_as_string(row.get("event_context")).lower(),
             contract_frozen=_as_string(row.get("contract_frozen")).lower(),
             lineage_id=_as_string(row.get("lineage_id")),
+            market_context_id=_as_string(row.get("market_context_id")),
             daily_ema20_slope=_as_string(row.get("daily_ema20_slope")).lower(),
             daily_ema50_slope=_as_string(row.get("daily_ema50_slope")).lower(),
             h_l_ema_slope_gate=_as_string(row.get("h_l_ema_slope_gate")).lower(),
@@ -626,6 +629,7 @@ def _base_result(contract: BacktestContract, *, fill_status: str, reason: str) -
         "major_high_low_review": contract.major_high_low_review,
         "ema20_50_200_review": contract.ema20_50_200_review,
         "contract_frozen": contract.contract_frozen,
+        "market_context_id": contract.market_context_id,
         "planned_entry_trigger": contract.entry_trigger,
         "structural_stop": contract.structural_stop,
         "first_obstacle": contract.first_obstacle,
@@ -1063,8 +1067,150 @@ def _safe_median(values: pd.Series) -> float | None:
     return float(values.median()) if not values.empty else None
 
 
+def _canonical_text_series(frame: pd.DataFrame, column: str) -> pd.Series:
+    """Return a case-insensitive identity series without changing display values."""
+
+    if column not in frame:
+        return pd.Series("", index=frame.index, dtype="object")
+    return frame[column].fillna("").astype(str).str.strip().str.casefold()
+
+
+def _canonical_date_series(frame: pd.DataFrame, column: str) -> pd.Series:
+    raw = _canonical_text_series(frame, column)
+    parsed = pd.to_datetime(raw.replace("", np.nan), errors="coerce")
+    normalised = raw.copy()
+    valid = parsed.notna()
+    normalised.loc[valid] = parsed.loc[valid].dt.strftime("%Y-%m-%d")
+    return normalised
+
+
+def _identity_key(frame: pd.DataFrame, columns: list[str]) -> pd.Series:
+    parts = [
+        _canonical_date_series(frame, column) if column == "decision_date" else _canonical_text_series(frame, column)
+        for column in columns
+    ]
+    key = parts[0].copy()
+    complete = parts[0].ne("")
+    for part in parts[1:]:
+        key = key + "|" + part
+        complete &= part.ne("")
+    return key.where(complete, "")
+
+
+def _duplicate_identity_mask(values: pd.Series) -> tuple[pd.Series, int, int, int]:
+    """Return duplicate rows and group/row/extra counts for a canonical identity."""
+
+    nonempty = values[values != ""]
+    counts = nonempty.value_counts()
+    duplicate_counts = counts[counts > 1]
+    mask = values.ne("") & values.isin(duplicate_counts.index)
+    row_count = int(duplicate_counts.sum()) if not duplicate_counts.empty else 0
+    group_count = int(len(duplicate_counts))
+    extra_count = int((duplicate_counts - 1).sum()) if not duplicate_counts.empty else 0
+    return mask, group_count, row_count, extra_count
+
+
+def _exposure_overlap_stats(frame: pd.DataFrame) -> tuple[pd.Series, int, int]:
+    """Find overlapping held intervals for non-duplicate filled result rows.
+
+    This is a dependence diagnostic, not a claim that all common market dates
+    are the same price-action setup.  Missing entry/exit dates remain unknown.
+    """
+
+    overlap = pd.Series(False, index=frame.index, dtype="bool")
+    candidate = frame.loc[
+        frame["fill_status"].eq("filled")
+        & ~frame["_duplicate_result_row"]
+        & frame["_symbol_key"].ne("")
+    ].copy()
+    if candidate.empty:
+        return overlap, 0, 0
+    candidate["_entry_ts"] = pd.to_datetime(candidate["entry_date"], errors="coerce")
+    candidate["_exit_ts"] = pd.to_datetime(candidate["exit_date"], errors="coerce")
+    candidate = candidate.loc[
+        candidate["_entry_ts"].notna()
+        & candidate["_exit_ts"].notna()
+        & (candidate["_exit_ts"] >= candidate["_entry_ts"])
+    ]
+    if candidate.empty:
+        return overlap, 0, 0
+
+    group_count = 0
+    for _, symbol_group in candidate.groupby("_symbol_key", sort=False):
+        ordered = symbol_group.sort_values(["_entry_ts", "_exit_ts"])
+        component_indices: list[Any] = []
+        component_end: pd.Timestamp | None = None
+
+        def flush_component() -> None:
+            nonlocal group_count
+            if len(component_indices) > 1:
+                overlap.loc[component_indices] = True
+                group_count += 1
+
+        for index, row in ordered.iterrows():
+            entry = row["_entry_ts"]
+            exit_ = row["_exit_ts"]
+            if component_end is None or entry > component_end:
+                flush_component()
+                component_indices = [index]
+                component_end = exit_
+            else:
+                component_indices.append(index)
+                if exit_ > component_end:
+                    component_end = exit_
+        flush_component()
+    return overlap, group_count, int(overlap.sum())
+
+
 def _prepare_result_frame(frame: pd.DataFrame) -> pd.DataFrame:
     """Normalize result fields before any denominator or group calculation."""
+
+    for column in (
+        "sample_id",
+        "symbol",
+        "decision_date",
+        "direction",
+        "primary_pattern",
+        "internal_label",
+        "order_branch",
+        "lineage_id",
+        "market_context_id",
+        "entry_date",
+        "exit_date",
+    ):
+        if column not in frame:
+            frame[column] = ""
+    frame["lineage_id"] = frame["lineage_id"].fillna("").astype(str).str.strip()
+    frame["market_context_id"] = frame["market_context_id"].fillna("").astype(str).str.strip()
+    frame["_sample_id_key"] = _canonical_text_series(frame, "sample_id")
+    frame["_symbol_key"] = _canonical_text_series(frame, "symbol")
+    frame["_lineage_key"] = _canonical_text_series(frame, "lineage_id")
+    frame["_market_context_key"] = _canonical_text_series(frame, "market_context_id")
+    frame["_contract_family_key"] = _identity_key(
+        frame,
+        [
+            "symbol",
+            "decision_date",
+            "direction",
+            "primary_pattern",
+            "internal_label",
+            "lineage_id",
+        ],
+    )
+    sample_duplicate, sample_group_count, sample_row_count, sample_extra_count = _duplicate_identity_mask(
+        frame["_sample_id_key"]
+    )
+    family_duplicate, family_group_count, family_row_count, family_extra_count = _duplicate_identity_mask(
+        frame["_contract_family_key"]
+    )
+    frame["_duplicate_result_row"] = sample_duplicate | family_duplicate
+    frame["_missing_result_identity"] = frame["_sample_id_key"].eq("") & frame["_contract_family_key"].eq("")
+    frame.attrs["sample_id_group_count"] = sample_group_count
+    frame.attrs["sample_id_row_count"] = sample_row_count
+    frame.attrs["sample_id_extra_count"] = sample_extra_count
+    frame.attrs["contract_family_group_count"] = family_group_count
+    frame.attrs["contract_family_row_count"] = family_row_count
+    frame.attrs["contract_family_extra_count"] = family_extra_count
 
     if "trade_result" not in frame:
         frame["trade_result"] = ""
@@ -1102,6 +1248,10 @@ def _prepare_result_frame(frame: pd.DataFrame) -> pd.DataFrame:
     frame["path_result"] = frame["path_result"].fillna("").astype(str).str.strip().str.lower()
     if "realized_R" not in frame:
         frame["realized_R"] = None
+    overlap, overlap_group_count, overlap_row_count = _exposure_overlap_stats(frame)
+    frame["_exposure_overlap_row"] = overlap
+    frame.attrs["exposure_overlap_group_count"] = overlap_group_count
+    frame.attrs["exposure_overlap_row_count"] = overlap_row_count
     return frame
 
 
@@ -1109,6 +1259,10 @@ def _completed_trade_mask(frame: pd.DataFrame) -> pd.Series:
     """Return the strict, auditable win-rate denominator mask."""
 
     realized_r = pd.to_numeric(frame["realized_R"], errors="coerce")
+    duplicate_rows = frame.get(
+        "_duplicate_result_row",
+        pd.Series(False, index=frame.index, dtype="bool"),
+    )
     return (
         frame["trade_result"].isin(TRADE_RESULTS)
         & frame["win_rate_eligible"].eq("yes")
@@ -1117,6 +1271,7 @@ def _completed_trade_mask(frame: pd.DataFrame) -> pd.Series:
         & frame["ambiguous_intrabar"].ne("yes")
         & frame["path_result"].ne("ambiguous")
         & frame["path_result"].ne("incomplete-horizon")
+        & ~duplicate_rows
         & realized_r.notna()
         & np.isfinite(realized_r)
     )
@@ -1149,6 +1304,11 @@ def _outcome_bucket_series(frame: pd.DataFrame, completed: pd.Series) -> pd.Seri
         frame["fill_status"].eq("not-traded") | frame["evidence_status"].eq("observation_only")
     )
     buckets.loc[observation_only] = "observation_only"
+    duplicate_rows = frame.get(
+        "_duplicate_result_row",
+        pd.Series(False, index=frame.index, dtype="bool"),
+    )
+    buckets.loc[duplicate_rows] = "duplicate_result"
     return buckets
 
 
@@ -1173,6 +1333,7 @@ def _aggregate_group(group: pd.DataFrame) -> dict[str, Any]:
         "internal_label": group["internal_label"].iloc[0],
         "direction": group["direction"].iloc[0],
         "lineage_id": group["lineage_id"].iloc[0],
+        "market_context_id": group["market_context_id"].iloc[0],
         "daily_ema20_slope": group["daily_ema20_slope"].iloc[0],
         "daily_ema50_slope": group["daily_ema50_slope"].iloc[0],
         "h_l_ema_slope_gate": group["h_l_ema_slope_gate"].iloc[0],
@@ -1185,6 +1346,7 @@ def _aggregate_group(group: pd.DataFrame) -> dict[str, Any]:
         "event_context_values": event_context_values,
         "sample_count": int(len(group)),
         "filled_count": int((group["fill_status"] == "filled").sum()),
+        "duplicate_result_count": int(group["_duplicate_result_row"].sum()),
         "win_rate_eligible_count": int((group["win_rate_eligible"] == "yes").sum()),
         "win_rate_eligibility_mismatch_count": int(
             (group["trade_result"].isin(TRADE_RESULTS) != group["win_rate_eligible"].eq("yes")).sum()
@@ -1224,6 +1386,15 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             "win_rate_eligible_count": 0,
             "win_rate_eligibility_mismatch_count": 0,
             "win_rate_guard_exclusion_count": 0,
+            "unique_sample_id_count": 0,
+            "missing_sample_id_count": 0,
+            "duplicate_sample_id_group_count": 0,
+            "duplicate_sample_id_row_count": 0,
+            "duplicate_sample_id_extra_row_count": 0,
+            "duplicate_contract_family_group_count": 0,
+            "duplicate_contract_family_row_count": 0,
+            "duplicate_contract_family_extra_row_count": 0,
+            "duplicate_result_row_count": 0,
             "event_bucket_contract_counts": {},
             "contract_space_bucket_counts": {},
             "outcome_bucket_counts": {},
@@ -1238,6 +1409,12 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             "shared_lineage_group_count": 0,
             "shared_lineage_row_count": 0,
             "cross_pattern_lineage_group_count": 0,
+            "unique_market_context_count": 0,
+            "missing_market_context_count": 0,
+            "shared_market_context_group_count": 0,
+            "shared_market_context_row_count": 0,
+            "exposure_overlap_group_count": 0,
+            "exposure_overlap_row_count": 0,
             "independence_status": "no-results",
             "independence_adjusted_win_rate_pct": None,
             "independence_statistics_status": "not-computable_no-results",
@@ -1294,7 +1471,7 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
     completed = frame[completed_mask]
     r_values = pd.to_numeric(completed["realized_R"], errors="coerce").dropna()
     wins = int((completed["trade_result"] == "win").sum())
-    lineage_values = frame["lineage_id"].fillna("").astype(str).str.strip()
+    lineage_values = frame["_lineage_key"]
     nonempty_lineages = lineage_values[lineage_values != ""]
     lineage_counts = nonempty_lineages.value_counts()
     shared_lineages = lineage_counts[lineage_counts > 1]
@@ -1310,7 +1487,33 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
     unique_lineage_count = int(nonempty_lineages.nunique())
     shared_lineage_group_count = int(len(shared_lineages))
     shared_lineage_row_count = int(shared_lineages.sum()) if shared_lineages.size else 0
-    if missing_lineage_count:
+    sample_id_values = frame["_sample_id_key"]
+    unique_sample_id_count = int(sample_id_values[sample_id_values != ""].nunique())
+    missing_sample_id_count = int((sample_id_values == "").sum())
+    duplicate_sample_id_group_count = int(frame.attrs.get("sample_id_group_count", 0))
+    duplicate_sample_id_row_count = int(frame.attrs.get("sample_id_row_count", 0))
+    duplicate_sample_id_extra_row_count = int(frame.attrs.get("sample_id_extra_count", 0))
+    duplicate_contract_family_group_count = int(frame.attrs.get("contract_family_group_count", 0))
+    duplicate_contract_family_row_count = int(frame.attrs.get("contract_family_row_count", 0))
+    duplicate_contract_family_extra_row_count = int(frame.attrs.get("contract_family_extra_count", 0))
+    duplicate_result_row_count = int(frame["_duplicate_result_row"].sum())
+
+    market_context_values = frame["_market_context_key"]
+    nonempty_market_contexts = market_context_values[market_context_values != ""]
+    market_context_counts = nonempty_market_contexts.value_counts()
+    shared_market_contexts = market_context_counts[market_context_counts > 1]
+    unique_market_context_count = int(nonempty_market_contexts.nunique())
+    missing_market_context_count = int((market_context_values == "").sum())
+    shared_market_context_group_count = int(len(shared_market_contexts))
+    shared_market_context_row_count = int(shared_market_contexts.sum()) if shared_market_contexts.size else 0
+    exposure_overlap_group_count = int(frame.attrs.get("exposure_overlap_group_count", 0))
+    exposure_overlap_row_count = int(frame.attrs.get("exposure_overlap_row_count", 0))
+
+    if duplicate_result_row_count:
+        independence_status = "duplicate_result_rows_present"
+        independence_adjusted_win_rate = None
+        independence_statistics_status = "not-computable_duplicate_result_rows"
+    elif missing_lineage_count:
         independence_status = "missing_lineage"
         independence_adjusted_win_rate = None
         independence_statistics_status = "not-computable_missing_lineage"
@@ -1318,6 +1521,22 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         independence_status = "dependent_lineage_rows_present"
         independence_adjusted_win_rate = None
         independence_statistics_status = "not-computable_shared_lineage"
+    elif missing_sample_id_count:
+        independence_status = "missing_sample_identity"
+        independence_adjusted_win_rate = None
+        independence_statistics_status = "not-computable_missing_sample_identity"
+    elif missing_market_context_count:
+        independence_status = "missing_market_context"
+        independence_adjusted_win_rate = None
+        independence_statistics_status = "not-computable_missing_market_context"
+    elif shared_market_context_group_count:
+        independence_status = "shared_market_context_rows_present"
+        independence_adjusted_win_rate = None
+        independence_statistics_status = "not-computable_shared_market_context"
+    elif exposure_overlap_group_count:
+        independence_status = "overlapping_symbol_exposure"
+        independence_adjusted_win_rate = None
+        independence_statistics_status = "not-computable_overlapping_exposure"
     else:
         independence_status = "unique_lineage_only"
         independence_adjusted_win_rate = float(wins / len(completed) * 100) if len(completed) else None
@@ -1354,6 +1573,15 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         "win_rate_guard_exclusion_count": int(
             ((frame["win_rate_eligible"] == "yes") & ~completed_mask).sum()
         ),
+        "unique_sample_id_count": unique_sample_id_count,
+        "missing_sample_id_count": missing_sample_id_count,
+        "duplicate_sample_id_group_count": duplicate_sample_id_group_count,
+        "duplicate_sample_id_row_count": duplicate_sample_id_row_count,
+        "duplicate_sample_id_extra_row_count": duplicate_sample_id_extra_row_count,
+        "duplicate_contract_family_group_count": duplicate_contract_family_group_count,
+        "duplicate_contract_family_row_count": duplicate_contract_family_row_count,
+        "duplicate_contract_family_extra_row_count": duplicate_contract_family_extra_row_count,
+        "duplicate_result_row_count": duplicate_result_row_count,
         "event_bucket_contract_counts": event_bucket_contract_counts,
         "contract_space_bucket_counts": contract_space_bucket_counts,
         "outcome_bucket_counts": {
@@ -1376,6 +1604,12 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         "shared_lineage_group_count": shared_lineage_group_count,
         "shared_lineage_row_count": shared_lineage_row_count,
         "cross_pattern_lineage_group_count": int(len(cross_pattern_lineages)),
+        "unique_market_context_count": unique_market_context_count,
+        "missing_market_context_count": missing_market_context_count,
+        "shared_market_context_group_count": shared_market_context_group_count,
+        "shared_market_context_row_count": shared_market_context_row_count,
+        "exposure_overlap_group_count": exposure_overlap_group_count,
+        "exposure_overlap_row_count": exposure_overlap_row_count,
         "independence_status": independence_status,
         "independence_adjusted_win_rate_pct": independence_adjusted_win_rate,
         "independence_statistics_status": independence_statistics_status,
@@ -1395,7 +1629,10 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             "same-bar stop/target ambiguity is excluded from the win-rate denominator",
             "each contract must be frozen before its outcome and must carry >=2y Daily context evidence",
             "lineage_id is preserved for dependence control; contracts sharing a lineage are not independent samples",
-            "win_rate_pct is row-based descriptive output; an independence-adjusted rate is withheld when lineages are shared or missing",
+            "same sample_id or contract-family duplicates are excluded from the completed denominator; all copies remain visible in duplicate counters",
+            "market_context_id is optional manual dependence evidence; missing or shared market context withholds the independence-adjusted rate",
+            "overlapping same-symbol held intervals are a dependence diagnostic and withhold the independence-adjusted rate",
+            "win_rate_pct is row-based descriptive output; an independence-adjusted rate is withheld when identity, lineage, market context or exposure independence is unresolved",
             "event_bucket is conservative; event-unverified, pending, unknown and unclassified contexts are never upgraded to ordinary_non_event",
             "ordinary_non_event_strict_space statistics use only explicit pre-entry space evidence; blank legacy space fields remain unknown",
             "H1/H2/L1/L2 require the matching Daily EMA20/EMA50 slope gate; failed gates remain observation_only and are excluded",
@@ -1408,6 +1645,7 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         "internal_label",
         "direction",
         *grouping_columns,
+        "market_context_id",
         "event_bucket",
         "contract_space_bucket",
         "order_branch",
@@ -1425,6 +1663,19 @@ def _json_default(value: Any) -> Any:
     if isinstance(value, pd.Timestamp):
         return value.isoformat()
     raise TypeError(f"not JSON serializable: {type(value).__name__}")
+
+
+def _sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _result_set_sha256(results: list[dict[str, Any]]) -> str:
+    serialised = pd.DataFrame(results).to_csv(index=False, lineterminator="\n")
+    return hashlib.sha256(serialised.encode("utf-8")).hexdigest()
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -1458,12 +1709,20 @@ def main(argv: list[str] | None = None) -> int:
         cash=args.cash,
     )
     summary = build_summary(results)
+    price_path = Path(args.prices).resolve()
+    contract_path = Path(args.contracts).resolve()
+    result_set_sha256 = _result_set_sha256(results)
+    summary["result_set_sha256"] = result_set_sha256
     summary["run_metadata"] = {
         "data_source": args.data_source,
         "data_status": args.data_status,
         "as_of_time": args.as_of_time,
-        "price_file": str(Path(args.prices).resolve()),
-        "contract_file": str(Path(args.contracts).resolve()),
+        "price_file": str(price_path),
+        "price_file_sha256": _sha256_file(price_path),
+        "contract_file": str(contract_path),
+        "contract_file_sha256": _sha256_file(contract_path),
+        "result_set_sha256": result_set_sha256,
+        "result_row_count": len(results),
         "commission": args.commission,
         "spread": args.spread,
         "cash": args.cash,

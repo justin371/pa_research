@@ -74,6 +74,7 @@ $requiredFiles = @(
     'research/backtesting/cross_pattern_statistics_isolation_audit_2026-08-29_CN.md',
     'research/backtesting/event_space_eligibility_audit_2026-08-29_CN.md',
     'research/backtesting/replay_outcome_denominator_audit_2026-08-29_CN.md',
+    'research/backtesting/replay_lineage_independence_audit_2026-08-29_CN.md',
     'research/backtesting/bop_contract_intake_2026-08-28.csv',
     'research/backtesting/bop_contract_intake_audit_2026-08-28_CN.md',
     'strategy/README.md'
@@ -112,6 +113,10 @@ $canonicalChecks = @{
         'win_rate_eligible:',
         'first_obstacle_hit:',
         'max_hold_bars',
+        'lineage_id:',
+        'market_context_id:',
+        'duplicate_result',
+        'price_file_sha256',
         'bop_state:',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'gate_result:',
@@ -268,6 +273,16 @@ if (Test-Path -LiteralPath $replayOutcomeAuditPath -PathType Leaf) {
     foreach ($token in @('win_rate_eligible', 'completed_trade_count', 'incomplete-horizon', 'opening-skip', 'ambiguous_intrabar', 'first_obstacle_hit', 'realized_R', 'max_hold_bars', 'no-new-positive')) {
         if (-not $replayOutcomeAuditContent.Contains($token)) {
             Add-ValidationError "missing replay outcome-audit token '$token'"
+        }
+    }
+}
+
+$replayLineageAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/replay_lineage_independence_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $replayLineageAuditPath -PathType Leaf) {
+    $replayLineageAuditContent = Get-Content -LiteralPath $replayLineageAuditPath -Raw
+    foreach ($token in @('lineage_id', 'market_context_id', 'duplicate_result', 'sample_id', 'results.csv', 'no-new-positive', 'validated win-rate: not-computable')) {
+        if (-not $replayLineageAuditContent.Contains($token)) {
+            Add-ValidationError "missing replay lineage-independence-audit token '$token'"
         }
     }
 }

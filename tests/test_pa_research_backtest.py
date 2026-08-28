@@ -453,6 +453,204 @@ class PaResearchBacktestTests(unittest.TestCase):
         self.assertEqual(summary["independence_status"], "dependent_lineage_rows_present")
         self.assertIsNone(summary["independence_adjusted_win_rate_pct"])
 
+    def test_summary_excludes_duplicate_sample_rows_from_denominator(self):
+        results = [
+            {
+                "sample_id": "DUPLICATE-1",
+                "symbol": "PA-EX",
+                "decision_date": "2026-01-02",
+                "primary_pattern": "ABC_CONT",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "LINEAGE-A",
+                "market_context_id": "MARKET-A",
+                "order_branch": "stop_confirmation",
+                "event_context": "none",
+                "fill_status": "filled",
+                "evidence_status": "comparable",
+                "path_result": "target-reached",
+                "trade_result": "win",
+                "win_rate_eligible": "yes",
+                "realized_R": 1.0,
+                "ambiguous_intrabar": "no",
+            },
+            {
+                "sample_id": "DUPLICATE-1",
+                "symbol": "PA-EX",
+                "decision_date": "2026-01-02",
+                "primary_pattern": "ABC_CONT",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "LINEAGE-B",
+                "market_context_id": "MARKET-B",
+                "order_branch": "stop_confirmation",
+                "event_context": "none",
+                "fill_status": "filled",
+                "evidence_status": "comparable",
+                "path_result": "target-reached",
+                "trade_result": "win",
+                "win_rate_eligible": "yes",
+                "realized_R": 1.0,
+                "ambiguous_intrabar": "no",
+            },
+        ]
+        summary = build_summary(results)
+        self.assertEqual(summary["duplicate_sample_id_group_count"], 1)
+        self.assertEqual(summary["duplicate_sample_id_row_count"], 2)
+        self.assertEqual(summary["duplicate_sample_id_extra_row_count"], 1)
+        self.assertEqual(summary["duplicate_result_row_count"], 2)
+        self.assertEqual(summary["completed_trade_count"], 0)
+        self.assertEqual(summary["outcome_bucket_counts"]["duplicate_result"], 2)
+        self.assertEqual(summary["independence_status"], "duplicate_result_rows_present")
+        self.assertIsNone(summary["independence_adjusted_win_rate_pct"])
+
+    def test_summary_excludes_duplicate_contract_families(self):
+        results = [
+            {
+                "sample_id": "FAMILY-A",
+                "symbol": "PA-EX",
+                "decision_date": "2026-01-02",
+                "primary_pattern": "ABC_CONT",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "SAME-FAMILY",
+                "market_context_id": "MARKET-A",
+                "order_branch": "stop_confirmation",
+                "event_context": "none",
+                "fill_status": "filled",
+                "evidence_status": "comparable",
+                "path_result": "target-reached",
+                "trade_result": "win",
+                "win_rate_eligible": "yes",
+                "realized_R": 1.0,
+                "ambiguous_intrabar": "no",
+            },
+            {
+                "sample_id": "FAMILY-B",
+                "symbol": "PA-EX",
+                "decision_date": "2026-01-02",
+                "primary_pattern": "ABC_CONT",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "SAME-FAMILY",
+                "market_context_id": "MARKET-B",
+                "order_branch": "stop_confirmation",
+                "event_context": "none",
+                "fill_status": "filled",
+                "evidence_status": "comparable",
+                "path_result": "target-reached",
+                "trade_result": "win",
+                "win_rate_eligible": "yes",
+                "realized_R": 1.0,
+                "ambiguous_intrabar": "no",
+            },
+        ]
+        summary = build_summary(results)
+        self.assertEqual(summary["duplicate_sample_id_group_count"], 0)
+        self.assertEqual(summary["duplicate_contract_family_group_count"], 1)
+        self.assertEqual(summary["duplicate_contract_family_row_count"], 2)
+        self.assertEqual(summary["duplicate_result_row_count"], 2)
+        self.assertEqual(summary["completed_trade_count"], 0)
+        self.assertEqual(summary["independence_status"], "duplicate_result_rows_present")
+
+    def test_summary_withholds_independence_rate_when_market_context_is_missing(self):
+        results = [
+            {
+                "sample_id": "MARKET-MISSING-A",
+                "symbol": "PA-EX",
+                "decision_date": "2026-01-02",
+                "primary_pattern": "ABC_CONT",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "LINEAGE-A",
+                "order_branch": "stop_confirmation",
+                "event_context": "none",
+                "fill_status": "filled",
+                "evidence_status": "comparable",
+                "path_result": "target-reached",
+                "trade_result": "win",
+                "win_rate_eligible": "yes",
+                "realized_R": 1.0,
+                "ambiguous_intrabar": "no",
+            },
+            {
+                "sample_id": "MARKET-MISSING-B",
+                "symbol": "PA-EX",
+                "decision_date": "2026-01-03",
+                "primary_pattern": "ABC_CONT",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "LINEAGE-B",
+                "order_branch": "stop_confirmation",
+                "event_context": "none",
+                "fill_status": "filled",
+                "evidence_status": "comparable",
+                "path_result": "invalidated",
+                "trade_result": "loss",
+                "win_rate_eligible": "yes",
+                "realized_R": -1.0,
+                "ambiguous_intrabar": "no",
+            },
+        ]
+        summary = build_summary(results)
+        self.assertEqual(summary["missing_market_context_count"], 2)
+        self.assertEqual(summary["independence_status"], "missing_market_context")
+        self.assertIsNone(summary["independence_adjusted_win_rate_pct"])
+        self.assertEqual(summary["completed_trade_count"], 2)
+
+    def test_summary_surfaces_shared_market_context_and_overlapping_exposure(self):
+        results = [
+            {
+                "sample_id": "OVERLAP-A",
+                "symbol": "PA-EX",
+                "decision_date": "2026-01-02",
+                "primary_pattern": "ABC_CONT",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "LINEAGE-A",
+                "market_context_id": "MARKET-SHARED",
+                "order_branch": "stop_confirmation",
+                "event_context": "none",
+                "fill_status": "filled",
+                "evidence_status": "comparable",
+                "path_result": "target-reached",
+                "trade_result": "win",
+                "win_rate_eligible": "yes",
+                "realized_R": 1.0,
+                "ambiguous_intrabar": "no",
+                "entry_date": "2026-01-05",
+                "exit_date": "2026-01-08",
+            },
+            {
+                "sample_id": "OVERLAP-B",
+                "symbol": "PA-EX",
+                "decision_date": "2026-01-03",
+                "primary_pattern": "ABC_CONT",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "LINEAGE-B",
+                "market_context_id": "MARKET-SHARED",
+                "order_branch": "stop_confirmation",
+                "event_context": "none",
+                "fill_status": "filled",
+                "evidence_status": "comparable",
+                "path_result": "invalidated",
+                "trade_result": "loss",
+                "win_rate_eligible": "yes",
+                "realized_R": -1.0,
+                "ambiguous_intrabar": "no",
+                "entry_date": "2026-01-07",
+                "exit_date": "2026-01-10",
+            },
+        ]
+        summary = build_summary(results)
+        self.assertEqual(summary["shared_market_context_group_count"], 1)
+        self.assertEqual(summary["shared_market_context_row_count"], 2)
+        self.assertEqual(summary["exposure_overlap_group_count"], 1)
+        self.assertEqual(summary["exposure_overlap_row_count"], 2)
+        self.assertEqual(summary["independence_status"], "shared_market_context_rows_present")
+        self.assertIsNone(summary["independence_adjusted_win_rate_pct"])
+
     def test_summary_separates_event_and_explicit_space_evidence(self):
         results = [
             {
