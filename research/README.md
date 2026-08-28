@@ -7,7 +7,7 @@
 ## 当前 authority 与工作流
 
 - [`ABC 研究状态与工作边界`](abc_research_status_v0_3_CN.md)：ABC 的快筛/深审边界；
-- [`ABC + H/L 分层历史结果审计`](abc_hl_stratified_outcome_audit_2026-08-24_CN.md)：当前结果口径、样本分层和 `no_new_positive`；
+- [`ABC + H/L 分层历史结果审计`](abc_hl_stratified_outcome_audit_2026-08-24_CN.md)：当前结果口径、样本分层和 `no-new-positive`；
 - [`BOP 真实多日回踩候选审计`](bop_multiday_pullback_candidate_audit_2026-08-24_CN.md)：普通 BOP、同日回测、事件/缺口分支和多日正例缺口；
 - [`核心八个 Pattern 交叉一致性审计`](core_pattern_cross_audit_CN.md)：主标签、状态转换和历史状态别名；
 - [`PA Pattern 视觉筛选协议`](visual_pattern_triage_protocol_CN.md)：快筛与深审的执行顺序；
@@ -17,6 +17,7 @@
 - [`统一输出、视觉字段与状态轴审计（2026-08-29）`](unified_output_state_axis_audit_2026-08-29_CN.md)：区分文档成熟度与案例状态，补齐历史摘要的 `gate_result`，统一 BOP/H3-L3 的方向、lineage、事件、空间和多周期字段；不新增样本或结果；
 - [`Pattern 索引、别名与主次标签边界审计（2026-08-29）`](pattern_index_alias_boundary_audit_2026-08-29_CN.md)：逐项核对 16 个目录、核心/独立层级、canonical `primary_pattern`/`internal_label`/`state_transition` 与本地入口；不新增样本或结果；
 - [`Pattern 视觉复核前置证据审计（2026-08-29）`](pattern_visual_preflight_audit_2026-08-29_CN.md)：核对 16 个目录是否先看两年 Daily 左侧、重要高低点、EMA20/50/200、强 A/受控 B、位置和首障碍；不新增样本或结果；
+- [`Pattern 案例入口与状态一致性审计（2026-08-29）`](pattern_case_entry_status_audit_2026-08-29_CN.md)：核对 16 个目录的案例链接、条件/边界/no-trade 文案和 `valid_no_trade`/`no-new-positive` 状态；不新增样本或结果；
 - [`人工冻结合同覆盖审计（2026-08-28）`](backtesting/contract_coverage_audit_2026-08-28_CN.md)：统计现有 H/L 合同的方向、标签、事件、空间和 lineage 覆盖，不把它解释为胜率；
 - [`冻结合同字段覆盖与分层完整性审计（2026-08-29）`](backtesting/frozen_contract_field_partition_audit_2026-08-29_CN.md)：逐文件核对方向、Pattern/内部标签、EMA gate、事件、空间、合同状态和 lineage；旧合同缺失字段不回填，继续隔离 ABC/BOP/H3/L3；
 - [`事前证据与结果证据隔离审计（2026-08-29）`](backtesting/pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md)：确认事件、空间和 EMA 资格只能来自入场前合同，回放结果不得反向改写派生分层或胜率分母；记录 mismatch 防护与 `no-new-positive`；

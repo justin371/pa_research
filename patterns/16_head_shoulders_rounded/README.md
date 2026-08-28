@@ -52,7 +52,7 @@
 | `neckline-break-acceptance` | 强收盘越过颈线、跟随、回测守住 | 转 BOP/MTR 新合同 |
 | `neckline-failure` | 越过颈线后重新回到原结构 | 开失败突破/区间边缘分支 |
 | `ordinary-flag-or-pullback` | 原趋势强，右侧只是浅回调且无成熟极端 | 按 ABC/H1/H2 延续，不命名右肩 |
-| `valid-no-trade` | 首障碍贴近、父级区间中部或事件改变几何 | 观察，保留形态标签但不交易 |
+| `valid_no_trade` | 首障碍贴近、父级区间中部或事件改变几何 | 观察，保留形态标签但不交易 |
 
 ## 颈线、订单与风险
 

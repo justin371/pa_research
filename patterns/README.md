@@ -99,6 +99,8 @@ final_state / failure_or_no_trade_reason
 
 16 个目录的两年 Daily 左侧、重要高低点、EMA20/50/200、强 A/受控 B、位置和首障碍共同前置证据见[`Pattern 视觉复核前置证据审计`](../research/pattern_visual_preflight_audit_2026-08-29_CN.md)。
 
+16 个目录的案例入口、条件/边界/no-trade 文案和 canonical `valid_no_trade` 状态见[`Pattern 案例入口与状态一致性审计`](../research/pattern_case_entry_status_audit_2026-08-29_CN.md)。
+
 订单语义和 R/R 的跨 pattern 规则见[`八个 Pattern 的订单合同与 R/R 审计`](../research/order_contract_cross_pattern_audit_CN.md)。
 
 MTR 与三推/H3-L3 的边界复核见[`MTR 与三推/H3-L3 视觉边界复核`](../research/mtr_three_push_visual_boundary_audit_2026-08-24_CN.md)：三推是压力观察入口；成熟区间边缘的第三推可以先成为独立反转候选，MTR 仍需要控制权改变和反向二次确认。

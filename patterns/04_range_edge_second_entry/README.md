@@ -68,9 +68,9 @@ second_leg_trap_risk:
 | 案例 | 视觉分类 | 当前结论 |
 | --- | --- | --- |
 | [`TSLA 2025-03-11–05-13`](../../research/tsla_range_after_sell_climax_2025-03-11_2025-05-13.md) | 卖出高潮后形成宽区间；下沿反应到上沿是区间摆动 | `second-leg-trap-control`；`05-08` 后才重新审计突破接受 |
-| [`RBLX 2024-03-18–04-05`](../../research/rblx_range_edge_not_abc_boundary_2024-03-18_2024-04-05.md) | 下沿测试/开盘上冲失败 | 信号 K、开盘重订和首磁铁否决，`valid-no-trade` |
+| [`RBLX 2024-03-18–04-05`](../../research/rblx_range_edge_not_abc_boundary_2024-03-18_2024-04-05.md) | 下沿测试/开盘上冲失败 | 信号 K、开盘重订和首磁铁否决，`valid_no_trade` |
 | [`TSLA 2024-03-04–03-14`](../../research/tsla_bearish_abc_case_2024-03-04_2024-03-14.md) | 上沿失败后的 L1/L2 空头反应 | 静态空间尚可但过程先破止损，`conditional / process-stop-first` |
-| `IWM 2024-04-17–04-30` | 下沿二次测试、limit 与 stop 两种合同 | limit 约 1R 边界，stop 因开盘/前高拥挤，`valid-no-trade` |
+| [`IWM 2024-04-17–04-30`](../../research/range_edge_second_entry_framework_CN.md) | 下沿二次测试、limit 与 stop 两种合同 | limit 约 1R 边界，stop 因开盘/前高拥挤，`valid_no_trade` |
 | [`QCOM 2025-02-21–03-28`](../../research/qcom_bearish_abc_range_b_boundary_2025-02-21_2025-03-28.md) | 宽 B/过渡区 | 重置趋势计数，不能把区间内下跌叫 L2 |
 
 专项审计见[`交易区间边缘二次入场专项视觉证据审计`](../../research/range_edge_second_entry_visual_evidence_gap_audit_2026-08-24_CN.md)。当前已经形成“先判区间、再判边缘、最后判订单”的工作语言，但尚无事件过滤通过、首磁铁宽裕且过程完整的标准上下沿正例；保持 `no-new-positive`。

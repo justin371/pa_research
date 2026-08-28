@@ -172,6 +172,7 @@ $requiredFiles = @(
     'research/unified_output_state_axis_audit_2026-08-29_CN.md',
     'research/pattern_index_alias_boundary_audit_2026-08-29_CN.md',
     'research/pattern_visual_preflight_audit_2026-08-29_CN.md',
+    'research/pattern_case_entry_status_audit_2026-08-29_CN.md',
     'research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
@@ -289,6 +290,71 @@ foreach ($entry in $canonicalChecks.GetEnumerator()) {
         if (-not $content.Contains($token)) {
             Add-ValidationError "missing canonical token '$token': $($entry.Key)"
         }
+    }
+}
+
+$patternCaseEntryAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/pattern_case_entry_status_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $patternCaseEntryAuditPath -PathType Leaf) {
+    $patternCaseEntryAuditContent = Get-Content -LiteralPath $patternCaseEntryAuditPath -Raw
+    foreach ($token in @(
+        'valid_no_trade',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
+    )) {
+        if (-not $patternCaseEntryAuditContent.Contains($token)) {
+            Add-ValidationError "missing pattern case-entry audit token '$token'"
+        }
+    }
+}
+
+$patternCaseReadmeRelativePaths = @(
+    'patterns/01_h1_l1_first_entry/README.md',
+    'patterns/02_h2_l2_second_entry/README.md',
+    'patterns/03_abc_continuation/README.md',
+    'patterns/04_range_edge_second_entry/README.md',
+    'patterns/05_failed_breakout_climax/README.md',
+    'patterns/06_breakout_pullback_bop/README.md',
+    'patterns/07_mtr_reversal/README.md',
+    'patterns/08_three_push_h3_l3/README.md',
+    'patterns/09_vcp_minervini/README.md',
+    'patterns/10_final_flag/README.md',
+    'patterns/11_opening_reversal/README.md',
+    'patterns/12_channel/README.md',
+    'patterns/13_inside_bar_two_bar_reversal/README.md',
+    'patterns/14_triangle_expanding_range/README.md',
+    'patterns/15_double_top_bottom/README.md',
+    'patterns/16_head_shoulders_rounded/README.md'
+)
+foreach ($relativePath in $patternCaseReadmeRelativePaths) {
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Content -LiteralPath $absolutePath -Raw
+    if ($content -match '(?<![\w-])valid(?:-| )no-trade(?![\w-])') {
+        Add-ValidationError "legacy valid-no-trade status alias in active pattern README: $relativePath"
+    }
+}
+
+$rangeEdgeReadmePath = Join-Path -Path $repoRoot -ChildPath 'patterns/04_range_edge_second_entry/README.md'
+if (Test-Path -LiteralPath $rangeEdgeReadmePath -PathType Leaf) {
+    $rangeEdgeReadmeContent = Get-Content -LiteralPath $rangeEdgeReadmePath -Raw
+    if ($rangeEdgeReadmeContent -notmatch 'IWM 2024-04-17' -or
+        $rangeEdgeReadmeContent -notmatch 'range_edge_second_entry_framework_CN\.md') {
+        Add-ValidationError 'IWM range-edge case is missing its framework entry link'
+    }
+}
+
+$researchReadmePath = Join-Path -Path $repoRoot -ChildPath 'research/README.md'
+if (Test-Path -LiteralPath $researchReadmePath -PathType Leaf) {
+    $researchReadmeContent = Get-Content -LiteralPath $researchReadmePath -Raw
+    if ($researchReadmeContent -match 'no_new_positive') {
+        Add-ValidationError 'research README contains non-canonical no_new_positive alias'
+    }
+    if ($researchReadmeContent -notmatch 'no-new-positive') {
+        Add-ValidationError 'research README is missing canonical no-new-positive status'
     }
 }
 

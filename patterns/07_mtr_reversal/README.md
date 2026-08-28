@@ -86,7 +86,7 @@ thesis_state: reversal-attempt / MTR-candidate / MTR-confirmed-for-research / fa
 | 案例 | MTR 状态 | 研究结论 |
 | --- | --- | --- |
 | [`TSLA 2024-03-04–03-14`](../../research/tsla_bearish_abc_case_2024-03-04_2024-03-14.md) | 区间上沿重叠的 MTR candidate | L1 失败后 L2 清楚，但过程先破坏结构止损；静态空间不能代替路径审计 |
-| [`NFLX 2024-08-05–09-26`](../../research/nflx_three_push_top_boundary_2024-08-05_2024-09-26.md) | 高位多次测试 / MTR-like | 首支撑拥挤，且原方向后来重新接受，记 valid no-trade |
+| [`NFLX 2024-08-05–09-26`](../../research/nflx_three_push_top_boundary_2024-08-05_2024-09-26.md) | 高位多次测试 / MTR-like | 首支撑拥挤，且原方向后来重新接受，记 `valid_no_trade` |
 | [`TSLA 2025-09-08–09-12`](../../research/tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md) | failed-MTR-thesis → BOP | 阻力下反转尝试被强收盘突破否定，必须切换新合同 |
 | [`ASML 2025-05-19–06-13`](../../research/asml_h3_l3_range_transition_boundary_2025-05-19_2025-06-13.md) | double-bottom-like / not-MTR | 低位两次测试后进入区间过渡，缺少结构接受和二次确认 |
 | [`PLTR 2024-12-24–2025-01-08`](../../research/pltr_bearish_abc_l1_ordinary_a_boundary_2024-12-24_2025-01-08.md) | ordinary-pullback / early-reversal-candidate | A 腿普通、首支撑不足约 `1R`，不能因为双顶样外观升级为 MTR |
