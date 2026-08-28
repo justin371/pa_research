@@ -4,7 +4,7 @@
 
 这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.9`）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
 
-当前人工冻结合同的方向、H/L 标签、事件、空间和 lineage 覆盖见[`人工冻结合同覆盖审计`](contract_coverage_audit_2026-08-28_CN.md)。研究记录与当前回放输入的字段边界见[`合同权威与字段一致性审计`](contract_authority_consistency_audit_2026-08-29_CN.md)；现有 CSV inventory 与资格隔离见[`合同 CSV inventory 与资格边界审计`](contract_csv_inventory_audit_2026-08-29_CN.md)；validator 与 engine 的合同 parity 见[`文档 validator 与 engine 合同 parity 审计`](validator_engine_contract_parity_audit_2026-08-29_CN.md)；报告、索引与 inventory 的当前一致性见[`报告、索引与 inventory 一致性审计`](report_index_inventory_consistency_audit_2026-08-29_CN.md)。这些审计只检查合同记录/边界完整性，不代表胜率验证。
+当前人工冻结合同的方向、H/L 标签、事件、空间和 lineage 覆盖见[`人工冻结合同覆盖审计`](contract_coverage_audit_2026-08-28_CN.md)。研究记录与当前回放输入的字段边界见[`合同权威与字段一致性审计`](contract_authority_consistency_audit_2026-08-29_CN.md)；现有 CSV inventory 与资格隔离见[`合同 CSV inventory 与资格边界审计`](contract_csv_inventory_audit_2026-08-29_CN.md)；validator 与 engine 的合同 parity 见[`文档 validator 与 engine 合同 parity 审计`](validator_engine_contract_parity_audit_2026-08-29_CN.md)；报告、索引与 inventory 的当前一致性见[`报告、索引与 inventory 一致性审计`](report_index_inventory_consistency_audit_2026-08-29_CN.md)；各批次报告数字、方向/标签、事件/空间和 lineage 的逐批重算见[`批次报告数字与分层一致性审计`](batch_report_numeric_consistency_audit_2026-08-29_CN.md)。这些审计只检查合同记录/边界完整性，不代表胜率验证。
 
 视觉资产、冻结合同截止图与事前/结果证据隔离见[`视觉资产与事前证据边界审计`](visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md)。该审计区分仓库内 105 张 PNG 与 `hl_next4/hl_next5` 的外部 artifact，不把人工画面抽查当作自动识别或胜率证据。外部 PNG 的逻辑文件清单、哈希和 ROST 决策日图缺失边界见[`外部视觉 artifact provenance 审计`](external_visual_artifact_provenance_audit_2026-08-29_CN.md)及[`外部视觉 artifact manifest`](external_visual_artifact_manifest_2026-08-29.json)。
 
@@ -103,7 +103,7 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 
 本轮大样本冻结合同见 [`hl_large_contracts_2026-08-27.csv`](hl_large_contracts_2026-08-27.csv)，历史价格快照见 [`hl_large_prices_2026-08-27.csv`](hl_large_prices_2026-08-27.csv)，冻结前人工筛选记录见 [`hl_large_selection_2026-08-27_CN.md`](hl_large_selection_2026-08-27_CN.md)，图表资产和来源边界见 [`H/L 大样本回测人工看图资产`](../assets/visual_recognition/2026-08-27/hl_large_backtest/README.md)。本轮仍是独立研究批次；目标胜率为用户修正后的 `60%`，不是生产规则或已验证结果。
 
-本轮大样本回放审计见 [`hl_large_replay_2026-08-27_CN.md`](hl_large_replay_2026-08-27_CN.md)。报告中的 `76.47%` 是由旧 engine `0.3.1` 产物计算的历史描述值；其中 `bars_held=11` 按当前定义是十根完整观察 K 线后的下一根开盘执行索引，不是额外自由持仓。engine `0.3.9` 保留该合同语义，并增加重复结果、市场上下文/持仓重叠、输入指纹、源码指纹、显式空间证据和事前 provenance/派生字段防护；历史 artifact 未静默重写。严格空间合格完成样本只有 1 条，当前 `validated win-rate` 仍为 `not-computable`，结论保持 `no-new-positive`。
+本轮大样本回放审计见 [`hl_large_replay_2026-08-27_CN.md`](hl_large_replay_2026-08-27_CN.md)。报告中的 `76.47%` 是由旧 engine `0.3.1` 产物计算的历史描述值；其中 `bars_held=11` 按当前定义是十根完整观察 K 线后的下一根开盘执行索引，不是额外自由持仓。engine `0.3.9` 保留该合同语义，并增加重复结果、市场上下文/持仓重叠、输入指纹、源码指纹、显式空间证据和事前 provenance/派生字段防护；历史 artifact 未静默重写。按冻结价格几何计算的严格空间子集只有 1 条完成样本，但旧 CSV 没有显式 `pre_entry_space_R/space_status`，当前 engine 将其 37 条合同都视为 `unknown_contract_space`；因此该子集不能读成当前显式 strict-space 胜率。当前 `validated win-rate` 仍为 `not-computable`，结论保持 `no-new-positive`。
 
 下一批 H/L 人工冻结合同见 [`hl_next_contracts_2026-08-27.csv`](hl_next_contracts_2026-08-27.csv)，历史价格快照见 [`hl_next_prices_2026-08-27.csv`](hl_next_prices_2026-08-27.csv)，冻结前人工选择和事件分层记录见 [`hl_next_selection_2026-08-27_CN.md`](hl_next_selection_2026-08-27_CN.md)，图表资产和来源边界见 [`H/L 下一批人工看图回放资产`](../assets/visual_recognition/2026-08-27/hl_next_backtest/README.md)。本批包含 5 条合同：3 条普通非事件、2 条事件驱动；全部通过事前 `>=1R` 空间字段，但只有 2 条成交完成，1 胜 1 负，描述性胜率 `50.00%`，60% 目标仍未验证。
 

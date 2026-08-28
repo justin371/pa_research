@@ -29,6 +29,8 @@
 
 合同原始字段见[`hl_contracts_2026-08-26.csv`](hl_contracts_2026-08-26.csv)。以下的 R/R 只是在合同冻结时用第一障碍计算的几何，不是胜率或收益保证。
 
+本批旧合同 CSV 没有显式 `pre_entry_space_R` 或 `space_status` 列；下文的 `xR` 是由冻结时已经写入的触发、结构止损和第一障碍做出的历史几何审计值。按当前 engine `0.3.9` 的字段分层，这 5 条合同的 `contract_space_bucket` 仍是 `unknown_contract_space`，不能把下文几何值回填成当前显式 strict-space 状态。
+
 | 合同 | 方向/标签 | lineage | EMA20/50 闸门 | 回调位置与 META | 触发 / 结构止损 / 第一障碍 | 冻结前判断 |
 | --- | --- | --- | --- | --- | --- | --- |
 | [`TSLA 2025-08-18`](../assets/visual_recognition/2026-08-26/hl_contract_batch/TSLA_Daily_2y_cutoff_2025-08-18.png) | `long / H1` | `TSLA-2025-08-local` | `up/up / long_pass` | EMA20 重测、前期支撑；`absent` | `336.27 / 326.50 / 340.47`；约 `0.43R` | 第一次尝试外形成立，但第一阻力太近，属于边界/不宜直接入场 |

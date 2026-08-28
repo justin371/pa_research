@@ -19,7 +19,8 @@
 | 冻结合同订单分支 | stop_confirmation 60 |
 | 冻结合同 lineage | 53 个，7 个共享组、14 条记录 |
 | 冻结合同空间字段 | strict_ge_1R 9、borderline_ge_1R 1、未知 50 |
-| ABC/BOP intake 主标签 | ABC_CONT 6、BOP 4 |
+| 统一 ABC/BOP intake 主标签 | `ABC_CONT` 6、`BOP` 4（共 10 条） |
+| BOP 专项 intake | 15 条（无统一 `primary_pattern` 列） |
 
 这些值与合同 inventory、人工冻结合同覆盖、字段分层和 lineage 审计中的当前数据相符。intake 仍全部为 `contract_frozen=no`，使用 `intake_id` 而非 `sample_id`，不进入回放分母。
 

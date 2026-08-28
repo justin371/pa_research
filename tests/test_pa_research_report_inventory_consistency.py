@@ -110,7 +110,9 @@ class PaResearchReportInventoryConsistencyTests(unittest.TestCase):
         self.assertIn("| `unknown` | 1 |", event_space)
         self.assertIn("| 冻结 H/L 合同 | 7 个 CSV、60 条 |", lineage)
         self.assertIn("| 共享 lineage | 7 组、14 条 |", lineage)
-        self.assertIn("| ABC/BOP intake | 6 条 ABC、4 条 BOP |", lineage)
+        self.assertIn("| 统一 ABC/BOP intake | 1 个 CSV、10 条", lineage)
+        self.assertIn("| BOP 专项 intake | 1 个 CSV、15 条 |", lineage)
+        self.assertIn("| 全部 intake | 2 个 CSV、25 条 |", lineage)
         self.assertIn("| `market_context_id` | 0/60 条已记录 |", lineage)
 
         replay_files = sorted(BACKTEST_ROOT.glob("*replay*.md"))
@@ -143,17 +145,21 @@ class PaResearchReportInventoryConsistencyTests(unittest.TestCase):
         scope_report = (BACKTEST_ROOT / "scope_boundary_dependency_audit_2026-08-29_CN.md").read_text(encoding="utf-8")
         validator = (REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1").read_text(encoding="utf-8")
         consistency_report = (BACKTEST_ROOT / "report_index_inventory_consistency_audit_2026-08-29_CN.md").read_text(encoding="utf-8")
+        batch_report = (BACKTEST_ROOT / "batch_report_numeric_consistency_audit_2026-08-29_CN.md").read_text(encoding="utf-8")
         engine_sha256 = hashlib.sha256((REPO_ROOT / "pa_research_backtest" / "engine.py").read_bytes()).hexdigest()
         self.assertIn(f"当前引擎版本 `{ENGINE_VERSION}`", readme)
         self.assertIn("backtesting==0.6.6", scope_report)
         self.assertIn("matplotlib==3.10.9", scope_report)
         self.assertIn("validator_engine_contract_parity_audit_2026-08-29_CN.md", validator)
         self.assertIn(f"engine.py` SHA-256 为 `{engine_sha256}`", consistency_report)
+        self.assertIn("| 全部 intake | 2 | 25 |", batch_report)
+        self.assertIn("旧批次报告里的 `xR` 是冻结价格几何审计值", batch_report)
 
         for relative_path in (
             "contract_csv_inventory_audit_2026-08-29_CN.md",
             "validator_engine_contract_parity_audit_2026-08-29_CN.md",
             "report_index_inventory_consistency_audit_2026-08-29_CN.md",
+            "batch_report_numeric_consistency_audit_2026-08-29_CN.md",
         ):
             self.assertIn(relative_path, readme)
             research_readme = (REPO_ROOT / "research" / "README.md").read_text(encoding="utf-8")

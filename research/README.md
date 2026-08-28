@@ -29,6 +29,7 @@
 - [`合同 CSV inventory 与资格边界审计（2026-08-29）`](backtesting/contract_csv_inventory_audit_2026-08-29_CN.md)：只读盘点冻结合同、示例合同、intake 和价格快照，固化 loader、入场几何、标签组合及 `contract_frozen` 隔离；不改写历史 CSV 或增加样本；
 - [`文档 validator 与 engine 合同 parity 审计（2026-08-29）`](backtesting/validator_engine_contract_parity_audit_2026-08-29_CN.md)：补齐 validator 与 engine 的必需列、订单/gap、有限数值、入场几何、META 和研究字段校验，并用合成负例验证拒绝边界；不改变 engine 语义或增加样本；
 - [`报告、索引与 inventory 一致性审计（2026-08-29）`](backtesting/report_index_inventory_consistency_audit_2026-08-29_CN.md)：交叉核对当前 CSV、冻结合同、intake、replay 报告、engine/dependency 版本和历史 artifact 边界，并增加动态防回归检查；不改写历史结果；
+- [`批次报告数字与分层一致性审计（2026-08-29）`](backtesting/batch_report_numeric_consistency_audit_2026-08-29_CN.md)：重算各 H/L 批次的方向、内部标签、EMA gate、事件/空间 bucket、几何空间和 lineage，并核对回放结论；明确 25 条 intake 总量和旧合同空间字段边界；不新增样本；
 - [`视觉资产与事前证据边界审计（2026-08-29）`](backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md)：核对 11 个视觉资产目录、105 张 PNG、冻结合同截止图、两年 Daily/EMA/重要高低点字段、结果隔离和外部 artifact 边界；不新增样本，不把人工抽查升级为胜率证据；
 - [`外部视觉 artifact provenance 审计（2026-08-29）`](backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md)：固定 `hl_next4/hl_next5` 的外部 PNG 数量、哈希和合同映射，明确 ROST 2026-01-07 缺少决策日图、后一天图不能替代；不复制外部缓存或改写历史结果；
 - [`回放版本与结论表述一致性审计（2026-08-29）`](backtesting/version_conclusion_consistency_audit_2026-08-29_CN.md)：统一当前 engine `0.3.9`、历史版本与 `no-new-positive`/`validated win-rate: not-computable` 的语境，保留历史点估计但不升级为验证统计；

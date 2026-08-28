@@ -6,7 +6,7 @@
 
 ## 结论
 
-本批 5 条人工看图冻结合同全部通过了 `>=1R` 首障碍空间字段和对应的 Daily EMA20/EMA50 方向闸门，但只有 2 条实际成交并完成，且全部属于事件驱动分组；3 条普通非事件合同都因 `gap_policy=skip` 在开盘跳过旧触发位。完成成交为 1 胜 1 负，描述性胜率 `50.00%`，Wilson 95% 区间约为 `9.45%–90.55%`。这不是对 H1/H2/L1/L2 规则的验证，60% 目标没有被验证，结论保持 `no-new-positive`。
+本批 5 条人工看图冻结合同，按冻结的 `entry_trigger`、`structural_stop` 和 `first_obstacle` 做事前价格几何计算，均达到 `>=1R`；它们也均通过对应的 Daily EMA20/EMA50 方向闸门。但旧合同 CSV 没有显式 `pre_entry_space_R/space_status`，所以当前 engine 的 `contract_space_bucket` 仍应视为 `unknown_contract_space`，不能把这段历史几何值当成当前显式 strict-space 字段。只有 2 条实际成交并完成，且全部属于事件驱动分组；3 条普通非事件合同都因 `gap_policy=skip` 在开盘跳过旧触发位。完成成交为 1 胜 1 负，描述性胜率 `50.00%`，Wilson 95% 区间约为 `9.45%–90.55%`。这不是对 H1/H2/L1/L2 规则的验证，60% 目标没有被验证，结论保持 `no-new-positive`。
 
 本报告只审计 PA Research 的人工冻结合同，不自动识别形态、不自动发现股票、不创建量化扫描器、不连接 Execution Agent，也不修改 Codex Trading。
 

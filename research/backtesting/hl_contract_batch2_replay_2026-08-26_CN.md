@@ -27,6 +27,8 @@
 
 三行合同分别属于不同 symbol/episode，且不与首批 TSLA/CRWD 合同共享局部 A/B lineage。`primary_pattern` 仍写母结构，`internal_label` 单独写 H2 或 L1；这不是把 H2/L1 变成新的生产 setup。
 
+本批旧合同 CSV 没有显式 `pre_entry_space_R` 或 `space_status` 列；下文的 `xR` 是由冻结时已经写入的触发、结构止损和第一障碍做出的历史几何审计值。按当前 engine `0.3.9` 的字段分层，这 3 条合同的 `contract_space_bucket` 仍是 `unknown_contract_space`，不能把下文几何值回填成当前显式 strict-space 状态。
+
 | 合同 | 方向 / 标签 | 两年 Daily 与重要结构 | EMA20/50/200（决策日） | A/B、位置与 META | 触发 / 结构止损 / 第一障碍 | 冻结前裁决 |
 | --- | --- | --- | --- | --- | --- | --- |
 | [`KLAC 2025-06-02`](../assets/visual_recognition/2026-08-26/hl_contract_batch2/KLAC_Daily_2y_cutoff_2025-06-02.png) | `long / H2`；`KLAC-2025-05-local-public` | `2023-06-01`–`2025-06-02`，502 根 Daily；左侧高点、2025-04 急跌低点和 2025-05 恢复均可见；A 为 05-07–05-14 的方向性上涨 | `75.5217 / 72.7031 / 70.7054`；EMA20/50 五日变化 `+0.9937/+0.9821`，`long_pass` | 05-23 首次测试、05-30/06-02 第二次回到 `72.98–74.71` 支撑簇并收回 EMA20；META：EMA20、重复低点、前方阻力 | `76.50 / 72.00 / 79.63`；空间约 `0.70R` | 形态和 EMA 闸门成立，但第一阻力不足约 1R；`valid_no_trade / space-borderline`，不进入正向统计 |

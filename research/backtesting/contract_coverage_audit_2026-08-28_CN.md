@@ -78,7 +78,7 @@
 
 ## 四、ABC/BOP 的机器可读缺口
 
-除示例文件外，当前 backtesting 合同 CSV 仍没有**冻结**的 `primary_pattern=ABC_CONT` 或 `primary_pattern=BOP` 研究合同；新增的 [`abc_bop_contract_intake_2026-08-28.csv`](abc_bop_contract_intake_2026-08-28.csv) 只有 6 条 ABC 和 4 条 BOP 准入记录，且全部是 `contract_frozen=no`，不进入回放分母。
+除示例文件外，当前 backtesting 合同 CSV 仍没有**冻结**的 `primary_pattern=ABC_CONT` 或 `primary_pattern=BOP` 研究合同。统一的 [`abc_bop_contract_intake_2026-08-28.csv`](abc_bop_contract_intake_2026-08-28.csv) 有 6 条 ABC 和 4 条 BOP 准入记录，另有独立的 [`bop_contract_intake_2026-08-28.csv`](bop_contract_intake_2026-08-28.csv) 15 条 BOP 专项边界记录；两类 intake 合计 25 条，且全部是 `contract_frozen=no`，不进入回放分母。此前的“6 条 ABC、4 条 BOP”只指统一 intake 文件，不是全部 intake 总量。
 
 这不是缺少研究，而是合同层尚未统一：
 
