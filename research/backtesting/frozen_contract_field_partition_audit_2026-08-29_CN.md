@@ -6,7 +6,7 @@
 
 ## 一、结论
 
-本轮只审计仓库中已有记录，没有下载新行情、重新选股、重画图表或新增回放样本。审计对象是 7 个非示例冻结合同 CSV，共 60 条 H1/H2/L1/L2 合同；当前 engine `0.3.6` 可以加载全部 60 条。核心身份、方向、Pattern/内部标签、订单字段、事件字段、人工审查字段、`contract_frozen` 和 `lineage_id` 没有发现跨文件重复或 H/L/ABC/BOP 混算。
+本轮只审计仓库中已有记录，没有下载新行情、重新选股、重画图表或新增回放样本。审计对象是 7 个非示例冻结合同 CSV，共 60 条 H1/H2/L1/L2 合同；当前 engine `0.3.7` 可以加载全部 60 条。核心身份、方向、Pattern/内部标签、订单字段、事件字段、人工审查字段、`contract_frozen` 和 `lineage_id` 没有发现跨文件重复或 H/L/ABC/BOP 混算。
 
 发现和处理的边界如下：
 
@@ -52,7 +52,7 @@
 
 本轮只修复记录完整性防护，不改变交易规则或历史数值：
 
-1. engine `0.3.6` 要求显式 `strict_ge_1R`、`clearly_positive` 或 `blocked` 必须同时提供数值 `pre_entry_space_R`；缺数值不能把状态当作可审计证据。
+1. engine `0.3.7` 要求显式 `strict_ge_1R`、`clearly_positive` 或 `blocked` 必须同时提供数值 `pre_entry_space_R`；缺数值不能把状态当作可审计证据。
 2. 文档校验器现在检查方向、Pattern、内部标签、H/L 方向映射、EMA 斜率与 gate 的一致性、H3/L3 的方向/Pattern 关系、可选 `contract_state` 枚举以及严格/阻断空间状态的数值证据。
 3. 合同身份键在校验器中统一按不区分大小写的 canonical key 检查，避免只因大小写不同而漏报重复。
 

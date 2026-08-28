@@ -47,7 +47,7 @@ validated win-rate: not-computable
 
 ## 三、报告数值与正式 artifact 的对应关系
 
-按仓库报告明确指定的 artifact 做现有输入的内存复核，未写出新的结果文件。下表中的“当前复核”使用 PA Research 当前 engine `0.3.6`；新增的事件/空间/独立性字段会比旧结果多，但成交、退出、结果标签和 `realized_R` 的核心历史路径保持一致。
+按仓库报告明确指定的 artifact 做现有输入的内存复核，未写出新的结果文件。下表中的“当前复核”使用 PA Research 当前 engine `0.3.7`；新增的事件/空间/独立性字段会比旧结果多，但成交、退出、结果标签和 `realized_R` 的核心历史路径保持一致。
 
 | 报告 | 指定 artifact | 旧 summary | 当前输入复核 | 处理 |
 | --- | --- | --- | --- | --- |
@@ -75,7 +75,7 @@ validated win-rate: not-computable
 
 ## 四、已落实的修复
 
-当前 engine 已升级为 `0.3.6`：
+当前 engine 已升级为 `0.3.7`：
 
 - 合同加载时对 `sample_id` 使用大小写不敏感的规范身份，对 `lineage_id` 使用规范化合同族键；大小写不同的重复身份不再被当成两条冻结合同放行；
 - CLI 输出的 `summary.json` 与 `run_metadata.json` 都记录 `engine_version`、`backtesting_version`、Python/pandas/numpy 运行时版本和 `engine_source_sha256`；

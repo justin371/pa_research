@@ -25,7 +25,7 @@ import pandas as pd
 from backtesting import Backtest, Strategy
 
 
-ENGINE_VERSION = "0.3.6"
+ENGINE_VERSION = "0.3.7"
 SUPPORTED_DIRECTIONS = {"long", "short"}
 SUPPORTED_PATTERNS = {"ABC_CONT", "BOP", "H1_L1", "H2_L2", "H3_L3", "RFB", "MTR", "other"}
 SUPPORTED_LABELS = {"H1", "H2", "L1", "L2", "H3", "L3", "none", "pending"}
@@ -297,6 +297,21 @@ def _contract_eligibility(contract: BacktestContract) -> str:
     if contract.h_l_ema_slope_gate in {"long_pass", "short_pass"}:
         return "eligible"
     if contract.h_l_ema_slope_gate == "fail_flat_or_opposite":
+        return "observation_only"
+    return "pending"
+
+
+def _result_contract_eligibility(internal_label: Any, ema_gate: Any) -> str:
+    """Derive result eligibility from the pre-entry H/L gate, never from outcome fields."""
+
+    label = _as_string(internal_label).upper()
+    gate = _as_string(ema_gate).lower()
+    if label not in H_L_LABELS:
+        return "eligible"
+    expected_gate = "long_pass" if label in {"H1", "H2"} else "short_pass"
+    if gate == expected_gate:
+        return "eligible"
+    if gate == "fail_flat_or_opposite":
         return "observation_only"
     return "pending"
 
@@ -1171,6 +1186,8 @@ def _exposure_overlap_stats(frame: pd.DataFrame) -> tuple[pd.Series, int, int]:
 def _prepare_result_frame(frame: pd.DataFrame) -> pd.DataFrame:
     """Normalize result fields before any denominator or group calculation."""
 
+    has_ema_gate_provenance = "h_l_ema_slope_gate" in frame.columns
+
     for column in (
         "sample_id",
         "symbol",
@@ -1254,6 +1271,29 @@ def _prepare_result_frame(frame: pd.DataFrame) -> pd.DataFrame:
     frame["path_result"] = frame["path_result"].fillna("").astype(str).str.strip().str.lower()
     if "realized_R" not in frame:
         frame["realized_R"] = None
+    if "contract_eligibility" not in frame:
+        frame["contract_eligibility"] = ""
+    declared_contract_eligibility = (
+        frame["contract_eligibility"].fillna("").astype(str).str.strip().str.lower()
+    )
+    if has_ema_gate_provenance:
+        derived_contract_eligibility = pd.Series(
+            [
+                _result_contract_eligibility(label, gate)
+                for label, gate in zip(frame["internal_label"], frame["h_l_ema_slope_gate"])
+            ],
+            index=frame.index,
+            dtype="object",
+        )
+        mismatch = declared_contract_eligibility.ne("") & declared_contract_eligibility.ne(
+            derived_contract_eligibility
+        )
+        frame["contract_eligibility"] = derived_contract_eligibility
+        frame["_contract_eligibility_guard"] = True
+        frame.attrs["contract_eligibility_mismatch_count"] = int(mismatch.sum())
+    else:
+        frame["_contract_eligibility_guard"] = False
+        frame.attrs["contract_eligibility_mismatch_count"] = 0
     overlap, overlap_group_count, overlap_row_count = _exposure_overlap_stats(frame)
     frame["_exposure_overlap_row"] = overlap
     frame.attrs["exposure_overlap_group_count"] = overlap_group_count
@@ -1269,6 +1309,14 @@ def _completed_trade_mask(frame: pd.DataFrame) -> pd.Series:
         "_duplicate_result_row",
         pd.Series(False, index=frame.index, dtype="bool"),
     )
+    contract_eligibility_guard = frame.get(
+        "_contract_eligibility_guard",
+        pd.Series(False, index=frame.index, dtype="bool"),
+    )
+    contract_eligibility = frame.get(
+        "contract_eligibility",
+        pd.Series("", index=frame.index, dtype="object"),
+    )
     return (
         frame["trade_result"].isin(TRADE_RESULTS)
         & frame["win_rate_eligible"].eq("yes")
@@ -1278,6 +1326,7 @@ def _completed_trade_mask(frame: pd.DataFrame) -> pd.Series:
         & frame["path_result"].ne("ambiguous")
         & frame["path_result"].ne("incomplete-horizon")
         & ~duplicate_rows
+        & (~contract_eligibility_guard | contract_eligibility.eq("eligible"))
         & realized_r.notna()
         & np.isfinite(realized_r)
     )
@@ -1401,6 +1450,9 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             "duplicate_contract_family_row_count": 0,
             "duplicate_contract_family_extra_row_count": 0,
             "duplicate_result_row_count": 0,
+            "contract_eligibility_mismatch_count": 0,
+            "event_bucket_mismatch_count": 0,
+            "contract_space_bucket_mismatch_count": 0,
             "event_bucket_contract_counts": {},
             "contract_space_bucket_counts": {},
             "outcome_bucket_counts": {},
@@ -1447,31 +1499,38 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             frame[column] = ""
     if "event_context" not in frame:
         frame["event_context"] = ""
-    if "event_bucket" not in frame:
-        frame["event_bucket"] = frame["event_context"].fillna("").map(_event_bucket)
-    else:
-        missing_event_bucket = frame["event_bucket"].fillna("").astype(str).str.strip() == ""
-        frame.loc[missing_event_bucket, "event_bucket"] = (
-            frame.loc[missing_event_bucket, "event_context"].fillna("").map(_event_bucket)
+    derived_event_bucket = frame["event_context"].fillna("").map(_event_bucket)
+    if "event_bucket" in frame:
+        declared_event_bucket = frame["event_bucket"].fillna("").astype(str).str.strip().str.casefold()
+        event_bucket_mismatch = declared_event_bucket.ne("") & declared_event_bucket.ne(
+            derived_event_bucket.str.casefold()
         )
+    else:
+        event_bucket_mismatch = pd.Series(False, index=frame.index, dtype="bool")
+    frame["event_bucket"] = derived_event_bucket
+    frame.attrs["event_bucket_mismatch_count"] = int(event_bucket_mismatch.sum())
     if "space_status" not in frame:
         frame["space_status"] = ""
     if "pre_entry_space_R" not in frame:
         frame["pre_entry_space_R"] = None
-    if "contract_space_bucket" not in frame:
-        frame["contract_space_bucket"] = [
+    frame["pre_entry_space_R"] = pd.to_numeric(frame["pre_entry_space_R"], errors="coerce")
+    derived_space_bucket = pd.Series(
+        [
             _contract_space_bucket(status, space_r)
             for status, space_r in zip(frame["space_status"], frame["pre_entry_space_R"])
-        ]
+        ],
+        index=frame.index,
+        dtype="object",
+    )
+    if "contract_space_bucket" in frame:
+        declared_space_bucket = frame["contract_space_bucket"].fillna("").astype(str).str.strip().str.casefold()
+        space_bucket_mismatch = declared_space_bucket.ne("") & declared_space_bucket.ne(
+            derived_space_bucket.str.casefold()
+        )
     else:
-        missing_space_bucket = frame["contract_space_bucket"].fillna("").astype(str).str.strip() == ""
-        frame.loc[missing_space_bucket, "contract_space_bucket"] = [
-            _contract_space_bucket(status, space_r)
-            for status, space_r in zip(
-                frame.loc[missing_space_bucket, "space_status"],
-                frame.loc[missing_space_bucket, "pre_entry_space_R"],
-            )
-        ]
+        space_bucket_mismatch = pd.Series(False, index=frame.index, dtype="bool")
+    frame["contract_space_bucket"] = derived_space_bucket
+    frame.attrs["contract_space_bucket_mismatch_count"] = int(space_bucket_mismatch.sum())
 
     completed_mask = _completed_trade_mask(frame)
     completed = frame[completed_mask]
@@ -1588,6 +1647,13 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         "duplicate_contract_family_row_count": duplicate_contract_family_row_count,
         "duplicate_contract_family_extra_row_count": duplicate_contract_family_extra_row_count,
         "duplicate_result_row_count": duplicate_result_row_count,
+        "contract_eligibility_mismatch_count": int(
+            frame.attrs.get("contract_eligibility_mismatch_count", 0)
+        ),
+        "event_bucket_mismatch_count": int(frame.attrs.get("event_bucket_mismatch_count", 0)),
+        "contract_space_bucket_mismatch_count": int(
+            frame.attrs.get("contract_space_bucket_mismatch_count", 0)
+        ),
         "event_bucket_contract_counts": event_bucket_contract_counts,
         "contract_space_bucket_counts": contract_space_bucket_counts,
         "outcome_bucket_counts": {
@@ -1642,6 +1708,8 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             "event_bucket is conservative; event-unverified, pending, unknown and unclassified contexts are never upgraded to ordinary_non_event",
             "ordinary_non_event_strict_space statistics use only explicit pre-entry space evidence; blank legacy space fields remain unknown",
             "H1/H2/L1/L2 require the matching Daily EMA20/EMA50 slope gate; failed gates remain observation_only and are excluded",
+            "event_bucket and contract_space_bucket are recomputed from raw pre-entry fields; supplied derived values are diagnostic only",
+            "when H/L EMA gate provenance is present, contract eligibility is recomputed from that gate and mismatches are excluded from the completed denominator",
             "META is recorded and stratified as a confluence field; it is not an entry trigger or authorization",
         ],
     }

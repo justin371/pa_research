@@ -77,6 +77,7 @@ $requiredFiles = @(
     'research/backtesting/replay_lineage_independence_audit_2026-08-29_CN.md',
     'research/backtesting/replay_provenance_reproducibility_audit_2026-08-29_CN.md',
     'research/backtesting/frozen_contract_field_partition_audit_2026-08-29_CN.md',
+    'research/backtesting/pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md',
     'research/backtesting/bop_contract_intake_2026-08-28.csv',
     'research/backtesting/bop_contract_intake_audit_2026-08-28_CN.md',
     'strategy/README.md'
@@ -123,6 +124,9 @@ $canonicalChecks = @{
         'python_version',
         'engine_source_sha256',
         'results_file_sha256',
+        'contract_eligibility_mismatch_count',
+        'event_bucket_mismatch_count',
+        'contract_space_bucket_mismatch_count',
         'bop_state:',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'gate_result:',
@@ -309,6 +313,16 @@ if (Test-Path -LiteralPath $frozenContractFieldAuditPath -PathType Leaf) {
     foreach ($token in @('hl_contracts_2026-08-26.csv', 'contract_state', 'space_status', 'strict_ge_1R', 'observation-only', 'ABC_CONT', 'BOP', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $frozenContractFieldAuditContent.Contains($token)) {
             Add-ValidationError "missing frozen-contract-field-audit token '$token'"
+        }
+    }
+}
+
+$preEntryResultIsolationAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $preEntryResultIsolationAuditPath -PathType Leaf) {
+    $preEntryResultIsolationAuditContent = Get-Content -LiteralPath $preEntryResultIsolationAuditPath -Raw
+    foreach ($token in @('event_context', 'pre_entry_space_R', 'first_obstacle_hit', 'realized_R', 'contract_eligibility_mismatch_count', 'event_bucket_mismatch_count', 'contract_space_bucket_mismatch_count', 'no-new-positive', 'validated win-rate: not-computable')) {
+        if (-not $preEntryResultIsolationAuditContent.Contains($token)) {
+            Add-ValidationError "missing pre-entry/result-isolation-audit token '$token'"
         }
     }
 }

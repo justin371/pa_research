@@ -2,13 +2,13 @@
 
 状态：`research_only / descriptive_only / not-validated / no-new-positive`
 
-这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.6`）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
+这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.7`）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
 
 当前人工冻结合同的方向、H/L 标签、事件、空间和 lineage 覆盖见[`人工冻结合同覆盖审计`](contract_coverage_audit_2026-08-28_CN.md)。该审计只检查合同记录完整性，不代表胜率验证。
 
 ABC/BOP 的视觉案例准入清单见[`ABC/BOP 合同准入审计`](abc_bop_contract_intake_audit_2026-08-28_CN.md)及[`abc_bop_contract_intake_2026-08-28.csv`](abc_bop_contract_intake_2026-08-28.csv)。该 CSV 明确标记 `contract_frozen=no`，不是回放输入，不增加胜率分母。NFLX/TSM 的逐字段冻结复核见[`ABC 候选合同冻结复核`](abc_bop_candidate_freeze_review_2026-08-28_CN.md)；V、NVDA、KLAC、CRWD 的多头候选复核见[`多头 ABC/H1/H2 候选合同审计`](abc_bullish_candidate_contract_audit_2026-08-28_CN.md)。
 
-跨 Pattern 统计隔离见[`跨 Pattern 统计隔离审计`](cross_pattern_statistics_isolation_audit_2026-08-29_CN.md)；事件与首障碍空间资格见[`事件与首障碍空间资格审计`](event_space_eligibility_audit_2026-08-29_CN.md)；冻结合同字段覆盖与分层见[`冻结合同字段覆盖与分层完整性审计`](frozen_contract_field_partition_audit_2026-08-29_CN.md)；结果分母与 horizon 语义见[`回放结果分母与 horizon 审计`](replay_outcome_denominator_audit_2026-08-29_CN.md)；lineage、重复 artifact 与样本独立性见[`回放 lineage 与样本独立性审计`](replay_lineage_independence_audit_2026-08-29_CN.md)；历史 artifact 版本/数值对应和再现性见[`回放 provenance 与再现性审计`](replay_provenance_reproducibility_audit_2026-08-29_CN.md)。这些审计都不增加回放分母。
+跨 Pattern 统计隔离见[`跨 Pattern 统计隔离审计`](cross_pattern_statistics_isolation_audit_2026-08-29_CN.md)；事件与首障碍空间资格见[`事件与首障碍空间资格审计`](event_space_eligibility_audit_2026-08-29_CN.md)；冻结合同字段覆盖与分层见[`冻结合同字段覆盖与分层完整性审计`](frozen_contract_field_partition_audit_2026-08-29_CN.md)；事前证据与结果证据隔离见[`事前证据与结果证据隔离审计`](pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md)；结果分母与 horizon 语义见[`回放结果分母与 horizon 审计`](replay_outcome_denominator_audit_2026-08-29_CN.md)；lineage、重复 artifact 与样本独立性见[`回放 lineage 与样本独立性审计`](replay_lineage_independence_audit_2026-08-29_CN.md)；历史 artifact 版本/数值对应和再现性见[`回放 provenance 与再现性审计`](replay_provenance_reproducibility_audit_2026-08-29_CN.md)。这些审计都不增加回放分母。
 
 BOP 多日回踩的独立准入清单见[`BOP 合同准入审计`](bop_contract_intake_audit_2026-08-28_CN.md)及[`bop_contract_intake_2026-08-28.csv`](bop_contract_intake_2026-08-28.csv)。该 CSV 只记录现有人工案例的接受、回测和边界状态，全部为 `contract_frozen=no`，不是回放输入。
 
@@ -27,7 +27,7 @@ py -3 .\scripts\pa_research_backtest.py `
 程序写出：
 
 - `results.csv`：每个冻结合同一行，包含成交、退出、空间、`realized_R`、`win_rate_eligible`、`sample_id`、`lineage_id`、可选 `market_context_id` 和证据状态；
-- `summary.json`：按 pattern、方向、订单分支、事件状态、`lineage_id`、EMA 斜率闸门和 META 的描述性分层，并显式报告重复结果、共享 lineage/市场状态、持仓区间重叠、严格胜率分母和互斥结果 bucket；
+- `summary.json`：按 pattern、方向、订单分支、事件状态、`lineage_id`、EMA 斜率闸门和 META 的描述性分层，并显式报告重复结果、共享 lineage/市场状态、持仓区间重叠、严格胜率分母、事前派生字段 mismatch 和互斥结果 bucket；
 - `run_metadata.json`：引擎/依赖/运行时版本、引擎源码 SHA-256、数据源、时间状态、成本、输入文件 SHA-256、结果集和实际 `results.csv` SHA-256，以及 PA Research 范围声明。
 
 ## 输入合同
@@ -69,13 +69,13 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 
 `label_source` 必须为 `human_chart_review`，并且必须有 `>=2y` Daily 背景、完整重要高低点审查和完整 EMA20/50/200 审查。`target_price`、结构止损、最大持有 K 线数必须在结果发生前冻结，否则不能进入胜率分母。
 
-`pre_entry_space_R` 和 `space_status` 是建议冻结的首障碍空间证据；旧合同缺失时必须按 `unknown_contract_space` 处理，不能从回放后的价格路径倒推为 `strict_ge_1R`。回放摘要中的 `event_bucket` 是对原始 `event_context` 的保守分类：未核实、待定、未知和未分类状态不能升级为普通非事件。
+`pre_entry_space_R` 和 `space_status` 是建议冻结的首障碍空间证据；旧合同缺失时必须按 `unknown_contract_space` 处理，不能从回放后的价格路径倒推为 `strict_ge_1R`。回放摘要中的 `event_bucket` 是对原始 `event_context` 的保守分类：未核实、待定、未知和未分类状态不能升级为普通非事件。摘要会从原始事前字段重算 `event_bucket`、`contract_space_bucket`；结果文件中携带的派生副本只用于报告 mismatch，不能覆盖事前字段。
 
 回放摘要的 `completed_trade_count` 不是简单的 `trade_result` 行数。它要求 `win_rate_eligible=yes`、`trade_result` 为 `win/loss/scratch`、`fill_status=filled`、`evidence_status=comparable`、没有 `ambiguous_intrabar` 或 `incomplete-horizon`，并且有有限的 `realized_R`；`win_rate_eligible_count` 只是旗标数量，二者不一致时以严格交集为分母并保留 mismatch/guard 计数。`first_obstacle_hit` 只表示路径过程，不能把首障碍到达自动改写成胜利。
 
 `lineage_id` 是冻结合同的必填依赖控制字段：共享同一父级行情、A/B 回调或局部尝试 lineage 的合同可以分别保留，但不能因为触发日期不同就当成独立统计样本。回放器会保留并分层该字段，并在共享 lineage 时撤回 independence-adjusted 胜率；它不替研究者决定哪些样本独立。
 
-回放摘要还会对相同 `sample_id`、相同合同族（symbol/date/direction/pattern/label/lineage）和同一标的重叠持仓区间做依赖诊断。重复结果全部标记为 `duplicate_result`，不任意保留一份；持仓区间重叠、缺失或共享 `market_context_id`、缺失 sample identity 或共享 lineage 时，只保留描述性行数结果，并撤回 independence-adjusted 胜率。不同 `lineage_id` 也不自动证明市场状态独立。
+回放摘要还会从结果行中的 H/L EMA gate 重算 `contract_eligibility`；当 gate 字段存在时，手工改写的 eligibility 不得进入完成交易分母，并以 `contract_eligibility_mismatch_count` 留痕。摘要还会对相同 `sample_id`、相同合同族（symbol/date/direction/pattern/label/lineage）和同一标的重叠持仓区间做依赖诊断。重复结果全部标记为 `duplicate_result`，不任意保留一份；持仓区间重叠、缺失或共享 `market_context_id`、缺失 sample identity 或共享 lineage 时，只保留描述性行数结果，并撤回 independence-adjusted 胜率。不同 `lineage_id` 也不自动证明市场状态独立。
 
 本批冻结合同见 [`hl_contracts_2026-08-26.csv`](hl_contracts_2026-08-26.csv)，历史价格快照见 [`hl_contract_batch_prices_2026-08-26.csv`](hl_contract_batch_prices_2026-08-26.csv)，人工图表资产和来源边界见 [`H/L 首批人工看图合同资产`](../assets/visual_recognition/2026-08-26/hl_contract_batch/README.md)。
 
@@ -83,7 +83,7 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 
 本轮大样本冻结合同见 [`hl_large_contracts_2026-08-27.csv`](hl_large_contracts_2026-08-27.csv)，历史价格快照见 [`hl_large_prices_2026-08-27.csv`](hl_large_prices_2026-08-27.csv)，冻结前人工筛选记录见 [`hl_large_selection_2026-08-27_CN.md`](hl_large_selection_2026-08-27_CN.md)，图表资产和来源边界见 [`H/L 大样本回测人工看图资产`](../assets/visual_recognition/2026-08-27/hl_large_backtest/README.md)。本轮仍是独立研究批次；目标胜率为用户修正后的 `60%`，不是生产规则或已验证结果。
 
-本轮大样本回放审计见 [`hl_large_replay_2026-08-27_CN.md`](hl_large_replay_2026-08-27_CN.md)。报告中的 `76.47%` 是由旧 engine `0.3.1` 产物计算的历史描述值；其中 `bars_held=11` 按当前定义是十根完整观察 K 线后的下一根开盘执行索引，不是额外自由持仓。engine `0.3.6` 保留该合同语义，并增加重复结果、市场上下文/持仓重叠、输入指纹、源码指纹和显式空间证据防护；历史 artifact 未静默重写。严格空间合格完成样本只有 1 条，当前 `validated win-rate` 仍为 `not-computable`，结论保持 `no-new-positive`。
+本轮大样本回放审计见 [`hl_large_replay_2026-08-27_CN.md`](hl_large_replay_2026-08-27_CN.md)。报告中的 `76.47%` 是由旧 engine `0.3.1` 产物计算的历史描述值；其中 `bars_held=11` 按当前定义是十根完整观察 K 线后的下一根开盘执行索引，不是额外自由持仓。engine `0.3.7` 保留该合同语义，并增加重复结果、市场上下文/持仓重叠、输入指纹、源码指纹、显式空间证据和事前派生字段防护；历史 artifact 未静默重写。严格空间合格完成样本只有 1 条，当前 `validated win-rate` 仍为 `not-computable`，结论保持 `no-new-positive`。
 
 下一批 H/L 人工冻结合同见 [`hl_next_contracts_2026-08-27.csv`](hl_next_contracts_2026-08-27.csv)，历史价格快照见 [`hl_next_prices_2026-08-27.csv`](hl_next_prices_2026-08-27.csv)，冻结前人工选择和事件分层记录见 [`hl_next_selection_2026-08-27_CN.md`](hl_next_selection_2026-08-27_CN.md)，图表资产和来源边界见 [`H/L 下一批人工看图回放资产`](../assets/visual_recognition/2026-08-27/hl_next_backtest/README.md)。本批包含 5 条合同：3 条普通非事件、2 条事件驱动；全部通过事前 `>=1R` 空间字段，但只有 2 条成交完成，1 胜 1 负，描述性胜率 `50.00%`，60% 目标仍未验证。
 

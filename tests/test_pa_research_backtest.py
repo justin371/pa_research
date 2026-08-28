@@ -709,6 +709,58 @@ class PaResearchBacktestTests(unittest.TestCase):
         self.assertEqual(summary["ordinary_non_event_strict_space_completed_trade_count"], 1)
         self.assertEqual(summary["ordinary_non_event_strict_space_win_rate_pct"], 100.0)
 
+    def test_summary_recomputes_pre_entry_buckets(self):
+        summary = build_summary(
+            [
+                {
+                    "primary_pattern": "H1_L1",
+                    "internal_label": "H1",
+                    "direction": "long",
+                    "lineage_id": "BUCKET-1",
+                    "order_branch": "stop_confirmation",
+                    "event_context": "ordinary_non_event",
+                    "event_bucket": "event_driven",
+                    "contract_space_bucket": "strict_ge_1R",
+                    "fill_status": "filled",
+                    "trade_result": "win",
+                    "realized_R": 1.0,
+                    "ambiguous_intrabar": "no",
+                }
+            ]
+        )
+        self.assertEqual(summary["event_bucket_contract_counts"], {"ordinary_non_event": 1})
+        self.assertEqual(summary["contract_space_bucket_counts"], {"unknown_contract_space": 1})
+        self.assertEqual(summary["event_bucket_mismatch_count"], 1)
+        self.assertEqual(summary["contract_space_bucket_mismatch_count"], 1)
+
+    def test_summary_uses_ema_gate_for_completed_trade_eligibility(self):
+        summary = build_summary(
+            [
+                {
+                    "primary_pattern": "H1_L1",
+                    "internal_label": "H1",
+                    "direction": "long",
+                    "lineage_id": "GATE-1",
+                    "order_branch": "stop_confirmation",
+                    "event_context": "ordinary_non_event",
+                    "daily_ema20_slope": "flat",
+                    "daily_ema50_slope": "up",
+                    "h_l_ema_slope_gate": "fail_flat_or_opposite",
+                    "contract_eligibility": "eligible",
+                    "fill_status": "filled",
+                    "evidence_status": "comparable",
+                    "win_rate_eligible": "yes",
+                    "trade_result": "win",
+                    "path_result": "target-reached",
+                    "realized_R": 2.0,
+                    "ambiguous_intrabar": "no",
+                }
+            ]
+        )
+        self.assertEqual(summary["contract_eligibility_mismatch_count"], 1)
+        self.assertEqual(summary["completed_trade_count"], 0)
+        self.assertIsNone(summary["win_rate_pct"])
+
     def test_summary_is_descriptive_only(self):
         results = [
             {"primary_pattern": "ABC_CONT", "internal_label": "H1", "direction": "long", "order_branch": "stop_confirmation", "event_context": "none", "fill_status": "filled", "trade_result": "win", "realized_R": 2.0, "ambiguous_intrabar": "no"},
