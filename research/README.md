@@ -16,6 +16,7 @@
 - [`候选、视觉复核与交易日志边界一致性审计（2026-08-29）`](candidate_visual_record_consistency_audit_2026-08-29_CN.md)：核对选择记录的方向汇总、冻结前/回放后状态、两年 Daily/EMA/A-B/空间字段、ROST 视觉 provenance 和历史三推笔记；不新增样本或结果；
 - [`统一输出、视觉字段与状态轴审计（2026-08-29）`](unified_output_state_axis_audit_2026-08-29_CN.md)：区分文档成熟度与案例状态，补齐历史摘要的 `gate_result`，统一 BOP/H3-L3 的方向、lineage、事件、空间和多周期字段；不新增样本或结果；
 - [`Pattern 索引、别名与主次标签边界审计（2026-08-29）`](pattern_index_alias_boundary_audit_2026-08-29_CN.md)：逐项核对 16 个目录、核心/独立层级、canonical `primary_pattern`/`internal_label`/`state_transition` 与本地入口；不新增样本或结果；
+- [`Pattern 视觉复核前置证据审计（2026-08-29）`](pattern_visual_preflight_audit_2026-08-29_CN.md)：核对 16 个目录是否先看两年 Daily 左侧、重要高低点、EMA20/50/200、强 A/受控 B、位置和首障碍；不新增样本或结果；
 - [`人工冻结合同覆盖审计（2026-08-28）`](backtesting/contract_coverage_audit_2026-08-28_CN.md)：统计现有 H/L 合同的方向、标签、事件、空间和 lineage 覆盖，不把它解释为胜率；
 - [`冻结合同字段覆盖与分层完整性审计（2026-08-29）`](backtesting/frozen_contract_field_partition_audit_2026-08-29_CN.md)：逐文件核对方向、Pattern/内部标签、EMA gate、事件、空间、合同状态和 lineage；旧合同缺失字段不回填，继续隔离 ABC/BOP/H3/L3；
 - [`事前证据与结果证据隔离审计（2026-08-29）`](backtesting/pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md)：确认事件、空间和 EMA 资格只能来自入场前合同，回放结果不得反向改写派生分层或胜率分母；记录 mismatch 防护与 `no-new-positive`；

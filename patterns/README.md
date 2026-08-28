@@ -89,11 +89,15 @@ final_state / failure_or_no_trade_reason
 
 先看背景和左侧，再看形态；先看第一独立障碍，再看 MM；强趋势不等于可以在趋势末端追价。统一背景见 [`docs/common_context.md`](../docs/common_context.md)，覆盖状态见 [`research/abc_pattern_coverage_audit_CN.md`](../research/abc_pattern_coverage_audit_CN.md)。
 
+16 个目录进入 pattern-specific 判断前，都先按[`PA 图表视觉复核卡`](../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点/低点、支撑阻力、前高/前低、EMA20/50/200、父级状态和第一独立障碍。对有 A/B 语义的案例核对强 A 与受控 B；独立主题只把它们作为背景对照，不强行添加 ABC/H-L 计数。涉及 H1/H2/L1/L2 时还要确认 Daily EMA20/50 与方向一致；缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`。
+
 ## 核心 pattern 交叉审计
 
 八个目录的共存关系、切换条件、状态词汇和共同否决层见[`核心八个 Pattern 交叉一致性审计`](../research/core_pattern_cross_audit_CN.md)。使用时先判父级市场状态，再判结构/计数，最后判状态转换和交易合同；不要因为多个标签同时出现就重复计算优势。
 
 16 个目录的完整入口、独立主题边界和 canonical `primary_pattern`/`internal_label`/`state_transition` 映射见[`Pattern 索引、别名与主次标签边界审计`](../research/pattern_index_alias_boundary_audit_2026-08-29_CN.md)。
+
+16 个目录的两年 Daily 左侧、重要高低点、EMA20/50/200、强 A/受控 B、位置和首障碍共同前置证据见[`Pattern 视觉复核前置证据审计`](../research/pattern_visual_preflight_audit_2026-08-29_CN.md)。
 
 订单语义和 R/R 的跨 pattern 规则见[`八个 Pattern 的订单合同与 R/R 审计`](../research/order_contract_cross_pattern_audit_CN.md)。
 

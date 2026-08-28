@@ -14,5 +14,6 @@
 - [`TSLA/META 历史复盘`](reviews/2026-06-25-tsla-meta-example.md)：历史案例，不是实盘授权。
 - [`候选、视觉复核与交易日志边界一致性审计`](../research/candidate_visual_record_consistency_audit_2026-08-29_CN.md)：核对方向、候选状态、事前证据和事后路径的分轴边界。
 - [`Pattern 索引、别名与主次标签边界审计`](../research/pattern_index_alias_boundary_audit_2026-08-29_CN.md)：核对 16 个 pattern 目录入口、核心/独立层级和 canonical 主次标签边界。
+- [`Pattern 视觉复核前置证据审计`](../research/pattern_visual_preflight_audit_2026-08-29_CN.md)：核对完整图表左侧、EMA、强 A/受控 B、位置与首障碍的共同前置证据。
 
 Codex Trading 的链接或历史材料只作为用户指定的只读参考；本目录不导入其规则、代码、实现状态或执行能力。
