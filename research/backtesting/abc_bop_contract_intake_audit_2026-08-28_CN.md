@@ -10,6 +10,8 @@
 
 因此新增[`abc_bop_contract_intake_2026-08-28.csv`](abc_bop_contract_intake_2026-08-28.csv)。它是**候选准入清单**，不是回放输入：所有行都标记 `contract_frozen=no`，回放器不得读取它们作为交易合同。
 
+NFLX/TSM 的后续逐字段冻结复核见[`ABC 候选合同冻结复核`](abc_bop_candidate_freeze_review_2026-08-28_CN.md)。该复核只使用本仓库已有案例，不把替代分支、粗略价格区间或事后路径当成冻结字段。
+
 ## 二、准入清单结果
 
 | 分类 | 数量 | 说明 |

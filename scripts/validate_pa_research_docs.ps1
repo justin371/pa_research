@@ -69,6 +69,7 @@ $requiredFiles = @(
     'research/backtesting/contract_coverage_audit_2026-08-28_CN.md',
     'research/backtesting/abc_bop_contract_intake_2026-08-28.csv',
     'research/backtesting/abc_bop_contract_intake_audit_2026-08-28_CN.md',
+    'research/backtesting/abc_bop_candidate_freeze_review_2026-08-28_CN.md',
     'strategy/README.md'
 )
 foreach ($relativePath in $requiredFiles) {
@@ -168,6 +169,16 @@ if (Test-Path -LiteralPath $intakePath -PathType Leaf) {
             if ([string]::IsNullOrWhiteSpace($row.missing_fields)) {
                 Add-ValidationError "ABC/BOP intake row missing missing_fields: $($row.intake_id)"
             }
+        }
+    }
+}
+
+$freezeReviewPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/abc_bop_candidate_freeze_review_2026-08-28_CN.md'
+if (Test-Path -LiteralPath $freezeReviewPath -PathType Leaf) {
+    $freezeReviewContent = Get-Content -LiteralPath $freezeReviewPath -Raw
+    foreach ($token in @('NFLX', 'TSM', 'contract_frozen=no', 'no-new-positive', 'max_hold_bars', 'do_not_replay')) {
+        if (-not $freezeReviewContent.Contains($token)) {
+            Add-ValidationError "missing ABC/BOP freeze-review token '$token'"
         }
     }
 }
