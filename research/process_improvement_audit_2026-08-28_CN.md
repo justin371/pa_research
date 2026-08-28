@@ -1,7 +1,7 @@
 # PA Research 流程改进审计（2026-08-28）
 
-日期：2026-08-28  
-范围：PA Research 候选筛选、完整图表审查和历史合同记录  
+日期：2026-08-28<br>
+范围：PA Research 候选筛选、完整图表审查和历史合同记录<br>
 状态：`research_only / process-improvement / no-new-positive`
 
 ## 结论
