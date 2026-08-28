@@ -13,6 +13,7 @@
 - [`PA Pattern 视觉筛选协议`](visual_pattern_triage_protocol_CN.md)：快筛与深审的执行顺序；
 - [`每日候选批次与图表审查卡`](../docs/daily_candidate_review_card_CN.md)：候选池覆盖、数据来源、两年 Daily 左侧、事件、流动性和空间证据的统一记录；
 - [`流程改进审计（2026-08-28）`](process_improvement_audit_2026-08-28_CN.md)：记录本轮独立修复、验证证据和仍需用户决定的研究设计事项；
+- [`人工冻结合同覆盖审计（2026-08-28）`](backtesting/contract_coverage_audit_2026-08-28_CN.md)：统计现有 H/L 合同的方向、标签、事件、空间和 lineage 覆盖，不把它解释为胜率；
 - [`PA 图表视觉识别冒烟验收`](visual_recognition_smoke_test_2026-08-24_CN.md)：图表识别能力、两年背景和当前 acceptance-pending 状态。
 
 ## 冻结合同回放

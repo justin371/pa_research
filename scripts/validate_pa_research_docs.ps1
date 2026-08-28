@@ -66,6 +66,7 @@ $requiredFiles = @(
     'foundations/README.md',
     'research/README.md',
     'research/process_improvement_audit_2026-08-28_CN.md',
+    'research/backtesting/contract_coverage_audit_2026-08-28_CN.md',
     'strategy/README.md'
 )
 foreach ($relativePath in $requiredFiles) {
