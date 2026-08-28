@@ -79,6 +79,7 @@ $requiredFiles = @(
     'research/backtesting/frozen_contract_field_partition_audit_2026-08-29_CN.md',
     'research/backtesting/pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md',
     'research/backtesting/legacy_result_provenance_completeness_audit_2026-08-29_CN.md',
+    'research/backtesting/artifact_schema_roundtrip_audit_2026-08-29_CN.md',
     'research/backtesting/bop_contract_intake_2026-08-28.csv',
     'research/backtesting/bop_contract_intake_audit_2026-08-28_CN.md',
     'strategy/README.md'
@@ -128,6 +129,7 @@ $canonicalChecks = @{
         'python_version',
         'engine_source_sha256',
         'results_file_sha256',
+        'summary_provenance',
         'contract_eligibility_mismatch_count',
         'event_bucket_mismatch_count',
         'contract_space_bucket_mismatch_count',
@@ -337,6 +339,16 @@ if (Test-Path -LiteralPath $legacyResultProvenanceAuditPath -PathType Leaf) {
     foreach ($token in @('pre_entry_provenance_status', 'pre_entry_provenance_missing_fields', 'completed_trade_count', 'pre_entry_provenance_incomplete', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $legacyResultProvenanceAuditContent.Contains($token)) {
             Add-ValidationError "missing legacy-result-provenance-audit token '$token'"
+        }
+    }
+}
+
+$artifactSchemaRoundtripAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/artifact_schema_roundtrip_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $artifactSchemaRoundtripAuditPath -PathType Leaf) {
+    $artifactSchemaRoundtripAuditContent = Get-Content -LiteralPath $artifactSchemaRoundtripAuditPath -Raw
+    foreach ($token in @('results.csv', 'summary.json', 'run_metadata.json', 'summary_provenance', 'result_columns', 'pre_entry_provenance_status', 'contract_eligibility_mismatch_count', 'event_bucket_mismatch_count', 'contract_space_bucket_mismatch_count', 'historical', 'no-new-positive', 'validated win-rate: not-computable')) {
+        if (-not $artifactSchemaRoundtripAuditContent.Contains($token)) {
+            Add-ValidationError "missing artifact-schema-roundtrip-audit token '$token'"
         }
     }
 }

@@ -17,6 +17,7 @@
 - [`冻结合同字段覆盖与分层完整性审计（2026-08-29）`](backtesting/frozen_contract_field_partition_audit_2026-08-29_CN.md)：逐文件核对方向、Pattern/内部标签、EMA gate、事件、空间、合同状态和 lineage；旧合同缺失字段不回填，继续隔离 ABC/BOP/H3/L3；
 - [`事前证据与结果证据隔离审计（2026-08-29）`](backtesting/pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md)：确认事件、空间和 EMA 资格只能来自入场前合同，回放结果不得反向改写派生分层或胜率分母；记录 mismatch 防护与 `no-new-positive`；
 - [`旧结果事前 provenance 完整性审计（2026-08-29）`](backtesting/legacy_result_provenance_completeness_audit_2026-08-29_CN.md)：为缺少合同、事件或 H/L EMA gate 的旧/最小结果建立 `pre_entry_provenance_status`，缺证据行只保留描述性记录，不进入完成交易分母；
+- [`回放 artifact schema round-trip 审计（2026-08-29）`](backtesting/artifact_schema_roundtrip_audit_2026-08-29_CN.md)：核对 `results.csv → summary.json → run_metadata.json` 的 provenance/mismatch 链路和旧 metadata 的历史状态；当前运行必须保留 `summary_provenance`，不把旧 artifact 或重复回放当成新样本；
 - [`ABC/BOP 合同准入审计（2026-08-28）`](backtesting/abc_bop_contract_intake_audit_2026-08-28_CN.md)：把现有 ABC/BOP 视觉案例分成条件准入和边界案例；intake 清单不进入回放分母；
 - [`ABC 候选合同冻结复核（2026-08-28）`](backtesting/abc_bop_candidate_freeze_review_2026-08-28_CN.md)：逐字段复核 NFLX/TSM 是否具备冻结条件；两者仍未冻结，不增加回放分母；
 - [`多头 ABC/H1/H2 候选合同审计（2026-08-28）`](backtesting/abc_bullish_candidate_contract_audit_2026-08-28_CN.md)：逐字段复核 V、NVDA、KLAC、CRWD；当前没有可冻结的新多头合同，不增加回放分母；

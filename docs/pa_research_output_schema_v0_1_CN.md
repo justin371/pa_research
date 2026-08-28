@@ -189,7 +189,7 @@ exit_date:
 
 摘要还必须报告 `unique_sample_id_count`、`missing_sample_id_count`、重复 sample/合同族的 group/row/extra 计数、`unique_lineage_count`、共享 lineage 计数、`unique_market_context_count`、缺失/共享市场状态计数，以及同一标的持仓区间重叠计数。相同 `sample_id` 或同一合同族的重复行全部标记为 `duplicate_result`，不任意保留其中一份；不同 `lineage_id` 也不自动证明样本独立。`independence_status` 和 `independence_statistics_status` 必须明确说明缺失或依赖来源。
 
-运行元数据应保留 `engine_version`、`backtesting_version`、`python_version`、`pandas_version`、`numpy_version`、`engine_source_sha256`、`price_file_sha256`、`contract_file_sha256`、`result_set_sha256`、`results_file` 和 `results_file_sha256`。引擎源码指纹与运行时版本一起锁定执行语义，结果文件指纹锁定实际写出的 artifact；输入/结果指纹用于识别同一输入的重复 artifact 或同一 `sample_id` 的不同版本。它们是审计 provenance，不是交易信号。旧的、缺少这些字段的 `summary.json` 或 `run_metadata.json` 只能作为历史描述，不能与新摘要拼接成验证结果。
+运行元数据应保留 `engine_version`、`backtesting_version`、`python_version`、`pandas_version`、`numpy_version`、`engine_source_sha256`、`price_file_sha256`、`contract_file_sha256`、`result_set_sha256`、`results_file` 和 `results_file_sha256`，并保留 `summary_provenance`。其中 `summary_provenance` 至少复制实际 `result_columns`、`pre_entry_provenance_status_counts`、`pre_entry_provenance_complete_count`、`pre_entry_provenance_incomplete_count`、`completed_trade_count`、`outcome_bucket_counts` 和各类 provenance/eligibility mismatch 计数；`summary.json` 中嵌套的 `run_metadata` 应与独立 `run_metadata.json` 一致。引擎源码指纹与运行时版本一起锁定执行语义，结果文件指纹锁定实际写出的 artifact；输入/结果指纹用于识别同一输入的重复 artifact 或同一 `sample_id` 的不同版本。它们是审计 provenance，不是交易信号。旧的、缺少这些字段的 `summary.json` 或 `run_metadata.json` 只能作为历史描述，不能与新摘要拼接成验证结果。
 
 ## 五、状态轴与交接轴
 

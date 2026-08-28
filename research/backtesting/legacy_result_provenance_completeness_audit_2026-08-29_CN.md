@@ -8,7 +8,7 @@
 
 本轮只检查已有代码、测试、合同、价格快照和报告，不下载新行情、不新增样本、不改 PA 交易规则。发现旧/最小结果行缺少 H/L EMA gate 或其他合同字段时，旧摘要路径会把它们当作普通结果字段处理；虽然最终仍标为 descriptive-only，但缺少一个明确的事前 provenance 状态，容易让 `completed_trade_count` 被误读为可比较分母。
 
-当前 engine `0.3.8` 已补上这条边界：
+当前 engine `0.3.9` 已补上这条边界：
 
 - 每个结果行写出 `pre_entry_provenance_status` 和 `pre_entry_provenance_missing_fields`；
 - 非 `market_close` 分支还必须保留冻结的 `planned_entry_trigger`；

@@ -993,14 +993,45 @@ class PaResearchBacktestTests(unittest.TestCase):
             summary = json.loads((output_path / "summary.json").read_text(encoding="utf-8"))
             metadata = json.loads((output_path / "run_metadata.json").read_text(encoding="utf-8"))
             results_path = output_path / "results.csv"
+            results = pd.read_csv(results_path)
             expected_results_hash = hashlib.sha256(results_path.read_bytes()).hexdigest()
             self.assertEqual(metadata["engine_version"], summary["engine_version"])
             self.assertEqual(metadata["backtesting_version"], summary["backtesting_version"])
+            self.assertEqual(summary["run_metadata"], metadata)
             self.assertEqual(metadata["result_row_count"], 1)
             self.assertEqual(metadata["results_file"], str(results_path.resolve()))
             self.assertEqual(metadata["results_file_sha256"], expected_results_hash)
             self.assertEqual(summary["results_file_sha256"], expected_results_hash)
             self.assertTrue(metadata["result_set_sha256"])
+            self.assertIn("pre_entry_provenance_status", results.columns)
+            self.assertIn("pre_entry_provenance_missing_fields", results.columns)
+            summary_provenance = metadata["summary_provenance"]
+            self.assertEqual(summary_provenance["result_columns"], list(results.columns))
+            for field in (
+                "pre_entry_provenance_complete_count",
+                "pre_entry_provenance_incomplete_count",
+                "pre_entry_provenance_status_counts",
+                "contract_eligibility_mismatch_count",
+                "event_bucket_mismatch_count",
+                "contract_space_bucket_mismatch_count",
+                "win_rate_eligibility_mismatch_count",
+                "win_rate_guard_exclusion_count",
+                "completed_trade_count",
+                "outcome_bucket_counts",
+            ):
+                self.assertEqual(summary_provenance[field], summary[field])
+            roundtrip = _build_summary(results.to_dict(orient="records"))
+            for field in (
+                "pre_entry_provenance_complete_count",
+                "pre_entry_provenance_incomplete_count",
+                "pre_entry_provenance_status_counts",
+                "contract_eligibility_mismatch_count",
+                "event_bucket_mismatch_count",
+                "contract_space_bucket_mismatch_count",
+                "completed_trade_count",
+                "win_rate_pct",
+            ):
+                self.assertEqual(roundtrip[field], summary[field])
 
     def test_contract_loader_rejects_case_insensitive_duplicate_sample_id(self):
         csv = StringIO(

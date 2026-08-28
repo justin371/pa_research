@@ -25,7 +25,7 @@ import pandas as pd
 from backtesting import Backtest, Strategy
 
 
-ENGINE_VERSION = "0.3.8"
+ENGINE_VERSION = "0.3.9"
 SUPPORTED_DIRECTIONS = {"long", "short"}
 SUPPORTED_PATTERNS = {"ABC_CONT", "BOP", "H1_L1", "H2_L2", "H3_L3", "RFB", "MTR", "other"}
 SUPPORTED_LABELS = {"H1", "H2", "L1", "L2", "H3", "L3", "none", "pending"}
@@ -1960,6 +1960,19 @@ def main(argv: list[str] | None = None) -> int:
     summary["result_set_sha256"] = result_set_sha256
     summary["results_file_sha256"] = results_file_sha256
     summary["engine_source_sha256"] = engine_source_sha256
+    summary_provenance = {
+        "result_columns": list(pd.DataFrame(results).columns),
+        "pre_entry_provenance_complete_count": summary["pre_entry_provenance_complete_count"],
+        "pre_entry_provenance_incomplete_count": summary["pre_entry_provenance_incomplete_count"],
+        "pre_entry_provenance_status_counts": dict(summary["pre_entry_provenance_status_counts"]),
+        "contract_eligibility_mismatch_count": summary["contract_eligibility_mismatch_count"],
+        "event_bucket_mismatch_count": summary["event_bucket_mismatch_count"],
+        "contract_space_bucket_mismatch_count": summary["contract_space_bucket_mismatch_count"],
+        "win_rate_eligibility_mismatch_count": summary["win_rate_eligibility_mismatch_count"],
+        "win_rate_guard_exclusion_count": summary["win_rate_guard_exclusion_count"],
+        "completed_trade_count": summary["completed_trade_count"],
+        "outcome_bucket_counts": dict(summary["outcome_bucket_counts"]),
+    }
     summary["run_metadata"] = {
         "engine_version": ENGINE_VERSION,
         "backtesting_version": getattr(backtesting, "__version__", "unknown"),
@@ -1979,6 +1992,7 @@ def main(argv: list[str] | None = None) -> int:
         "results_file": str(results_path),
         "results_file_sha256": results_file_sha256,
         "result_row_count": len(results),
+        "summary_provenance": summary_provenance,
         "commission": args.commission,
         "spread": args.spread,
         "cash": args.cash,
