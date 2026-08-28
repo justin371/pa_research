@@ -25,7 +25,7 @@ import pandas as pd
 from backtesting import Backtest, Strategy
 
 
-ENGINE_VERSION = "0.3.7"
+ENGINE_VERSION = "0.3.8"
 SUPPORTED_DIRECTIONS = {"long", "short"}
 SUPPORTED_PATTERNS = {"ABC_CONT", "BOP", "H1_L1", "H2_L2", "H3_L3", "RFB", "MTR", "other"}
 SUPPORTED_LABELS = {"H1", "H2", "L1", "L2", "H3", "L3", "none", "pending"}
@@ -314,6 +314,117 @@ def _result_contract_eligibility(internal_label: Any, ema_gate: Any) -> str:
     if gate == "fail_flat_or_opposite":
         return "observation_only"
     return "pending"
+
+
+def _result_text_series(frame: pd.DataFrame, column: str) -> pd.Series:
+    """Return a trimmed text column without treating missing evidence as valid."""
+
+    if column not in frame:
+        return pd.Series("", index=frame.index, dtype="object")
+    return frame[column].fillna("").astype(str).str.strip()
+
+
+def _pre_entry_provenance(frame: pd.DataFrame) -> tuple[pd.Series, pd.Series]:
+    """Classify whether a result row still carries the required pre-entry evidence."""
+
+    required_fields = (
+        "sample_id",
+        "symbol",
+        "decision_date",
+        "direction",
+        "primary_pattern",
+        "internal_label",
+        "order_branch",
+        "structural_stop",
+        "first_obstacle",
+        "target_price",
+        "max_hold_bars",
+        "gap_policy",
+        "label_source",
+        "daily_context_window",
+        "major_high_low_review",
+        "ema20_50_200_review",
+        "event_context",
+        "contract_frozen",
+        "lineage_id",
+    )
+    missing_by_row: list[list[str]] = [[] for _ in range(len(frame))]
+
+    def mark(field: str, condition: pd.Series) -> None:
+        for position, flagged in enumerate(condition.tolist()):
+            if bool(flagged) and field not in missing_by_row[position]:
+                missing_by_row[position].append(field)
+
+    for field in required_fields:
+        mark(field, _result_text_series(frame, field).eq(""))
+    mark("contract_frozen", _result_text_series(frame, "contract_frozen").str.lower().ne("yes"))
+    order_branches = _result_text_series(frame, "order_branch").str.lower()
+    mark(
+        "planned_entry_trigger",
+        order_branches.ne("market_close")
+        & _result_text_series(frame, "planned_entry_trigger").eq(""),
+    )
+
+    labels = _result_text_series(frame, "internal_label").str.upper()
+    directions = _result_text_series(frame, "direction").str.lower()
+    h_l_rows = labels.isin(H_L_LABELS)
+    mark("direction", h_l_rows & labels.isin({"H1", "H2"}) & directions.ne("long"))
+    mark("direction", h_l_rows & labels.isin({"L1", "L2"}) & directions.ne("short"))
+
+    for field in (
+        "daily_ema20_slope",
+        "daily_ema50_slope",
+        "h_l_ema_slope_gate",
+        "h_l_pullback_location",
+        "meta_confluence",
+    ):
+        mark(field, h_l_rows & _result_text_series(frame, field).eq(""))
+    for field in ("daily_ema20_slope", "daily_ema50_slope"):
+        mark(
+            field,
+            h_l_rows
+            & ~_result_text_series(frame, field).str.lower().isin(SUPPORTED_EMA_SLOPES),
+        )
+    ema_gate = _result_text_series(frame, "h_l_ema_slope_gate").str.lower()
+    mark(
+        "h_l_ema_slope_gate",
+        h_l_rows & ~ema_gate.isin(SUPPORTED_H_L_EMA_GATES - {"not_applicable"}),
+    )
+    meta_confluence = _result_text_series(frame, "meta_confluence").str.lower()
+    mark(
+        "meta_confluence",
+        h_l_rows & ~meta_confluence.isin(SUPPORTED_META_CONFLUENCE),
+    )
+    mark(
+        "meta_zone",
+        h_l_rows
+        & meta_confluence.eq("present")
+        & _result_text_series(frame, "meta_zone").eq(""),
+    )
+    mark(
+        "meta_components",
+        h_l_rows
+        & meta_confluence.eq("present")
+        & _result_text_series(frame, "meta_components").eq(""),
+    )
+
+    space_status = _result_text_series(frame, "space_status").str.lower()
+    valid_space_statuses = {item.lower() for item in SUPPORTED_SPACE_STATUSES}
+    mark("space_status", space_status.ne("") & ~space_status.isin(valid_space_statuses))
+    space_value = pd.to_numeric(_result_text_series(frame, "pre_entry_space_R"), errors="coerce")
+    strict_space = space_status.isin({"strict_ge_1r", "clearly_positive"})
+    mark("pre_entry_space_R", strict_space & space_value.isna())
+    mark("pre_entry_space_R", strict_space & space_value.notna() & space_value.lt(1))
+    mark("pre_entry_space_R", space_status.eq("blocked") & space_value.isna())
+    mark("pre_entry_space_R", space_status.eq("blocked") & space_value.gt(0))
+
+    missing_fields = pd.Series(
+        [";".join(fields) for fields in missing_by_row],
+        index=frame.index,
+        dtype="object",
+    )
+    status = missing_fields.map(lambda value: "incomplete" if value else "complete")
+    return status, missing_fields
 
 
 def _normalise_date_index(index: Any) -> pd.Timestamp:
@@ -643,6 +754,8 @@ def _base_result(contract: BacktestContract, *, fill_status: str, reason: str) -
         "contract_space_bucket": _contract_space_bucket(contract.space_status, contract.pre_entry_space_R),
         "event_bucket": _event_bucket(contract.event_context),
         "contract_eligibility": eligibility,
+        "pre_entry_provenance_status": "complete",
+        "pre_entry_provenance_missing_fields": "",
         "order_branch": contract.order_branch,
         "event_context": contract.event_context,
         "label_source": contract.label_source,
@@ -1196,8 +1309,29 @@ def _prepare_result_frame(frame: pd.DataFrame) -> pd.DataFrame:
         "primary_pattern",
         "internal_label",
         "order_branch",
+        "planned_entry_trigger",
         "lineage_id",
         "market_context_id",
+        "structural_stop",
+        "first_obstacle",
+        "target_price",
+        "max_hold_bars",
+        "gap_policy",
+        "label_source",
+        "daily_context_window",
+        "major_high_low_review",
+        "ema20_50_200_review",
+        "event_context",
+        "contract_frozen",
+        "daily_ema20_slope",
+        "daily_ema50_slope",
+        "h_l_ema_slope_gate",
+        "h_l_pullback_location",
+        "meta_confluence",
+        "meta_zone",
+        "meta_components",
+        "pre_entry_space_R",
+        "space_status",
         "entry_date",
         "exit_date",
     ):
@@ -1271,6 +1405,12 @@ def _prepare_result_frame(frame: pd.DataFrame) -> pd.DataFrame:
     frame["path_result"] = frame["path_result"].fillna("").astype(str).str.strip().str.lower()
     if "realized_R" not in frame:
         frame["realized_R"] = None
+    pre_entry_status, pre_entry_missing_fields = _pre_entry_provenance(frame)
+    frame["pre_entry_provenance_status"] = pre_entry_status
+    frame["pre_entry_provenance_missing_fields"] = pre_entry_missing_fields
+    frame.attrs["pre_entry_provenance_incomplete_count"] = int(
+        pre_entry_status.eq("incomplete").sum()
+    )
     if "contract_eligibility" not in frame:
         frame["contract_eligibility"] = ""
     declared_contract_eligibility = (
@@ -1317,6 +1457,10 @@ def _completed_trade_mask(frame: pd.DataFrame) -> pd.Series:
         "contract_eligibility",
         pd.Series("", index=frame.index, dtype="object"),
     )
+    pre_entry_provenance_status = frame.get(
+        "pre_entry_provenance_status",
+        pd.Series("incomplete", index=frame.index, dtype="object"),
+    )
     return (
         frame["trade_result"].isin(TRADE_RESULTS)
         & frame["win_rate_eligible"].eq("yes")
@@ -1327,6 +1471,7 @@ def _completed_trade_mask(frame: pd.DataFrame) -> pd.Series:
         & frame["path_result"].ne("incomplete-horizon")
         & ~duplicate_rows
         & (~contract_eligibility_guard | contract_eligibility.eq("eligible"))
+        & pre_entry_provenance_status.eq("complete")
         & realized_r.notna()
         & np.isfinite(realized_r)
     )
@@ -1359,6 +1504,8 @@ def _outcome_bucket_series(frame: pd.DataFrame, completed: pd.Series) -> pd.Seri
         frame["fill_status"].eq("not-traded") | frame["evidence_status"].eq("observation_only")
     )
     buckets.loc[observation_only] = "observation_only"
+    provenance_incomplete = (~completed) & frame["pre_entry_provenance_status"].eq("incomplete")
+    buckets.loc[provenance_incomplete] = "pre_entry_provenance_incomplete"
     duplicate_rows = frame.get(
         "_duplicate_result_row",
         pd.Series(False, index=frame.index, dtype="bool"),
@@ -1387,6 +1534,7 @@ def _aggregate_group(group: pd.DataFrame) -> dict[str, Any]:
         "primary_pattern": group["primary_pattern"].iloc[0],
         "internal_label": group["internal_label"].iloc[0],
         "direction": group["direction"].iloc[0],
+        "pre_entry_provenance_status": group["pre_entry_provenance_status"].iloc[0],
         "lineage_id": group["lineage_id"].iloc[0],
         "market_context_id": group["market_context_id"].iloc[0],
         "daily_ema20_slope": group["daily_ema20_slope"].iloc[0],
@@ -1450,6 +1598,9 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             "duplicate_contract_family_row_count": 0,
             "duplicate_contract_family_extra_row_count": 0,
             "duplicate_result_row_count": 0,
+            "pre_entry_provenance_complete_count": 0,
+            "pre_entry_provenance_incomplete_count": 0,
+            "pre_entry_provenance_status_counts": {},
             "contract_eligibility_mismatch_count": 0,
             "event_bucket_mismatch_count": 0,
             "contract_space_bucket_mismatch_count": 0,
@@ -1493,6 +1644,7 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         "h_l_ema_slope_gate",
         "meta_confluence",
         "contract_eligibility",
+        "pre_entry_provenance_status",
     ]
     for column in stratification_columns:
         if column not in frame:
@@ -1573,6 +1725,10 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
     shared_market_context_row_count = int(shared_market_contexts.sum()) if shared_market_contexts.size else 0
     exposure_overlap_group_count = int(frame.attrs.get("exposure_overlap_group_count", 0))
     exposure_overlap_row_count = int(frame.attrs.get("exposure_overlap_row_count", 0))
+    pre_entry_provenance_status_counts = {
+        str(key): int(value)
+        for key, value in frame["pre_entry_provenance_status"].value_counts(dropna=False).items()
+    }
 
     if duplicate_result_row_count:
         independence_status = "duplicate_result_rows_present"
@@ -1647,6 +1803,13 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         "duplicate_contract_family_row_count": duplicate_contract_family_row_count,
         "duplicate_contract_family_extra_row_count": duplicate_contract_family_extra_row_count,
         "duplicate_result_row_count": duplicate_result_row_count,
+        "pre_entry_provenance_complete_count": int(
+            (frame["pre_entry_provenance_status"] == "complete").sum()
+        ),
+        "pre_entry_provenance_incomplete_count": int(
+            (frame["pre_entry_provenance_status"] == "incomplete").sum()
+        ),
+        "pre_entry_provenance_status_counts": pre_entry_provenance_status_counts,
         "contract_eligibility_mismatch_count": int(
             frame.attrs.get("contract_eligibility_mismatch_count", 0)
         ),
@@ -1710,6 +1873,7 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             "H1/H2/L1/L2 require the matching Daily EMA20/EMA50 slope gate; failed gates remain observation_only and are excluded",
             "event_bucket and contract_space_bucket are recomputed from raw pre-entry fields; supplied derived values are diagnostic only",
             "when H/L EMA gate provenance is present, contract eligibility is recomputed from that gate and mismatches are excluded from the completed denominator",
+            "completed trades also require complete pre-entry provenance; missing contract/event/planned-trigger/H-L evidence is descriptive only and is bucketed as pre_entry_provenance_incomplete",
             "META is recorded and stratified as a confluence field; it is not an entry trigger or authorization",
         ],
     }

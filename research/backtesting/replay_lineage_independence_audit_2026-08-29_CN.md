@@ -59,7 +59,7 @@
 
 另有 `PA-EX-001` 冒烟样本和两个不在当前 60 条冻结合同中的 MCHP 结果（2024-08-06、2024-12-06）。它们不能并入当前冻结 H/L 研究分母。
 
-若把 13 份 artifact 直接拼接，旧逻辑会把重复副本当作普通结果行；当前 engine `0.3.7` 会识别重复 sample/合同族并把全部副本标为 `duplicate_result`，不任意选择其中一份。该修复是统计防护，不是对旧结果进行重算或删改。
+若把 13 份 artifact 直接拼接，旧逻辑会把重复副本当作普通结果行；当前 engine `0.3.8` 会识别重复 sample/合同族并把全部副本标为 `duplicate_result`，不任意选择其中一份。该修复是统计防护，不是对旧结果进行重算或删改。
 
 ## 四、同一标的局部段与共享市场状态
 
@@ -74,7 +74,7 @@
 
 ## 五、已落实的防护
 
-engine `0.3.4` 首次增加了统计隔离字段；当前 engine `0.3.7` 在其基础上继续保留并补充：
+engine `0.3.4` 首次增加了统计隔离字段；当前 engine `0.3.8` 在其基础上继续保留并补充：
 
 1. `sample_id` 与规范化合同族（symbol/date/direction/pattern/label/lineage）的重复检测；重复行全部排除出 `completed_trade_count`，并通过 `duplicate_result` bucket 保留；
 2. `lineage_id` 的大小写/首尾空格规范化用于依赖统计；共享 lineage 时撤回 independence-adjusted 胜率；

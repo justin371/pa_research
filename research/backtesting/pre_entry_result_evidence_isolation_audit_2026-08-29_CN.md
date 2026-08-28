@@ -11,7 +11,7 @@
 审计确认并落实了三条隔离边界：
 
 1. `event_context`、`space_status`、`pre_entry_space_R`、EMA20/50 斜率和 `h_l_ema_slope_gate` 属于事前合同证据；`first_obstacle_hit`、`space_to_first_obstacle_R`、`fill_status`、`trade_result`、`realized_R` 和 `win_rate_eligible` 属于回放结果或结果旗标。
-2. `event_bucket` 和 `contract_space_bucket` 是派生分层字段。当前 engine `0.3.7` 总是从原始事前字段重算它们；结果文件中同名的旧/手工派生值只用于 mismatch 诊断，不能把实际路径上的空间或事件结果改写成事前合格条件。
+2. `event_bucket` 和 `contract_space_bucket` 是派生分层字段。当前 engine `0.3.8` 总是从原始事前字段重算它们；结果文件中同名的旧/手工派生值只用于 mismatch 诊断，不能把实际路径上的空间或事件结果改写成事前合格条件。
 3. 结果行带有 H/L EMA gate 时，`contract_eligibility` 由内部标签和 gate 重算；失败或 pending gate 即使被手工写成 `eligible`，也不能进入完成交易分母。
 
 因此，`first_obstacle_hit=yes` 不会自动产生 `win`，`space_to_first_obstacle_R>=1` 不会自动产生合同的 `strict_ge_1R`，正的 `realized_R` 也不会自动产生 `win_rate_eligible=yes`。现有统计仍只是描述性结果，保持：
@@ -55,7 +55,7 @@ space_status + pre_entry_space_R -----> contract_space_bucket
 
 结果字段中的 `contract_eligibility` 不是独立证据。当前 engine 在结果行含有 H/L gate 时从 `internal_label + h_l_ema_slope_gate` 重算它，并记录 `contract_eligibility_mismatch_count`。完成交易 mask 还要求重算后为 `eligible`，所以 `fail_flat_or_opposite`、`pending` 或方向 gate 不一致的行不能靠 `win_rate_eligible=yes` 进入分母。
 
-对缺少 H/L gate 列的旧/最小结果 fixture，engine 不伪造 EMA 证据；这类历史描述应继续视为 provenance 不完整，不能据此升级验证统计。
+对缺少 H/L gate 列的旧/最小结果 fixture，engine 不伪造 EMA 证据；这类历史描述应继续视为 provenance 不完整，不能据此升级验证统计，并以 `pre_entry_provenance_incomplete` bucket 保留描述性记录。
 
 ### 3. 严格完成分母仍然独立于结果收益
 
@@ -63,11 +63,11 @@ space_status + pre_entry_space_R -----> contract_space_bucket
 
 ### 4. 现有价格快照的内存 smoke check
 
-使用仓库已有的 7 组价格快照与对应 60 条冻结合同做只读内存复核：7/7 合同文件成功加载，产生 34 条完整回放行和 5 条 EMA observation-only 行；`contract_eligibility_mismatch_count`、`event_bucket_mismatch_count`、`contract_space_bucket_mismatch_count` 均为 0。该次运行没有写出新的 `results.csv` 或 `summary.json`，34 条完成行也不加入任何新的官方统计分母，只用于验证当前实现不会把结果字段反向变成事前资格。
+使用仓库已有的 7 组价格快照与对应 60 条冻结合同做只读内存复核：7/7 合同文件成功加载，产生 34 条完整回放行和 5 条 EMA observation-only 行；`pre_entry_provenance_status=incomplete` 为 0，`contract_eligibility_mismatch_count`、`event_bucket_mismatch_count`、`contract_space_bucket_mismatch_count` 均为 0。该次运行没有写出新的 `results.csv` 或 `summary.json`，34 条完成行也不加入任何新的官方统计分母，只用于验证当前实现不会把结果字段反向变成事前资格。
 
 ## 四、现有合同和报告边界
 
-- 7 个冻结 H/L 合同 CSV 共 60 条，当前可由 engine `0.3.7` 加载；没有新增合同或结果分母。
+- 7 个冻结 H/L 合同 CSV 共 60 条，当前可由 engine `0.3.8` 加载；没有新增合同或结果分母。
 - 60 条的 `event_context`、EMA gate、lineage 等合同字段仍按前一份[`冻结合同字段覆盖与分层完整性审计`](frozen_contract_field_partition_audit_2026-08-29_CN.md)分层；旧 50 条的空间字段继续是 unknown，不从结果反推严格空间。
 - 现有 provenance 审计记录的历史 `summary.json/results.csv` 内部数值对应关系仍保留，但历史 engine/运行元数据缺失时只能作为描述性 evidence；不能因为重新计算出派生字段就把旧结果变成当前验证样本。
 - ABC/BOP intake 与冻结 H/L 继续分开，H3/L3 没有因为本轮结果字段审计而进入 H/L 分母。

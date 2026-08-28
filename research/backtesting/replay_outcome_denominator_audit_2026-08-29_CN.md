@@ -36,7 +36,7 @@ realized_R is finite
 
 `win_rate_eligible_count` 只报告旗标数量；若旗标和结果标签不一致，摘要另外报告 `win_rate_eligibility_mismatch_count`。旗标虽为 `yes`、但被成交/证据/horizon/歧义/R 值硬闸门挡住的行计入 `win_rate_guard_exclusion_count`。`outcome_bucket_counts` 为互斥的结果/排除状态，防止把未成交或未完成路径从分母悄悄丢掉。
 
-当前 engine `0.3.7` 还把事前证据与结果派生字段分开：`event_bucket` 和 `contract_space_bucket` 从原始 `event_context`、`space_status`、`pre_entry_space_R` 重算，结果行中已有的同名字段只做 mismatch 诊断；若结果行带 H/L EMA gate，`contract_eligibility` 也从该 gate 重算，失败或 pending gate 不能靠结果行旗标进入完成交易分母。对应的 `contract_eligibility_mismatch_count`、`event_bucket_mismatch_count` 和 `contract_space_bucket_mismatch_count` 必须保留。
+当前 engine `0.3.8` 还把事前证据与结果派生字段分开：`event_bucket` 和 `contract_space_bucket` 从原始 `event_context`、`space_status`、`pre_entry_space_R` 重算，结果行中已有的同名字段只做 mismatch 诊断；若结果行带 H/L EMA gate，`contract_eligibility` 也从该 gate 重算，失败或 pending gate 不能靠结果行旗标进入完成交易分母。缺少合同、事件或 H/L gate 必需字段的行标记为 `pre_entry_provenance_status=incomplete`，不能进入完成分母。对应的 `contract_eligibility_mismatch_count`、`event_bucket_mismatch_count` 和 `contract_space_bucket_mismatch_count` 必须保留。
 
 ## 三、发现与修复
 

@@ -78,6 +78,7 @@ $requiredFiles = @(
     'research/backtesting/replay_provenance_reproducibility_audit_2026-08-29_CN.md',
     'research/backtesting/frozen_contract_field_partition_audit_2026-08-29_CN.md',
     'research/backtesting/pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md',
+    'research/backtesting/legacy_result_provenance_completeness_audit_2026-08-29_CN.md',
     'research/backtesting/bop_contract_intake_2026-08-28.csv',
     'research/backtesting/bop_contract_intake_audit_2026-08-28_CN.md',
     'strategy/README.md'
@@ -114,6 +115,9 @@ $canonicalChecks = @{
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'event_bucket:',
         'win_rate_eligible:',
+        'pre_entry_provenance_status:',
+        'pre_entry_provenance_missing_fields:',
+        'planned_entry_trigger:',
         'first_obstacle_hit:',
         'max_hold_bars',
         'lineage_id:',
@@ -320,9 +324,19 @@ if (Test-Path -LiteralPath $frozenContractFieldAuditPath -PathType Leaf) {
 $preEntryResultIsolationAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $preEntryResultIsolationAuditPath -PathType Leaf) {
     $preEntryResultIsolationAuditContent = Get-Content -LiteralPath $preEntryResultIsolationAuditPath -Raw
-    foreach ($token in @('event_context', 'pre_entry_space_R', 'first_obstacle_hit', 'realized_R', 'contract_eligibility_mismatch_count', 'event_bucket_mismatch_count', 'contract_space_bucket_mismatch_count', 'no-new-positive', 'validated win-rate: not-computable')) {
+    foreach ($token in @('event_context', 'pre_entry_space_R', 'pre_entry_provenance_status', 'pre_entry_provenance_incomplete', 'first_obstacle_hit', 'realized_R', 'contract_eligibility_mismatch_count', 'event_bucket_mismatch_count', 'contract_space_bucket_mismatch_count', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $preEntryResultIsolationAuditContent.Contains($token)) {
             Add-ValidationError "missing pre-entry/result-isolation-audit token '$token'"
+        }
+    }
+}
+
+$legacyResultProvenanceAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/legacy_result_provenance_completeness_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $legacyResultProvenanceAuditPath -PathType Leaf) {
+    $legacyResultProvenanceAuditContent = Get-Content -LiteralPath $legacyResultProvenanceAuditPath -Raw
+    foreach ($token in @('pre_entry_provenance_status', 'pre_entry_provenance_missing_fields', 'completed_trade_count', 'pre_entry_provenance_incomplete', 'no-new-positive', 'validated win-rate: not-computable')) {
+        if (-not $legacyResultProvenanceAuditContent.Contains($token)) {
+            Add-ValidationError "missing legacy-result-provenance-audit token '$token'"
         }
     }
 }

@@ -167,6 +167,9 @@ main_uncertainty_or_exclusion:
 ```text
 fill_status: filled / no-fill / opening-skip / unproven / not-traded
 evidence_status: comparable / excluded / excluded_incomplete_horizon / excluded_ambiguous / observation_only
+pre_entry_provenance_status: complete / incomplete
+pre_entry_provenance_missing_fields:
+planned_entry_trigger:
 sample_id:
 market_context_id:
 win_rate_eligible: yes / no
@@ -182,7 +185,7 @@ exit_date:
 
 `first_obstacle_hit` 是路径过程字段，不是胜负标签；触及首障碍不能自动写成 `win`。若首障碍只出现在未解决的 stop/target 歧义路径上，应写 `unknown`。`realized_R` 只有在成交、路径完成、无未解决歧义且 `win_rate_eligible=yes` 时才可进入可比结果。`opening-skip`、`no-fill`、`observation_only`、`incomplete-horizon`、`ambiguous_intrabar` 和 `pending` 不进入胜率分母。`max_hold_bars` 表示实际交易 `entry_bar` 之后允许观察的完整 K 线数；非 `market_close` 的时间退出在观察窗口结束后的下一根 K 线开盘成交，因此 `bars_held` 这个 backtesting.py 的 entry/exit bar 索引距离可能比 `max_hold_bars` 多 1，不能把该执行索引差异误读成额外的自由持仓。`market_close` 按收盘时间索引计数；如果数据末尾没有可执行的时间退出价格，则必须标为 `incomplete-horizon`。
 
-`summary.json` 的 `completed_trade_count` 只统计同时满足 `win_rate_eligible=yes`、`trade_result=win/loss/scratch`、`evidence_status=comparable`、`fill_status=filled`、无歧义/未完成 horizon、非重复结果且有有限 `realized_R` 的行；如果结果行带有 H/L EMA gate，还必须由该事前 gate 推导出 `contract_eligibility=eligible`。`win_rate_eligible_count` 是结果旗标数量，不应在旗标与结果不一致时直接当作分母；`win_rate_eligibility_mismatch_count`、`contract_eligibility_mismatch_count`、`event_bucket_mismatch_count`、`contract_space_bucket_mismatch_count`、`win_rate_guard_exclusion_count` 和互斥的 `outcome_bucket_counts` 必须保留用于审计。`event_bucket` 与 `contract_space_bucket` 必须从原始事前字段重算，结果文件中的同名派生字段不能反向覆盖合同证据。`first_obstacle_hit`、`space_to_first_obstacle_R` 和 `realized_R` 是结果阶段字段，不得回填入 `space_status`、`pre_entry_space_R` 或任何 EMA gate。
+`summary.json` 的 `completed_trade_count` 只统计同时满足 `pre_entry_provenance_status=complete`、`win_rate_eligible=yes`、`trade_result=win/loss/scratch`、`evidence_status=comparable`、`fill_status=filled`、无歧义/未完成 horizon、非重复结果且有有限 `realized_R` 的行；如果结果行带有 H/L EMA gate，还必须由该事前 gate 推导出 `contract_eligibility=eligible`。`pre_entry_provenance_status=incomplete` 的行只能作为描述性结果，`pre_entry_provenance_missing_fields` 必须保留缺失项。`win_rate_eligible_count` 是结果旗标数量，不应在旗标与结果不一致时直接当作分母；`win_rate_eligibility_mismatch_count`、`contract_eligibility_mismatch_count`、`event_bucket_mismatch_count`、`contract_space_bucket_mismatch_count`、`win_rate_guard_exclusion_count` 和互斥的 `outcome_bucket_counts` 必须保留用于审计。`event_bucket` 与 `contract_space_bucket` 必须从原始事前字段重算，结果文件中的同名派生字段不能反向覆盖合同证据。`first_obstacle_hit`、`space_to_first_obstacle_R` 和 `realized_R` 是结果阶段字段，不得回填入 `space_status`、`pre_entry_space_R` 或任何 EMA gate。
 
 摘要还必须报告 `unique_sample_id_count`、`missing_sample_id_count`、重复 sample/合同族的 group/row/extra 计数、`unique_lineage_count`、共享 lineage 计数、`unique_market_context_count`、缺失/共享市场状态计数，以及同一标的持仓区间重叠计数。相同 `sample_id` 或同一合同族的重复行全部标记为 `duplicate_result`，不任意保留其中一份；不同 `lineage_id` 也不自动证明样本独立。`independence_status` 和 `independence_statistics_status` 必须明确说明缺失或依赖来源。
 

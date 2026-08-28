@@ -11,7 +11,7 @@ import pandas as pd
 from pa_research_backtest.engine import (
     BacktestContract,
     ContractValidationError,
-    build_summary,
+    build_summary as _build_summary,
     load_contracts,
     load_prices,
     main,
@@ -59,6 +59,59 @@ def make_contract(**overrides):
     }
     values.update(overrides)
     return BacktestContract(**values)
+
+
+def _complete_synthetic_result_rows(results):
+    """Give summary-only fixtures explicit pre-entry evidence without changing production code."""
+
+    completed = []
+    for index, result in enumerate(results, start=1):
+        row = dict(result)
+        row.setdefault("sample_id", f"SYNTH-{index}")
+        row.setdefault("symbol", "PA-EX")
+        row.setdefault("decision_date", "2026-01-02")
+        row.setdefault("direction", "long")
+        row.setdefault("primary_pattern", "ABC_CONT")
+        row.setdefault("internal_label", "H1")
+        row.setdefault("order_branch", "stop_confirmation")
+        if str(row["order_branch"]).lower() == "market_close":
+            row.setdefault("planned_entry_trigger", "")
+        else:
+            row.setdefault("planned_entry_trigger", 10.0)
+        row.setdefault("structural_stop", 9.0)
+        row.setdefault("first_obstacle", 12.0)
+        row.setdefault("target_price", 12.0)
+        row.setdefault("max_hold_bars", 5)
+        row.setdefault("gap_policy", "accept_open")
+        row.setdefault("label_source", "human_chart_review")
+        row.setdefault("daily_context_window", ">=2y")
+        row.setdefault("major_high_low_review", "complete")
+        row.setdefault("ema20_50_200_review", "complete")
+        row.setdefault("event_context", "none")
+        row.setdefault("contract_frozen", "yes")
+        row.setdefault("lineage_id", f"SYNTH-LINEAGE-{index}")
+        label = str(row["internal_label"]).upper()
+        if label in {"H1", "H2"}:
+            row.setdefault("daily_ema20_slope", "up")
+            row.setdefault("daily_ema50_slope", "up")
+            row.setdefault("h_l_ema_slope_gate", "long_pass")
+            row.setdefault("h_l_pullback_location", "rising_ema20")
+            row.setdefault("meta_confluence", "absent")
+        elif label in {"L1", "L2"}:
+            row.setdefault("direction", "short")
+            row.setdefault("daily_ema20_slope", "down")
+            row.setdefault("daily_ema50_slope", "down")
+            row.setdefault("h_l_ema_slope_gate", "short_pass")
+            row.setdefault("h_l_pullback_location", "falling_ema20")
+            row.setdefault("meta_confluence", "absent")
+        completed.append(row)
+    return completed
+
+
+def build_summary(results):
+    """Keep existing summary fixtures explicit; raw provenance tests call _build_summary."""
+
+    return _build_summary(_complete_synthetic_result_rows(results))
 
 
 class PaResearchBacktestTests(unittest.TestCase):
@@ -760,6 +813,75 @@ class PaResearchBacktestTests(unittest.TestCase):
         self.assertEqual(summary["contract_eligibility_mismatch_count"], 1)
         self.assertEqual(summary["completed_trade_count"], 0)
         self.assertIsNone(summary["win_rate_pct"])
+
+    def test_summary_excludes_missing_h_l_ema_gate_from_denominator(self):
+        row = _complete_synthetic_result_rows(
+            [
+                {
+                    "primary_pattern": "H1_L1",
+                    "internal_label": "H1",
+                    "direction": "long",
+                    "fill_status": "filled",
+                    "evidence_status": "comparable",
+                    "win_rate_eligible": "yes",
+                    "trade_result": "win",
+                    "path_result": "target-reached",
+                    "realized_R": 2.0,
+                    "ambiguous_intrabar": "no",
+                }
+            ]
+        )[0]
+        row.pop("h_l_ema_slope_gate")
+        summary = _build_summary([row])
+        self.assertEqual(summary["pre_entry_provenance_status_counts"], {"incomplete": 1})
+        self.assertEqual(summary["completed_trade_count"], 0)
+        self.assertEqual(summary["outcome_bucket_counts"]["pre_entry_provenance_incomplete"], 1)
+
+    def test_summary_excludes_missing_event_context_from_denominator(self):
+        row = _complete_synthetic_result_rows(
+            [
+                {
+                    "primary_pattern": "H1_L1",
+                    "internal_label": "H1",
+                    "direction": "long",
+                    "fill_status": "filled",
+                    "evidence_status": "comparable",
+                    "win_rate_eligible": "yes",
+                    "trade_result": "win",
+                    "path_result": "target-reached",
+                    "realized_R": 2.0,
+                    "ambiguous_intrabar": "no",
+                }
+            ]
+        )[0]
+        row["event_context"] = ""
+        summary = _build_summary([row])
+        self.assertEqual(summary["pre_entry_provenance_status_counts"], {"incomplete": 1})
+        self.assertEqual(summary["completed_trade_count"], 0)
+        self.assertEqual(summary["outcome_bucket_counts"]["pre_entry_provenance_incomplete"], 1)
+
+    def test_summary_excludes_missing_planned_entry_trigger_from_denominator(self):
+        row = _complete_synthetic_result_rows(
+            [
+                {
+                    "primary_pattern": "H1_L1",
+                    "internal_label": "H1",
+                    "direction": "long",
+                    "fill_status": "filled",
+                    "evidence_status": "comparable",
+                    "win_rate_eligible": "yes",
+                    "trade_result": "win",
+                    "path_result": "target-reached",
+                    "realized_R": 2.0,
+                    "ambiguous_intrabar": "no",
+                }
+            ]
+        )[0]
+        row.pop("planned_entry_trigger")
+        summary = _build_summary([row])
+        self.assertEqual(summary["pre_entry_provenance_status_counts"], {"incomplete": 1})
+        self.assertEqual(summary["completed_trade_count"], 0)
+        self.assertEqual(summary["outcome_bucket_counts"]["pre_entry_provenance_incomplete"], 1)
 
     def test_summary_is_descriptive_only(self):
         results = [
