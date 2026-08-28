@@ -17,6 +17,7 @@
 - 输入价格：[`hl_next4_prices_2026-08-27.csv`](hl_next4_prices_2026-08-27.csv)。
 - 冻结前人工审查：[`hl_next4_selection_2026-08-27_CN.md`](hl_next4_selection_2026-08-27_CN.md)。
 - 回放输出：`C:\Users\lwang\.codex\artifacts\pa-research-hl-next4-20260827\replay2`，包含 `results.csv`、`summary.json` 和 `run_metadata.json`。
+- 同一 artifact 根目录下另有旧 `replay` 输出；它使用相同输入文件但记录为两条 `unproven`，与本报告不一致。当前报告只认上述明确指定的 `replay2`，两个旧结果不合并；版本/指纹冲突见[`回放 provenance 与再现性审计`](replay_provenance_reproducibility_audit_2026-08-29_CN.md)。
 - 数据：公开 Yahoo Chart API 历史 Daily OHLCV，经 agent-reach 的 Jina 公共路由读取；源时区 `America/New_York`，复核时间 `2026-08-27 Asia/Shanghai`，最新完整 RTH 日线为 `2026-08-26`。本 session 未成功调用 Futu MCP，因此不是实时或 Futu 回放。
 - 成本：commission `0`、spread `0`；结果是研究路径结果，不是净执行收益估计。
 - 合同：全部 `stop_confirmation`、`max_hold_bars=10`、`gap_policy=skip`。开盘越过触发位则跳过，不追价。

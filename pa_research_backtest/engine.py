@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import json
 import math
+import platform
 import re
 import warnings
 from dataclasses import asdict, dataclass
@@ -24,7 +25,7 @@ import pandas as pd
 from backtesting import Backtest, Strategy
 
 
-ENGINE_VERSION = "0.3.4"
+ENGINE_VERSION = "0.3.5"
 SUPPORTED_DIRECTIONS = {"long", "short"}
 SUPPORTED_PATTERNS = {"ABC_CONT", "BOP", "H1_L1", "H2_L2", "H3_L3", "RFB", "MTR", "other"}
 SUPPORTED_LABELS = {"H1", "H2", "L1", "L2", "H3", "L3", "none", "pending"}
@@ -549,7 +550,8 @@ def load_contracts(path: str | Path) -> list[BacktestContract]:
             validate_contract(contract)
         except ContractValidationError as exc:
             raise ContractValidationError(f"contract CSV row {row_number}: {exc}") from exc
-        if contract.sample_id in seen_ids:
+        sample_identity = contract.sample_id.casefold()
+        if sample_identity in seen_ids:
             raise ContractValidationError(f"duplicate sample_id: {contract.sample_id}")
         contract_family = (
             contract.symbol,
@@ -557,7 +559,7 @@ def load_contracts(path: str | Path) -> list[BacktestContract]:
             contract.direction,
             contract.primary_pattern,
             contract.internal_label,
-            contract.lineage_id,
+            contract.lineage_id.casefold(),
         )
         if contract_family in seen_contract_families:
             raise ContractValidationError(
@@ -566,7 +568,7 @@ def load_contracts(path: str | Path) -> list[BacktestContract]:
                 f"{contract.symbol}/{contract.decision_date.strftime('%Y-%m-%d')}/"
                 f"{contract.primary_pattern}/{contract.internal_label}/{contract.lineage_id}"
             )
-        seen_ids.add(contract.sample_id)
+        seen_ids.add(sample_identity)
         seen_contract_families.add(contract_family)
         contracts.append(contract)
     if not contracts:
@@ -1711,9 +1713,25 @@ def main(argv: list[str] | None = None) -> int:
     summary = build_summary(results)
     price_path = Path(args.prices).resolve()
     contract_path = Path(args.contracts).resolve()
+    engine_source_path = Path(__file__).resolve()
+    output_dir = Path(args.output_dir).resolve()
+    output_dir.mkdir(parents=True, exist_ok=True)
+    results_path = output_dir / "results.csv"
     result_set_sha256 = _result_set_sha256(results)
+    pd.DataFrame(results).to_csv(results_path, index=False)
+    results_file_sha256 = _sha256_file(results_path)
+    engine_source_sha256 = _sha256_file(engine_source_path)
     summary["result_set_sha256"] = result_set_sha256
+    summary["results_file_sha256"] = results_file_sha256
+    summary["engine_source_sha256"] = engine_source_sha256
     summary["run_metadata"] = {
+        "engine_version": ENGINE_VERSION,
+        "backtesting_version": getattr(backtesting, "__version__", "unknown"),
+        "python_version": platform.python_version(),
+        "pandas_version": pd.__version__,
+        "numpy_version": np.__version__,
+        "engine_source": str(engine_source_path),
+        "engine_source_sha256": engine_source_sha256,
         "data_source": args.data_source,
         "data_status": args.data_status,
         "as_of_time": args.as_of_time,
@@ -1722,15 +1740,14 @@ def main(argv: list[str] | None = None) -> int:
         "contract_file": str(contract_path),
         "contract_file_sha256": _sha256_file(contract_path),
         "result_set_sha256": result_set_sha256,
+        "results_file": str(results_path),
+        "results_file_sha256": results_file_sha256,
         "result_row_count": len(results),
         "commission": args.commission,
         "spread": args.spread,
         "cash": args.cash,
         "scope": "PA Research only; no scanner; no Execution Agent; no Codex Trading changes",
     }
-    output_dir = Path(args.output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(results).to_csv(output_dir / "results.csv", index=False)
     (output_dir / "summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2, default=_json_default) + "\n",
         encoding="utf-8",

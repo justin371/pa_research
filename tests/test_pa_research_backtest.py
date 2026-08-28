@@ -1,5 +1,10 @@
+import hashlib
+import json
 import unittest
+from contextlib import redirect_stdout
 from io import StringIO
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import pandas as pd
 
@@ -7,7 +12,9 @@ from pa_research_backtest.engine import (
     BacktestContract,
     ContractValidationError,
     build_summary,
+    load_contracts,
     load_prices,
+    main,
     run_contract,
 )
 
@@ -778,9 +785,76 @@ class PaResearchBacktestTests(unittest.TestCase):
         self.assertEqual(frame.iloc[0]["Open"], 9)
         self.assertEqual(frame.iloc[0]["Symbol"], "PA-EX")
 
-    def test_contract_loader_keeps_canonical_none_label(self):
-        from pa_research_backtest.engine import load_contracts
+    def test_cli_metadata_records_engine_and_result_file_provenance(self):
+        with TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            prices_path = temp_path / "prices.csv"
+            contracts_path = temp_path / "contracts.csv"
+            output_path = temp_path / "output"
+            make_prices(
+                [
+                    ("2026-01-01", 9.0, 9.2, 8.8, 9.0),
+                    ("2026-01-02", 9.0, 9.2, 8.8, 9.0),
+                    ("2026-01-03", 9.5, 10.5, 9.5, 10.2),
+                    ("2026-01-04", 10.2, 12.5, 10.1, 12.2),
+                ]
+            ).reset_index().to_csv(prices_path, index=False)
+            pd.DataFrame([make_contract().as_record()]).to_csv(contracts_path, index=False)
 
+            with redirect_stdout(StringIO()):
+                self.assertEqual(
+                    main(
+                        [
+                            "--prices",
+                            str(prices_path),
+                            "--contracts",
+                            str(contracts_path),
+                            "--output-dir",
+                            str(output_path),
+                        ]
+                    ),
+                    0,
+                )
+
+            summary = json.loads((output_path / "summary.json").read_text(encoding="utf-8"))
+            metadata = json.loads((output_path / "run_metadata.json").read_text(encoding="utf-8"))
+            results_path = output_path / "results.csv"
+            expected_results_hash = hashlib.sha256(results_path.read_bytes()).hexdigest()
+            self.assertEqual(metadata["engine_version"], summary["engine_version"])
+            self.assertEqual(metadata["backtesting_version"], summary["backtesting_version"])
+            self.assertEqual(metadata["result_row_count"], 1)
+            self.assertEqual(metadata["results_file"], str(results_path.resolve()))
+            self.assertEqual(metadata["results_file_sha256"], expected_results_hash)
+            self.assertEqual(summary["results_file_sha256"], expected_results_hash)
+            self.assertTrue(metadata["result_set_sha256"])
+
+    def test_contract_loader_rejects_case_insensitive_duplicate_sample_id(self):
+        csv = StringIO(
+            "sample_id,symbol,decision_date,direction,primary_pattern,internal_label,order_branch,"
+            "entry_trigger,structural_stop,first_obstacle,target_price,max_hold_bars,gap_policy,"
+            "label_source,daily_context_window,major_high_low_review,ema20_50_200_review,event_context,contract_frozen,lineage_id\n"
+            "TEST-A,PA-EX,2026-01-02,long,other,none,market_close,,8,12,12,5,"
+            "not_applicable,human_chart_review,>=2y,complete,complete,none,yes,FAMILY-1\n"
+            "test-a,PA-EX,2026-01-03,long,other,none,market_close,,8,12,12,5,"
+            "not_applicable,human_chart_review,>=2y,complete,complete,none,yes,FAMILY-2\n"
+        )
+        with self.assertRaisesRegex(ContractValidationError, "duplicate sample_id"):
+            load_contracts(csv)
+
+    def test_contract_loader_rejects_case_insensitive_duplicate_lineage_family(self):
+        csv = StringIO(
+            "sample_id,symbol,decision_date,direction,primary_pattern,internal_label,order_branch,"
+            "entry_trigger,structural_stop,first_obstacle,target_price,max_hold_bars,gap_policy,"
+            "label_source,daily_context_window,major_high_low_review,ema20_50_200_review,event_context,contract_frozen,lineage_id\n"
+            "TEST-A,PA-EX,2026-01-02,long,other,none,market_close,,8,12,12,5,"
+            "not_applicable,human_chart_review,>=2y,complete,complete,none,yes,FAMILY-1\n"
+            "TEST-B,PA-EX,2026-01-02,long,other,none,stop_confirmation,10,8,12,12,5,"
+            "accept_open,human_chart_review,>=2y,complete,complete,none,yes,family-1\n"
+        )
+        with self.assertRaisesRegex(ContractValidationError, "duplicate contract family"):
+            load_contracts(csv)
+
+    def test_contract_loader_keeps_canonical_none_label(self):
         csv = StringIO(
             "sample_id,symbol,decision_date,direction,primary_pattern,internal_label,order_branch,"
             "entry_trigger,structural_stop,first_obstacle,target_price,max_hold_bars,gap_policy,"
@@ -802,8 +876,6 @@ class PaResearchBacktestTests(unittest.TestCase):
             "TEST-B,PA-EX,2026-01-02,long,other,none,stop_confirmation,10,8,12,12,5,"
             "accept_open,human_chart_review,>=2y,complete,complete,none,yes,FAMILY-1\n"
         )
-        from pa_research_backtest.engine import load_contracts
-
         with self.assertRaises(ContractValidationError):
             load_contracts(csv)
 

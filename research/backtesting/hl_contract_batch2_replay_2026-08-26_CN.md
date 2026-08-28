@@ -57,7 +57,7 @@
 
 ## 实际回放结果
 
-本节在合同冻结提交 `c58a5a5` 之后补写。回放输出目录为外部 artifact，不作为仓库数据源；运行元数据保留引擎版本、`backtesting.py` 版本、数据源、历史状态、成本和范围声明。运行使用引擎 `0.3.0`、`backtesting.py 0.6.6`、佣金 `0`、spread `0`，价格状态为 historical；完整输出位于 `C:\Users\lwang\.codex\artifacts\pa-research-hl-batch2-replay-20260826`。
+本节在合同冻结提交 `c58a5a5` 之后补写。回放输出目录为外部 artifact，不作为仓库数据源；该历史 artifact 的 `summary.json` 记录引擎版本和 `backtesting.py` 版本，但其独立的 `run_metadata.json` 没有版本或文件指纹字段。运行使用引擎 `0.3.0`、`backtesting.py 0.6.6`、佣金 `0`、spread `0`，价格状态为 historical；完整输出位于 `C:\Users\lwang\.codex\artifacts\pa-research-hl-batch2-replay-20260826`。当前 engine 要重新生成可审计 artifact 时，必须额外写入源码、输入和结果文件指纹。
 
 | 合同 | 成交 / 退出 | 结果 | 首障碍空间 | 解释 |
 | --- | --- | --- | --- | --- |

@@ -23,6 +23,8 @@
 
 `C:\Users\lwang\.codex\artifacts\pa-research-hl-next5-20260827\replay\results_final`
 
+该目录是本报告的正式 artifact。`results_clean` 只差 NDAQ `2022-05-10` 的事件分类（`earnings_adjacent` 修正前为 `ordinary_non_event`），`results_repo_inputs` 与正式结果字节相同但价格文件封装不同，均不与本报告合并为新增样本；详细输入/结果指纹见[`回放 provenance 与再现性审计`](replay_provenance_reproducibility_audit_2026-08-29_CN.md)。
+
 ## 成交和结果
 
 | 合同 | 方向 / 标签 | 事件分组 | 入场 | 出场 | 结果 | 实现 R | 首障碍 |
