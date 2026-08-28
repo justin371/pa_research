@@ -22,6 +22,7 @@
 - [`回放范围隔离与依赖边界审计（2026-08-29）`](backtesting/scope_boundary_dependency_audit_2026-08-29_CN.md)：核对 executable code、依赖和配置没有接入 Futu/OpenD、Codex Trading、量化扫描器或 Execution Agent；边界守卫测试固定研究依赖；
 - [`回放输入边界与 provenance bug 审计（2026-08-29）`](backtesting/input_boundary_bug_audit_2026-08-29_CN.md)：修复非有限合同/行情数值、无效回放成本参数、空 CSV 和源码 hash 双文件篡改边界，并补回归测试；不改变有效合同语义；
 - [`回放 artifact 状态与 CLI 返回码审计（2026-08-29）`](backtesting/artifact_validator_state_exit_audit_2026-08-29_CN.md)：用最小损坏/历史/当前 fixture 固化 `current_valid`、`historical_incomplete`、`invalid` 及 `0/2/1` 返回码边界；不把 artifact 完整性误读成胜率验证；
+- [`回放结果分母边界 bug 审计（2026-08-29）`](backtesting/result_denominator_boundary_bug_audit_2026-08-29_CN.md)：修复缺失 `path_result` 仍可能进入完成交易分母的问题，并把该结果列纳入当前 artifact schema；不增加样本或改变有效回放语义；
 - [`回放版本与结论表述一致性审计（2026-08-29）`](backtesting/version_conclusion_consistency_audit_2026-08-29_CN.md)：统一当前 engine `0.3.9`、历史版本与 `no-new-positive`/`validated win-rate: not-computable` 的语境，保留历史点估计但不升级为验证统计；
 - [`ABC/BOP 合同准入审计（2026-08-28）`](backtesting/abc_bop_contract_intake_audit_2026-08-28_CN.md)：把现有 ABC/BOP 视觉案例分成条件准入和边界案例；intake 清单不进入回放分母；
 - [`ABC 候选合同冻结复核（2026-08-28）`](backtesting/abc_bop_candidate_freeze_review_2026-08-28_CN.md)：逐字段复核 NFLX/TSM 是否具备冻结条件；两者仍未冻结，不增加回放分母；

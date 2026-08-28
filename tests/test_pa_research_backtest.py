@@ -90,6 +90,7 @@ def _complete_synthetic_result_rows(results):
         row.setdefault("event_context", "none")
         row.setdefault("contract_frozen", "yes")
         row.setdefault("lineage_id", f"SYNTH-LINEAGE-{index}")
+        row.setdefault("path_result", "target-reached")
         label = str(row["internal_label"]).upper()
         if label in {"H1", "H2"}:
             row.setdefault("daily_ema20_slope", "up")
@@ -882,6 +883,31 @@ class PaResearchBacktestTests(unittest.TestCase):
         self.assertEqual(summary["pre_entry_provenance_status_counts"], {"incomplete": 1})
         self.assertEqual(summary["completed_trade_count"], 0)
         self.assertEqual(summary["outcome_bucket_counts"]["pre_entry_provenance_incomplete"], 1)
+
+    def test_summary_excludes_missing_path_result_from_denominator(self):
+        row = _complete_synthetic_result_rows(
+            [
+                {
+                    "primary_pattern": "ABC_CONT",
+                    "internal_label": "H1",
+                    "direction": "long",
+                    "fill_status": "filled",
+                    "evidence_status": "comparable",
+                    "win_rate_eligible": "yes",
+                    "trade_result": "win",
+                    "realized_R": 2.0,
+                    "ambiguous_intrabar": "no",
+                }
+            ]
+        )[0]
+        row.pop("path_result")
+
+        summary = _build_summary([row])
+
+        self.assertEqual(summary["pre_entry_provenance_status_counts"], {"complete": 1})
+        self.assertEqual(summary["completed_trade_count"], 0)
+        self.assertIsNone(summary["win_rate_pct"])
+        self.assertEqual(summary["outcome_bucket_counts"]["missing_path_result"], 1)
 
     def test_summary_is_descriptive_only(self):
         results = [

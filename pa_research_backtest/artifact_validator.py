@@ -88,6 +88,7 @@ REQUIRED_RESULT_COLUMNS = {
     "contract_frozen",
     "lineage_id",
     "fill_status",
+    "path_result",
     "trade_result",
     "evidence_status",
     "win_rate_eligible",

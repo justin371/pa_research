@@ -118,21 +118,25 @@ class PaResearchArtifactValidatorTests(unittest.TestCase):
 
     def test_missing_required_result_column_is_historical_with_exit_two(self):
         with TemporaryDirectory() as temp_dir:
-            output_dir = Path(temp_dir) / "output"
-            create_current_artifact(output_dir)
-            results_path = output_dir / "results.csv"
-            results = pd.read_csv(results_path)
-            results.drop(columns=["direction"]).to_csv(results_path, index=False)
+            base_dir = Path(temp_dir) / "base"
+            create_current_artifact(base_dir)
+            for column in ("direction", "path_result"):
+                with self.subTest(column=column):
+                    output_dir = Path(temp_dir) / f"missing-{column}"
+                    shutil.copytree(base_dir, output_dir)
+                    results_path = output_dir / "results.csv"
+                    results = pd.read_csv(results_path)
+                    results.drop(columns=[column]).to_csv(results_path, index=False)
 
-            report = validate_artifact(output_dir)
+                    report = validate_artifact(output_dir)
 
-            self.assertEqual(report["status"], "historical_incomplete")
-            self.assertIn("results.csv predates the current result schema", report["historical_reasons"])
-            output = io.StringIO()
-            with contextlib.redirect_stdout(output):
-                exit_code = validate_main([str(output_dir)])
-            self.assertEqual(exit_code, 2)
-            self.assertIn('"status": "historical_incomplete"', output.getvalue())
+                    self.assertEqual(report["status"], "historical_incomplete")
+                    self.assertIn("results.csv predates the current result schema", report["historical_reasons"])
+                    output = io.StringIO()
+                    with contextlib.redirect_stdout(output):
+                        exit_code = validate_main([str(output_dir)])
+                    self.assertEqual(exit_code, 2)
+                    self.assertIn('"status": "historical_incomplete"', output.getvalue())
 
     def test_legacy_artifact_is_explicitly_historical_incomplete(self):
         with TemporaryDirectory() as temp_dir:

@@ -1521,6 +1521,7 @@ def _completed_trade_mask(frame: pd.DataFrame) -> pd.Series:
         & frame["evidence_status"].eq("comparable")
         & frame["fill_status"].eq("filled")
         & frame["ambiguous_intrabar"].ne("yes")
+        & frame["path_result"].ne("")
         & frame["path_result"].ne("ambiguous")
         & frame["path_result"].ne("incomplete-horizon")
         & ~duplicate_rows
@@ -1548,6 +1549,8 @@ def _outcome_bucket_series(frame: pd.DataFrame, completed: pd.Series) -> pd.Seri
     buckets.loc[ambiguous] = "ambiguous_intrabar"
     incomplete = (~completed) & frame["path_result"].eq("incomplete-horizon")
     buckets.loc[incomplete] = "incomplete_horizon"
+    missing_path = (~completed) & frame["path_result"].eq("")
+    buckets.loc[missing_path] = "missing_path_result"
     opening_skip = (~completed) & frame["fill_status"].eq("opening-skip")
     buckets.loc[opening_skip] = "opening_skip"
     no_fill = (~completed) & frame["fill_status"].eq("no-fill")
