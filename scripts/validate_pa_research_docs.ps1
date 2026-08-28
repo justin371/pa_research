@@ -166,6 +166,7 @@ $requiredFiles = @(
     'research/backtesting/report_index_inventory_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/batch_report_numeric_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/abc_bop_intake_schema_consistency_audit_2026-08-29_CN.md',
+    'research/backtesting/historical_replay_result_log_provenance_audit_2026-08-29_CN.md',
     'research/candidate_visual_record_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
@@ -510,6 +511,16 @@ if (Test-Path -LiteralPath $artifactSchemaRoundtripAuditPath -PathType Leaf) {
     foreach ($token in @('results.csv', 'summary.json', 'run_metadata.json', 'summary_provenance', 'result_columns', 'pre_entry_provenance_status', 'contract_eligibility_mismatch_count', 'event_bucket_mismatch_count', 'contract_space_bucket_mismatch_count', 'historical', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $artifactSchemaRoundtripAuditContent.Contains($token)) {
             Add-ValidationError "missing artifact-schema-roundtrip-audit token '$token'"
+        }
+    }
+}
+
+$historicalReplayResultLogAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/historical_replay_result_log_provenance_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $historicalReplayResultLogAuditPath -PathType Leaf) {
+    $historicalReplayResultLogAuditContent = Get-Content -LiteralPath $historicalReplayResultLogAuditPath -Raw
+    foreach ($token in @('external_results_files=13', 'external_result_rows=88', 'unique_sample_ids=63', 'duplicate_sample_id_groups=13', 'rows_in_duplicate_groups=38', 'extra_duplicate_rows=25', 'current_valid=0', 'historical_incomplete=13', 'invalid=0', 'historical_exit_code=2', 'journal/', 'trade_log/', 'transaction/', 'ledger/', 'no-new-positive', 'validated win-rate: not-computable')) {
+        if (-not $historicalReplayResultLogAuditContent.Contains($token)) {
+            Add-ValidationError "missing historical replay/result-log provenance audit token '$token'"
         }
     }
 }

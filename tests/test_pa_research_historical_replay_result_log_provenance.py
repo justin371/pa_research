@@ -1,0 +1,75 @@
+"""Regression checks for historical replay and transaction-log boundaries."""
+
+import unittest
+from pathlib import Path
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+BACKTEST_ROOT = REPO_ROOT / "research" / "backtesting"
+AUDIT_PATH = BACKTEST_ROOT / "historical_replay_result_log_provenance_audit_2026-08-29_CN.md"
+
+
+class HistoricalReplayResultLogProvenanceTests(unittest.TestCase):
+    def test_audit_records_external_inventory_and_historical_validator_boundary(self):
+        text = AUDIT_PATH.read_text(encoding="utf-8")
+
+        for phrase in (
+            "13 份 `results.csv`",
+            "88 行、63 个不同 `sample_id`",
+            "13 个 `sample_id` 组重复",
+            "38 行",
+            "25 行",
+            "historical_incomplete",
+            "退出码 `2`",
+            "current_valid",
+            "no-new-positive",
+            "validated win-rate: not-computable",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_replay_results_are_distinguished_from_actual_transaction_logs(self):
+        text = AUDIT_PATH.read_text(encoding="utf-8")
+
+        self.assertIn("`results.csv` 是模拟结果记录，不是券商订单、成交、持仓或账户交易日志", text)
+        self.assertIn("当前 PA Research 没有实际订单、实际成交、持仓、账户 P&L 或 Execution Agent 交易日志", text)
+        for directory in ("journal", "trade_log", "transaction", "ledger"):
+            self.assertIn(f"`{directory}/`", text)
+            self.assertFalse((REPO_ROOT / directory).exists(), directory)
+
+    def test_current_checkout_does_not_contain_persisted_replay_triples(self):
+        artifact_names = {"results.csv", "summary.json", "run_metadata.json"}
+        current_artifacts = [
+            path
+            for path in REPO_ROOT.rglob("*")
+            if path.is_file() and path.name in artifact_names and ".git" not in path.parts
+        ]
+        self.assertEqual(current_artifacts, [])
+
+    def test_axes_cannot_be_reconstructed_from_outcomes(self):
+        text = AUDIT_PATH.read_text(encoding="utf-8")
+
+        for phrase in (
+            "不能由盈利方向、结果标签或后验走势改写",
+            "不能由回放收益或事后均线位置补齐",
+            "不能由 `space_to_first_obstacle_R`、`first_obstacle_hit` 或 `realized_R` 倒推严格空间",
+            "不能因为日期不同或结果不同就宣称独立",
+            "不能反向修改上述事前标签或创造新合同",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_audit_is_indexed_and_validator_guarded(self):
+        research_readme = (REPO_ROOT / "research" / "README.md").read_text(encoding="utf-8")
+        backtesting_readme = (BACKTEST_ROOT / "README.md").read_text(encoding="utf-8")
+        validator = (REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1").read_text(
+            encoding="utf-8"
+        )
+        filename = AUDIT_PATH.name
+
+        self.assertIn(filename, research_readme)
+        self.assertIn(filename, backtesting_readme)
+        self.assertIn(filename, validator)
+        self.assertIn("historical replay/result-log provenance audit", validator)
+
+
+if __name__ == "__main__":
+    unittest.main()

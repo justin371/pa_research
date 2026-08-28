@@ -115,7 +115,11 @@ class PaResearchReportInventoryConsistencyTests(unittest.TestCase):
         self.assertIn("| 全部 intake | 2 个 CSV、25 条 |", lineage)
         self.assertIn("| `market_context_id` | 0/60 条已记录 |", lineage)
 
-        replay_files = sorted(BACKTEST_ROOT.glob("*replay*.md"))
+        replay_files = sorted(
+            path
+            for path in BACKTEST_ROOT.glob("*replay*.md")
+            if path.name != "historical_replay_result_log_provenance_audit_2026-08-29_CN.md"
+        )
         version_report = (BACKTEST_ROOT / "version_conclusion_consistency_audit_2026-08-29_CN.md").read_text(encoding="utf-8")
         self.assertEqual(len(replay_files), 11)
         self.assertIn("| 回放报告数 | 11 |", version_report)
