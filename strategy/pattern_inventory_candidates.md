@@ -78,6 +78,31 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 八个目录的交叉关系不另造第九个 pattern；统一复核和切换入口见[`核心八个 Pattern 交叉一致性审计`](../research/core_pattern_cross_audit_CN.md)。
 代表性候选、边界和研究缺口见[`核心八个 Pattern 代表性案例矩阵`](../research/core_pattern_case_matrix_CN.md)。
 
+## 2A. 16 个 pattern 目录入口与 canonical 字段边界
+
+下面是当前 16 个实际目录的完整入口。前八个是 PA Research 的核心结构；后八个是独立的视觉研究主题，均保持 `research_only / provisional`，不能因为目录名称就写成统一输出合同的 `ABC_CONT`、`BOP` 或 H/L 主标签。
+
+| # | 目录入口 | 层级 | canonical 记录方式 |
+| --- | --- | --- | --- |
+| 01 | [`H1/L1 第一次入场`](../patterns/01_h1_l1_first_entry/README.md) | 核心八个 | 日线母级通常为 `ABC_CONT`，`internal_label=H1 / L1`；历史兼容枚举可用 `H1_L1` |
+| 02 | [`H2/L2 第二次入场`](../patterns/02_h2_l2_second_entry/README.md) | 核心八个 | 日线母级通常为 `ABC_CONT`，`internal_label=H2 / L2`；历史兼容枚举可用 `H2_L2` |
+| 03 | [`ABC 趋势延续`](../patterns/03_abc_continuation/README.md) | 核心八个 | `primary_pattern=ABC_CONT`；H/L 只作为 `internal_label` 或 `secondary_context` |
+| 04 | [`区间边缘二次入场`](../patterns/04_range_edge_second_entry/README.md) | 核心八个 | 只有区间边缘失败/二次确认合同才用 `primary_pattern=RFB`；H/L 是关系标签，不是主标签 |
+| 05 | [`失败突破与高潮`](../patterns/05_failed_breakout_climax/README.md) | 核心八个 | 失败突破用 `RFB`；高潮/边界观察可用 `other` 加 `state_transition`，不能自动升级成 BOP |
+| 06 | [`突破回踩 / BOP`](../patterns/06_breakout_pullback_bop/README.md) | 核心八个 | `primary_pattern=BOP`；接受、回踩和角色转换写入 `state_transition`，不拼进主标签 |
+| 07 | [`MTR 趋势反转`](../patterns/07_mtr_reversal/README.md) | 核心八个 | 条件闭合后才用 `primary_pattern=MTR`；双顶/三推等只作次级证据 |
+| 08 | [`三推 / H3-L3 压力状态`](../patterns/08_three_push_h3_l3/README.md) | 核心八个 | 三推合同才用 `primary_pattern=H3_L3`，并明确 `internal_label=H3` 或 `L3`；不完整计数用 `other`/`pending` |
+| 09 | [`VCP / Minervini 独立主题`](../patterns/09_vcp_minervini/README.md) | 独立主题 | 保留目录级 VCP 语义；统一记录若未扩展 schema，使用 `other` 加明确 `secondary_context`/`pattern_like_reason` |
+| 10 | [`Final Flag 独立主题`](../patterns/10_final_flag/README.md) | 独立主题 | 保留目录级 Final Flag 语义；不把它当作 MTR 或 `ABC_CONT` 别名 |
+| 11 | [`Opening Reversal 独立主题`](../patterns/11_opening_reversal/README.md) | 独立主题 | 保留目录级开盘反转语义；触发和开盘事件单独记录 |
+| 12 | [`Channel 独立主题`](../patterns/12_channel/README.md) | 独立主题 | 保留紧/宽通道背景语义；通道本身不创造 H/L、BOP 或 MTR 主标签 |
+| 13 | [`Inside Bar / Two-Bar Reversal 独立主题`](../patterns/13_inside_bar_two_bar_reversal/README.md) | 独立主题 | 保留母 K、内包和两根反转边界；未冻结时使用 `other`/观察状态 |
+| 14 | [`Triangle / Expanding Range 独立主题`](../patterns/14_triangle_expanding_range/README.md) | 独立主题 | 保留三角形/扩张区间语义；突破接受或失败另写状态转换 |
+| 15 | [`Double Top/Bottom 独立主题`](../patterns/15_double_top_bottom/README.md) | 独立主题 | 保留双顶/双底作为位置形状；根据父级和接受/失败再归入 RFB、MTR 或普通回调 |
+| 16 | [`Head & Shoulders / Rounded 独立主题`](../patterns/16_head_shoulders_rounded/README.md) | 独立主题 | 保留头肩/圆顶圆底的视觉边界；未满足颈线、确认和空间时不升级为 MTR |
+
+上述目录入口是索引，不是 16 个已验证策略。当前可报告的胜率仍以逐类、逐合同的 validated evidence 为准；本清单不新增样本，也不改变 engine 的有效枚举。
+
 ## 3A. 视觉发现候选目录
 
 这一节是视觉筛选目录，不是胜率表，也不是量化输入。先在完整图表上判断“像不像”，再决定哪些候选值得做精细 R/R 或低周期核验。详细案例只保存在各自的研究文件中，这里只保留入口和视觉问题，避免两个 Repo 或多个文件重复搬运同一套内容。第一轮与第二轮的边界见[`PA Pattern 视觉筛选协议`](../research/visual_pattern_triage_protocol_CN.md)。

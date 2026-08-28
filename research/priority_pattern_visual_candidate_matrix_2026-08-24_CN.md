@@ -18,7 +18,7 @@ PA Research 已经分别审计了 H1/L1、H2/L2、ABC、BOP、MTR/三推和交�
 
 ## 2. 统一字段与主标签规则
 
-每个案例只允许一个 `primary_pattern`。其他结构写成 `secondary_context`，避免同一组 K 线被 H2、ABC、三推、双顶和 MTR 重复计分。
+每个案例只允许一个 `primary_pattern`：日线母级结构使用 `ABC_CONT`、`BOP`、`RFB`、`MTR`、`H3_L3` 或必要时 `other`。H1/H2/L1/L2/H3/L3 只写入 `internal_label` 或关系描述；接受/失败等状态写入 `state_transition`，不能把内部计数或状态别名塞进主标签。这样可以避免同一组 K 线被 H2、ABC、三推、双顶和 MTR 重复计分。
 
 ```text
 primary_pattern
@@ -51,20 +51,20 @@ handoff_status
 
 ## 3. 代表性候选矩阵
 
-| 案例 | 主标签 | 次标签/关系 | 父级与位置 | A/B 与状态变化 | 订单、止损、首障碍 | 当前裁决 |
-| --- | --- | --- | --- | --- | --- | --- |
-| [`KLAC 2025-05-07–06-03`](klac_h2_case_study_2025-05-07_2025-06-03.md) | `H2` | `ABC continuation / support-EMA cluster` | 多头趋势回调，重复支撑与 EMA20 附近 | 强 A；B 较深但后段稳定；`2025-06-02` 的第二次恢复比 `2025-05-23` 更有意义 | `2025-06-02` 高点上方 buy-stop；结构止损约 `72`；首阻力约 `79.03–79.79`，约 `0.8R–1.0R`；MM 约 `87` 只能放在首障碍之后 | `research_positive_conditional`；位置和合同最清楚，但不是宽空间日线基准 |
-| [`CRWD 2024-09-11–10-11`](crwd_bullish_h2_deep_b_late_stabilization_2024-09-11_2024-10-11.md) | `H2` | `ABC / deep-but-late-controlled-B` | 多头父级，回调落在支撑附近 | A 有方向性；B 前段卖压较强，后段在约 `68.17` 稳定后才保留 H2 | `2024-10-02`/`2024-10-03` 触发分开；结构止损约 `67.4–67.8`；首阻力约 `75.11–75.54`，约 `1.5R–1.9R`；低周期只作确认 | `research_positive_conditional / incident-context-pending`；说明深 B 不自动失效，但不能等同浅 B |
-| [`NFLX 2025-02-14–03-28`](nflx_bearish_abc_l1_no_gap_space_2025-02-14_2025-03-28.md) | `L1` | `ABC continuation / no-gap bear` | 空头趋势中的回调，不是区间中部追空 | 空头 A 方向性清楚；B 深但后段受控；`2025-03-28` 第一次空头恢复 | 盘中刺破与收盘确认分开；结构止损约 `100.8–101.2`；首支撑约 `90.10–88.75`，约 `1.4R–1.9R`；无缺口，但路径仍需独立审计 | `research_positive_conditional`；当前最有价值的无缺口 L1 条件覆盖，不冻结通用规则 |
-| [`TSM 2025-02-14–03-28`](tsm_bearish_abc_l1_gap_reprice_space_2025-02-14_2025-03-28.md) | `L1` | `ABC / reprice-after-gap` | 空头趋势，原触发被事件/小缺口改变 | 强 A；B 仍受控；原 stop 被开盘越过，旧 limit 没有真实回测 | 原约 `177.22` 合同失效；重订约 `176.66`；首支撑约 `167.99–165.05`，约 `1.6R+`；必须按实际价格重算 | `research_positive_conditional / gap-reprice-only`；证明重订可以保留 thesis，但不是原订单正例 |
-| [`TSLA 2025-08-06–08-22`](tsla_abc_h1_h2_case_study_2025-08-06_2025-08-22.md) | `H2` | `ABC / low-cycle-contract-separate` | 多头回调靠近前高、通道和 EMA，但日线首阻力拥挤 | A 清楚；B 前段卖压强，后段在支撑与 EMA20/50 附近稳定；`2025-08-22` H2-like 恢复 | 日线完整结构止损约 `314.60`、最近阻力约 `340.25–340.55`，空间拥挤；15m 可另立约 `1.7R` 的短线合同 | `pattern_like / daily-valid-no-trade`；低周期合同不能替换日线母级风险 |
-| [`KLAC 2025-03-12–03-28`](klac_h3_bear_flag_case_2025-03-12_2025-03-28.md) | `H3 / MTR-candidate` | `bear flag / exhaustion-candidate` | 空头父级中的熊旗上沿，主要阻力约 `74–75` | 三次上探仍属同一 lineage；第三推没有接受，随后出现空头跟随 | `2025-03-25` 低点下方 sell-stop；结构止损约 `74.50`；首支撑约 `66.6–65.1`，约 `1.4R–1.9R`；SOXX 同向 | `research_positive_candidate / not-production`；目前最有价值的 H3 条件样本，但仍需第二个独立方向样本 |
-| [`TSLA 2025-03-07–03-10`](tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md) | `L3 / climax-boundary` | `continuation-or-climax` | 下跌末端靠近支撑/MM，父级状态不支持直接抄底 | 第三推反而加速、卖压扩张，非“一推比一推弱”的衰竭三推 | 第三推末端没有可靠反向订单；`220–224` 只是目标/支撑观察区，不能事后把止跌写成入场证据 | `valid_no_trade / continuation-risk`；保留为 L3 反转的反例 |
-| [`TSLA 2024-03-04–03-14`](tsla_bearish_abc_case_2024-03-04_2024-03-14.md) | `range-edge second-entry` | `L2 / MTR-candidate / ABC` | 局部空头结构发生在区间上沿失败后 | 强空头 A；B 后 `2024-03-12` L1 失败，`2024-03-13` L2-like 更清楚 | 约 `172.41` 下方 sell-stop；结构止损约 `182.87`；首支撑约 `152.37–153.75`，静态约 `1.6R–1.9R`，但实际先破结构止损 | `process-stop-first / range-edge-boundary`；不能用后来到达支撑替代过程审计 |
-| [`TSLA 2025-09-08–09-12`](tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md) | `BOP / breakout-acceptance` | `prior MTR / three-push pressure` | 主要阻力约 `355.39–357.54`，由反转观察切换为接受 | 突破前多次影线测试但未接受；`2025-09-11` 强收盘站上阻力，15m 有跟随且未回到旧区间 | 15m 触发、日线收盘追入和次日追入是不同合同；突破 K 很宽，结构止损/首障碍尚未闭合 | `research_positive_conditional / state-transition`；验证状态切换，不验证“必然等回踩” |
-| [`TSLA 2025-03-04 284 回测`](tsla_abc_playbook_2025-03-04_284_retest.md) | `BOP / breakout-pullback` | `gap-and-go / role-reversal` | 空头 gap-and-go 后，旧低点转为阻力 | 原 `277` sell-stop 被开盘跳过；价格回测约 `283.8–284.3` 后再次受阻 | 约 `284` sell-limit/retest 是独立合同；结构止损约 `304`；首支撑约 `261.84–262.24`，约 `1.1R`；MM `220–224` 仅第二层目标 | `research_positive_conditional / reprice-contract`；最清楚的真实回测路径，但空间和事件闭环仍有限 |
-| [`RBLX 2024-03-18–04-05`](rblx_range_edge_not_abc_boundary_2024-03-18_2024-04-05.md) | `range-edge / failed-breakout` | `not-ABC continuation / double-bottom-like` | 完整日线是约 `35.8–39.0` 区间，反应在下沿附近 | B 回到 A 起点和下沿；`2024-04-04` 上冲越过前高后收回，突破不被接受 | 信号 K 失败；结构止损覆盖区间测试，首目标先看中线约 `37.3–37.8`；宽止损使空间不足 | `valid_no_trade`；用来阻止把区间局部外形写成 ABC/H2 |
-| [`TSLA 2025-03-11–05-13`](tsla_range_after_sell_climax_2025-03-11_2025-05-13.md) | `range-bottom reaction` | `second-leg-trap control / H2-like` | 卖出高潮后形成宽交易区间 | `2025-04-21/22` 是下沿反应，不是趋势第二腿；`2025-04-22–04-29` 只是从下沿摆到上沿；`2025-05-08` 后才重建新 lineage/BOP | 区间目标先看中线/上沿；开盘跳过原触发时必须重订；不能用 MM 把中部首磁铁隐藏 | `observation_only / count-reset`；这是防止错误计数的核心对照 |
+| 案例 | 主标签 | 内部标签 | 次标签/关系 | 父级与位置 | A/B 与状态变化 | 订单、止损、首障碍 | 当前裁决 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [`KLAC 2025-05-07–06-03`](klac_h2_case_study_2025-05-07_2025-06-03.md) | `ABC_CONT` | `H2` | `H2_within_ABC / support_ema_cluster` | 多头趋势回调，重复支撑与 EMA20 附近 | 强 A；B 较深但后段稳定；`2025-06-02` 的第二次恢复比 `2025-05-23` 更有意义 | `2025-06-02` 高点上方 buy-stop；结构止损约 `72`；首阻力约 `79.03–79.79`，约 `0.8R–1.0R`；MM 约 `87` 只能放在首障碍之后 | `research_positive_conditional`；位置和合同最清楚，但不是宽空间日线基准 |
+| [`CRWD 2024-09-11–10-11`](crwd_bullish_h2_deep_b_late_stabilization_2024-09-11_2024-10-11.md) | `ABC_CONT` | `H2` | `H2_within_ABC / deep_but_late_controlled_B` | 多头父级，回调落在支撑附近 | A 有方向性；B 前段卖压较强，后段在约 `68.17` 稳定后才保留 H2 | `2024-10-02`/`2024-10-03` 触发分开；结构止损约 `67.4–67.8`；首阻力约 `75.11–75.54`，约 `1.5R–1.9R`；低周期只作确认 | `research_positive_conditional / incident-context-pending`；说明深 B 不自动失效，但不能等同浅 B |
+| [`NFLX 2025-02-14–03-28`](nflx_bearish_abc_l1_no_gap_space_2025-02-14_2025-03-28.md) | `ABC_CONT` | `L1` | `L1_within_ABC / no_gap_bear` | 空头趋势中的回调，不是区间中部追空 | 空头 A 方向性清楚；B 深但后段受控；`2025-03-28` 第一次空头恢复 | 盘中刺破与收盘确认分开；结构止损约 `100.8–101.2`；首支撑约 `90.10–88.75`，约 `1.4R–1.9R`；无缺口，但路径仍需独立审计 | `research_positive_conditional`；当前最有价值的无缺口 L1 条件覆盖，不冻结通用规则 |
+| [`TSM 2025-02-14–03-28`](tsm_bearish_abc_l1_gap_reprice_space_2025-02-14_2025-03-28.md) | `ABC_CONT` | `L1` | `L1_within_ABC / reprice_after_gap` | 空头趋势，原触发被事件/小缺口改变 | 强 A；B 仍受控；原 stop 被开盘越过，旧 limit 没有真实回测 | 原约 `177.22` 合同失效；重订约 `176.66`；首支撑约 `167.99–165.05`，约 `1.6R+`；必须按实际价格重算 | `research_positive_conditional / gap-reprice-only`；证明重订可以保留 thesis，但不是原订单正例 |
+| [`TSLA 2025-08-06–08-22`](tsla_abc_h1_h2_case_study_2025-08-06_2025-08-22.md) | `ABC_CONT` | `H2` | `H2_within_ABC / low_cycle_contract_separate` | 多头回调靠近前高、通道和 EMA，但日线首阻力拥挤 | A 清楚；B 前段卖压强，后段在支撑与 EMA20/50 附近稳定；`2025-08-22` H2-like 恢复 | 日线完整结构止损约 `314.60`、最近阻力约 `340.25–340.55`，空间拥挤；15m 可另立约 `1.7R` 的短线合同 | `pattern_like / daily-valid-no-trade`；低周期合同不能替换日线母级风险 |
+| [`KLAC 2025-03-12–03-28`](klac_h3_bear_flag_case_2025-03-12_2025-03-28.md) | `H3_L3` | `H3` | `bear_flag / exhaustion_candidate` | 空头父级中的熊旗上沿，主要阻力约 `74–75` | 三次上探仍属同一 lineage；第三推没有接受，随后出现空头跟随 | `2025-03-25` 低点下方 sell-stop；结构止损约 `74.50`；首支撑约 `66.6–65.1`，约 `1.4R–1.9R`；SOXX 同向 | `research_positive_candidate / not-production`；目前最有价值的 H3 条件样本，但仍需第二个独立方向样本 |
+| [`TSLA 2025-03-07–03-10`](tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md) | `H3_L3` | `L3` | `continuation_or_climax` | 下跌末端靠近支撑/MM，父级状态不支持直接抄底 | 第三推反而加速、卖压扩张，非“一推比一推弱”的衰竭三推 | 第三推末端没有可靠反向订单；`220–224` 只是目标/支撑观察区，不能事后把止跌写成入场证据 | `valid_no_trade / continuation-risk`；保留为 L3 反转的反例 |
+| [`TSLA 2024-03-04–03-14`](tsla_bearish_abc_case_2024-03-04_2024-03-14.md) | `RFB` | `L2` | `range_edge / MTR_candidate / ABC_context` | 局部空头结构发生在区间上沿失败后 | 强空头 A；B 后 `2024-03-12` L1 失败，`2024-03-13` L2-like 更清楚 | 约 `172.41` 下方 sell-stop；结构止损约 `182.87`；首支撑约 `152.37–153.75`，静态约 `1.6R–1.9R`，但实际先破结构止损 | `process-stop-first / range-edge-boundary`；不能用后来到达支撑替代过程审计 |
+| [`TSLA 2025-09-08–09-12`](tsla_h1_h2_bop_followup_2025-09-08_2025-09-12.md) | `BOP` | `none` | `prior_MTR / three_push_pressure` | 主要阻力约 `355.39–357.54`，由反转观察切换为接受 | 突破前多次影线测试但未接受；`2025-09-11` 强收盘站上阻力，15m 有跟随且未回到旧区间 | 15m 触发、日线收盘追入和次日追入是不同合同；突破 K 很宽，结构止损/首障碍尚未闭合 | `research_positive_conditional / state-transition`；验证状态切换，不验证“必然等回踩” |
+| [`TSLA 2025-03-04 284 回测`](tsla_abc_playbook_2025-03-04_284_retest.md) | `BOP` | `none` | `gap_and_go / role_reversal` | 空头 gap-and-go 后，旧低点转为阻力 | 原 `277` sell-stop 被开盘跳过；价格回测约 `283.8–284.3` 后再次受阻 | 约 `284` sell-limit/retest 是独立合同；结构止损约 `304`；首支撑约 `261.84–262.24`，约 `1.1R`；MM `220–224` 仅第二层目标 | `research_positive_conditional / reprice-contract`；最清楚的真实回测路径，但空间和事件闭环仍有限 |
+| [`RBLX 2024-03-18–04-05`](rblx_range_edge_not_abc_boundary_2024-03-18_2024-04-05.md) | `RFB` | `none` | `range_edge / failed_breakout / double_bottom_like` | 完整日线是约 `35.8–39.0` 区间，反应在下沿附近 | B 回到 A 起点和下沿；`2024-04-04` 上冲越过前高后收回，突破不被接受 | 信号 K 失败；结构止损覆盖区间测试，首目标先看中线约 `37.3–37.8`；宽止损使空间不足 | `valid_no_trade`；用来阻止把区间局部外形写成 ABC/H2 |
+| [`TSLA 2025-03-11–05-13`](tsla_range_after_sell_climax_2025-03-11_2025-05-13.md) | `other` | `none` | `range_bottom_reaction / second_leg_trap / count_reset` | 卖出高潮后形成宽交易区间 | `2025-04-21/22` 是下沿反应，不是趋势第二腿；`2025-04-22–04-29` 只是从下沿摆到上沿；`2025-05-08` 后才重建新 lineage/BOP | 区间目标先看中线/上沿；开盘跳过原触发时必须重订；不能用 MM 把中部首磁铁隐藏 | `observation_only / count-reset`；这是防止错误计数的核心对照 |
 
 ## 4. 这组样本真正支持什么
 
@@ -115,8 +115,9 @@ handoff_status
 以后遇到一张新图，先用下面这种短输出，而不是先讲一长串形态名称：
 
 ```text
-primary_pattern: H2
-secondary_context: ABC continuation / support-EMA cluster
+primary_pattern: ABC_CONT
+internal_label: H2
+secondary_context: H2_within_ABC / support_ema_cluster
 parent_state: open bull trend, not range-middle
 state_transition: none
 A/B: strong A; deep but late-controlled B

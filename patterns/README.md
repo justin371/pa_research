@@ -93,6 +93,8 @@ final_state / failure_or_no_trade_reason
 
 八个目录的共存关系、切换条件、状态词汇和共同否决层见[`核心八个 Pattern 交叉一致性审计`](../research/core_pattern_cross_audit_CN.md)。使用时先判父级市场状态，再判结构/计数，最后判状态转换和交易合同；不要因为多个标签同时出现就重复计算优势。
 
+16 个目录的完整入口、独立主题边界和 canonical `primary_pattern`/`internal_label`/`state_transition` 映射见[`Pattern 索引、别名与主次标签边界审计`](../research/pattern_index_alias_boundary_audit_2026-08-29_CN.md)。
+
 订单语义和 R/R 的跨 pattern 规则见[`八个 Pattern 的订单合同与 R/R 审计`](../research/order_contract_cross_pattern_audit_CN.md)。
 
 MTR 与三推/H3-L3 的边界复核见[`MTR 与三推/H3-L3 视觉边界复核`](../research/mtr_three_push_visual_boundary_audit_2026-08-24_CN.md)：三推是压力观察入口；成熟区间边缘的第三推可以先成为独立反转候选，MTR 仍需要控制权改变和反向二次确认。

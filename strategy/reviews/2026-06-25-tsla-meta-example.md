@@ -23,8 +23,9 @@ event_context: unknown
 event_bucket: unknown
 directional_bias: changing
 direction: no_valid_direction
-primary_pattern: H3_L3
+primary_pattern: other
 secondary_context: potential_three_push_wedge;support_reaction;META_candidate
+pattern_like_reason: potential_three_push_visual_shape;incomplete_left_context;count_pending
 range_edge_three_push: pending
 state_transition: none
 lineage_status: pending

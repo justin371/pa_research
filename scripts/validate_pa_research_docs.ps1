@@ -170,6 +170,7 @@ $requiredFiles = @(
     'research/backtesting/historical_replay_result_log_provenance_audit_2026-08-29_CN.md',
     'research/candidate_visual_record_consistency_audit_2026-08-29_CN.md',
     'research/unified_output_state_axis_audit_2026-08-29_CN.md',
+    'research/pattern_index_alias_boundary_audit_2026-08-29_CN.md',
     'research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
@@ -552,6 +553,16 @@ if (Test-Path -LiteralPath $unifiedOutputStateAxisAuditPath -PathType Leaf) {
     foreach ($token in @('document_maturity', 'attempt_direction', 'Daily', '4H', '15m', 'lineage_id', 'event_bucket', 'space_status', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $unifiedOutputStateAxisAuditContent.Contains($token)) {
             Add-ValidationError "missing unified-output state-axis audit token '$token'"
+        }
+    }
+}
+
+$patternIndexAliasBoundaryAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/pattern_index_alias_boundary_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $patternIndexAliasBoundaryAuditPath -PathType Leaf) {
+    $patternIndexAliasBoundaryAuditContent = Get-Content -LiteralPath $patternIndexAliasBoundaryAuditPath -Raw
+    foreach ($token in @('01_h1_l1_first_entry', '02_h2_l2_second_entry', '03_abc_continuation', '04_range_edge_second_entry', '05_failed_breakout_climax', '06_breakout_pullback_bop', '07_mtr_reversal', '08_three_push_h3_l3', '09_vcp_minervini', '10_final_flag', '11_opening_reversal', '12_channel', '13_inside_bar_two_bar_reversal', '14_triangle_expanding_range', '15_double_top_bottom', '16_head_shoulders_rounded', 'primary_pattern: ABC_CONT', 'internal_label=H1 / L1', 'internal_label=H2 / L2', 'internal_label=H3 / L3', 'state_transition', 'no-new-positive', 'validated win-rate: not-computable', 'PA Research only', 'no Codex Trading', 'no quantitative scanner', 'no Execution Agent')) {
+        if (-not $patternIndexAliasBoundaryAuditContent.Contains($token)) {
+            Add-ValidationError "missing pattern-index-alias-boundary-audit token '$token'"
         }
     }
 }

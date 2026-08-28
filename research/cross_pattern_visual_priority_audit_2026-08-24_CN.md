@@ -94,8 +94,9 @@
 边界外强收盘、后续跟随、回测守住后，输出：
 
 ```text
-primary_pattern: BOP / accepted_breakout
+primary_pattern: BOP
 secondary_context: former_range / former_double_top / former_triangle
+state_transition: breakout_acceptance
 old_thesis: invalidated
 next_contract: breakout-continuation or limit-retest
 ```
@@ -114,7 +115,7 @@ next_contract: breakout-continuation or limit-retest
 
 ### TSLA `2025-09-08–09-12`
 
-早期看起来可以有阻力下双高、三推、Final Flag 或 MTR 空头候选；但 `09-11` 强收盘突破并有跟随、回测守住。主标签应改为 `BOP_acceptance`，旧反向标签只做历史背景。
+早期看起来可以有阻力下双高、三推、Final Flag 或 MTR 空头候选；但 `09-11` 强收盘突破并有跟随、回测守住。主标签应改为 `BOP`，并以 `state_transition=breakout_acceptance` 记录接受；旧反向标签只做历史背景。
 
 ### TSLA `2024-03-04–03-14`
 
