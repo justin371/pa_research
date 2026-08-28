@@ -114,7 +114,7 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 ## 关键执行边界
 
 1. 订单只从 `decision_date` 之后开始生效；程序不读取未来结果来创建 pattern 标签。
-2. `gap_policy=skip` 遇到第一根 K 线开盘跳过触发位时记录 `opening-skip`；`accept_open` 记录实际开盘成交；两者不混算。
+2. `gap_policy=skip` 遇到第一根 K 线开盘跳过触发位时记录 `opening-skip`；`accept_open` 记录实际开盘成交；`flag_only` 也按实际开盘成交，但把 `gap_adjustment` 保留为 `flag_only`；三者不混算。
 3. 止损和目标在入场 K 线完成后才挂入，避免把入场 K 线内无法确定的先后顺序伪装成结果。
 4. 后续 K 线同时触及止损和目标时，结果标记为 `ambiguous_intrabar`，不进入胜率分母；歧义路径上的首障碍若不能确认在持仓仍有效时到达，则标为 `unknown`。
 5. 时间退出以实际 `entry_bar` 计数；`max_hold_bars` 表示 entry 之后允许观察的完整 K 线数，非 `market_close` 的时间退出在观察窗口结束后的下一根开盘成交，因此 backtesting.py 的 `bars_held` 索引距离可能比 `max_hold_bars` 多 1，这不是额外的自由持仓。`market_close` 按收盘时间索引计数；若数据末尾没有可执行的时间退出价格则标为 `incomplete-horizon`。

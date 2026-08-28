@@ -160,6 +160,21 @@ class PaResearchBacktestTests(unittest.TestCase):
         self.assertEqual(result["gap_adjustment"], "accepted_open")
         self.assertEqual(result["entry_price"], 11.0)
 
+    def test_gap_flag_only_accepts_open_and_preserves_gap_flag(self):
+        prices = make_prices(
+            [
+                ("2026-01-01", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-02", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-03", 11.0, 11.5, 10.8, 11.2),
+                ("2026-01-04", 11.2, 12.5, 11.0, 12.2),
+            ]
+        )
+        result = run_contract(make_contract(gap_policy="flag_only"), prices)
+        self.assertEqual(result["fill_status"], "filled")
+        self.assertTrue(result["gap_through"])
+        self.assertEqual(result["gap_adjustment"], "flag_only")
+        self.assertEqual(result["entry_price"], 11.0)
+
     def test_gap_reprice_is_required_when_old_target_is_invalid(self):
         prices = make_prices(
             [
@@ -205,6 +220,37 @@ class PaResearchBacktestTests(unittest.TestCase):
         self.assertEqual(result["fill_status"], "filled")
         self.assertEqual(result["trade_result"], "win")
         self.assertAlmostEqual(result["realized_R"], 2.0)
+
+    def test_short_stop_confirmation_mirrors_protective_stop(self):
+        prices = make_prices(
+            [
+                ("2026-01-01", 11.0, 11.5, 10.5, 11.0),
+                ("2026-01-02", 11.0, 11.5, 10.5, 11.0),
+                ("2026-01-03", 10.0, 10.2, 9.5, 9.8),
+                ("2026-01-04", 11.2, 11.5, 10.8, 11.3),
+            ]
+        )
+        contract = make_contract(
+            direction="short",
+            primary_pattern="H1_L1",
+            internal_label="L1",
+            order_branch="stop_confirmation",
+            entry_trigger=10.0,
+            structural_stop=11.0,
+            first_obstacle=8.0,
+            target_price=8.0,
+            gap_policy="accept_open",
+            daily_ema20_slope="down",
+            daily_ema50_slope="down",
+            h_l_ema_slope_gate="short_pass",
+            h_l_pullback_location="falling_ema20;prior_resistance",
+        )
+        result = run_contract(contract, prices)
+        self.assertEqual(result["fill_status"], "filled")
+        self.assertEqual(result["entry_price"], 10.0)
+        self.assertEqual(result["exit_reason"], "stop")
+        self.assertEqual(result["path_result"], "invalidated")
+        self.assertEqual(result["trade_result"], "loss")
 
     def test_target_gap_after_entry_is_a_completed_target(self):
         prices = make_prices(
