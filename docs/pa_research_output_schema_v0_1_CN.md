@@ -47,6 +47,7 @@ daily_ema50_slope: up / flat / down / unknown
 h_l_ema_slope_gate: long_pass / short_pass / fail_flat_or_opposite / pending / not_applicable
 
 event_context: none / earnings / macro / gap / other / unknown
+event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
 event_source_as_of:
 earnings_next_three_sessions: yes / no / unknown
 sector_reference:
@@ -144,6 +145,8 @@ structural_stop:
 structural_invalidation:
 first_independent_obstacle:
 rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 rough_R_R:
 target_layers:
 main_uncertainty_or_exclusion:

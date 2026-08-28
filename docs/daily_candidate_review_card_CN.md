@@ -72,6 +72,7 @@ market_cap_gate: pass / fail / pending
 liquidity_gate: pass / fail / pending
 
 event_context: none / earnings / macro / gap / other / unknown
+event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
 event_source_as_of:
 earnings_next_three_sessions: yes / no / unknown
 event_gate: pass / exclude / pending
@@ -152,7 +153,7 @@ first_independent_obstacle:
 first_obstacle_zone:
 distance_to_first_obstacle:
 rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
-space_status: clearly_positive / borderline / blocked / unknown
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 ```
 
 `META` 至少需要两个独立结构来源在同一价格区域汇聚，例如 EMA20、前期支撑和角色转换区；它只能增强合格候选的优先级，不能替代方向、触发、结构止损或第一障碍。

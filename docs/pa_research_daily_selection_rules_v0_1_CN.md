@@ -256,6 +256,7 @@ market_cap_source:
 average_dollar_volume_20d:
 earnings_next_three_sessions:
 event_context:
+event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
 event_source_as_of:
 sector_reference:
 sector_state: aligned / mixed / counter / unknown
@@ -295,6 +296,7 @@ possible_daily_entry_trigger:
 structural_invalidation:
 first_independent_obstacle:
 rough_space_to_first_obstacle_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 signal_bar:
 confirmation_bar:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only

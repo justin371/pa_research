@@ -72,6 +72,7 @@ $requiredFiles = @(
     'research/backtesting/abc_bop_candidate_freeze_review_2026-08-28_CN.md',
     'research/backtesting/abc_bullish_candidate_contract_audit_2026-08-28_CN.md',
     'research/backtesting/cross_pattern_statistics_isolation_audit_2026-08-29_CN.md',
+    'research/backtesting/event_space_eligibility_audit_2026-08-29_CN.md',
     'research/backtesting/bop_contract_intake_2026-08-28.csv',
     'research/backtesting/bop_contract_intake_audit_2026-08-28_CN.md',
     'strategy/README.md'
@@ -106,6 +107,7 @@ $canonicalChecks = @{
     'docs/pa_research_output_schema_v0_1_CN.md' = @(
         'direction: long / short / no_valid_direction',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
+        'event_bucket:',
         'bop_state:',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'gate_result:',
@@ -114,6 +116,7 @@ $canonicalChecks = @{
     'docs/pa_research_daily_selection_rules_v0_1_CN.md' = @(
         'direction: long / short / no_valid_direction',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
+        'event_bucket:',
         'bop_state:',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'gate_result:',
@@ -129,6 +132,7 @@ $canonicalChecks = @{
         'universe_coverage: complete / partial / discovery_only / unknown',
         'avg_20d_dollar_volume_usd:',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
+        'event_bucket:',
         'daily_context_window: >=2y / <2y / unavailable',
         'major_high_low_review: complete / partial / unavailable',
         'h_l_ema_slope_gate:',
@@ -244,10 +248,21 @@ if (Test-Path -LiteralPath $crossPatternAuditPath -PathType Leaf) {
     }
 }
 
+$eventSpaceAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/event_space_eligibility_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $eventSpaceAuditPath -PathType Leaf) {
+    $eventSpaceAuditContent = Get-Content -LiteralPath $eventSpaceAuditPath -Raw
+    foreach ($token in @('event_bucket', 'ordinary_non_event', 'event_unverified_or_pending', 'space_status', 'unknown_contract_space', 'strict_ge_1R', 'no-new-positive')) {
+        if (-not $eventSpaceAuditContent.Contains($token)) {
+            Add-ValidationError "missing event/space eligibility-audit token '$token'"
+        }
+    }
+}
+
 $frozenContractFiles = @(Get-ChildItem -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'research/backtesting') -File -Filter '*contracts*.csv' | Where-Object {
     $_.Name -ne 'contracts.example.csv'
 })
 $frozenContractRecords = [System.Collections.Generic.List[object]]::new()
+$allowedSpaceStatuses = @('strict_ge_1R', 'borderline_ge_1R', 'clearly_positive', 'borderline', 'blocked', 'unknown')
 foreach ($file in $frozenContractFiles) {
     $rows = @(Import-Csv -LiteralPath $file.FullName)
     if ($rows.Count -eq 0) {
@@ -266,6 +281,24 @@ foreach ($file in $frozenContractFiles) {
         }
         if ([string]::IsNullOrWhiteSpace($row.lineage_id)) {
             Add-ValidationError "frozen contract row missing lineage_id: $($file.Name) / $($row.sample_id)"
+        }
+        if ([string]::IsNullOrWhiteSpace($row.event_context)) {
+            Add-ValidationError "frozen contract row missing event_context: $($file.Name) / $($row.sample_id)"
+        }
+        if (-not [string]::IsNullOrWhiteSpace($row.space_status) -and $row.space_status -notin $allowedSpaceStatuses) {
+            Add-ValidationError "frozen contract row has invalid space_status: $($file.Name) / $($row.sample_id)"
+        }
+        if ($row.space_status -in @('strict_ge_1R', 'clearly_positive') -and -not [string]::IsNullOrWhiteSpace($row.pre_entry_space_R)) {
+            $spaceValue = 0.0
+            if (-not [double]::TryParse([string]$row.pre_entry_space_R, [ref]$spaceValue)) {
+                Add-ValidationError "frozen contract row has non-numeric pre_entry_space_R: $($file.Name) / $($row.sample_id)"
+            } elseif ($spaceValue -lt 1) {
+                Add-ValidationError "strict space_status is below 1R: $($file.Name) / $($row.sample_id)"
+            }
+        }
+        if (([string]$row.event_context -match 'historical_event_filter_not_verified') -and
+            ([string]$row.event_context -match 'ordinary_non_event')) {
+            Add-ValidationError "event-unverified row is mislabeled ordinary_non_event: $($file.Name) / $($row.sample_id)"
         }
         if (($row.primary_pattern -eq 'H1_L1') -and ($row.internal_label -notin @('H1', 'L1'))) {
             Add-ValidationError "H1_L1 mapping mismatch: $($file.Name) / $($row.sample_id)"

@@ -30,6 +30,14 @@ SUPPORTED_LABELS = {"H1", "H2", "L1", "L2", "H3", "L3", "none", "pending"}
 H_L_LABELS = {"H1", "H2", "L1", "L2"}
 THIRD_PUSH_LABELS = {"H3", "L3"}
 SUPPORTED_EMA_SLOPES = {"up", "flat", "down", "unknown"}
+SUPPORTED_SPACE_STATUSES = {
+    "strict_ge_1R",
+    "borderline_ge_1R",
+    "clearly_positive",
+    "borderline",
+    "blocked",
+    "unknown",
+}
 SUPPORTED_H_L_EMA_GATES = {
     "long_pass",
     "short_pass",
@@ -115,6 +123,8 @@ class BacktestContract:
     meta_confluence: str = ""
     meta_zone: str = ""
     meta_components: str = ""
+    pre_entry_space_R: float | None = None
+    space_status: str = ""
 
     @classmethod
     def from_row(cls, row: Mapping[str, Any]) -> "BacktestContract":
@@ -150,6 +160,8 @@ class BacktestContract:
             meta_confluence=_as_string(row.get("meta_confluence")).lower(),
             meta_zone=_as_string(row.get("meta_zone")),
             meta_components=_as_string(row.get("meta_components")),
+            pre_entry_space_R=_parse_optional_float(row.get("pre_entry_space_R"), "pre_entry_space_R"),
+            space_status=_normalise_space_status(row.get("space_status")),
         )
 
     def as_record(self) -> dict[str, Any]:
@@ -221,6 +233,58 @@ def _meta_component_names(value: str) -> list[str]:
     ]
 
 
+def _event_bucket(event_context: str) -> str:
+    """Classify raw event evidence conservatively for summary stratification."""
+
+    context = _as_string(event_context).lower()
+    if re.search(
+        r"historical_event_filter_not_verified|event_context_pending|"
+        r"sector_context_pending|public_price_reaudit",
+        context,
+    ):
+        return "event_unverified_or_pending"
+    if re.search(r"event_driven|earnings[-_]driven|aftershock", context):
+        return "event_driven"
+    if "earnings_adjacent" in context:
+        return "earnings_adjacent"
+    if "ordinary_non_event" in context and "gap_reprice" not in context:
+        return "ordinary_non_event"
+    if re.search(
+        r"earnings_filter_passed|no_event_inside|outside_10bar_horizon|"
+        r"outside_a_b_and_10bar_horizon|setup_window_no_known_event",
+        context,
+    ):
+        return "event_reviewed_non_event"
+    if context == "none":
+        return "unknown"
+    return "other_unclassified"
+
+
+def _normalise_space_status(value: Any) -> str:
+    raw = _as_string(value).lower()
+    for status in SUPPORTED_SPACE_STATUSES:
+        if status.lower() == raw:
+            return status
+    return raw
+
+
+def _contract_space_bucket(space_status: str, pre_entry_space_r: float | None) -> str:
+    """Return only the pre-entry space evidence explicitly frozen in the contract."""
+
+    status = _as_string(space_status).lower()
+    if status in {"strict_ge_1r", "clearly_positive"}:
+        return "strict_ge_1R"
+    if status in {"borderline_ge_1r", "borderline"}:
+        return "borderline"
+    if status == "blocked":
+        return "blocked"
+    if status == "unknown":
+        return "unknown_contract_space"
+    if pre_entry_space_r is not None and not _is_missing(pre_entry_space_r):
+        return "numeric_only"
+    return "unknown_contract_space"
+
+
 def _contract_eligibility(contract: BacktestContract) -> str:
     """Return the research replay status implied by the frozen H/L gate."""
 
@@ -276,6 +340,15 @@ def validate_contract(contract: BacktestContract, entry_reference: float | None 
         errors.append("contract_frozen must be yes")
     if not contract.lineage_id:
         errors.append("lineage_id is required for dependence control")
+    space_status = _as_string(contract.space_status).lower()
+    if space_status and space_status not in {item.lower() for item in SUPPORTED_SPACE_STATUSES}:
+        errors.append(f"space_status must be one of {sorted(SUPPORTED_SPACE_STATUSES)}")
+    if space_status in {"strict_ge_1r", "clearly_positive"} and contract.pre_entry_space_R is not None:
+        if contract.pre_entry_space_R < 1:
+            errors.append("strict space_status requires pre_entry_space_R >= 1")
+    if space_status == "blocked" and contract.pre_entry_space_R is not None:
+        if contract.pre_entry_space_R > 0:
+            errors.append("blocked space_status requires pre_entry_space_R <= 0")
 
     if contract.internal_label == "H3_L3":
         errors.append("internal_label H3_L3 is ambiguous; use H3 or L3")
@@ -541,6 +614,10 @@ def _base_result(contract: BacktestContract, *, fill_status: str, reason: str) -
         "meta_confluence": contract.meta_confluence,
         "meta_zone": contract.meta_zone,
         "meta_components": contract.meta_components,
+        "pre_entry_space_R": contract.pre_entry_space_R,
+        "space_status": contract.space_status,
+        "contract_space_bucket": _contract_space_bucket(contract.space_status, contract.pre_entry_space_R),
+        "event_bucket": _event_bucket(contract.event_context),
         "contract_eligibility": eligibility,
         "order_branch": contract.order_branch,
         "event_context": contract.event_context,
@@ -939,6 +1016,13 @@ def _aggregate_group(group: pd.DataFrame) -> dict[str, Any]:
     gross_wins = float(r_values[r_values > 0].sum()) if not r_values.empty else 0.0
     gross_losses = float(r_values[r_values < 0].sum()) if not r_values.empty else 0.0
     profit_factor = gross_wins / abs(gross_losses) if gross_losses < 0 else None
+    event_context_values = sorted(
+        {
+            str(value)
+            for value in group["event_context"].dropna().tolist()
+            if str(value).strip()
+        }
+    )
     return {
         "primary_pattern": group["primary_pattern"].iloc[0],
         "internal_label": group["internal_label"].iloc[0],
@@ -948,9 +1032,12 @@ def _aggregate_group(group: pd.DataFrame) -> dict[str, Any]:
         "daily_ema50_slope": group["daily_ema50_slope"].iloc[0],
         "h_l_ema_slope_gate": group["h_l_ema_slope_gate"].iloc[0],
         "meta_confluence": group["meta_confluence"].iloc[0],
+        "event_bucket": group["event_bucket"].iloc[0],
+        "contract_space_bucket": group["contract_space_bucket"].iloc[0],
         "contract_eligibility": group["contract_eligibility"].iloc[0],
         "order_branch": group["order_branch"].iloc[0],
-        "event_context": group["event_context"].iloc[0],
+        "event_context": event_context_values[0] if len(event_context_values) == 1 else "multiple",
+        "event_context_values": event_context_values,
         "sample_count": int(len(group)),
         "filled_count": int((group["fill_status"] == "filled").sum()),
         "completed_trade_count": int(len(completed)),
@@ -982,6 +1069,13 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             "observation_only_count": 0,
             "pending_contract_count": 0,
             "completed_trade_count": 0,
+            "event_bucket_contract_counts": {},
+            "contract_space_bucket_counts": {},
+            "ordinary_non_event_completed_trade_count": 0,
+            "ordinary_non_event_win_rate_pct": None,
+            "ordinary_non_event_strict_space_completed_trade_count": 0,
+            "ordinary_non_event_strict_space_win_rate_pct": None,
+            "ordinary_non_event_strict_space_statistics_status": "not-computable_no-results",
             "unique_lineage_count": 0,
             "missing_lineage_count": 0,
             "shared_lineage_group_count": 0,
@@ -1006,6 +1100,33 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
     for column in stratification_columns:
         if column not in frame:
             frame[column] = ""
+    if "event_context" not in frame:
+        frame["event_context"] = ""
+    if "event_bucket" not in frame:
+        frame["event_bucket"] = frame["event_context"].fillna("").map(_event_bucket)
+    else:
+        missing_event_bucket = frame["event_bucket"].fillna("").astype(str).str.strip() == ""
+        frame.loc[missing_event_bucket, "event_bucket"] = (
+            frame.loc[missing_event_bucket, "event_context"].fillna("").map(_event_bucket)
+        )
+    if "space_status" not in frame:
+        frame["space_status"] = ""
+    if "pre_entry_space_R" not in frame:
+        frame["pre_entry_space_R"] = None
+    if "contract_space_bucket" not in frame:
+        frame["contract_space_bucket"] = [
+            _contract_space_bucket(status, space_r)
+            for status, space_r in zip(frame["space_status"], frame["pre_entry_space_R"])
+        ]
+    else:
+        missing_space_bucket = frame["contract_space_bucket"].fillna("").astype(str).str.strip() == ""
+        frame.loc[missing_space_bucket, "contract_space_bucket"] = [
+            _contract_space_bucket(status, space_r)
+            for status, space_r in zip(
+                frame.loc[missing_space_bucket, "space_status"],
+                frame.loc[missing_space_bucket, "pre_entry_space_R"],
+            )
+        ]
 
     completed = frame[frame["trade_result"].isin(TRADE_RESULTS)]
     r_values = pd.to_numeric(completed["realized_R"], errors="coerce").dropna()
@@ -1038,6 +1159,21 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         independence_status = "unique_lineage_only"
         independence_adjusted_win_rate = float(wins / len(completed) * 100) if len(completed) else None
         independence_statistics_status = "descriptive_unique_lineage_only"
+    event_bucket_contract_counts = {
+        str(key): int(value) for key, value in frame["event_bucket"].value_counts(dropna=False).items()
+    }
+    contract_space_bucket_counts = {
+        str(key): int(value) for key, value in frame["contract_space_bucket"].value_counts(dropna=False).items()
+    }
+    ordinary_rows = frame[frame["event_bucket"] == "ordinary_non_event"]
+    ordinary_completed = ordinary_rows[ordinary_rows["trade_result"].isin(TRADE_RESULTS)]
+    ordinary_strict_rows = ordinary_rows[ordinary_rows["contract_space_bucket"] == "strict_ge_1R"]
+    ordinary_strict_completed = ordinary_strict_rows[ordinary_strict_rows["trade_result"].isin(TRADE_RESULTS)]
+    ordinary_wins = int((ordinary_completed["trade_result"] == "win").sum())
+    ordinary_strict_wins = int((ordinary_strict_completed["trade_result"] == "win").sum())
+    ordinary_strict_status = (
+        "descriptive_only" if len(ordinary_strict_completed) else "not-computable_no-completed-trades"
+    )
     summary: dict[str, Any] = {
         "engine_version": ENGINE_VERSION,
         "backtesting_version": getattr(backtesting, "__version__", "unknown"),
@@ -1048,6 +1184,19 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         "observation_only_count": int((frame["contract_eligibility"] == "observation_only").sum()),
         "pending_contract_count": int((frame["contract_eligibility"] == "pending").sum()),
         "completed_trade_count": int(len(completed)),
+        "event_bucket_contract_counts": event_bucket_contract_counts,
+        "contract_space_bucket_counts": contract_space_bucket_counts,
+        "ordinary_non_event_completed_trade_count": int(len(ordinary_completed)),
+        "ordinary_non_event_win_rate_pct": (
+            float(ordinary_wins / len(ordinary_completed) * 100) if len(ordinary_completed) else None
+        ),
+        "ordinary_non_event_strict_space_completed_trade_count": int(len(ordinary_strict_completed)),
+        "ordinary_non_event_strict_space_win_rate_pct": (
+            float(ordinary_strict_wins / len(ordinary_strict_completed) * 100)
+            if len(ordinary_strict_completed)
+            else None
+        ),
+        "ordinary_non_event_strict_space_statistics_status": ordinary_strict_status,
         "unique_lineage_count": unique_lineage_count,
         "missing_lineage_count": missing_lineage_count,
         "shared_lineage_group_count": shared_lineage_group_count,
@@ -1072,6 +1221,8 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             "each contract must be frozen before its outcome and must carry >=2y Daily context evidence",
             "lineage_id is preserved for dependence control; contracts sharing a lineage are not independent samples",
             "win_rate_pct is row-based descriptive output; an independence-adjusted rate is withheld when lineages are shared or missing",
+            "event_bucket is conservative; event-unverified, pending, unknown and unclassified contexts are never upgraded to ordinary_non_event",
+            "ordinary_non_event_strict_space statistics use only explicit pre-entry space evidence; blank legacy space fields remain unknown",
             "H1/H2/L1/L2 require the matching Daily EMA20/EMA50 slope gate; failed gates remain observation_only and are excluded",
             "META is recorded and stratified as a confluence field; it is not an entry trigger or authorization",
         ],
@@ -1082,8 +1233,9 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         "internal_label",
         "direction",
         *grouping_columns,
+        "event_bucket",
+        "contract_space_bucket",
         "order_branch",
-        "event_context",
     ]
     for _, group in frame.groupby(group_columns, dropna=False, sort=True):
         summary["groups"].append(_aggregate_group(group))

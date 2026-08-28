@@ -8,6 +8,8 @@
 
 ABC/BOP 的视觉案例准入清单见[`ABC/BOP 合同准入审计`](abc_bop_contract_intake_audit_2026-08-28_CN.md)及[`abc_bop_contract_intake_2026-08-28.csv`](abc_bop_contract_intake_2026-08-28.csv)。该 CSV 明确标记 `contract_frozen=no`，不是回放输入，不增加胜率分母。NFLX/TSM 的逐字段冻结复核见[`ABC 候选合同冻结复核`](abc_bop_candidate_freeze_review_2026-08-28_CN.md)；V、NVDA、KLAC、CRWD 的多头候选复核见[`多头 ABC/H1/H2 候选合同审计`](abc_bullish_candidate_contract_audit_2026-08-28_CN.md)。
 
+跨 Pattern 统计隔离见[`跨 Pattern 统计隔离审计`](cross_pattern_statistics_isolation_audit_2026-08-29_CN.md)；事件与首障碍空间资格见[`事件与首障碍空间资格审计`](event_space_eligibility_audit_2026-08-29_CN.md)。两份审计都不增加回放分母。
+
 BOP 多日回踩的独立准入清单见[`BOP 合同准入审计`](bop_contract_intake_audit_2026-08-28_CN.md)及[`bop_contract_intake_2026-08-28.csv`](bop_contract_intake_2026-08-28.csv)。该 CSV 只记录现有人工案例的接受、回测和边界状态，全部为 `contract_frozen=no`，不是回放输入。
 
 ## 运行
@@ -64,6 +66,8 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 - `market_close`：在 `decision_date` 收盘成交；此分支的 `gap_policy` 必须为 `not_applicable`。
 
 `label_source` 必须为 `human_chart_review`，并且必须有 `>=2y` Daily 背景、完整重要高低点审查和完整 EMA20/50/200 审查。`target_price`、结构止损、最大持有 K 线数必须在结果发生前冻结，否则不能进入胜率分母。
+
+`pre_entry_space_R` 和 `space_status` 是建议冻结的首障碍空间证据；旧合同缺失时必须按 `unknown_contract_space` 处理，不能从回放后的价格路径倒推为 `strict_ge_1R`。回放摘要中的 `event_bucket` 是对原始 `event_context` 的保守分类：未核实、待定、未知和未分类状态不能升级为普通非事件。
 
 `lineage_id` 是冻结合同的必填依赖控制字段：共享同一父级行情、A/B 回调或局部尝试 lineage 的合同可以分别保留，但不能因为触发日期不同就当成独立统计样本。回放器会保留并分层该字段，并在共享 lineage 时撤回 independence-adjusted 胜率；它不替研究者决定哪些样本独立。
 

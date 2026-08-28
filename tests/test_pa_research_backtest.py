@@ -365,6 +365,57 @@ class PaResearchBacktestTests(unittest.TestCase):
         self.assertEqual(summary["independence_status"], "dependent_lineage_rows_present")
         self.assertIsNone(summary["independence_adjusted_win_rate_pct"])
 
+    def test_summary_separates_event_and_explicit_space_evidence(self):
+        results = [
+            {
+                "primary_pattern": "H1_L1",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "ORDINARY-1",
+                "order_branch": "stop_confirmation",
+                "event_context": "ordinary_non_event",
+                "space_status": "strict_ge_1R",
+                "pre_entry_space_R": 1.5,
+                "fill_status": "filled",
+                "trade_result": "win",
+                "realized_R": 1.0,
+                "ambiguous_intrabar": "no",
+            },
+            {
+                "primary_pattern": "H1_L1",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "ORDINARY-2",
+                "order_branch": "stop_confirmation",
+                "event_context": "ordinary_non_event",
+                "fill_status": "filled",
+                "trade_result": "loss",
+                "realized_R": -1.0,
+                "ambiguous_intrabar": "no",
+            },
+            {
+                "primary_pattern": "H1_L1",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "UNVERIFIED-1",
+                "order_branch": "stop_confirmation",
+                "event_context": "historical_event_filter_not_verified;exploratory_only",
+                "fill_status": "filled",
+                "trade_result": "win",
+                "realized_R": 1.0,
+                "ambiguous_intrabar": "no",
+            },
+        ]
+        summary = build_summary(results)
+        self.assertEqual(summary["event_bucket_contract_counts"]["ordinary_non_event"], 2)
+        self.assertEqual(summary["event_bucket_contract_counts"]["event_unverified_or_pending"], 1)
+        self.assertEqual(summary["contract_space_bucket_counts"]["strict_ge_1R"], 1)
+        self.assertEqual(summary["contract_space_bucket_counts"]["unknown_contract_space"], 2)
+        self.assertEqual(summary["ordinary_non_event_completed_trade_count"], 2)
+        self.assertEqual(summary["ordinary_non_event_win_rate_pct"], 50.0)
+        self.assertEqual(summary["ordinary_non_event_strict_space_completed_trade_count"], 1)
+        self.assertEqual(summary["ordinary_non_event_strict_space_win_rate_pct"], 100.0)
+
     def test_summary_is_descriptive_only(self):
         results = [
             {"primary_pattern": "ABC_CONT", "internal_label": "H1", "direction": "long", "order_branch": "stop_confirmation", "event_context": "none", "fill_status": "filled", "trade_result": "win", "realized_R": 2.0, "ambiguous_intrabar": "no"},
