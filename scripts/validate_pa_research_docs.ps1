@@ -165,6 +165,8 @@ $requiredFiles = @(
     'research/backtesting/validator_engine_contract_parity_audit_2026-08-29_CN.md',
     'research/backtesting/report_index_inventory_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
+    'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
+    'research/backtesting/external_visual_artifact_manifest_2026-08-29.json',
     'research/backtesting/bop_contract_intake_2026-08-28.csv',
     'research/backtesting/bop_contract_intake_audit_2026-08-28_CN.md',
     'scripts/validate_pa_research_artifact.py',

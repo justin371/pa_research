@@ -24,6 +24,7 @@
 - 成本：commission `0`、spread `0`；结果是研究路径结果，不是净执行收益估计。
 - 合同：全部 `stop_confirmation`、`max_hold_bars=10`、`gap_policy=skip`。开盘越过触发位则跳过，不追价。
 - 图像：使用 Matplotlib `3.10.9` 生成至少两年 Daily 背景、局部 OHLC、EMA20/50/200 和原始成交量图；图上没有事后标签、入场、止损、目标或结果。Matplotlib 只渲染，不识别 pattern、不扫描股票。
+- 2026-08-29 外部 artifact 审计发现：ROST 合同决策日为 `2026-01-07`，但现有外部目录只有 `ROST_2026-01-08_candidate_review.png` 和 `ROST_2026-01-13_candidate_review.png` 等后续图；后续图不能替代 `2026-01-07` 的 pre-entry visual evidence。该 provenance gap 不改写本报告历史回放数字，但阻止把 ROST 说成具有完整、可移植的决策日图证据。详细清单见[`外部视觉 artifact provenance 审计`](external_visual_artifact_provenance_audit_2026-08-29_CN.md)。
 
 ## 成交和结果
 

@@ -49,6 +49,10 @@
 
 图像使用 Matplotlib `3.10.9` 渲染，`requirements-backtesting.txt` 已固定同一版本。Matplotlib 只负责两年 Daily、局部 OHLC、EMA20/50/200 和原始成交量的人工审阅图；不识别 pattern、不扫描股票、不生成合同，也不连接 Execution Agent。
 
+### 2026-08-29 外部图像 provenance 注记
+
+外部 PNG 的逻辑清单和哈希见[`外部视觉 artifact manifest`](external_visual_artifact_manifest_2026-08-29.json)及[`外部视觉 artifact provenance 审计`](external_visual_artifact_provenance_audit_2026-08-29_CN.md)。审计发现 CBOE `2025-05-22` 有同日 candidate-review 图，但 ROST 合同决策日是 `2026-01-07`，artifact 没有 `ROST_2026-01-07_*.png`；最近的 `ROST_2026-01-08_candidate_review.png` 与 `ROST_2026-01-13_candidate_review.png` 属于 post-decision 图，不能作为该合同的 `pre-entry visual evidence`。原合同和历史结果不改写；ROST 的这一可复核性缺口不能用后一天图静默补齐。
+
 ## 冻结合同
 
 空间按多头 `(first_obstacle - entry_trigger) / (entry_trigger - structural_stop)` 计算。`>=1R` 是最低几何门槛，不等于已验证优势。全部合同使用 `stop_confirmation`、`max_hold_bars=10`、`gap_policy=skip`；开盘越过触发位时不追价。
