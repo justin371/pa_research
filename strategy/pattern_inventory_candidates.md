@@ -82,6 +82,8 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 
 这一节是视觉筛选目录，不是胜率表，也不是量化输入。先在完整图表上判断“像不像”，再决定哪些候选值得做精细 R/R 或低周期核验。详细案例只保存在各自的研究文件中，这里只保留入口和视觉问题，避免两个 Repo 或多个文件重复搬运同一套内容。第一轮与第二轮的边界见[`PA Pattern 视觉筛选协议`](../research/visual_pattern_triage_protocol_CN.md)。
 
+本表的“当前状态”是目录标签，不是统一输出合同中的单一 `research_state`。其中 `process-*`、`*-reached`、`opening-skip` 等词若出现，只能表示已经单独记录的路径/订单审计事实，不能被复制成入场前的 `research_positive_conditional`，也不能替代 `trade_state`、`gate_result`、`handoff_status` 或冻结合同。
+
 统一的逐图复核顺序见 [`docs/visual_pa_review_card_CN.md`](../docs/visual_pa_review_card_CN.md)。
 
 当前各 pattern 家族的覆盖程度和真正缺失的视觉对照见 [`PA Pattern 覆盖审计`](../research/abc_pattern_coverage_audit_CN.md)。这份审计用于防止重复堆叠相似案例，不代表任何胜率或量化结论。

@@ -166,6 +166,7 @@ $requiredFiles = @(
     'research/backtesting/report_index_inventory_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/batch_report_numeric_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/abc_bop_intake_schema_consistency_audit_2026-08-29_CN.md',
+    'research/candidate_visual_record_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_manifest_2026-08-29.json',

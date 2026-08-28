@@ -1,5 +1,49 @@
 # TSLA META Example — 2026-06-25
 
+## 统一输出边界
+
+```text
+contract_scope: historical_context_only
+symbol: TSLA
+review_date: 2026-06-25
+data_source: historical chart note
+data_status: incomplete
+as_of_time: unknown
+timezone: unknown
+session_state: historical_close
+timeframes_seen: Daily / unknown lower timeframe
+chart_scope: partial
+daily_context_window: unavailable
+major_high_low_review: unavailable
+ema20_50_200_review: unavailable
+daily_ema20_slope: unknown
+daily_ema50_slope: unknown
+h_l_ema_slope_gate: pending
+event_context: unknown
+event_bucket: unknown
+directional_bias: changing
+direction: no_valid_direction
+primary_pattern: H3_L3
+secondary_context: potential_three_push_wedge;support_reaction;META_candidate
+range_edge_three_push: pending
+state_transition: none
+lineage_status: pending
+lineage_id: pending
+internal_label: pending
+permission: no_direction
+gate_result: observation_only
+order_branch: observation_only
+actual_fill_or_open_skip: not_applicable
+structural_invalidation: pending
+first_independent_obstacle: unknown
+rough_space_to_first_obstacle_R: unknown
+research_state: pattern_like
+trade_state: not_authorized
+handoff_status: research_only
+```
+
+这是一条历史形态观察笔记，不是实际成交日志、冻结合同或胜率样本。由于两年 Daily、EMA、事件、精确触发、结构失效和第一障碍没有在本笔记中闭合，方向明确保留为 `no_valid_direction`，不把“Potential Trigger”升级成交易授权。
+
 ## Status
 
 Draft retrospective review. This example is for validating the META framework, not yet a production backtest rule.
