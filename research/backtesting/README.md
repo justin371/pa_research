@@ -24,6 +24,14 @@ py -3 .\scripts\pa_research_backtest.py `
   --output-dir .\research\backtesting\example-output
 ```
 
+对已经存在的回放输出做只读 provenance 校验：
+
+```powershell
+py -3 .\scripts\validate_pa_research_artifact.py .\research\backtesting\example-output
+```
+
+该校验器不下载行情、不重跑回放、不写回 artifact。返回码 `0` 表示当前 schema 完整且链路一致，`2` 表示明确的 `historical_incomplete` 旧 artifact，`1` 表示当前格式下发现缺失、hash 或 round-trip 不一致。
+
 程序写出：
 
 - `results.csv`：每个冻结合同一行，包含成交、退出、空间、`realized_R`、`win_rate_eligible`、`sample_id`、`lineage_id`、可选 `market_context_id` 和证据状态；

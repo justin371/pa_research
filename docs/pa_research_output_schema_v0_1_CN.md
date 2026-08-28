@@ -191,6 +191,8 @@ exit_date:
 
 运行元数据应保留 `engine_version`、`backtesting_version`、`python_version`、`pandas_version`、`numpy_version`、`engine_source_sha256`、`price_file_sha256`、`contract_file_sha256`、`result_set_sha256`、`results_file` 和 `results_file_sha256`，并保留 `summary_provenance`。其中 `summary_provenance` 至少复制实际 `result_columns`、`pre_entry_provenance_status_counts`、`pre_entry_provenance_complete_count`、`pre_entry_provenance_incomplete_count`、`completed_trade_count`、`outcome_bucket_counts` 和各类 provenance/eligibility mismatch 计数；`summary.json` 中嵌套的 `run_metadata` 应与独立 `run_metadata.json` 一致。引擎源码指纹与运行时版本一起锁定执行语义，结果文件指纹锁定实际写出的 artifact；输入/结果指纹用于识别同一输入的重复 artifact 或同一 `sample_id` 的不同版本。它们是审计 provenance，不是交易信号。旧的、缺少这些字段的 `summary.json` 或 `run_metadata.json` 只能作为历史描述，不能与新摘要拼接成验证结果。
 
+`scripts/validate_pa_research_artifact.py` 是只读校验入口：它从 `results.csv` 重建摘要关键计数，核对 `summary_provenance`、CSV/summary/metadata 的 hash 和嵌套 metadata 一致性。`result_set_sha256` 按 engine 约定统一 CSV 换行符后核对，`results_file_sha256` 仍核对实际文件字节。当前 engine/schema 完整且通过检查返回 `current_valid`；旧 engine、缺少当前字段或缺少 provenance 的输出返回 `historical_incomplete`，不能作为当前验证样本；结构损坏或当前字段互相矛盾返回 `invalid`。校验过程不下载行情、不重跑回放、不写回文件。
+
 ## 五、状态轴与交接轴
 
 不同状态不能塞进一个 `status`：

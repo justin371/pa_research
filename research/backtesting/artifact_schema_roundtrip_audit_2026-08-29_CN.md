@@ -36,13 +36,30 @@
 
 `results.csv` 的实际列名包含 `pre_entry_provenance_status`、`pre_entry_provenance_missing_fields`、`planned_entry_trigger`；`summary_provenance.result_columns` 与 CSV 列名完全一致。该检查只证明 artifact 链路自洽，不证明样本独立或长期胜率。
 
-## 三、历史 metadata 处理
+## 三、只读校验器对现有输入的复核
+
+用当前 engine `0.3.9` 对仓库已有的 7 组合同/价格快照在临时目录生成输出，再运行 `scripts/validate_pa_research_artifact.py` 的同一校验逻辑。临时目录在检查后删除，没有把输出写回仓库：
+
+| 检查 | 结果 |
+| --- | --- |
+| 校验组数 | 7 |
+| 结果行数 | 60 |
+| `current_valid` | 7 / 7 |
+| `invalid` | 0 |
+| `historical_incomplete` | 0（当前 engine 生成的临时输出） |
+| 结果文件 hash | 7 / 7 与实际 `results.csv` 一致 |
+| summary/metadata 嵌套一致性 | 7 / 7 |
+| CSV round-trip 关键摘要字段 | 7 / 7 |
+
+`result_set_sha256` 沿用 engine 的规范：对写出的 CSV 内容统一换行符后计算；这样 Windows 的 CRLF 与其他平台的 LF 不会被误报为结果集变化，实际结果文件的原始字节仍由 `results_file_sha256` 单独锁定。
+
+## 四、历史 metadata 处理
 
 本机现有 13 份 PA Research `run_metadata.json` 均缺少当前必需的 engine/依赖版本、源码指纹、输入文件指纹、结果文件指纹和 `summary_provenance`。它们继续标记为 `historical / incomplete provenance`，不能因为对应 `summary.json` 有旧 engine 版本或有结果数字就升级为当前验证结果；不删除、不回写、不与当前输出拼接。
 
 同一输入曾存在不同旧输出的情况仍按前一份[`回放 provenance 与再现性审计`](replay_provenance_reproducibility_audit_2026-08-29_CN.md)处理：保留报告明确指定的 artifact，其他版本只做历史冲突记录。任何未来重跑都必须由新 `result_set_sha256`、实际结果文件 hash、当前 engine/source hash 和 `summary_provenance` 绑定；重跑本身不是新样本。
 
-## 四、统计与范围结论
+## 五、统计与范围结论
 
 本轮没有新增结果分母、没有把 example 行并入正式样本，也没有把 ABC/BOP/H3/L3 与 H/L 混算。现有 PA Research 结论保持：
 

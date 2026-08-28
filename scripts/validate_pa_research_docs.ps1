@@ -82,6 +82,7 @@ $requiredFiles = @(
     'research/backtesting/artifact_schema_roundtrip_audit_2026-08-29_CN.md',
     'research/backtesting/bop_contract_intake_2026-08-28.csv',
     'research/backtesting/bop_contract_intake_audit_2026-08-28_CN.md',
+    'scripts/validate_pa_research_artifact.py',
     'strategy/README.md'
 )
 foreach ($relativePath in $requiredFiles) {

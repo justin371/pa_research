@@ -9,6 +9,7 @@ from .engine import (
     run_contract,
     run_contracts,
 )
+from .artifact_validator import validate_artifact
 
 __all__ = [
     "BacktestContract",
@@ -18,4 +19,5 @@ __all__ = [
     "load_prices",
     "run_contract",
     "run_contracts",
+    "validate_artifact",
 ]
