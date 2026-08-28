@@ -5,6 +5,8 @@
 
 统一字段、方向、BOP 状态和订单分支见[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。本审计只修改 PA Research，不创建量化扫描器、不连接 Execution Agent。
 
+本审计的机器可读后续准入清单见[`BOP 合同准入审计（2026-08-28）`](backtesting/bop_contract_intake_audit_2026-08-28_CN.md)及[`bop_contract_intake_2026-08-28.csv`](backtesting/bop_contract_intake_2026-08-28.csv)。
+
 ## 1. 本轮要找的不是哪一种突破
 
 本轮只检查一种较完整的 BOP 合同：

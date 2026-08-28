@@ -70,6 +70,8 @@ $requiredFiles = @(
     'research/backtesting/abc_bop_contract_intake_2026-08-28.csv',
     'research/backtesting/abc_bop_contract_intake_audit_2026-08-28_CN.md',
     'research/backtesting/abc_bop_candidate_freeze_review_2026-08-28_CN.md',
+    'research/backtesting/bop_contract_intake_2026-08-28.csv',
+    'research/backtesting/bop_contract_intake_audit_2026-08-28_CN.md',
     'strategy/README.md'
 )
 foreach ($relativePath in $requiredFiles) {
@@ -168,6 +170,40 @@ if (Test-Path -LiteralPath $intakePath -PathType Leaf) {
             }
             if ([string]::IsNullOrWhiteSpace($row.missing_fields)) {
                 Add-ValidationError "ABC/BOP intake row missing missing_fields: $($row.intake_id)"
+            }
+        }
+    }
+}
+
+$bopIntakePath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/bop_contract_intake_2026-08-28.csv'
+if (Test-Path -LiteralPath $bopIntakePath -PathType Leaf) {
+    $bopRows = @(Import-Csv -LiteralPath $bopIntakePath)
+    $requiredBopColumns = @(
+        'intake_id', 'symbol', 'source_case', 'decision_date', 'direction',
+        'classification', 'bop_state', 'retest_class', 'order_branch',
+        'contract_frozen', 'event_state', 'missing_fields', 'freeze_recommendation'
+    )
+    if ($bopRows.Count -eq 0) {
+        Add-ValidationError 'BOP intake CSV has no rows'
+    } else {
+        $bopPropertyNames = @($bopRows[0].PSObject.Properties.Name)
+        foreach ($column in $requiredBopColumns) {
+            if ($column -notin $bopPropertyNames) {
+                Add-ValidationError "missing BOP intake column '$column'"
+            }
+        }
+        foreach ($row in $bopRows) {
+            if ($row.contract_frozen -ne 'no') {
+                Add-ValidationError "BOP intake row is not marked contract_frozen=no: $($row.intake_id)"
+            }
+            if ([string]::IsNullOrWhiteSpace($row.source_case)) {
+                Add-ValidationError "BOP intake row missing source_case: $($row.intake_id)"
+            }
+            if ([string]::IsNullOrWhiteSpace($row.missing_fields)) {
+                Add-ValidationError "BOP intake row missing missing_fields: $($row.intake_id)"
+            }
+            if ($row.retest_class -eq 'multi-day' -or $row.classification -eq 'multi_day_bop_positive') {
+                Add-ValidationError "BOP intake row claims a multi-day positive without a frozen contract: $($row.intake_id)"
             }
         }
     }
