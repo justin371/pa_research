@@ -17,7 +17,7 @@
 | Git 历史中同名输出路径 | 0 |
 | 可配对的回放合同/价格输入组 | 7 |
 
-因此，当前仓库没有可供 `scripts/validate_pa_research_artifact.py` 直接读取的持久化 artifact。不存在“校验通过但未登记”的输出，也不存在缺一件却应被当成完整结果的目录。
+因此，当前仓库没有可供 `scripts/validate_pa_research_artifact.py` 直接读取的持久化 artifact。不存在“校验通过但未登记”的输出，也不存在缺一件却应被当成完整结果的目录。当前仓库的范围守卫测试还会检查 executable code 没有外部行情/券商/连接器 import，且回放依赖只保留已锁定的研究依赖。
 
 ## 二、输入与 artifact 的边界
 

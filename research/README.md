@@ -19,6 +19,7 @@
 - [`旧结果事前 provenance 完整性审计（2026-08-29）`](backtesting/legacy_result_provenance_completeness_audit_2026-08-29_CN.md)：为缺少合同、事件或 H/L EMA gate 的旧/最小结果建立 `pre_entry_provenance_status`，缺证据行只保留描述性记录，不进入完成交易分母；
 - [`回放 artifact schema round-trip 审计（2026-08-29）`](backtesting/artifact_schema_roundtrip_audit_2026-08-29_CN.md)：核对 `results.csv → summary.json → run_metadata.json` 的 provenance/mismatch 链路和旧 metadata 的历史状态；当前运行必须保留 `summary_provenance`，不把旧 artifact 或重复回放当成新样本；
 - [`回放 artifact 全仓库 inventory 审计（2026-08-29）`](backtesting/artifact_inventory_audit_2026-08-29_CN.md)：确认当前 checkout 没有持久化回放三件套，区分合同/价格输入与结果 artifact，避免缺文件或旧 metadata 进入统计分母；
+- [`回放范围隔离与依赖边界审计（2026-08-29）`](backtesting/scope_boundary_dependency_audit_2026-08-29_CN.md)：核对 executable code、依赖和配置没有接入 Futu/OpenD、Codex Trading、量化扫描器或 Execution Agent；边界守卫测试固定研究依赖；
 - [`回放版本与结论表述一致性审计（2026-08-29）`](backtesting/version_conclusion_consistency_audit_2026-08-29_CN.md)：统一当前 engine `0.3.9`、历史版本与 `no-new-positive`/`validated win-rate: not-computable` 的语境，保留历史点估计但不升级为验证统计；
 - [`ABC/BOP 合同准入审计（2026-08-28）`](backtesting/abc_bop_contract_intake_audit_2026-08-28_CN.md)：把现有 ABC/BOP 视觉案例分成条件准入和边界案例；intake 清单不进入回放分母；
 - [`ABC 候选合同冻结复核（2026-08-28）`](backtesting/abc_bop_candidate_freeze_review_2026-08-28_CN.md)：逐字段复核 NFLX/TSM 是否具备冻结条件；两者仍未冻结，不增加回放分母；
