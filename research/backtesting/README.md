@@ -30,7 +30,7 @@ py -3 .\scripts\pa_research_backtest.py `
 py -3 .\scripts\validate_pa_research_artifact.py .\research\backtesting\example-output
 ```
 
-该校验器不下载行情、不重跑回放、不写回 artifact，并会核对 metadata 记录的 engine 源文件 hash。返回码 `0` 表示当前 schema 完整且链路一致，`2` 表示明确的 `historical_incomplete` 旧 artifact，`1` 表示当前格式下发现缺失、hash 或 round-trip 不一致。
+该校验器不下载行情、不重跑回放、不写回 artifact，并会核对 metadata 记录的 engine 源文件 hash。返回码固定为 `0=current_valid`、`2=historical_incomplete`、`1=invalid`；`current_valid` 只表示 artifact schema/provenance 链路完整，不等于胜率已经验证。缺失当前字段或旧 engine 的输出保留为 `historical_incomplete`，文件解析失败、源码文件不可用、hash 或 round-trip 不一致则为 `invalid`。
 
 程序写出：
 
