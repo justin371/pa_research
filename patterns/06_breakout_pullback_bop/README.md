@@ -40,7 +40,7 @@ close_outside_boundary:
 follow_through:
 pullback_to_old_level: yes / no / not_yet
 role_reversal_accepted:
-order_branch: stop_confirmation / market_close / limit_retest / observation_only
+order_branch: stop_confirmation / market_close / limit_retest / stop_limit / observation_only
 branch_role: same_contract / role_reversal_retest / gap_reprice / management
 actual_fill_or_open_skip:
 structural_stop:

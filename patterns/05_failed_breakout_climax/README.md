@@ -43,7 +43,7 @@ second_confirmation:
 structural_stop:
 first_independent_obstacle:
 rough_R_R:
-order_branch: stop_confirmation / limit_retest / market_close / observation_only
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: reverse_stop / role_reversal_retest / gap_reprice / same_contract / management
 original_direction_reaccepted:
 final_state: continuation / small-reversal / range / MTR-candidate / no-trade

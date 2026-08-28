@@ -32,7 +32,7 @@ midpoint:
 edge_attempt_1:
 edge_failure_or_reentry:
 edge_attempt_2:
-order_branch: limit_retest / stop_confirmation / market_close / observation_only
+order_branch: limit_retest / stop_confirmation / market_close / stop_limit / observation_only
 branch_role: role_reversal_retest / same_contract / management
 structural_stop:
 first_independent_obstacle:
@@ -55,7 +55,7 @@ second_leg_trap_risk:
 1. `limit-edge`：边缘区域已由左侧结构确认，预先等待正常测试；止损在边缘外，首目标先看中线。
 2. `stop-confirmation`：第一次反应不清楚，等第二次信号 K 外确认；成交后重新审计到中线/另一边缘的空间。
 3. `failed-breakout-reentry`：价格先越过边缘又收回区间；原突破、重返区间和后续二次入场是不同合同。
-4. `observation-only`：区间中部、第一目标太近、结构止损过宽、事件窗口或区间边界未确认。
+4. `observation_only`：区间中部、第一目标太近、结构止损过宽、事件窗口或区间边界未确认。
 
 只有区间外突破被收盘接受、出现跟随并且回测守住后，才可以重建新的趋势合同；不能把区间边缘止损与突破后止损合并。
 

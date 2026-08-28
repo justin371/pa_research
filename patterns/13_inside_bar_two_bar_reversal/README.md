@@ -49,7 +49,7 @@ Inside Bar 关注范围压缩；H1/H2、L1/L2 关注回调中的尝试次数；s
 2. 冻结母 K、inside K 或两根 K 的整根范围；
 3. 标出左侧主要支撑/阻力、EMA、缺口、区间边缘和事件/板块背景；
 4. 区分 setup/count、signal 和 trigger/confirmation；
-5. 事前冻结 stop、limit-retest、market-close 或 observation-only 合同；
+5. 事前冻结 stop、limit-retest、market-close 或 `observation_only` 合同；
 6. 用结构极端确定止损，再看第一独立障碍和 rough R/R；
 7. 只有突破被接受、反向有跟随或出现二次入场时，才升级状态；
 8. 后续 MM、盈利或反转不能倒灌成当时的入场证据。
@@ -59,7 +59,7 @@ Inside Bar 关注范围压缩；H1/H2、L1/L2 关注回调中的尝试次数；s
 - **Stop-confirmation**：多头放在母 K/信号 K 高点外，空头放在低点外；宽 K、跳空或接近首障碍时要重算。
 - **Limit-retest**：只在旧边界、母 K 边缘或角色转换区已经明确后研究；未回到区域前不假设成交。
 - **Market/close-confirmation**：只给强反向收盘、结构已经破坏且等待代价明显的分支；小内包突破不自动授权追入。
-- **Observation-only**：母 K 未冻结、处于区间中部、首障碍贴近、事件/跳空改变原合同，或只能把止损压在母 K 内部才得到好看的 R/R。
+- **observation_only**：母 K 未冻结、处于区间中部、首障碍贴近、事件/跳空改变原合同，或只能把止损压在母 K 内部才得到好看的 R/R。
 
 结构止损要覆盖回调极端、母 K/反向测试极端和真正失效位置，不能只放在第二根 K 的小尾巴外。第一独立支撑/阻力不足约 1R 时记录为 `valid_no_trade`；约 2R 是完整波段参考，不是固定门槛。MM 只有在首障碍被接受穿越后才作为延伸目标。
 

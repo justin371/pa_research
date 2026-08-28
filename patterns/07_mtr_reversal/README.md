@@ -18,7 +18,7 @@
 - 出现双顶/双底、三推、失败突破、Final Flag 或趋势线/通道破坏中的一个或多个证据；
 - 第一次反向只是 reversal attempt；
 - 反向方向再次出现确认并接受关键结构；
-- 首障碍、结构止损和事件过滤允许交易；否则保留为 observation-only。
+- 首障碍、结构止损和事件过滤允许交易；否则保留为 `observation_only`。
 
 ## 主要边界
 
@@ -38,12 +38,13 @@ first_reverse_attempt:
 first_attempt_follow_through:
 second_reverse_attempt:
 structure_acceptance:
-order_branch: stop_confirmation / limit_retest / market_close / observation_only
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: reverse_stop / role_reversal_retest / gap_reprice / management
 structural_stop:
 first_independent_obstacle:
 rough_R_R:
-thesis_state: reversal-attempt / MTR-candidate / MTR-confirmed-for-research / failed-MTR-thesis
+mtr_state: reversal_attempt / mtr_candidate / mtr_confirmed_for_research / failed_mtr_thesis
+thesis_state: working / failed / invalidated / replaced / pending
 ```
 
 ## MTR 的五个必要问题

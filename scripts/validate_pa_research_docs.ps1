@@ -173,6 +173,7 @@ $requiredFiles = @(
     'research/pattern_index_alias_boundary_audit_2026-08-29_CN.md',
     'research/pattern_visual_preflight_audit_2026-08-29_CN.md',
     'research/pattern_case_entry_status_audit_2026-08-29_CN.md',
+    'research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md',
     'research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
@@ -248,6 +249,7 @@ $canonicalChecks = @{
     )
     'docs/visual_pa_review_card_CN.md' = @(
         'direction: long / short / no_valid_direction',
+        'state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'gate_result:',
         'contract_scope:'
@@ -274,6 +276,18 @@ $canonicalChecks = @{
         'trade_state:',
         'gate_result:',
         'handoff_status:'
+    )
+    'patterns/README.md' = @(
+        'lineage_status / lineage_id / internal_label / range_edge_three_push',
+        'daily_context_window / major_high_low_review / ema20_50_200_review',
+        'signal_bar / confirmation_bar / new_trigger / follow_through',
+        'structural_stop / structural_invalidation',
+        'first_independent_obstacle / rough_space_to_first_obstacle_R / space_status / rough_R_R',
+        'event_context / event_bucket / sector_state / market_state / permission / gate_result'
+    )
+    'patterns/07_mtr_reversal/README.md' = @(
+        'mtr_state: reversal_attempt / mtr_candidate / mtr_confirmed_for_research / failed_mtr_thesis',
+        'thesis_state: working / failed / invalidated / replaced / pending'
     )
     'research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md' = @(
         'direction: long / short / no_valid_direction',
@@ -329,12 +343,51 @@ $patternCaseReadmeRelativePaths = @(
     'patterns/15_double_top_bottom/README.md',
     'patterns/16_head_shoulders_rounded/README.md'
 )
+$patternStateAxisAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $patternStateAxisAuditPath -PathType Leaf) {
+    $patternStateAxisAuditContent = Get-Content -LiteralPath $patternStateAxisAuditPath -Raw
+    foreach ($token in @(
+        'state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
+    )) {
+        if (-not $patternStateAxisAuditContent.Contains($token)) {
+            Add-ValidationError "missing pattern state-axis audit token '$token'"
+        }
+    }
+}
 foreach ($relativePath in $patternCaseReadmeRelativePaths) {
     $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
     if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
     $content = Get-Content -LiteralPath $absolutePath -Raw
     if ($content -match '(?<![\w-])valid(?:-| )no-trade(?![\w-])') {
         Add-ValidationError "legacy valid-no-trade status alias in active pattern README: $relativePath"
+    }
+    if ($content -match '(?i)(?<![\w-])observation-only(?![\w-])') {
+        Add-ValidationError "legacy observation-only status alias in active pattern README: $relativePath"
+    }
+    if ($content -match '(?<![A-Za-z_])no_trade(?![A-Za-z_])') {
+        Add-ValidationError "legacy no_trade status alias in active pattern README: $relativePath"
+    }
+}
+
+$corePatternOrderBranchRelativePaths = @(
+    'patterns/04_range_edge_second_entry/README.md',
+    'patterns/05_failed_breakout_climax/README.md',
+    'patterns/06_breakout_pullback_bop/README.md',
+    'patterns/07_mtr_reversal/README.md',
+    'patterns/08_three_push_h3_l3/README.md'
+)
+foreach ($relativePath in $corePatternOrderBranchRelativePaths) {
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Content -LiteralPath $absolutePath -Raw
+    if ($content -notmatch '(?m)^order_branch:.*\bstop_limit\b') {
+        Add-ValidationError "core pattern order_branch omits research stop_limit: $relativePath"
     }
 }
 

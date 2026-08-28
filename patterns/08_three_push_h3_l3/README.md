@@ -44,12 +44,12 @@ event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / ear
 third_push_state: exhaustion / expansion-or-climax / range-repeat / channel-continuation
 first_reverse: none / touch / structural-break
 second_confirmation: yes / no / pending
-order_branch: stop_confirmation / limit_retest / market_close / observation_only
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / management
 structural_stop:
 first_independent_obstacle:
 space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
-rough_R_R: wide / borderline / insufficient / not-frozen
+rough_R_R: wide / borderline / insufficient / not_frozen
 research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
 trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
 gate_result: pass / conditional / observation_only / valid_no_trade / pending
@@ -86,7 +86,7 @@ H3/L3 描述的是第三次有意义的方向尝试；“三推”描述的是�
 - `expansion-or-climax` 看到实体扩大、跳空、收盘靠极值和跟随增强时，默认原方向仍有控制权；
 - `range-repeat` 先使用区间上沿/下沿和 second-leg trap 逻辑，不能继承趋势中的 ABC 腿数；
 - `channel-continuation` 先问通道是否仍被接受，通道内的第三次触碰不能自动升级为反转；
-- 只有状态判断之后，才把 H3/L3 作为订单候选；没有第二次反向确认就保留为 `pattern_like` 或 `observation-only`。
+- 只有状态判断之后，才把 H3/L3 作为订单候选；没有第二次反向确认就保留为 `pattern_like` 或 `observation_only`。
 
 ### 区间边缘三推：从重复测试到反转候选
 
@@ -155,7 +155,7 @@ H3/L3 描述的是第三次有意义的方向尝试；“三推”描述的是�
 
 ## 与 MTR 的关系
 
-三推回答“第三次推进的压力状态是什么”；MTR 回答“趋势控制权是否已经改变”。三推可以作为 MTR 的证据，但没有结构破坏和接受，三推只停留在 `pattern_like` 或 `observation-only`。
+三推回答“第三次推进的压力状态是什么”；MTR 回答“趋势控制权是否已经改变”。三推可以作为 MTR 的证据，但没有结构破坏和接受，三推只停留在 `pattern_like` 或 `observation_only`。
 
 ## 现有入口
 

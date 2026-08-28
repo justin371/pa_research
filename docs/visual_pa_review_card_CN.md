@@ -74,7 +74,7 @@ B 腿：受控 / 深但后段受控 / 反向压力强 / 区间化 / 不清楚
 位置：主要支撑阻力、区间边缘、EMA、缺口、通道或中部
 primary_pattern:
 secondary_context:
-state_transition: none / pending / BOP / failed_breakout / range_transition / MTR_candidate
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
 第一阶段结论：值得深入 / 形态像但先观望 / 不是这个 pattern
 仍不确定：一句话写出计数、尺度或事件疑问
 ```

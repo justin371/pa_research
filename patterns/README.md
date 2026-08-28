@@ -66,14 +66,16 @@ parent_state / market_context
 direction: long / short / no_valid_direction
 left_structure_and_location
 directional_leg_or_range_edge
-lineage_and_attempt_count
+lineage_status / lineage_id / internal_label / range_edge_three_push
+daily_context_window / major_high_low_review / ema20_50_200_review
+daily_ema20_slope / daily_ema50_slope / h_l_ema_slope_gate / h_l_pullback_location
 primary_pattern / secondary_context / pattern_like_reason
 state_transition / bop_state
-signal_bar_and_trigger / follow_through
+signal_bar / confirmation_bar / new_trigger / follow_through
 order_branch / branch_role / actual_fill_or_open_skip
-structural_stop / invalidation
-first_independent_obstacle / rough_R_R
-event_sector_market_gate / permission / gate_result
+structural_stop / structural_invalidation
+first_independent_obstacle / rough_space_to_first_obstacle_R / space_status / rough_R_R
+event_context / event_bucket / sector_state / market_state / permission / gate_result
 research_state / trade_state / thesis_state / handoff_status
 final_state / failure_or_no_trade_reason
 ```
@@ -100,6 +102,8 @@ final_state / failure_or_no_trade_reason
 16 个目录的两年 Daily 左侧、重要高低点、EMA20/50/200、强 A/受控 B、位置和首障碍共同前置证据见[`Pattern 视觉复核前置证据审计`](../research/pattern_visual_preflight_audit_2026-08-29_CN.md)。
 
 16 个目录的案例入口、条件/边界/no-trade 文案和 canonical `valid_no_trade` 状态见[`Pattern 案例入口与状态一致性审计`](../research/pattern_case_entry_status_audit_2026-08-29_CN.md)。
+
+16 个目录的 canonical 状态轴、字段命名和 pattern-specific 模板边界见[`Pattern 状态轴、字段与枚举一致性审计`](../research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md)。
 
 订单语义和 R/R 的跨 pattern 规则见[`八个 Pattern 的订单合同与 R/R 审计`](../research/order_contract_cross_pattern_audit_CN.md)。
 
