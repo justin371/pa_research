@@ -289,6 +289,22 @@ def validate_artifact(artifact_dir: str | Path) -> dict[str, Any]:
     if summary.get("contract_count") != len(results):
         issues.append("summary contract_count does not equal results.csv row count")
 
+    source_hash: str | None = None
+    source_value = metadata.get("engine_source")
+    if not isinstance(source_value, str) or not source_value.strip():
+        issues.append("metadata engine_source is missing or empty")
+    else:
+        source_path = Path(source_value)
+        if not source_path.is_file():
+            issues.append("metadata engine_source file is unavailable")
+        else:
+            try:
+                source_hash = _sha256_file(source_path)
+            except OSError as exc:
+                issues.append(f"cannot hash metadata engine_source: {exc}")
+            if source_hash is not None and metadata.get("engine_source_sha256") != source_hash:
+                issues.append("metadata engine_source_sha256 does not match engine_source")
+
     result_columns = list(results.columns)
     if summary_provenance.get("result_columns") != result_columns:
         issues.append("summary_provenance result_columns do not equal results.csv columns")
@@ -328,6 +344,7 @@ def validate_artifact(artifact_dir: str | Path) -> dict[str, Any]:
 
     result["status"] = "current_valid" if not issues else "invalid"
     result["checks"] = {
+        "engine_source_sha256": source_hash,
         "results_file_sha256": results_hash,
         "result_set_sha256": roundtrip_result_set_hash,
         "summary_metadata_equal": summary.get("run_metadata") == metadata,

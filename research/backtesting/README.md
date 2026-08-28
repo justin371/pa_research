@@ -8,7 +8,7 @@
 
 ABC/BOP 的视觉案例准入清单见[`ABC/BOP 合同准入审计`](abc_bop_contract_intake_audit_2026-08-28_CN.md)及[`abc_bop_contract_intake_2026-08-28.csv`](abc_bop_contract_intake_2026-08-28.csv)。该 CSV 明确标记 `contract_frozen=no`，不是回放输入，不增加胜率分母。NFLX/TSM 的逐字段冻结复核见[`ABC 候选合同冻结复核`](abc_bop_candidate_freeze_review_2026-08-28_CN.md)；V、NVDA、KLAC、CRWD 的多头候选复核见[`多头 ABC/H1/H2 候选合同审计`](abc_bullish_candidate_contract_audit_2026-08-28_CN.md)。
 
-跨 Pattern 统计隔离见[`跨 Pattern 统计隔离审计`](cross_pattern_statistics_isolation_audit_2026-08-29_CN.md)；事件与首障碍空间资格见[`事件与首障碍空间资格审计`](event_space_eligibility_audit_2026-08-29_CN.md)；冻结合同字段覆盖与分层见[`冻结合同字段覆盖与分层完整性审计`](frozen_contract_field_partition_audit_2026-08-29_CN.md)；事前证据与结果证据隔离见[`事前证据与结果证据隔离审计`](pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md)；旧结果事前 provenance 完整性见[`旧结果事前 provenance 完整性审计`](legacy_result_provenance_completeness_audit_2026-08-29_CN.md)；artifact schema round-trip 见[`回放 artifact schema round-trip 审计`](artifact_schema_roundtrip_audit_2026-08-29_CN.md)；全仓库 artifact inventory 见[`回放 artifact 全仓库 inventory 审计`](artifact_inventory_audit_2026-08-29_CN.md)；版本与结论表述一致性见[`回放版本与结论表述一致性审计`](version_conclusion_consistency_audit_2026-08-29_CN.md)；范围隔离与依赖边界见[`回放范围隔离与依赖边界审计`](scope_boundary_dependency_audit_2026-08-29_CN.md)；结果分母与 horizon 语义见[`回放结果分母与 horizon 审计`](replay_outcome_denominator_audit_2026-08-29_CN.md)；lineage、重复 artifact 与样本独立性见[`回放 lineage 与样本独立性审计`](replay_lineage_independence_audit_2026-08-29_CN.md)；历史 artifact 版本/数值对应和再现性见[`回放 provenance 与再现性审计`](replay_provenance_reproducibility_audit_2026-08-29_CN.md)。这些审计都不增加回放分母。
+跨 Pattern 统计隔离见[`跨 Pattern 统计隔离审计`](cross_pattern_statistics_isolation_audit_2026-08-29_CN.md)；事件与首障碍空间资格见[`事件与首障碍空间资格审计`](event_space_eligibility_audit_2026-08-29_CN.md)；冻结合同字段覆盖与分层见[`冻结合同字段覆盖与分层完整性审计`](frozen_contract_field_partition_audit_2026-08-29_CN.md)；事前证据与结果证据隔离见[`事前证据与结果证据隔离审计`](pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md)；旧结果事前 provenance 完整性见[`旧结果事前 provenance 完整性审计`](legacy_result_provenance_completeness_audit_2026-08-29_CN.md)；artifact schema round-trip 见[`回放 artifact schema round-trip 审计`](artifact_schema_roundtrip_audit_2026-08-29_CN.md)；全仓库 artifact inventory 见[`回放 artifact 全仓库 inventory 审计`](artifact_inventory_audit_2026-08-29_CN.md)；版本与结论表述一致性见[`回放版本与结论表述一致性审计`](version_conclusion_consistency_audit_2026-08-29_CN.md)；范围隔离与依赖边界见[`回放范围隔离与依赖边界审计`](scope_boundary_dependency_audit_2026-08-29_CN.md)；输入边界与 provenance bug 见[`回放输入边界与 provenance bug 审计`](input_boundary_bug_audit_2026-08-29_CN.md)；结果分母与 horizon 语义见[`回放结果分母与 horizon 审计`](replay_outcome_denominator_audit_2026-08-29_CN.md)；lineage、重复 artifact 与样本独立性见[`回放 lineage 与样本独立性审计`](replay_lineage_independence_audit_2026-08-29_CN.md)；历史 artifact 版本/数值对应和再现性见[`回放 provenance 与再现性审计`](replay_provenance_reproducibility_audit_2026-08-29_CN.md)。这些审计都不增加回放分母。
 
 BOP 多日回踩的独立准入清单见[`BOP 合同准入审计`](bop_contract_intake_audit_2026-08-28_CN.md)及[`bop_contract_intake_2026-08-28.csv`](bop_contract_intake_2026-08-28.csv)。该 CSV 只记录现有人工案例的接受、回测和边界状态，全部为 `contract_frozen=no`，不是回放输入。
 
@@ -30,7 +30,7 @@ py -3 .\scripts\pa_research_backtest.py `
 py -3 .\scripts\validate_pa_research_artifact.py .\research\backtesting\example-output
 ```
 
-该校验器不下载行情、不重跑回放、不写回 artifact。返回码 `0` 表示当前 schema 完整且链路一致，`2` 表示明确的 `historical_incomplete` 旧 artifact，`1` 表示当前格式下发现缺失、hash 或 round-trip 不一致。
+该校验器不下载行情、不重跑回放、不写回 artifact，并会核对 metadata 记录的 engine 源文件 hash。返回码 `0` 表示当前 schema 完整且链路一致，`2` 表示明确的 `historical_incomplete` 旧 artifact，`1` 表示当前格式下发现缺失、hash 或 round-trip 不一致。
 
 程序写出：
 

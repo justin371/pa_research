@@ -192,6 +192,15 @@ def _normalise_symbol(value: Any) -> str:
     return _as_string(value).upper()
 
 
+def _is_finite_numeric(value: Any) -> bool:
+    if isinstance(value, (bool, np.bool_)):
+        return False
+    try:
+        return math.isfinite(float(value))
+    except (TypeError, ValueError, OverflowError):
+        return False
+
+
 def _parse_date(value: Any, field: str) -> pd.Timestamp:
     if _is_missing(value):
         raise ContractValidationError(f"{field} is required")
@@ -454,7 +463,32 @@ def validate_contract(contract: BacktestContract, entry_reference: float | None 
         errors.append("market_close requires gap_policy=not_applicable")
     if contract.order_branch != "market_close" and contract.gap_policy not in SUPPORTED_GAP_POLICIES - {"not_applicable"}:
         errors.append(f"gap_policy must be one of {sorted(SUPPORTED_GAP_POLICIES - {'not_applicable'})}")
-    if contract.max_hold_bars < 1:
+    finite_numeric_fields: set[str] = set()
+    for field_name, value in (
+        ("structural_stop", contract.structural_stop),
+        ("first_obstacle", contract.first_obstacle),
+        ("target_price", contract.target_price),
+    ):
+        if _is_finite_numeric(value):
+            finite_numeric_fields.add(field_name)
+        else:
+            errors.append(f"{field_name} must be finite")
+    if contract.entry_trigger is not None:
+        if _is_finite_numeric(contract.entry_trigger):
+            finite_numeric_fields.add("entry_trigger")
+        else:
+            errors.append("entry_trigger must be finite")
+    if contract.pre_entry_space_R is not None:
+        if _is_finite_numeric(contract.pre_entry_space_R):
+            finite_numeric_fields.add("pre_entry_space_R")
+        else:
+            errors.append("pre_entry_space_R must be finite")
+    max_hold_bars_valid = isinstance(contract.max_hold_bars, (int, np.integer)) and not isinstance(
+        contract.max_hold_bars, (bool, np.bool_)
+    )
+    if not max_hold_bars_valid:
+        errors.append("max_hold_bars must be an integer")
+    elif contract.max_hold_bars < 1:
         errors.append("max_hold_bars must be at least 1")
     if contract.label_source != "human_chart_review":
         errors.append("label_source must be human_chart_review")
@@ -476,12 +510,12 @@ def validate_contract(contract: BacktestContract, entry_reference: float | None 
     if space_status in {"strict_ge_1r", "clearly_positive"}:
         if contract.pre_entry_space_R is None:
             errors.append("strict space_status requires pre_entry_space_R")
-        elif contract.pre_entry_space_R < 1:
+        elif "pre_entry_space_R" in finite_numeric_fields and contract.pre_entry_space_R < 1:
             errors.append("strict space_status requires pre_entry_space_R >= 1")
     if space_status == "blocked":
         if contract.pre_entry_space_R is None:
             errors.append("blocked space_status requires pre_entry_space_R")
-        elif contract.pre_entry_space_R > 0:
+        elif "pre_entry_space_R" in finite_numeric_fields and contract.pre_entry_space_R > 0:
             errors.append("blocked space_status requires pre_entry_space_R <= 0")
 
     if contract.internal_label == "H3_L3":
@@ -581,20 +615,22 @@ def validate_contract(contract: BacktestContract, entry_reference: float | None 
             "or must be not_applicable"
         )
 
-    if entry_reference is not None:
+    if entry_reference is not None and not _is_finite_numeric(entry_reference):
+        errors.append("entry reference must be finite")
+    if entry_reference is not None and _is_finite_numeric(entry_reference):
         if contract.direction == "long":
-            if contract.structural_stop >= entry_reference:
+            if "structural_stop" in finite_numeric_fields and contract.structural_stop >= entry_reference:
                 errors.append("long structural_stop must be below the entry reference")
-            if contract.first_obstacle <= entry_reference:
+            if "first_obstacle" in finite_numeric_fields and contract.first_obstacle <= entry_reference:
                 errors.append("long first_obstacle must be above the entry reference")
-            if contract.target_price <= entry_reference:
+            if "target_price" in finite_numeric_fields and contract.target_price <= entry_reference:
                 errors.append("long target_price must be above the entry reference")
         elif contract.direction == "short":
-            if contract.structural_stop <= entry_reference:
+            if "structural_stop" in finite_numeric_fields and contract.structural_stop <= entry_reference:
                 errors.append("short structural_stop must be above the entry reference")
-            if contract.first_obstacle >= entry_reference:
+            if "first_obstacle" in finite_numeric_fields and contract.first_obstacle >= entry_reference:
                 errors.append("short first_obstacle must be below the entry reference")
-            if contract.target_price >= entry_reference:
+            if "target_price" in finite_numeric_fields and contract.target_price >= entry_reference:
                 errors.append("short target_price must be below the entry reference")
 
     if errors:
@@ -618,7 +654,10 @@ def _normalise_price_columns(frame: pd.DataFrame) -> pd.DataFrame:
 def load_prices(path: str | Path, default_symbol: str | None = None) -> pd.DataFrame:
     """Load a combined or single-symbol OHLCV CSV for the replay engine."""
 
-    frame = _normalise_price_columns(pd.read_csv(path))
+    try:
+        frame = _normalise_price_columns(pd.read_csv(path))
+    except pd.errors.EmptyDataError as exc:
+        raise ValueError("price CSV contains no rows or columns") from exc
     required = {"Date", "Open", "High", "Low", "Close"}
     missing = sorted(required - set(frame.columns))
     if missing:
@@ -632,11 +671,14 @@ def load_prices(path: str | Path, default_symbol: str | None = None) -> pd.DataF
     if frame["Symbol"].eq("").any():
         raise ValueError("price CSV contains an empty Symbol")
 
-    frame["Date"] = pd.to_datetime(frame["Date"], errors="coerce")
+    try:
+        frame["Date"] = pd.to_datetime(frame["Date"], errors="coerce")
+        if frame["Date"].dt.tz is not None:
+            frame["Date"] = frame["Date"].dt.tz_localize(None)
+    except (AttributeError, TypeError, ValueError) as exc:
+        raise ValueError("price CSV contains invalid or mixed-timezone Date values") from exc
     if frame["Date"].isna().any():
         raise ValueError("price CSV contains an invalid Date")
-    if frame["Date"].dt.tz is not None:
-        frame["Date"] = frame["Date"].dt.tz_localize(None)
     for column in ("Open", "High", "Low", "Close"):
         frame[column] = pd.to_numeric(frame[column], errors="coerce")
     if "Volume" not in frame.columns:
@@ -646,6 +688,8 @@ def load_prices(path: str | Path, default_symbol: str | None = None) -> pd.DataF
 
     if frame[["Open", "High", "Low", "Close"]].isna().any().any():
         raise ValueError("price CSV contains a missing or non-numeric OHLC value")
+    if not np.isfinite(frame[["Open", "High", "Low", "Close", "Volume"]].to_numpy(dtype=float)).all():
+        raise ValueError("price CSV contains a non-finite OHLCV value")
     invalid_ohlc = (
         (frame["High"] < frame[["Open", "Close", "Low"]].max(axis=1))
         | (frame["Low"] > frame[["Open", "Close", "High"]].min(axis=1))
@@ -666,7 +710,10 @@ def load_prices(path: str | Path, default_symbol: str | None = None) -> pd.DataF
 def load_contracts(path: str | Path) -> list[BacktestContract]:
     """Load and validate the pre-outcome contract CSV."""
 
-    frame = pd.read_csv(path)
+    try:
+        frame = pd.read_csv(path)
+    except pd.errors.EmptyDataError as exc:
+        raise ContractValidationError("contract CSV contains no rows or columns") from exc
     frame.columns = [str(column).strip() for column in frame.columns]
     missing = sorted(REQUIRED_CONTRACT_COLUMNS - set(frame.columns))
     if missing:
@@ -880,8 +927,15 @@ def run_contract(
 ) -> dict[str, Any]:
     """Replay one frozen contract and return one auditable result row."""
 
-    if commission < 0 or spread < 0:
-        raise ValueError("commission and spread must be non-negative")
+    if (
+        not _is_finite_numeric(commission)
+        or not _is_finite_numeric(spread)
+        or not _is_finite_numeric(cash)
+        or float(commission) < 0
+        or float(spread) < 0
+        or float(cash) <= 0
+    ):
+        raise ValueError("commission and spread must be finite and non-negative; cash must be finite and positive")
     validate_contract(contract)
     eligibility = _contract_eligibility(contract)
     if eligibility == "observation_only":
@@ -1935,8 +1989,15 @@ def _build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
-    if args.commission < 0 or args.spread < 0 or args.cash <= 0:
-        raise SystemExit("commission/spread must be non-negative and cash must be positive")
+    if (
+        not _is_finite_numeric(args.commission)
+        or not _is_finite_numeric(args.spread)
+        or not _is_finite_numeric(args.cash)
+        or args.commission < 0
+        or args.spread < 0
+        or args.cash <= 0
+    ):
+        raise SystemExit("commission/spread must be finite and non-negative; cash must be finite and positive")
     prices = load_prices(args.prices, default_symbol=args.symbol)
     contracts = load_contracts(args.contracts)
     results = run_contracts(

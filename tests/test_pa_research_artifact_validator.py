@@ -102,6 +102,28 @@ class PaResearchArtifactValidatorTests(unittest.TestCase):
             self.assertEqual(report["status"], "invalid")
             self.assertIn("summary.json run_metadata does not equal run_metadata.json", report["issues"])
 
+    def test_current_artifact_source_hash_tampering_is_invalid(self):
+        with TemporaryDirectory() as temp_dir:
+            output_dir = Path(temp_dir) / "output"
+            create_current_artifact(output_dir)
+            metadata_path = output_dir / "run_metadata.json"
+            summary_path = output_dir / "summary.json"
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            summary = json.loads(summary_path.read_text(encoding="utf-8"))
+            metadata["engine_source_sha256"] = "0" * 64
+            summary["engine_source_sha256"] = "0" * 64
+            summary["run_metadata"] = metadata
+            metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
+            summary_path.write_text(json.dumps(summary), encoding="utf-8")
+
+            report = validate_artifact(output_dir)
+
+            self.assertEqual(report["status"], "invalid")
+            self.assertIn(
+                "metadata engine_source_sha256 does not match engine_source",
+                report["issues"],
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
