@@ -1,14 +1,96 @@
 [CmdletBinding()]
-param()
+param(
+    [string]$RepoRoot
+)
 
 $ErrorActionPreference = 'Stop'
-$repoRoot = Split-Path -Parent $PSScriptRoot
+if ([string]::IsNullOrWhiteSpace($RepoRoot)) {
+    $repoRoot = Split-Path -Parent $PSScriptRoot
+} else {
+    try {
+        $repoRoot = (Resolve-Path -LiteralPath $RepoRoot -ErrorAction Stop).Path
+    } catch {
+        Write-Error "RepoRoot does not exist: $RepoRoot"
+        exit 1
+    }
+    if (-not (Test-Path -LiteralPath $repoRoot -PathType Container)) {
+        Write-Error "RepoRoot is not a directory: $RepoRoot"
+        exit 1
+    }
+}
 $errors = [System.Collections.Generic.List[string]]::new()
 $checkedLinks = 0
 
 function Add-ValidationError {
     param([Parameter(Mandatory)][string]$Message)
     [void]$errors.Add($Message)
+}
+
+function Get-TrimmedText {
+    param([AllowNull()][object]$Value)
+    if ($null -eq $Value) { return '' }
+    $text = ([string]$Value).Trim()
+    # Match pandas.read_csv's default missing-value tokens used by engine.py.
+    $pandasMissingTokens = @(
+        '', '#N/A', '#N/A N/A', '#NA', '-1.#IND', '-1.#QNAN', '-NaN', '-nan',
+        '1.#IND', '1.#QNAN', '<NA>', 'N/A', 'NA', 'NULL', 'NaN', 'None', 'n/a',
+        'nan', 'null'
+    )
+    if ($pandasMissingTokens -ccontains $text) {
+        return ''
+    }
+    return $text
+}
+
+function Test-FiniteNumber {
+    param(
+        [AllowNull()][object]$Value,
+        [ref]$Number
+    )
+
+    $text = Get-TrimmedText $Value
+    if ([string]::IsNullOrWhiteSpace($text)) { return $false }
+    $parsed = 0.0
+    if (-not [double]::TryParse(
+        $text,
+        [Globalization.NumberStyles]::Float,
+        [Globalization.CultureInfo]::InvariantCulture,
+        [ref]$parsed
+    )) { return $false }
+    if ([double]::IsNaN($parsed) -or [double]::IsInfinity($parsed)) { return $false }
+    $Number.Value = $parsed
+    return $true
+}
+
+function Test-ValidDate {
+    param([AllowNull()][object]$Value)
+
+    $text = Get-TrimmedText $Value
+    if ([string]::IsNullOrWhiteSpace($text)) { return $false }
+    $parsed = [DateTime]::MinValue
+    return [DateTime]::TryParse(
+        $text,
+        [Globalization.CultureInfo]::InvariantCulture,
+        [Globalization.DateTimeStyles]::AllowWhiteSpaces,
+        [ref]$parsed
+    )
+}
+
+function Get-CanonicalDateKey {
+    param([AllowNull()][object]$Value)
+
+    $text = Get-TrimmedText $Value
+    if ([string]::IsNullOrWhiteSpace($text)) { return '' }
+    $parsed = [DateTimeOffset]::MinValue
+    if (-not [DateTimeOffset]::TryParse(
+        $text,
+        [Globalization.CultureInfo]::InvariantCulture,
+        [Globalization.DateTimeStyles]::AllowWhiteSpaces,
+        [ref]$parsed
+    )) {
+        return $text.ToLowerInvariant()
+    }
+    return $parsed.ToString('yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)
 }
 
 function Test-PathInsideRepo {
@@ -80,6 +162,7 @@ $requiredFiles = @(
     'research/backtesting/pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md',
     'research/backtesting/legacy_result_provenance_completeness_audit_2026-08-29_CN.md',
     'research/backtesting/artifact_schema_roundtrip_audit_2026-08-29_CN.md',
+    'research/backtesting/validator_engine_contract_parity_audit_2026-08-29_CN.md',
     'research/backtesting/bop_contract_intake_2026-08-28.csv',
     'research/backtesting/bop_contract_intake_audit_2026-08-28_CN.md',
     'scripts/validate_pa_research_artifact.py',
@@ -365,6 +448,23 @@ $allowedLabels = @('H1', 'H2', 'L1', 'L2', 'H3', 'L3', 'none', 'pending')
 $allowedEmaSlopes = @('up', 'flat', 'down', 'unknown')
 $allowedEmaGates = @('long_pass', 'short_pass', 'fail_flat_or_opposite', 'pending', 'not_applicable')
 $allowedContractStates = @('', 'frozen_pre_outcome')
+$allowedOrderBranches = @('stop_confirmation', 'limit_retest', 'market_close')
+$allowedGapPolicies = @('accept_open', 'skip', 'flag_only', 'not_applicable')
+$allowedMetaConfluence = @('present', 'absent', 'unknown')
+$requiredFrozenContractColumns = @(
+    'sample_id', 'symbol', 'decision_date', 'direction', 'primary_pattern',
+    'internal_label', 'order_branch', 'entry_trigger', 'structural_stop',
+    'first_obstacle', 'target_price', 'max_hold_bars', 'gap_policy',
+    'label_source', 'daily_context_window', 'major_high_low_review',
+    'ema20_50_200_review', 'event_context', 'contract_frozen', 'lineage_id'
+)
+$requiredNonEmptyFrozenContractColumns = @(
+    'sample_id', 'symbol', 'decision_date', 'direction', 'primary_pattern',
+    'internal_label', 'order_branch', 'structural_stop', 'first_obstacle',
+    'target_price', 'max_hold_bars', 'gap_policy', 'label_source',
+    'daily_context_window', 'major_high_low_review', 'ema20_50_200_review',
+    'event_context', 'contract_frozen', 'lineage_id'
+)
 foreach ($file in $frozenContractFiles) {
     $rows = @(Import-Csv -LiteralPath $file.FullName)
     if ($rows.Count -eq 0) {
@@ -372,34 +472,59 @@ foreach ($file in $frozenContractFiles) {
         continue
     }
     $columnNames = @($rows[0].PSObject.Properties.Name)
-    foreach ($column in @('sample_id', 'symbol', 'decision_date', 'direction', 'primary_pattern', 'internal_label', 'contract_frozen', 'lineage_id')) {
+    $missingColumns = @($requiredFrozenContractColumns | Where-Object { $_ -notin $columnNames })
+    foreach ($column in $missingColumns) {
         if ($column -notin $columnNames) {
             Add-ValidationError "missing frozen contract column '$column': $($file.Name)"
         }
     }
+    if ($missingColumns.Count -gt 0) {
+        continue
+    }
     foreach ($row in $rows) {
-        $sampleId = ([string]$row.sample_id).Trim()
-        $symbol = ([string]$row.symbol).Trim()
-        $decisionDate = ([string]$row.decision_date).Trim()
-        $direction = ([string]$row.direction).Trim().ToLowerInvariant()
-        $primaryPattern = ([string]$row.primary_pattern).Trim().ToUpperInvariant()
+        $sampleId = Get-TrimmedText $row.sample_id
+        $symbol = Get-TrimmedText $row.symbol
+        $decisionDate = Get-TrimmedText $row.decision_date
+        $direction = (Get-TrimmedText $row.direction).ToLowerInvariant()
+        $primaryPattern = (Get-TrimmedText $row.primary_pattern).ToUpperInvariant()
         if ($primaryPattern -eq 'OTHER') {
             $primaryPattern = 'other'
         }
-        $internalLabel = ([string]$row.internal_label).Trim()
-        $lineageId = ([string]$row.lineage_id).Trim()
-        $spaceStatus = ([string]$row.space_status).Trim()
+        $internalLabel = (Get-TrimmedText $row.internal_label).ToUpperInvariant()
+        if ($internalLabel -eq 'NONE') { $internalLabel = 'none' }
+        if ($internalLabel -eq 'PENDING') { $internalLabel = 'pending' }
+        $lineageId = Get-TrimmedText $row.lineage_id
+        $orderBranch = (Get-TrimmedText $row.order_branch).ToLowerInvariant()
+        $gapPolicy = (Get-TrimmedText $row.gap_policy).ToLowerInvariant()
+        $labelSource = (Get-TrimmedText $row.label_source).ToLowerInvariant()
+        $dailyContextWindow = (Get-TrimmedText $row.daily_context_window).ToLowerInvariant()
+        $majorHighLowReview = (Get-TrimmedText $row.major_high_low_review).ToLowerInvariant()
+        $emaReview = (Get-TrimmedText $row.ema20_50_200_review).ToLowerInvariant()
+        $eventContext = Get-TrimmedText $row.event_context
+        $contractFrozen = (Get-TrimmedText $row.contract_frozen).ToLowerInvariant()
+        $spaceStatus = Get-TrimmedText $row.space_status
         $spaceStatusLower = $spaceStatus.ToLowerInvariant()
-        $ema20Slope = ([string]$row.daily_ema20_slope).Trim().ToLowerInvariant()
-        $ema50Slope = ([string]$row.daily_ema50_slope).Trim().ToLowerInvariant()
-        $emaGate = ([string]$row.h_l_ema_slope_gate).Trim().ToLowerInvariant()
-        $contractState = ([string]$row.contract_state).Trim().ToLowerInvariant()
+        $ema20Slope = (Get-TrimmedText $row.daily_ema20_slope).ToLowerInvariant()
+        $ema50Slope = (Get-TrimmedText $row.daily_ema50_slope).ToLowerInvariant()
+        $emaGate = (Get-TrimmedText $row.h_l_ema_slope_gate).ToLowerInvariant()
+        $pullbackLocation = Get-TrimmedText $row.h_l_pullback_location
+        $metaConfluence = (Get-TrimmedText $row.meta_confluence).ToLowerInvariant()
+        $contractState = (Get-TrimmedText $row.contract_state).ToLowerInvariant()
 
-        if (([string]$row.contract_frozen).Trim().ToLowerInvariant() -ne 'yes') {
+        foreach ($column in $requiredNonEmptyFrozenContractColumns) {
+            $value = Get-TrimmedText $row.PSObject.Properties[$column].Value
+            if ([string]::IsNullOrWhiteSpace($value)) {
+                Add-ValidationError "frozen contract row missing required value '$column': $($file.Name) / $sampleId"
+            }
+        }
+        if ($contractFrozen -ne 'yes') {
             Add-ValidationError "non-frozen row in frozen contract CSV: $($file.Name) / $sampleId"
         }
         if ([string]::IsNullOrWhiteSpace($sampleId) -or [string]::IsNullOrWhiteSpace($symbol) -or [string]::IsNullOrWhiteSpace($decisionDate)) {
             Add-ValidationError "frozen contract row missing identity field: $($file.Name) / $sampleId"
+        }
+        if (-not (Test-ValidDate $decisionDate)) {
+            Add-ValidationError "frozen contract row has invalid decision_date: $($file.Name) / $sampleId"
         }
         if ($direction -notin $allowedDirections) {
             Add-ValidationError "frozen contract row has invalid direction: $($file.Name) / $sampleId"
@@ -413,8 +538,81 @@ foreach ($file in $frozenContractFiles) {
         if ([string]::IsNullOrWhiteSpace($lineageId)) {
             Add-ValidationError "frozen contract row missing lineage_id: $($file.Name) / $sampleId"
         }
-        if ([string]::IsNullOrWhiteSpace($row.event_context)) {
+        if ([string]::IsNullOrWhiteSpace($eventContext)) {
             Add-ValidationError "frozen contract row missing event_context: $($file.Name) / $sampleId"
+        }
+        if ($orderBranch -notin $allowedOrderBranches) {
+            Add-ValidationError "frozen contract row has invalid order_branch: $($file.Name) / $sampleId"
+        }
+        if ($gapPolicy -notin $allowedGapPolicies) {
+            Add-ValidationError "frozen contract row has invalid gap_policy: $($file.Name) / $sampleId"
+        } elseif ($orderBranch -eq 'market_close' -and $gapPolicy -ne 'not_applicable') {
+            Add-ValidationError "market_close requires gap_policy=not_applicable: $($file.Name) / $sampleId"
+        } elseif ($orderBranch -ne 'market_close' -and $gapPolicy -eq 'not_applicable') {
+            Add-ValidationError "non-market-close branch cannot use gap_policy=not_applicable: $($file.Name) / $sampleId"
+        }
+        if ($labelSource -ne 'human_chart_review') {
+            Add-ValidationError "frozen contract row has invalid label_source: $($file.Name) / $sampleId"
+        }
+        if ($dailyContextWindow -ne '>=2y') {
+            Add-ValidationError "frozen contract row requires daily_context_window=>=2y: $($file.Name) / $sampleId"
+        }
+        if ($majorHighLowReview -ne 'complete') {
+            Add-ValidationError "frozen contract row requires major_high_low_review=complete: $($file.Name) / $sampleId"
+        }
+        if ($emaReview -ne 'complete') {
+            Add-ValidationError "frozen contract row requires ema20_50_200_review=complete: $($file.Name) / $sampleId"
+        }
+
+        $numericValues = @{}
+        foreach ($field in @('structural_stop', 'first_obstacle', 'target_price')) {
+            $parsedValue = 0.0
+            if (-not (Test-FiniteNumber -Value $row.PSObject.Properties[$field].Value -Number ([ref]$parsedValue))) {
+                Add-ValidationError "frozen contract row has non-finite ${field}: $($file.Name) / $sampleId"
+            } else {
+                $numericValues[$field] = $parsedValue
+            }
+        }
+        $entryReference = 0.0
+        $entryText = Get-TrimmedText $row.entry_trigger
+        $hasEntryReference = $false
+        if ($orderBranch -ne 'market_close' -and [string]::IsNullOrWhiteSpace($entryText)) {
+            Add-ValidationError "non-market-close branch requires entry_trigger: $($file.Name) / $sampleId"
+        } elseif (-not [string]::IsNullOrWhiteSpace($entryText)) {
+            if (-not (Test-FiniteNumber -Value $entryText -Number ([ref]$entryReference))) {
+                Add-ValidationError "frozen contract row has non-finite entry_trigger: $($file.Name) / $sampleId"
+            } else {
+                $hasEntryReference = $true
+            }
+        }
+        $maxHoldBars = 0.0
+        if (-not (Test-FiniteNumber -Value $row.max_hold_bars -Number ([ref]$maxHoldBars)) -or
+            $maxHoldBars -lt 1 -or $maxHoldBars -ne [math]::Truncate($maxHoldBars)) {
+            Add-ValidationError "frozen contract row has invalid max_hold_bars: $($file.Name) / $sampleId"
+        }
+        if ($hasEntryReference -and $numericValues.ContainsKey('structural_stop') -and
+            $numericValues.ContainsKey('first_obstacle') -and $numericValues.ContainsKey('target_price')) {
+            if ($direction -eq 'long') {
+                if ($numericValues['structural_stop'] -ge $entryReference) {
+                    Add-ValidationError "long structural_stop must be below entry reference: $($file.Name) / $sampleId"
+                }
+                if ($numericValues['first_obstacle'] -le $entryReference) {
+                    Add-ValidationError "long first_obstacle must be above entry reference: $($file.Name) / $sampleId"
+                }
+                if ($numericValues['target_price'] -le $entryReference) {
+                    Add-ValidationError "long target_price must be above entry reference: $($file.Name) / $sampleId"
+                }
+            } elseif ($direction -eq 'short') {
+                if ($numericValues['structural_stop'] -le $entryReference) {
+                    Add-ValidationError "short structural_stop must be above entry reference: $($file.Name) / $sampleId"
+                }
+                if ($numericValues['first_obstacle'] -ge $entryReference) {
+                    Add-ValidationError "short first_obstacle must be below entry reference: $($file.Name) / $sampleId"
+                }
+                if ($numericValues['target_price'] -ge $entryReference) {
+                    Add-ValidationError "short target_price must be below entry reference: $($file.Name) / $sampleId"
+                }
+            }
         }
         if ($spaceStatus -and $spaceStatusLower -notin @($allowedSpaceStatuses | ForEach-Object { $_.ToLowerInvariant() })) {
             Add-ValidationError "frozen contract row has invalid space_status: $($file.Name) / $sampleId"
@@ -423,9 +621,9 @@ foreach ($file in $frozenContractFiles) {
             Add-ValidationError "frozen contract row has invalid contract_state: $($file.Name) / $sampleId"
         }
         $spaceValue = 0.0
-        $hasSpaceValue = -not [string]::IsNullOrWhiteSpace($row.pre_entry_space_R)
-        if ($hasSpaceValue -and -not [double]::TryParse([string]$row.pre_entry_space_R, [ref]$spaceValue)) {
-            Add-ValidationError "frozen contract row has non-numeric pre_entry_space_R: $($file.Name) / $sampleId"
+        $hasSpaceValue = -not [string]::IsNullOrWhiteSpace((Get-TrimmedText $row.pre_entry_space_R))
+        if ($hasSpaceValue -and -not (Test-FiniteNumber -Value $row.pre_entry_space_R -Number ([ref]$spaceValue))) {
+            Add-ValidationError "frozen contract row has non-finite pre_entry_space_R: $($file.Name) / $sampleId"
             $hasSpaceValue = $false
         }
         if ($spaceStatusLower -in @('strict_ge_1r', 'clearly_positive', 'blocked') -and -not $hasSpaceValue) {
@@ -455,7 +653,16 @@ foreach ($file in $frozenContractFiles) {
         if ($internalLabel -in @('H3', 'L3') -and $emaGate -ne 'not_applicable') {
             Add-ValidationError "H3/L3 requires EMA gate not_applicable: $($file.Name) / $sampleId"
         }
+        if ($ema20Slope -and $ema20Slope -notin $allowedEmaSlopes) {
+            Add-ValidationError "frozen contract row has invalid daily_ema20_slope: $($file.Name) / $sampleId"
+        }
+        if ($ema50Slope -and $ema50Slope -notin $allowedEmaSlopes) {
+            Add-ValidationError "frozen contract row has invalid daily_ema50_slope: $($file.Name) / $sampleId"
+        }
         if ($internalLabel -in @('H1', 'H2', 'L1', 'L2')) {
+            if ([string]::IsNullOrWhiteSpace($pullbackLocation)) {
+                Add-ValidationError "H/L row missing h_l_pullback_location: $($file.Name) / $sampleId"
+            }
             if ($ema20Slope -notin $allowedEmaSlopes -or $ema50Slope -notin $allowedEmaSlopes) {
                 Add-ValidationError "H/L row has invalid EMA slope: $($file.Name) / $sampleId"
             }
@@ -479,8 +686,26 @@ foreach ($file in $frozenContractFiles) {
         } elseif ($emaGate -and $emaGate -ne 'not_applicable') {
             Add-ValidationError "non-H/L row must leave EMA gate blank or not_applicable: $($file.Name) / $sampleId"
         }
-        if (([string]$row.event_context -match 'historical_event_filter_not_verified') -and
-            ([string]$row.event_context -match 'ordinary_non_event')) {
+        if ($metaConfluence -and $metaConfluence -notin $allowedMetaConfluence) {
+            Add-ValidationError "frozen contract row has invalid meta_confluence: $($file.Name) / $sampleId"
+        }
+        if ($internalLabel -in @('H1', 'H2', 'L1', 'L2') -and [string]::IsNullOrWhiteSpace((Get-TrimmedText $row.meta_confluence))) {
+            Add-ValidationError "H/L row missing meta_confluence: $($file.Name) / $sampleId"
+        }
+        if ($metaConfluence -eq 'present') {
+            if ([string]::IsNullOrWhiteSpace((Get-TrimmedText $row.meta_zone))) {
+                Add-ValidationError "meta_confluence=present requires meta_zone: $($file.Name) / $sampleId"
+            }
+            $metaComponents = @([regex]::Split((Get-TrimmedText $row.meta_components), '[;,|+]') | ForEach-Object {
+                $component = ([string]$_).Trim().ToLowerInvariant()
+                if ($component) { $component }
+            } | Sort-Object -Unique)
+            if ($metaComponents.Count -lt 2) {
+                Add-ValidationError "meta_confluence=present requires two meta_components: $($file.Name) / $sampleId"
+            }
+        }
+        if (($eventContext -match 'historical_event_filter_not_verified') -and
+            ($eventContext -match 'ordinary_non_event')) {
             Add-ValidationError "event-unverified row is mislabeled ordinary_non_event: $($file.Name) / $sampleId"
         }
         if (($primaryPattern -eq 'H1_L1') -and ($internalLabel -notin @('H1', 'L1'))) {
@@ -500,7 +725,7 @@ foreach ($file in $frozenContractFiles) {
             sample_id = $sampleId
             sample_id_key = $sampleId.ToLowerInvariant()
             symbol = $symbol
-            decision_date = $decisionDate
+            decision_date = Get-CanonicalDateKey $decisionDate
             direction = $direction
             primary_pattern = $primaryPattern
             internal_label = $internalLabel
