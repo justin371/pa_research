@@ -1,11 +1,14 @@
+import csv
 from pathlib import Path
 import unittest
 
 from pa_research_backtest.engine import (
+    ContractValidationError,
     SUPPORTED_DIRECTIONS,
     SUPPORTED_ORDER_BRANCHES,
     SUPPORTED_PATTERNS,
     load_contracts,
+    validate_contract,
 )
 
 
@@ -33,6 +36,45 @@ class PaResearchContractConsistencyTests(unittest.TestCase):
         self.assertEqual(contract.internal_label, "H1")
         self.assertEqual(contract.order_branch, "stop_confirmation")
         self.assertEqual(contract.contract_frozen, "yes")
+
+    def test_all_frozen_contract_csvs_pass_loader_and_entry_geometry(self):
+        contract_paths = sorted(
+            path
+            for path in BACKTEST_ROOT.glob("*contracts*.csv")
+            if path.name != "contracts.example.csv"
+        )
+        self.assertTrue(contract_paths)
+
+        for path in contract_paths:
+            with self.subTest(path=path.name):
+                contracts = load_contracts(path)
+                self.assertTrue(contracts)
+                for contract in contracts:
+                    self.assertEqual(contract.contract_frozen, "yes")
+                    self.assertIn(contract.direction, SUPPORTED_DIRECTIONS)
+                    self.assertIn(contract.primary_pattern, SUPPORTED_PATTERNS)
+                    self.assertIn(contract.order_branch, SUPPORTED_ORDER_BRANCHES)
+                    entry_reference = (
+                        None
+                        if contract.order_branch == "market_close"
+                        else contract.entry_trigger
+                    )
+                    validate_contract(contract, entry_reference=entry_reference)
+
+    def test_intake_csvs_are_not_replay_contract_inputs(self):
+        intake_paths = sorted(BACKTEST_ROOT.glob("*intake*.csv"))
+        self.assertTrue(intake_paths)
+
+        for path in intake_paths:
+            with self.subTest(path=path.name):
+                with path.open(encoding="utf-8", newline="") as handle:
+                    rows = list(csv.DictReader(handle))
+                self.assertTrue(rows)
+                self.assertIn("intake_id", rows[0])
+                self.assertNotIn("sample_id", rows[0])
+                self.assertTrue(all(row["contract_frozen"].strip().lower() == "no" for row in rows))
+                with self.assertRaises(ContractValidationError):
+                    load_contracts(path)
 
     def test_daily_candidate_templates_keep_top_level_pattern_boundary(self):
         rules = (REPO_ROOT / "docs" / "pa_research_daily_selection_rules_v0_1_CN.md").read_text(

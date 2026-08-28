@@ -4,7 +4,7 @@
 
 这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.9`）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
 
-当前人工冻结合同的方向、H/L 标签、事件、空间和 lineage 覆盖见[`人工冻结合同覆盖审计`](contract_coverage_audit_2026-08-28_CN.md)。研究记录与当前回放输入的字段边界见[`合同权威与字段一致性审计`](contract_authority_consistency_audit_2026-08-29_CN.md)。这些审计只检查合同记录/边界完整性，不代表胜率验证。
+当前人工冻结合同的方向、H/L 标签、事件、空间和 lineage 覆盖见[`人工冻结合同覆盖审计`](contract_coverage_audit_2026-08-28_CN.md)。研究记录与当前回放输入的字段边界见[`合同权威与字段一致性审计`](contract_authority_consistency_audit_2026-08-29_CN.md)；现有 CSV inventory 与资格隔离见[`合同 CSV inventory 与资格边界审计`](contract_csv_inventory_audit_2026-08-29_CN.md)。这些审计只检查合同记录/边界完整性，不代表胜率验证。
 
 ABC/BOP 的视觉案例准入清单见[`ABC/BOP 合同准入审计`](abc_bop_contract_intake_audit_2026-08-28_CN.md)及[`abc_bop_contract_intake_2026-08-28.csv`](abc_bop_contract_intake_2026-08-28.csv)。该 CSV 明确标记 `contract_frozen=no`，不是回放输入，不增加胜率分母。NFLX/TSM 的逐字段冻结复核见[`ABC 候选合同冻结复核`](abc_bop_candidate_freeze_review_2026-08-28_CN.md)；V、NVDA、KLAC、CRWD 的多头候选复核见[`多头 ABC/H1/H2 候选合同审计`](abc_bullish_candidate_contract_audit_2026-08-28_CN.md)。
 
