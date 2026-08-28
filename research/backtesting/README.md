@@ -2,7 +2,7 @@
 
 状态：`research_only / descriptive_only / not-validated / no-new-positive`
 
-这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.1`）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
+这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.2`）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
 
 当前人工冻结合同的方向、H/L 标签、事件、空间和 lineage 覆盖见[`人工冻结合同覆盖审计`](contract_coverage_audit_2026-08-28_CN.md)。该审计只检查合同记录完整性，不代表胜率验证。
 
@@ -25,7 +25,7 @@ py -3 .\scripts\pa_research_backtest.py `
 程序写出：
 
 - `results.csv`：每个冻结合同一行，包含成交、退出、空间、`realized_R` 和证据状态；
-- `summary.json`：按 pattern、方向、订单分支、事件状态、`lineage_id`、EMA 斜率闸门和 META 的描述性分层；
+- `summary.json`：按 pattern、方向、订单分支、事件状态、`lineage_id`、EMA 斜率闸门和 META 的描述性分层，并显式报告共享 lineage 的依赖状态；
 - `run_metadata.json`：数据源、时间状态、成本和 PA Research 范围声明。
 
 ## 输入合同
@@ -55,6 +55,8 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 `meta_confluence=present` 时，`meta_zone` 和至少两个以分号、逗号、`|` 或 `+`
 分隔的独立来源必须同时存在。META 只用于记录和结果分层，不能代替触发、空间或结构止损。
 
+`primary_pattern=H3_L3` 时，`internal_label` 必须明确为 `H3` 或 `L3`，不能使用合并的 `H3_L3`；H3/L3 的方向和结果必须分开统计。`primary_pattern=BOP` 不得用 H1/H2/L1/L2/H3/L3 充当内部标签，相关 ABC、H/L 或三推信息只能作为 `secondary_context` 保留。
+
 第一版支持：
 
 - `stop_confirmation`：在 `decision_date` 收盘后提交 stop；
@@ -63,7 +65,7 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 
 `label_source` 必须为 `human_chart_review`，并且必须有 `>=2y` Daily 背景、完整重要高低点审查和完整 EMA20/50/200 审查。`target_price`、结构止损、最大持有 K 线数必须在结果发生前冻结，否则不能进入胜率分母。
 
-`lineage_id` 是可选但建议填写的依赖控制字段：共享同一父级行情、A/B 回调或局部尝试 lineage 的合同可以分别保留，但不能因为触发日期不同就当成独立统计样本。回放器只保留并分层该字段，不替研究者决定哪些样本独立。
+`lineage_id` 是冻结合同的必填依赖控制字段：共享同一父级行情、A/B 回调或局部尝试 lineage 的合同可以分别保留，但不能因为触发日期不同就当成独立统计样本。回放器会保留并分层该字段，并在共享 lineage 时撤回 independence-adjusted 胜率；它不替研究者决定哪些样本独立。
 
 本批冻结合同见 [`hl_contracts_2026-08-26.csv`](hl_contracts_2026-08-26.csv)，历史价格快照见 [`hl_contract_batch_prices_2026-08-26.csv`](hl_contract_batch_prices_2026-08-26.csv)，人工图表资产和来源边界见 [`H/L 首批人工看图合同资产`](../assets/visual_recognition/2026-08-26/hl_contract_batch/README.md)。
 

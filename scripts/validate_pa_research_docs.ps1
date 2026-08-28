@@ -71,6 +71,7 @@ $requiredFiles = @(
     'research/backtesting/abc_bop_contract_intake_audit_2026-08-28_CN.md',
     'research/backtesting/abc_bop_candidate_freeze_review_2026-08-28_CN.md',
     'research/backtesting/abc_bullish_candidate_contract_audit_2026-08-28_CN.md',
+    'research/backtesting/cross_pattern_statistics_isolation_audit_2026-08-29_CN.md',
     'research/backtesting/bop_contract_intake_2026-08-28.csv',
     'research/backtesting/bop_contract_intake_audit_2026-08-28_CN.md',
     'strategy/README.md'
@@ -104,6 +105,7 @@ foreach ($file in $markdownFiles) {
 $canonicalChecks = @{
     'docs/pa_research_output_schema_v0_1_CN.md' = @(
         'direction: long / short / no_valid_direction',
+        'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'bop_state:',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'gate_result:',
@@ -111,6 +113,7 @@ $canonicalChecks = @{
     )
     'docs/pa_research_daily_selection_rules_v0_1_CN.md' = @(
         'direction: long / short / no_valid_direction',
+        'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'bop_state:',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'gate_result:',
@@ -125,6 +128,7 @@ $canonicalChecks = @{
     'docs/daily_candidate_review_card_CN.md' = @(
         'universe_coverage: complete / partial / discovery_only / unknown',
         'avg_20d_dollar_volume_usd:',
+        'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'daily_context_window: >=2y / <2y / unavailable',
         'major_high_low_review: complete / partial / unavailable',
         'h_l_ema_slope_gate:',
@@ -228,6 +232,78 @@ if (Test-Path -LiteralPath $bullishCandidateAuditPath -PathType Leaf) {
             Add-ValidationError "missing bullish ABC candidate-audit token '$token'"
         }
     }
+}
+
+$crossPatternAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/cross_pattern_statistics_isolation_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $crossPatternAuditPath -PathType Leaf) {
+    $crossPatternAuditContent = Get-Content -LiteralPath $crossPatternAuditPath -Raw
+    foreach ($token in @('ABC_CONT', 'BOP', 'H1', 'H2', 'L1', 'L2', 'H3', 'L3', 'lineage_id', 'no-new-positive')) {
+        if (-not $crossPatternAuditContent.Contains($token)) {
+            Add-ValidationError "missing cross-pattern isolation-audit token '$token'"
+        }
+    }
+}
+
+$frozenContractFiles = @(Get-ChildItem -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'research/backtesting') -File -Filter '*contracts*.csv' | Where-Object {
+    $_.Name -ne 'contracts.example.csv'
+})
+$frozenContractRecords = [System.Collections.Generic.List[object]]::new()
+foreach ($file in $frozenContractFiles) {
+    $rows = @(Import-Csv -LiteralPath $file.FullName)
+    if ($rows.Count -eq 0) {
+        Add-ValidationError "frozen contract CSV has no rows: $($file.Name)"
+        continue
+    }
+    $columnNames = @($rows[0].PSObject.Properties.Name)
+    foreach ($column in @('sample_id', 'symbol', 'decision_date', 'direction', 'primary_pattern', 'internal_label', 'contract_frozen', 'lineage_id')) {
+        if ($column -notin $columnNames) {
+            Add-ValidationError "missing frozen contract column '$column': $($file.Name)"
+        }
+    }
+    foreach ($row in $rows) {
+        if ($row.contract_frozen -ne 'yes') {
+            Add-ValidationError "non-frozen row in frozen contract CSV: $($file.Name) / $($row.sample_id)"
+        }
+        if ([string]::IsNullOrWhiteSpace($row.lineage_id)) {
+            Add-ValidationError "frozen contract row missing lineage_id: $($file.Name) / $($row.sample_id)"
+        }
+        if (($row.primary_pattern -eq 'H1_L1') -and ($row.internal_label -notin @('H1', 'L1'))) {
+            Add-ValidationError "H1_L1 mapping mismatch: $($file.Name) / $($row.sample_id)"
+        }
+        if (($row.primary_pattern -eq 'H2_L2') -and ($row.internal_label -notin @('H2', 'L2'))) {
+            Add-ValidationError "H2_L2 mapping mismatch: $($file.Name) / $($row.sample_id)"
+        }
+        if ($row.internal_label -eq 'H3_L3') {
+            Add-ValidationError "ambiguous combined H3_L3 internal label: $($file.Name) / $($row.sample_id)"
+        }
+        if (($row.primary_pattern -eq 'BOP') -and ($row.internal_label -in @('H1', 'H2', 'L1', 'L2', 'H3', 'L3'))) {
+            Add-ValidationError "BOP row mixes an internal PA label: $($file.Name) / $($row.sample_id)"
+        }
+        [void]$frozenContractRecords.Add([pscustomobject]@{
+            file = $file.Name
+            sample_id = [string]$row.sample_id
+            symbol = [string]$row.symbol
+            decision_date = [string]$row.decision_date
+            direction = [string]$row.direction
+            primary_pattern = [string]$row.primary_pattern
+            internal_label = [string]$row.internal_label
+            lineage_id = [string]$row.lineage_id
+            contract_family_key = @(
+                [string]$row.symbol,
+                [string]$row.decision_date,
+                [string]$row.direction,
+                [string]$row.primary_pattern,
+                [string]$row.internal_label,
+                [string]$row.lineage_id
+            ) -join '|'
+        })
+    }
+}
+foreach ($duplicate in @($frozenContractRecords | Group-Object sample_id | Where-Object { $_.Name -and $_.Count -gt 1 })) {
+    Add-ValidationError "duplicate frozen sample_id across contract CSVs: $($duplicate.Name)"
+}
+foreach ($duplicate in @($frozenContractRecords | Where-Object { $_.lineage_id } | Group-Object contract_family_key | Where-Object { $_.Count -gt 1 })) {
+    Add-ValidationError "duplicate frozen contract family across contract CSVs: $($duplicate.Name)"
 }
 
 $activeRoots = @('docs', 'foundations', 'patterns', 'strategy') | ForEach-Object {

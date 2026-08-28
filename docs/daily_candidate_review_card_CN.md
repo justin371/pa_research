@@ -121,7 +121,7 @@ b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrol
 b_leg_location:
 lineage_status: same_lineage / reset / unclear / pending
 setup_count_bar:
-internal_label: H1 / H2 / L1 / L2 / H3_L3 / none / pending
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 count_basis:
 count_reset_reason:
 primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / other

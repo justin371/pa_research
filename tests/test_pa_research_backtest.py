@@ -41,6 +41,7 @@ def make_contract(**overrides):
         "ema20_50_200_review": "complete",
         "event_context": "none",
         "contract_frozen": "yes",
+        "lineage_id": "TEST-LINEAGE-001",
         "daily_ema20_slope": "up",
         "daily_ema50_slope": "up",
         "h_l_ema_slope_gate": "long_pass",
@@ -234,6 +235,55 @@ class PaResearchBacktestTests(unittest.TestCase):
         with self.assertRaises(ContractValidationError):
             run_contract(contract, make_prices([]))
 
+    def test_h3_and_l3_are_separate_directional_labels(self):
+        h3 = make_contract(
+            primary_pattern="H3_L3",
+            internal_label="H3",
+            h_l_ema_slope_gate="not_applicable",
+        )
+        l3 = make_contract(
+            sample_id="TEST-L3",
+            direction="short",
+            primary_pattern="H3_L3",
+            internal_label="L3",
+            structural_stop=11.0,
+            first_obstacle=8.0,
+            target_price=8.0,
+            gap_policy="flag_only",
+            daily_ema20_slope="down",
+            daily_ema50_slope="down",
+            h_l_ema_slope_gate="not_applicable",
+        )
+        self.assertEqual(run_contract(h3, make_prices([]))["fill_status"], "unproven")
+        self.assertEqual(run_contract(l3, make_prices([]))["fill_status"], "unproven")
+
+    def test_combined_h3_l3_label_is_rejected(self):
+        with self.assertRaises(ContractValidationError):
+            run_contract(
+                make_contract(
+                    primary_pattern="H3_L3",
+                    internal_label="H3_L3",
+                    h_l_ema_slope_gate="not_applicable",
+                ),
+                make_prices([]),
+            )
+
+    def test_cross_pattern_internal_label_mixing_is_rejected(self):
+        with self.assertRaises(ContractValidationError):
+            run_contract(
+                make_contract(primary_pattern="H1_L1", internal_label="H2"),
+                make_prices([]),
+            )
+        with self.assertRaises(ContractValidationError):
+            run_contract(
+                make_contract(primary_pattern="BOP", internal_label="H1"),
+                make_prices([]),
+            )
+
+    def test_frozen_contract_requires_lineage_id(self):
+        with self.assertRaises(ContractValidationError):
+            run_contract(make_contract(lineage_id=""), make_prices([]))
+
     def test_meta_present_requires_zone_and_two_sources(self):
         contract = make_contract(
             meta_confluence="present",
@@ -280,6 +330,41 @@ class PaResearchBacktestTests(unittest.TestCase):
         summary = build_summary([result])
         self.assertEqual(summary["groups"][0]["lineage_id"], "LINEAGE-1")
 
+    def test_summary_surfaces_shared_lineage_dependence(self):
+        results = [
+            {
+                "primary_pattern": "H1_L1",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "SHARED-1",
+                "order_branch": "stop_confirmation",
+                "event_context": "none",
+                "fill_status": "filled",
+                "trade_result": "win",
+                "realized_R": 1.0,
+                "ambiguous_intrabar": "no",
+            },
+            {
+                "primary_pattern": "H2_L2",
+                "internal_label": "H2",
+                "direction": "long",
+                "lineage_id": "SHARED-1",
+                "order_branch": "stop_confirmation",
+                "event_context": "none",
+                "fill_status": "filled",
+                "trade_result": "loss",
+                "realized_R": -1.0,
+                "ambiguous_intrabar": "no",
+            },
+        ]
+        summary = build_summary(results)
+        self.assertEqual(summary["unique_lineage_count"], 1)
+        self.assertEqual(summary["shared_lineage_group_count"], 1)
+        self.assertEqual(summary["shared_lineage_row_count"], 2)
+        self.assertEqual(summary["cross_pattern_lineage_group_count"], 1)
+        self.assertEqual(summary["independence_status"], "dependent_lineage_rows_present")
+        self.assertIsNone(summary["independence_adjusted_win_rate_pct"])
+
     def test_summary_is_descriptive_only(self):
         results = [
             {"primary_pattern": "ABC_CONT", "internal_label": "H1", "direction": "long", "order_branch": "stop_confirmation", "event_context": "none", "fill_status": "filled", "trade_result": "win", "realized_R": 2.0, "ambiguous_intrabar": "no"},
@@ -304,13 +389,28 @@ class PaResearchBacktestTests(unittest.TestCase):
         csv = StringIO(
             "sample_id,symbol,decision_date,direction,primary_pattern,internal_label,order_branch,"
             "entry_trigger,structural_stop,first_obstacle,target_price,max_hold_bars,gap_policy,"
-            "label_source,daily_context_window,major_high_low_review,ema20_50_200_review,event_context,contract_frozen\n"
+            "label_source,daily_context_window,major_high_low_review,ema20_50_200_review,event_context,contract_frozen,lineage_id\n"
             "TEST-OTHER,PA-EX,2026-01-02,long,other,none,market_close,,8,12,12,5,"
-            "not_applicable,human_chart_review,>=2y,complete,complete,none,yes\n"
+            "not_applicable,human_chart_review,>=2y,complete,complete,none,yes,OTHER-LINEAGE\n"
         )
         contract = load_contracts(csv)[0]
         self.assertEqual(contract.primary_pattern, "other")
         self.assertEqual(contract.internal_label, "none")
+
+    def test_contract_loader_rejects_duplicate_contract_family(self):
+        csv = StringIO(
+            "sample_id,symbol,decision_date,direction,primary_pattern,internal_label,order_branch,"
+            "entry_trigger,structural_stop,first_obstacle,target_price,max_hold_bars,gap_policy,"
+            "label_source,daily_context_window,major_high_low_review,ema20_50_200_review,event_context,contract_frozen,lineage_id\n"
+            "TEST-A,PA-EX,2026-01-02,long,other,none,market_close,,8,12,12,5,"
+            "not_applicable,human_chart_review,>=2y,complete,complete,none,yes,FAMILY-1\n"
+            "TEST-B,PA-EX,2026-01-02,long,other,none,stop_confirmation,10,8,12,12,5,"
+            "accept_open,human_chart_review,>=2y,complete,complete,none,yes,FAMILY-1\n"
+        )
+        from pa_research_backtest.engine import load_contracts
+
+        with self.assertRaises(ContractValidationError):
+            load_contracts(csv)
 
 
 if __name__ == "__main__":

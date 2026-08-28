@@ -23,11 +23,12 @@ import pandas as pd
 from backtesting import Backtest, Strategy
 
 
-ENGINE_VERSION = "0.3.1"
+ENGINE_VERSION = "0.3.2"
 SUPPORTED_DIRECTIONS = {"long", "short"}
 SUPPORTED_PATTERNS = {"ABC_CONT", "BOP", "H1_L1", "H2_L2", "H3_L3", "RFB", "MTR", "other"}
-SUPPORTED_LABELS = {"H1", "H2", "L1", "L2", "H3_L3", "none", "pending"}
+SUPPORTED_LABELS = {"H1", "H2", "L1", "L2", "H3", "L3", "none", "pending"}
 H_L_LABELS = {"H1", "H2", "L1", "L2"}
+THIRD_PUSH_LABELS = {"H3", "L3"}
 SUPPORTED_EMA_SLOPES = {"up", "flat", "down", "unknown"}
 SUPPORTED_H_L_EMA_GATES = {
     "long_pass",
@@ -61,6 +62,7 @@ REQUIRED_CONTRACT_COLUMNS = {
     "ema20_50_200_review",
     "event_context",
     "contract_frozen",
+    "lineage_id",
 }
 
 PRICE_COLUMNS = {"Date", "Open", "High", "Low", "Close", "Volume", "Symbol"}
@@ -272,6 +274,26 @@ def validate_contract(contract: BacktestContract, entry_reference: float | None 
         errors.append("event_context is required; use none when no event is known")
     if contract.contract_frozen != "yes":
         errors.append("contract_frozen must be yes")
+    if not contract.lineage_id:
+        errors.append("lineage_id is required for dependence control")
+
+    if contract.internal_label == "H3_L3":
+        errors.append("internal_label H3_L3 is ambiguous; use H3 or L3")
+    if contract.internal_label == "H3" and contract.direction != "long":
+        errors.append("H3 contracts must have direction=long")
+    if contract.internal_label == "L3" and contract.direction != "short":
+        errors.append("L3 contracts must have direction=short")
+    if contract.internal_label in THIRD_PUSH_LABELS:
+        if contract.primary_pattern != "H3_L3":
+            errors.append("H3/L3 contracts must have primary_pattern=H3_L3")
+        if contract.h_l_ema_slope_gate != "not_applicable":
+            errors.append("H3/L3 contracts require h_l_ema_slope_gate=not_applicable")
+    if contract.primary_pattern == "H1_L1" and contract.internal_label not in {"H1", "L1"}:
+        errors.append("primary_pattern H1_L1 requires internal_label H1 or L1")
+    if contract.primary_pattern == "H2_L2" and contract.internal_label not in {"H2", "L2"}:
+        errors.append("primary_pattern H2_L2 requires internal_label H2 or L2")
+    if contract.primary_pattern == "BOP" and contract.internal_label in H_L_LABELS | THIRD_PUSH_LABELS:
+        errors.append("BOP contracts cannot use H/L or H3/L3 as internal_label; keep them in secondary_context")
 
     for field_name, slope in (
         ("daily_ema20_slope", contract.daily_ema20_slope),
@@ -444,6 +466,7 @@ def load_contracts(path: str | Path) -> list[BacktestContract]:
         raise ContractValidationError(f"contract CSV is missing required columns: {missing}")
     contracts: list[BacktestContract] = []
     seen_ids: set[str] = set()
+    seen_contract_families: set[tuple[str, str, str, str, str, str]] = set()
     for row_number, row in enumerate(frame.to_dict(orient="records"), start=2):
         try:
             contract = BacktestContract.from_row(row)
@@ -452,7 +475,23 @@ def load_contracts(path: str | Path) -> list[BacktestContract]:
             raise ContractValidationError(f"contract CSV row {row_number}: {exc}") from exc
         if contract.sample_id in seen_ids:
             raise ContractValidationError(f"duplicate sample_id: {contract.sample_id}")
+        contract_family = (
+            contract.symbol,
+            contract.decision_date.strftime("%Y-%m-%d"),
+            contract.direction,
+            contract.primary_pattern,
+            contract.internal_label,
+            contract.lineage_id,
+        )
+        if contract_family in seen_contract_families:
+            raise ContractValidationError(
+                "duplicate contract family (same symbol/date/direction/pattern/label/lineage); "
+                "choose one order branch before replay: "
+                f"{contract.symbol}/{contract.decision_date.strftime('%Y-%m-%d')}/"
+                f"{contract.primary_pattern}/{contract.internal_label}/{contract.lineage_id}"
+            )
         seen_ids.add(contract.sample_id)
+        seen_contract_families.add(contract_family)
         contracts.append(contract)
     if not contracts:
         raise ContractValidationError("contract CSV contains no rows")
@@ -943,6 +982,14 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             "observation_only_count": 0,
             "pending_contract_count": 0,
             "completed_trade_count": 0,
+            "unique_lineage_count": 0,
+            "missing_lineage_count": 0,
+            "shared_lineage_group_count": 0,
+            "shared_lineage_row_count": 0,
+            "cross_pattern_lineage_group_count": 0,
+            "independence_status": "no-results",
+            "independence_adjusted_win_rate_pct": None,
+            "independence_statistics_status": "not-computable_no-results",
             "win_rate_pct": None,
             "realized_R_distribution": None,
             "groups": [],
@@ -963,6 +1010,34 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
     completed = frame[frame["trade_result"].isin(TRADE_RESULTS)]
     r_values = pd.to_numeric(completed["realized_R"], errors="coerce").dropna()
     wins = int((completed["trade_result"] == "win").sum())
+    lineage_values = frame["lineage_id"].fillna("").astype(str).str.strip()
+    nonempty_lineages = lineage_values[lineage_values != ""]
+    lineage_counts = nonempty_lineages.value_counts()
+    shared_lineages = lineage_counts[lineage_counts > 1]
+    lineage_frame = frame.assign(_lineage=lineage_values)
+    lineage_frame = lineage_frame[lineage_frame["_lineage"] != ""]
+    pattern_counts = (
+        lineage_frame.groupby("_lineage")["primary_pattern"].nunique()
+        if not lineage_frame.empty
+        else pd.Series(dtype="int64")
+    )
+    cross_pattern_lineages = pattern_counts[pattern_counts > 1]
+    missing_lineage_count = int((lineage_values == "").sum())
+    unique_lineage_count = int(nonempty_lineages.nunique())
+    shared_lineage_group_count = int(len(shared_lineages))
+    shared_lineage_row_count = int(shared_lineages.sum()) if shared_lineages.size else 0
+    if missing_lineage_count:
+        independence_status = "missing_lineage"
+        independence_adjusted_win_rate = None
+        independence_statistics_status = "not-computable_missing_lineage"
+    elif shared_lineage_group_count:
+        independence_status = "dependent_lineage_rows_present"
+        independence_adjusted_win_rate = None
+        independence_statistics_status = "not-computable_shared_lineage"
+    else:
+        independence_status = "unique_lineage_only"
+        independence_adjusted_win_rate = float(wins / len(completed) * 100) if len(completed) else None
+        independence_statistics_status = "descriptive_unique_lineage_only"
     summary: dict[str, Any] = {
         "engine_version": ENGINE_VERSION,
         "backtesting_version": getattr(backtesting, "__version__", "unknown"),
@@ -973,6 +1048,14 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         "observation_only_count": int((frame["contract_eligibility"] == "observation_only").sum()),
         "pending_contract_count": int((frame["contract_eligibility"] == "pending").sum()),
         "completed_trade_count": int(len(completed)),
+        "unique_lineage_count": unique_lineage_count,
+        "missing_lineage_count": missing_lineage_count,
+        "shared_lineage_group_count": shared_lineage_group_count,
+        "shared_lineage_row_count": shared_lineage_row_count,
+        "cross_pattern_lineage_group_count": int(len(cross_pattern_lineages)),
+        "independence_status": independence_status,
+        "independence_adjusted_win_rate_pct": independence_adjusted_win_rate,
+        "independence_statistics_status": independence_statistics_status,
         "ambiguous_count": int((frame["ambiguous_intrabar"] == "yes").sum()),
         "win_rate_pct": float(wins / len(completed) * 100) if len(completed) else None,
         "realized_R_distribution": {
@@ -988,6 +1071,7 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             "same-bar stop/target ambiguity is excluded from the win-rate denominator",
             "each contract must be frozen before its outcome and must carry >=2y Daily context evidence",
             "lineage_id is preserved for dependence control; contracts sharing a lineage are not independent samples",
+            "win_rate_pct is row-based descriptive output; an independence-adjusted rate is withheld when lineages are shared or missing",
             "H1/H2/L1/L2 require the matching Daily EMA20/EMA50 slope gate; failed gates remain observation_only and are excluded",
             "META is recorded and stratified as a confluence field; it is not an entry trigger or authorization",
         ],

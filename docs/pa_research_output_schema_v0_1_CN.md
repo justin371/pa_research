@@ -99,7 +99,7 @@ secondary_context:
 range_edge_three_push: yes / no / pending
 state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
 lineage_status: same_lineage / reset / unclear / pending
-internal_label: H1 / H2 / L1 / L2 / H3_L3 / none / pending
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 pattern_like_reason:
 ```
 
@@ -113,7 +113,7 @@ pattern_like_reason:
 
 对于 `internal_label: H1 / H2` 的多头候选，`h_l_ema_slope_gate` 必须为 `long_pass`（Daily EMA20、EMA50 均向上）；对于 `internal_label: L1 / L2` 的空头候选，必须为 `short_pass`（两条均向下）。走平、反向或资料不足时分别记录为 `fail_flat_or_opposite` 或 `pending`，不能写成普通高质量 H/L。`meta_confluence: present` 只表示多个独立来源在同一回调区域汇聚，不是自动触发器。
 
-`primary_pattern: H3_L3` 时，必须额外区分 `range_edge_three_push: yes`、`no` 或 `pending`。区间边缘三推允许 A 腿普通或偏弱，但必须记录上沿/下沿位置、反向确认和区间外接受分流；区间中部重复测试不能凭次数升级。
+`primary_pattern: H3_L3` 时，`internal_label` 必须明确写成 `H3`（多头第三次尝试）或 `L3`（空头第三次尝试），不得使用含混的 `H3_L3`；还必须额外区分 `range_edge_three_push: yes`、`no` 或 `pending`。区间边缘三推允许 A 腿普通或偏弱，但必须记录上沿/下沿位置、反向确认和区间外接受分流；区间中部重复测试不能凭次数升级。
 
 ## 三、BOP 专用字段
 

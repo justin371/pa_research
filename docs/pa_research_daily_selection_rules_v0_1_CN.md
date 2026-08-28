@@ -280,7 +280,7 @@ primary_pattern: ABC_CONT / BOP
 secondary_context:
 state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
 lineage_status: same_lineage / reset / unclear / pending
-internal_label: H1 / H2 / L1 / L2 / H3_L3 / none / pending
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 range_edge_three_push: yes / no / pending
 bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable
 breakout_boundary:
