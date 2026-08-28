@@ -6,6 +6,8 @@
 
 当前人工冻结合同的方向、H/L 标签、事件、空间和 lineage 覆盖见[`人工冻结合同覆盖审计`](contract_coverage_audit_2026-08-28_CN.md)。该审计只检查合同记录完整性，不代表胜率验证。
 
+ABC/BOP 的视觉案例准入清单见[`ABC/BOP 合同准入审计`](abc_bop_contract_intake_audit_2026-08-28_CN.md)及[`abc_bop_contract_intake_2026-08-28.csv`](abc_bop_contract_intake_2026-08-28.csv)。该 CSV 明确标记 `contract_frozen=no`，不是回放输入，不增加胜率分母。
+
 ## 运行
 
 在仓库根目录创建临时虚拟环境或使用已准备好的 Python 环境，安装固定依赖：

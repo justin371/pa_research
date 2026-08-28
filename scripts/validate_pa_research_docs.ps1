@@ -67,6 +67,8 @@ $requiredFiles = @(
     'research/README.md',
     'research/process_improvement_audit_2026-08-28_CN.md',
     'research/backtesting/contract_coverage_audit_2026-08-28_CN.md',
+    'research/backtesting/abc_bop_contract_intake_2026-08-28.csv',
+    'research/backtesting/abc_bop_contract_intake_audit_2026-08-28_CN.md',
     'strategy/README.md'
 )
 foreach ($relativePath in $requiredFiles) {
@@ -134,6 +136,38 @@ foreach ($entry in $canonicalChecks.GetEnumerator()) {
     foreach ($token in $entry.Value) {
         if (-not $content.Contains($token)) {
             Add-ValidationError "missing canonical token '$token': $($entry.Key)"
+        }
+    }
+}
+
+$intakePath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/abc_bop_contract_intake_2026-08-28.csv'
+if (Test-Path -LiteralPath $intakePath -PathType Leaf) {
+    $intakeRows = @(Import-Csv -LiteralPath $intakePath)
+    $requiredIntakeColumns = @(
+        'intake_id', 'symbol', 'source_case', 'decision_date', 'direction',
+        'primary_pattern', 'intake_state', 'contract_frozen', 'event_state',
+        'trigger_evidence', 'structural_stop_evidence', 'first_obstacle_evidence',
+        'missing_fields', 'freeze_recommendation'
+    )
+    if ($intakeRows.Count -eq 0) {
+        Add-ValidationError 'ABC/BOP intake CSV has no rows'
+    } else {
+        $intakePropertyNames = @($intakeRows[0].PSObject.Properties.Name)
+        foreach ($column in $requiredIntakeColumns) {
+            if ($column -notin $intakePropertyNames) {
+                Add-ValidationError "missing ABC/BOP intake column '$column'"
+            }
+        }
+        foreach ($row in $intakeRows) {
+            if ($row.contract_frozen -ne 'no') {
+                Add-ValidationError "ABC/BOP intake row is not marked contract_frozen=no: $($row.intake_id)"
+            }
+            if ([string]::IsNullOrWhiteSpace($row.source_case)) {
+                Add-ValidationError "ABC/BOP intake row missing source_case: $($row.intake_id)"
+            }
+            if ([string]::IsNullOrWhiteSpace($row.missing_fields)) {
+                Add-ValidationError "ABC/BOP intake row missing missing_fields: $($row.intake_id)"
+            }
         }
     }
 }
