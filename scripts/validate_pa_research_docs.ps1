@@ -61,9 +61,11 @@ $requiredFiles = @(
     'docs/pa_research_output_schema_v0_1_CN.md',
     'docs/pa_research_daily_selection_rules_v0_1_CN.md',
     'docs/visual_pa_review_card_CN.md',
+    'docs/daily_candidate_review_card_CN.md',
     'patterns/README.md',
     'foundations/README.md',
     'research/README.md',
+    'research/process_improvement_audit_2026-08-28_CN.md',
     'strategy/README.md'
 )
 foreach ($relativePath in $requiredFiles) {
@@ -73,7 +75,10 @@ foreach ($relativePath in $requiredFiles) {
     }
 }
 
-$markdownFiles = Get-ChildItem -LiteralPath $repoRoot -Recurse -File -Filter '*.md'
+$markdownFiles = Get-ChildItem -LiteralPath $repoRoot -Recurse -File -Filter '*.md' | Where-Object {
+    $relative = $_.FullName.Substring($repoRoot.Length + 1)
+    -not $relative.StartsWith('.codex' + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)
+}
 foreach ($file in $markdownFiles) {
     $relativePath = $file.FullName.Substring($repoRoot.Length + 1)
     $content = Get-Content -LiteralPath $file.FullName -Raw
@@ -109,6 +114,16 @@ $canonicalChecks = @{
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'gate_result:',
         'contract_scope:'
+    )
+    'docs/daily_candidate_review_card_CN.md' = @(
+        'universe_coverage: complete / partial / discovery_only / unknown',
+        'avg_20d_dollar_volume_usd:',
+        'daily_context_window: >=2y / <2y / unavailable',
+        'major_high_low_review: complete / partial / unavailable',
+        'h_l_ema_slope_gate:',
+        'first_independent_obstacle:',
+        'research_state:',
+        'Execution Agent'
     )
 }
 foreach ($entry in $canonicalChecks.GetEnumerator()) {

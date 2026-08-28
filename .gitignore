@@ -1,0 +1,13 @@
+# Local Python and test artefacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environments
+.venv/
+venv/
+
+# Long-task control state is local to the working copy
+.codex/goals/

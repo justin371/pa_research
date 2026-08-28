@@ -1,11 +1,11 @@
 # PA Research 日线选股规则 v0.1
 
-日期：2026-08-24；合同修订：2026-08-25；三推与股票池修订：2026-08-26；H/L EMA 方向与 META 修订：2026-08-26
+日期：2026-08-24；合同修订：2026-08-25；三推与股票池修订：2026-08-26；H/L EMA 方向与 META 修订：2026-08-26；批次证据修订：2026-08-28
 文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
 
 这份文件是 PA Research 的日线候选筛选合同。它用于从美股日线图表中筛选少量值得继续研究的 ABC 和 BOP 候选，不是量化扫描器、生产交易规则或下单授权。
 
-统一字段、方向、BOP 状态、订单枚举和状态分轴见[`PA Research 统一输出合同 v0.1`](pa_research_output_schema_v0_1_CN.md)。本文件规定日线筛选内容；统一合同规定如何记录，二者不能互相省略。
+统一字段、方向、BOP 状态、订单枚举和状态分轴见[`PA Research 统一输出合同 v0.1`](pa_research_output_schema_v0_1_CN.md)。批次覆盖、数据来源、两年左侧图表和逐标的审查使用[`每日候选批次与图表审查卡`](daily_candidate_review_card_CN.md)。本文件规定日线筛选内容；统一合同和审查卡规定如何记录，三者不能互相省略。
 
 ## 0. 本次采纳前修正
 

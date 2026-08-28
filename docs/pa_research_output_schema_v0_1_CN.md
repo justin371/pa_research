@@ -1,6 +1,6 @@
 # PA Research 统一输出合同 v0.1
 
-日期：2026-08-25；合同修订：2026-08-26
+日期：2026-08-25；合同修订：2026-08-26；批次证据字段修订：2026-08-28
 文档状态：`adopted / research-only / not-quantitative`
 
 ## 目的与适用范围
@@ -58,6 +58,23 @@ gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 
 `as_of_time`、时区、session 和 `completed_bar_as_of` 必须能区分报告生成时间、查询窗口结束时间和实际可用的最新完整 K 线。历史数据不能写成实时数据。
+
+每日批次记录还应使用[`每日候选批次与图表审查卡`](daily_candidate_review_card_CN.md)补充以下证据。它们是候选池和视觉审查字段，不会把回放合同变成扫描器输入：
+
+```text
+candidate_batch_id:
+discovery_source:
+universe_scope:
+universe_coverage: complete / partial / discovery_only / unknown
+directional_coverage: long / short / both / unknown
+avg_20d_dollar_volume_usd:
+liquidity_as_of:
+liquidity_source:
+event_source_as_of:
+event_gate: pass / exclude / pending
+```
+
+`universe_coverage=discovery_only` 或 `unknown` 时，输出必须标为发现池/已审查子集；不能把发现页数量解释为完整市场合格数量。`avg_20d_dollar_volume_usd` 必须对应最近 20 个完整交易日，不能用单日事件成交额替代。
 
 ## 二、结构、方向与 pattern
 

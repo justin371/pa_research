@@ -3,6 +3,7 @@
 - [`PA Research 日线选股规则 v0.1`](pa_research_daily_selection_rules_v0_1_CN.md)
 - [`PA Research 统一输出合同 v0.1`](pa_research_output_schema_v0_1_CN.md)
 - [`PA 图表视觉复核卡`](visual_pa_review_card_CN.md)
+- [`每日候选批次与图表审查卡`](daily_candidate_review_card_CN.md)
 - [`共同上下文`](common_context.md)
 - [`PA Research → Codex Trading 研究交接规范`](research_to_system_handoff_CN.md)
 - [`冻结合同回放器（backtesting.py）`](../research/backtesting/README.md)
