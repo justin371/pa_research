@@ -1,7 +1,7 @@
 # PA Research 统一输出合同 v0.1
 
 日期：2026-08-25；合同修订：2026-08-26；批次证据字段修订：2026-08-28；回放结果口径修订：2026-08-29；样本独立性字段修订：2026-08-29；回放输入边界修订：2026-08-29
-文档状态：`adopted / research-only / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / research-only / not-quantitative`
 
 ## 目的与适用范围
 
@@ -21,6 +21,8 @@ stage_1_fast_screen / deep_review / daily_candidate / historical_context_only
 ```
 
 `stage_1_fast_screen` 和 `historical_context_only` 可以暂缺成交、止损、首障碍和 R/R，但必须写 `pending` 或 `unknown`，不能被当作完整候选。
+
+文档头的 `document_status`、`document_maturity` 和 `handoff_status` 是文档生命周期元数据，不是某一条案例的交易状态。当前仓库文档头使用 `document_maturity=provisional` 表示研究材料仍在迭代；它不能写入案例的 `research_state`。案例状态只使用下方状态轴定义的枚举。
 
 ## 0. 研究记录与当前回放输入的边界
 
@@ -209,6 +211,7 @@ exit_date:
 
 ```text
 document_status: draft / adopted / historical / research_only
+document_maturity: provisional
 research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
 trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
 gate_result: pass / conditional / observation_only / valid_no_trade / pending

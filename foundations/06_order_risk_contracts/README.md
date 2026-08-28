@@ -1,6 +1,6 @@
 # 订单类型与风险合同
 
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 统一字段和枚举见[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)。本层只定义订单合同，不把研究状态、市场许可或 pattern 分支角色塞进 `order_branch`。
 

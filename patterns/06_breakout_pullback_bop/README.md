@@ -1,6 +1,6 @@
 # 突破回踩 / BOP
 
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补突破接受、回踩、角色转换和跟随。`BOP` 是唯一主标签，ABC/H-L 只能作为 `secondary_context`。
 

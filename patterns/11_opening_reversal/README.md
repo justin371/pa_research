@@ -1,6 +1,6 @@
 # Opening Reversal / 开盘反转
 
-文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=research_only / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补开盘第一波、事前位置和反向确认。订单、方向和事件状态必须单独记录。
 

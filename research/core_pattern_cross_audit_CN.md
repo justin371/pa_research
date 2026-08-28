@@ -1,7 +1,7 @@
 # 核心八个 Pattern 交叉一致性审计 V0.1
 
 日期：2026-08-23  
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 ## 目的
 

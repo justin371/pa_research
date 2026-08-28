@@ -1,6 +1,6 @@
 # 财报 / 事件 / 板块 / 大盘前置闸门
 
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 统一输出字段见[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)。本层的 `permission` 和 `gate_result` 是闸门字段，不是方向或交易授权的替代品。
 

@@ -1,7 +1,7 @@
 # 交易区间边缘二次入场：专项视觉证据审计（2026-08-24）
 
 日期：2026-08-24  
-状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+状态：`document_status=research_only / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 本审计采用[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)；本轮只修改 PA Research，不创建扫描器，也不连接 Execution Agent。
 
 ## 1. 本轮核心问题

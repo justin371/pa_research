@@ -65,7 +65,7 @@
 本轮使用 6 个合同一致性回归测试，并运行全套仓库测试、文档 validator、Python 编译检查和 `git diff --check`：全套 `73` 个单元测试通过，文档校验通过（`263` 个 Markdown 文件、`1232` 个链接）。这些检查不下载数据、不运行正式回放、不产生新的统计样本。当前状态保持：
 
 ```text
-research_state: provisional
+document_maturity: provisional
 validated win-rate: not-computable
 conclusion: no-new-positive
 ```

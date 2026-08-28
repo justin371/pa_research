@@ -1,6 +1,6 @@
 # PA 视觉助手：订单分支协议
 
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 新案例的订单字段遵循[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)：`order_branch` 只写基础合同，`branch_role` 单独写反向 stop、角色转换回测或跳空重订。
 

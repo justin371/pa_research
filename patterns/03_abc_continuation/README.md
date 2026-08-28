@@ -1,6 +1,6 @@
 # ABC：趋势延续
 
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录的 A/B/C 字段是差异字段。ABC 是母结构，方向必须单独写 `long`、`short` 或 `no_valid_direction`；H/L 只能作为 `internal_label`。
 

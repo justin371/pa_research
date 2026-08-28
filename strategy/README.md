@@ -1,6 +1,6 @@
 # PA Research Strategy 研究索引
 
-文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=research_only / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 本目录只保存研究框架、候选清单和历史复盘入口，不是 Codex Trading 实现队列。所有新案例必须使用[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)，并明确 `direction`、`research_state`、`trade_state` 和 `handoff_status`。
 

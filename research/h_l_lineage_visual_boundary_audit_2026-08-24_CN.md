@@ -1,6 +1,6 @@
 # H/L lineage 与三推状态视觉边界复核（2026-08-24）
 
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`；边缘三推修订：`2026-08-26`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`；边缘三推修订：`2026-08-26`
 
 统一字段、方向和状态分轴见[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。本阶段只做视觉识别，不冻结订单合同。
 
@@ -41,8 +41,9 @@ symbol:
 contract_scope: stage_1_fast_screen
 review_timeframe:                 # 只允许一个主计数周期
 direction: long / short / no_valid_direction
-parent_state: open_trend / mature_range / channel / transition / unclear
-lineage_status: same-lineage / reset / unclear
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
 lineage_anchor:                   # 使尝试仍属于同一组的母腿、回调或压力区
 parent_leg: origin -> extreme
 local_A: origin -> extreme / quality

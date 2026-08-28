@@ -1,6 +1,6 @@
 # Head-and-Shoulders / Rounded Top-Bottom / 头肩顶底与圆顶圆底
 
-文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=research_only / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补头肩/圆顶圆底、颈线和状态转移。三个点本身不产生方向或交易授权。
 

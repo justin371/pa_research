@@ -1,6 +1,6 @@
 # ABC / H-L1-3 统一决策矩阵
 
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 ## 目的
 

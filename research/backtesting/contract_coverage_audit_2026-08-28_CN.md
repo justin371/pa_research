@@ -93,7 +93,7 @@
 本审计不改变任何结果结论。现有回放仍然只能做描述性分层，整体状态保持：
 
 ```text
-research_state: provisional
+document_maturity: provisional
 validated_win_rate: not-computable
 conclusion: no-new-positive
 ```

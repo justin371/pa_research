@@ -1,6 +1,6 @@
 # Inside Bar / 两根 K 线反转
 
-文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=research_only / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补母 K、内包/IOI 和两根反转边界。严格内包定义不能替代事件、订单、止损和方向字段。
 

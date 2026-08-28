@@ -1,6 +1,6 @@
 # Channel / 通道
 
-文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=research_only / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补通道边界、推进/回调和状态切换。通道线不能替代结构止损、第一独立障碍或 `direction`。
 

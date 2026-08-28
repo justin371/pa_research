@@ -1,6 +1,6 @@
 # PA 图表视觉复核卡
 
-文档状态：`document_status=adopted / research_state=research_only / handoff_status=not_ready / canonical-output-v0.6`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / canonical-output-v0.6`
 
 日线候选筛选先遵循 [`PA Research 日线选股规则 v0.1`](pa_research_daily_selection_rules_v0_1_CN.md)；本卡中的 4H/1H/15m 仅适用于候选入选后的深审、确认或独立低周期合同。
 

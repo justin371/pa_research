@@ -19,6 +19,7 @@ data_status: historical_close
 as_of_time: 2026-08-22
 research_state: research_candidate
 trade_state: not_authorized
+gate_result: pending
 handoff_status: research_only
 ```
 

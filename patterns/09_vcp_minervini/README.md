@@ -1,6 +1,6 @@
 # VCP / Volatility Contraction Pattern（Minervini）
 
-文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=research_only / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补 VCP 的 T1/T2/T3、pivot 和收缩 lineage。VCP 仍是独立视觉研究主题，不与 Brooks pattern 或 BOP 统计合并。
 

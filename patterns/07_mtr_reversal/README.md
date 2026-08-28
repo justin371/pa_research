@@ -1,6 +1,6 @@
 # MTR：主要趋势反转
 
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补成熟趋势、结构破坏和第二次反向确认。MTR 不能单独冻结方向或交易授权。
 

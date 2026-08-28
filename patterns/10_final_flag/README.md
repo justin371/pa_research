@@ -1,6 +1,6 @@
 # Final Flag / 最终旗形
 
-文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=research_only / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补趋势末端、最后一次原方向尝试和状态分流。没有完整合同的内容只能标为 `historical_context_only`。
 

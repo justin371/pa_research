@@ -1,6 +1,6 @@
 # Triangle / 三角形、扩张三角形与区间内区间
 
-文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=research_only / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补两侧边界、压缩/扩张和突破接受或失败。三角形中部没有有效方向时必须写 `no_valid_direction`。
 

@@ -1,7 +1,7 @@
 # PA Research 每日候选批次与图表审查卡 v0.1
 
 日期：2026-08-28<br>
-文档状态：`document_status=adopted / research_state=research_only / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 本卡是 PA Research 的**批次记录和人工审查模板**。它把候选池覆盖、数据来源、两年 Daily 左侧、强阻力、A/B/H-L、事件、流动性和空间证据放在同一张卡上，避免把“发现页上的股票”误称为“已经通过规则的候选”。
 

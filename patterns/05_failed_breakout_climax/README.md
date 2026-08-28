@@ -1,6 +1,6 @@
 # 失败突破与高潮
 
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补失败边界、重新接受和高潮/延续分流。`reverse-stop` 是历史分支别名，新记录拆成 `order_branch: stop_confirmation` + `branch_role: reverse_stop`。
 

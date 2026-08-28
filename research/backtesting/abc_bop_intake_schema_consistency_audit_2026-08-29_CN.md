@@ -76,7 +76,7 @@ BOP 专项 intake 的分布为：
 没有发现可以把任一 ABC/BOP 行升级为冻结正向合同的证据。BOP 日线级多日回踩正例仍为 0，ABC 候选仍处于人工冻结复核层；`no-new-positive` 和 `validated win-rate: not-computable` 保持不变。
 
 ```text
-research_state: provisional
+document_maturity: provisional
 validated win-rate: not-computable
 conclusion: no-new-positive
 ```

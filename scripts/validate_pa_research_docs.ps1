@@ -145,6 +145,7 @@ $requiredFiles = @(
     'docs/visual_pa_review_card_CN.md',
     'docs/daily_candidate_review_card_CN.md',
     'patterns/README.md',
+    'patterns/08_three_push_h3_l3/README.md',
     'foundations/README.md',
     'research/README.md',
     'research/process_improvement_audit_2026-08-28_CN.md',
@@ -168,6 +169,8 @@ $requiredFiles = @(
     'research/backtesting/abc_bop_intake_schema_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/historical_replay_result_log_provenance_audit_2026-08-29_CN.md',
     'research/candidate_visual_record_consistency_audit_2026-08-29_CN.md',
+    'research/unified_output_state_axis_audit_2026-08-29_CN.md',
+    'research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_manifest_2026-08-29.json',
@@ -204,6 +207,7 @@ foreach ($file in $markdownFiles) {
 
 $canonicalChecks = @{
     'docs/pa_research_output_schema_v0_1_CN.md' = @(
+        'document_maturity: provisional',
         'direction: long / short / no_valid_direction',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'event_bucket:',
@@ -256,6 +260,23 @@ $canonicalChecks = @{
         'first_independent_obstacle:',
         'research_state:',
         'Execution Agent'
+    )
+    'patterns/08_three_push_h3_l3/README.md' = @(
+        'attempt_direction: bullish_attempts / bearish_attempts',
+        'canonical `direction`',
+        'lineage_status: same_lineage / reset / unclear / pending',
+        'context_timeframes_seen:',
+        'event_bucket:',
+        'space_status:',
+        'trade_state:',
+        'gate_result:',
+        'handoff_status:'
+    )
+    'research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md' = @(
+        'direction: long / short / no_valid_direction',
+        'parent_state: open_trend / trading_range / range_edge / transition / climax / unclear',
+        'lineage_status: same_lineage / reset / unclear / pending',
+        'lineage_id:'
     )
 }
 foreach ($entry in $canonicalChecks.GetEnumerator()) {
@@ -521,6 +542,16 @@ if (Test-Path -LiteralPath $historicalReplayResultLogAuditPath -PathType Leaf) {
     foreach ($token in @('external_results_files=13', 'external_result_rows=88', 'unique_sample_ids=63', 'duplicate_sample_id_groups=13', 'rows_in_duplicate_groups=38', 'extra_duplicate_rows=25', 'current_valid=0', 'historical_incomplete=13', 'invalid=0', 'historical_exit_code=2', 'journal/', 'trade_log/', 'transaction/', 'ledger/', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $historicalReplayResultLogAuditContent.Contains($token)) {
             Add-ValidationError "missing historical replay/result-log provenance audit token '$token'"
+        }
+    }
+}
+
+$unifiedOutputStateAxisAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/unified_output_state_axis_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $unifiedOutputStateAxisAuditPath -PathType Leaf) {
+    $unifiedOutputStateAxisAuditContent = Get-Content -LiteralPath $unifiedOutputStateAxisAuditPath -Raw
+    foreach ($token in @('document_maturity', 'attempt_direction', 'Daily', '4H', '15m', 'lineage_id', 'event_bucket', 'space_status', 'no-new-positive', 'validated win-rate: not-computable')) {
+        if (-not $unifiedOutputStateAxisAuditContent.Contains($token)) {
+            Add-ValidationError "missing unified-output state-axis audit token '$token'"
         }
     }
 }

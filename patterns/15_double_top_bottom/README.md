@@ -1,6 +1,6 @@
 # Double Top / Double Bottom / 双顶双底
 
-文档状态：`document_status=research_only / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=research_only / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补两次有分离测试和父级关系。双顶/双底不是自动反转，方向、第二次确认和交易闸门必须独立记录。
 

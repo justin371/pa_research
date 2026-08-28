@@ -72,7 +72,7 @@
 没有发现需要改写的历史成交、胜负、`realized_R`、方向/内部标签或正式报告结论。没有新增 ABC、BOP、H3/L3 或 H/L 样本，没有改变 pattern 规则或 engine 有效语义。
 
 ```text
-research_state: provisional
+document_maturity: provisional
 validated win-rate: not-computable
 conclusion: no-new-positive
 ```

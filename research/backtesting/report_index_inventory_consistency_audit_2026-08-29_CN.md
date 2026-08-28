@@ -53,7 +53,7 @@
 本轮没有发现可以支持新增正向结论的证据；没有新增回放分母，没有把历史 artifact、intake、H/L、ABC、BOP 或 H3/L3 混算。当前状态保持：
 
 ```text
-research_state: provisional
+document_maturity: provisional
 validated win-rate: not-computable
 conclusion: no-new-positive
 ```

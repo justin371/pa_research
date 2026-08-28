@@ -43,7 +43,7 @@
 验证包括 8 个合同 parity 专项测试、全套单元测试、文档链接/authority validator、Python 编译检查和 `git diff --check`：全套 `75` 个单元测试通过，文档校验通过（`264` 个 Markdown 文件、`1234` 个链接）。合成负例只写入临时目录，测试结束后清理；不进入研究数据或胜率分母。验证通过后，当前统计状态仍为：
 
 ```text
-research_state: provisional
+document_maturity: provisional
 validated win-rate: not-computable
 conclusion: no-new-positive
 ```

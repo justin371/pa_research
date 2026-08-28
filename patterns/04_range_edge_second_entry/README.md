@@ -1,6 +1,6 @@
 # 交易区间边缘二次入场
 
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补区间上沿/下沿、边缘尝试和区间目标。`first_magnet` 只作为历史别名，新记录统一写 `first_independent_obstacle`。
 

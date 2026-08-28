@@ -1,8 +1,8 @@
 # 三推 / H3-L3：压力状态
 
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`；规则修订：`2026-08-26`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`；规则修订：`2026-08-26`
 
-完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补三推压力、lineage 和 H3/L3 状态。三推本身不冻结方向，反向合同必须另写 `direction`、`order_branch`、`structural_invalidation` 和 `gate_result`。
+完整案例先套用[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)；本目录只补三推压力、lineage 和 H3/L3 状态。三推本身不冻结方向，反向合同必须另写 canonical `direction`、`order_branch`、`structural_invalidation` 和 `gate_result`。本页协议中的 `attempt_direction` 只描述三次尝试的朝向，不能替代统一合同的 `direction`。
 
 ## 研究目的
 
@@ -27,10 +27,12 @@
 ## 最小视觉协议
 
 ```text
-parent_state: open_trend / mature_range / channel / transition
-direction: bullish_attempts / bearish_attempts
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+attempt_direction: bullish_attempts / bearish_attempts
 timeframe:
-lineage_status: same-lineage / reset / unclear
+context_timeframes_seen: Daily / 4H / 1H / 15m / unknown
+daily_context_window: >=2y / <2y / unavailable
+lineage_status: same_lineage / reset / unclear / pending
 range_edge_three_push: yes / no / pending
 range_edge_side: upper / lower / none / pending
 push_1: origin -> extreme / quality / separation
@@ -38,6 +40,7 @@ push_2: origin -> extreme / quality / separation
 push_3: origin -> extreme / quality / separation
 pressure_change: weakening / expanding / mixed / unknown
 location_and_left_structure:
+event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
 third_push_state: exhaustion / expansion-or-climax / range-repeat / channel-continuation
 first_reverse: none / touch / structural-break
 second_confirmation: yes / no / pending
@@ -45,9 +48,13 @@ order_branch: stop_confirmation / limit_retest / market_close / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / management
 structural_stop:
 first_independent_obstacle:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 rough_R_R: wide / borderline / insufficient / not-frozen
-research_state: research_candidate / observation_only / valid_no_trade / pending
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 thesis_state: working / failed / replaced / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
 
 研究记录必须先填完 `lineage_status` 和 `third_push_state`，再讨论 H3/L3。若三次推进不能在当时被分开识别，标签写成 `not_h3_l3` 或 `new_lineage_pending`，不得用最终走势反推计数。

@@ -1,6 +1,6 @@
 # PA Research 核心 PA Pattern 与独立体系目录
 
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 每日候选筛选统一遵循 [`PA Research 日线选股规则 v0.1`](../docs/pa_research_daily_selection_rules_v0_1_CN.md)：只用完成的 Daily K 线选股，重点为 `ABC_CONT` 与 `BOP`；4H/1H/15m 不能改变日线候选主标签。
 

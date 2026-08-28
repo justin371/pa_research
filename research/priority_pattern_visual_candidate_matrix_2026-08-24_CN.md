@@ -1,7 +1,7 @@
 # 优先 Pattern 代表性视觉候选矩阵（2026-08-24）
 
 日期：2026-08-24  
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 本矩阵使用[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)；每个案例必须单独填写 `direction: long / short / no_valid_direction`，矩阵级别的状态不能替代行级状态。
 

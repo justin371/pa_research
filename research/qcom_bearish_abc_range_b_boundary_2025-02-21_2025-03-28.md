@@ -14,6 +14,7 @@ contract_scope: historical_context_only
 direction: no_valid_direction
 research_state: observation_only
 trade_state: not_authorized
+gate_result: observation_only
 handoff_status: research_only
 ```
 

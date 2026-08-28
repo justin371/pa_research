@@ -63,7 +63,7 @@
 当前合同覆盖证明了“哪些字段已经记录、哪些层可以安全分开”，不能证明 H1/H2/L1/L2 的真实胜率。尤其是 50 条空间未知、37 条事件过滤未核实、7 个共享 lineage 组和缺失 `market_context_id`，都不足以支持独立样本外推。继续保留：
 
 ```text
-research_state: provisional
+document_maturity: provisional
 validated win-rate: not-computable
 conclusion: no-new-positive
 ```

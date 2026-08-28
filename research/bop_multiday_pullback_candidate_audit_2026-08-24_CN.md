@@ -1,7 +1,7 @@
 # BOP 真实多日回踩候选审计（2026-08-24）
 
 日期：2026-08-24
-文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
+文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 统一字段、方向、BOP 状态和订单分支见[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。本审计只修改 PA Research，不创建量化扫描器、不连接 Execution Agent。
 
@@ -31,7 +31,16 @@
 
 ```text
 contract_scope: deep_review
-primary_pattern: BOP / failed_breakout / range_edge / other
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+timeframes_seen: Daily / 4H / 1H / 15m / unknown
+daily_context_window: >=2y / <2y / unavailable
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+directional_bias: bull / bear / balanced / changing
+primary_pattern: BOP / other
+candidate_class: bop_candidate / failed_breakout_boundary / range_edge_boundary / other
 direction: long / short / no_valid_direction
 secondary_context: gap-and-go / former-double-top / H1-H2 / channel / triangle
 state_transition: none / breakout_acceptance / role_reversal / failed_breakout
@@ -40,12 +49,23 @@ acceptance: close outside + follow-through + hold/retest evidence
 retest: intraday-only / single-session / multi-day / not-occurred
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / role_reversal_retest / gap_reprice / management
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
+event_context: none / earnings / macro / gap / other / unknown
+event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
+range_edge_three_push: yes / no / pending / not_applicable
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 structural_stop: role-conversion zone or parent invalidation, with buffer
 first_independent_obstacle: first independent left-side level after actual fill
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
 gate_result: pass / conditional / observation_only / valid_no_trade / pending
-trade_state: conditional / valid_no_trade / observation_only / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
 thesis_state: working / failed / invalidated / replaced / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
+
+这里的 `primary_pattern` 遵循统一合同：只有真正进入 BOP 合同的候选才写 `BOP`；失败突破和区间边缘只是 `candidate_class`/`state_transition` 的筛选分类，不能把观察边界伪装成 BOP 主标签。`research_state`、`trade_state`、`gate_result` 和 `handoff_status` 也必须分别记录，不能用一个“当前裁决”代替四个状态轴。
 
 同一价格簇中的旧边界、EMA、缺口边缘和 MM 不重复计分。MM 只能在角色转换被接受、第一独立障碍已处理后升级目标，不能替代回踩证据。
 
