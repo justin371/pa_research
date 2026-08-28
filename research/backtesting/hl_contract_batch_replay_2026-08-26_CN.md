@@ -2,6 +2,8 @@
 
 状态：`research_only / descriptive_only / not-validated / no-new-positive`
 
+本报告保留当时历史回放的运行口径；其中的旧 engine 版本不是当前维护版本。当前 PA Research engine 为 `0.3.9`，历史数字不会因版本升级自动变成当前验证结果。
+
 ## 目的与硬边界
 
 本批把已有的人工图表读法冻结成第一批可回放的 H1/H2/L1/L2 研究合同。标签允许是“约等于”某个 PA pattern，但限制条件不能用后见之明放宽：先看至少两年 Daily 左侧，再看重要高低点、支撑阻力、EMA20/50/200、A/B/lineage、回调位置和 META，最后才冻结触发、结构止损、第一障碍、目标、持有期和缺口处理。
@@ -66,5 +68,9 @@ TSLA `2025-08-18` H1 和 `2025-08-21` H2 共享一个局部行情 lineage，不�
 ## 当前结论
 
 回放没有产生新的正向验证证据。H2 的一次目标到达被同一 TSLA lineage 的 H1 失败样本依赖，L2 先止损后到更低支撑，L1 被开盘跳过，CRWD 被 EMA50 闸门排除，H1 的首障碍只有约 `0.43R`。因此本批结果只能标记为 `research_only / descriptive_only / not-validated`，总体验证结论继续是 `no-new-positive`，胜率和盈亏比均不能升级为已验证统计。
+
+```text
+validated win-rate: not-computable
+```
 
 后续如要继续，必须补充新的独立 lineage，并把 Daily 触发合同与 15m 确认合同分开记录；不修改规则、不扩展成扫描器、不连接执行层。

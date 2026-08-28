@@ -2,6 +2,8 @@
 
 状态：`research_only / no-eligible-contracts / no-new-positive`
 
+本报告保留当时历史回放的运行口径；其中的旧 engine 版本不是当前维护版本。当前 PA Research engine 为 `0.3.9`，历史数字不会因版本升级自动变成当前验证结果。
+
 ## 结果
 
 本批人工审阅 18 个候选，但没有任何一条同时通过 ordinary non-event、清晰 H1/H2/L1/L2 lineage、匹配的 EMA20/50 方向闸门和首障碍 `>=1R` 空间。因此没有冻结交易合同，也没有可以合法交给 `backtesting.py` 的交易样本。
@@ -38,3 +40,7 @@ PA Research 的回放器只接受人工冻结合同；它不是图表识别器�
 图表由 Matplotlib `3.10.9` 渲染，包含 EMA20/50/200 和原始成交量，但不含事后标签或结果。回放引擎版本为 `0.3.1`，依赖 `backtesting.py 0.6.6`；本批没有 Futu 实时证据。
 
 本报告只属于 PA Research，不修改 Codex Trading，不创建量化扫描器，不连接 Execution Agent。
+
+```text
+validated win-rate: not-computable
+```

@@ -2,6 +2,8 @@
 
 状态：`research_only / descriptive_only / not-validated / no-new-positive`
 
+本报告保留当时历史回放的运行口径；其中的旧 engine 版本不是当前维护版本。当前 PA Research engine 为 `0.3.9`，历史数字不会因版本升级自动变成当前验证结果。
+
 ## 结论
 
 本批 2 条人工冻结合同均属于普通非事件、`long / H1`，均通过 Daily EMA20/EMA50 方向闸门并实际成交到达第一障碍：2 胜 0 负，描述性胜率 `100.00%`，总实现 `+2.5925R`，平均 `+1.2963R`。这是只有两个不同 `lineage_id` 的小样本；95% Wilson 区间约为 `34.24%–100.00%`，不能据此确认规则达到长期 `60%`，结论仍为 `no-new-positive`。
@@ -71,3 +73,7 @@
 4. 零成本、历史 OHLCV 和十根 K 线窗口不等于真实执行结果；实际滑点、点差和事件识别误差尚未纳入。
 
 本报告只属于 PA Research，不修改 Codex Trading，不创建量化扫描器，不连接 Execution Agent。
+
+```text
+validated win-rate: not-computable
+```

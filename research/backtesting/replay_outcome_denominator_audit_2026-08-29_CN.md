@@ -42,7 +42,7 @@ realized_R is finite
 
 ### 1. summary 的分母防护不足
 
-此前摘要主要用 `trade_result in {win, loss, scratch}` 形成 `completed`，对手工或旧产物中可能出现的资格旗标、证据状态、成交状态不一致没有显式防护。现已在 engine `0.3.3` 中统一准备结果字段，并以严格交集计算顶层和每个分组的完成交易；同时保留资格旗标、mismatch、guard exclusion 和互斥 outcome bucket。
+此前摘要主要用 `trade_result in {win, loss, scratch}` 形成 `completed`，对手工或旧产物中可能出现的资格旗标、证据状态、成交状态不一致没有显式防护。在本审计对应的历史中间版本 engine `0.3.3` 中已统一准备结果字段，并以严格交集计算顶层和每个分组的完成交易；当前 engine `0.3.9` 延续并保留这套防护，同时保留资格旗标、mismatch、guard exclusion 和互斥 outcome bucket。
 
 这不会把旧的 `opening-skip`、`observation_only`、`pending` 或 `incomplete-horizon` 变成负数，也不会把首障碍到达改写为胜利。
 
@@ -56,7 +56,7 @@ realized_R is finite
 - `market_close` 现在以 `backtesting.py` 的实际 `trade.entry_bar` 计时，不再把“策略第一次看到持仓的 bar”误当作入场 bar；
 - 如果时间退出请求发生在数据末尾、没有预期的市场执行 bar，则保留为 `incomplete-horizon`，不因 `finalize_trades=True` 的合成收尾而制造完成交易。
 
-因此 engine `0.3.3` 保留既有 H/L 合同的“观察十根完整 K 线后下一根开盘退出”语义，并修复实际 entry-bar 和数据末尾边界；相关回归测试已覆盖普通订单、`market_close`、末尾不完整 horizon 以及时间退出后 bar 不应制造首障碍/歧义的情况。
+因此历史中间版本 engine `0.3.3` 保留既有 H/L 合同的“观察十根完整 K 线后下一根开盘退出”语义，并修复实际 entry-bar 和数据末尾边界；当前 engine `0.3.9` 延续该语义。相关回归测试已覆盖普通订单、`market_close`、末尾不完整 horizon 以及时间退出后 bar 不应制造首障碍/歧义的情况。
 
 ### 3. 首障碍、歧义和 realized_R 的隔离
 
@@ -66,7 +66,7 @@ realized_R is finite
 
 ## 四、已有仓库价格快照的复核
 
-以下只使用已有仓库合同和历史价格文件，通过 engine `0.3.3` 做语义复核；不新增行情样本，也不把复核结果写成新的验证批次：
+以下只使用已有仓库合同和历史价格文件，通过当时的历史中间版本 engine `0.3.3` 做语义复核；当前维护版本为 engine `0.3.9`。不新增行情样本，也不把复核结果写成新的验证批次：
 
 | 批次 | 合同 | 完成交易 | 胜 / 负 | 时间退出核对 |
 | --- | ---: | ---: | ---: | --- |

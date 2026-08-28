@@ -2,6 +2,8 @@
 
 状态：`research_only / descriptive_only / not-validated / no-new-positive`
 
+本报告保留当时历史回放的运行口径；其中的旧 engine 版本不是当前维护版本。当前 PA Research engine 为 `0.3.9`，历史数字不会因版本升级自动变成当前验证结果。
+
 ## 结论
 
 本批回放 6 条人工冻结合同，全部是**空头 L1**；其中 5 条成交并完成，1 条因开盘跳过旧触发位而未成交。完成交易为 **3 胜 2 负，描述性胜率 `60.00%`，总实现 `+3.4812R`，平均 `+0.6962R`，Profit Factor `3.1762`**。这个 60% 只是在极小样本上的合并描述值，不能把普通非事件、财报邻近和财报驱动样本混成一个胜率；本批仍是 `no-new-positive`，没有验证 H1/H2/L1/L2 的长期胜率。
@@ -80,3 +82,7 @@
 - 需要下一批继续增加未使用标的、同质 ordinary lineage 和真正的 H2/L2；不得把事件样本、宽 B 或转换段为凑数量混入普通统计。
 
 本文件只属于 PA Research，不修改 Codex Trading，不创建量化扫描器，不连接 Execution Agent。
+
+```text
+validated win-rate: not-computable
+```

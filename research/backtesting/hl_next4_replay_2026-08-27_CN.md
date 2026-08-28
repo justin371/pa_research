@@ -2,6 +2,8 @@
 
 状态：`research_only / descriptive_only / not-validated / no-new-positive`
 
+本报告保留当时历史回放的运行口径；其中的旧 engine 版本不是当前维护版本。当前 PA Research engine 为 `0.3.9`，历史数字不会因版本升级自动变成当前验证结果。
+
 ## 结论
 
 本批只有 2 条人工冻结合同，均为普通非事件口径下的 `long / H1`，均满足事前第一障碍空间 `>=1R`。两条都成交，但都没有到达第一障碍：CBOE 触发后止损，ROST 在十根 K 线合同结束时退出。描述性结果为 **0 胜 2 负、胜率 `0.00%`、总实现 `-1.5090R`、平均 `-0.7545R`**。
@@ -76,3 +78,7 @@ opening-skip、未成交、`observation_only`、pending 和 ambiguous intrabar �
 ## 研究边界与下一步
 
 本批只属于 PA Research，不修改 Codex Trading，不创建量化扫描器，不连接 Execution Agent。下一步应继续增加新的、相互独立的普通股和 lineage，并优先寻找空头 L1/L2 和 H2/L2，而不是为了提高样本量放宽 strong-A、controlled-B、EMA 方向、事件隔离或首障碍空间。只有在合同质量和样本量足够后，才有资格重新检验 `60%`。
+
+```text
+validated win-rate: not-computable
+```
