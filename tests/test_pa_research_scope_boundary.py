@@ -1,5 +1,6 @@
 import ast
 from pathlib import Path
+import re
 import unittest
 
 
@@ -55,6 +56,16 @@ class PaResearchScopeBoundaryTests(unittest.TestCase):
             dependencies,
             ["backtesting==0.6.6", "matplotlib==3.10.9"],
         )
+
+    def test_docs_do_not_reintroduce_external_v1_authority_marker(self):
+        violations = set()
+        for path in REPO_ROOT.rglob("*.md"):
+            if ".codex" in path.relative_to(REPO_ROOT).parts:
+                continue
+            content = path.read_text(encoding="utf-8")
+            if re.search(r"\bV1\.\d+\b", content, flags=re.IGNORECASE):
+                violations.add(str(path.relative_to(REPO_ROOT)))
+        self.assertEqual(violations, set())
 
 
 if __name__ == "__main__":
