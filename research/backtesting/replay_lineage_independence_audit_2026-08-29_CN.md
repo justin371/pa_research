@@ -27,7 +27,7 @@
 | 冻结 ABC_CONT、BOP、H3/L3 | 0 条 | intake/视觉案例不进入回放分母 |
 | 统一 ABC/BOP intake | 1 个 CSV、10 条（`ABC_CONT` 6、`BOP` 4） | 全部 `contract_frozen=no`，不与 H/L 结果混算 |
 | BOP 专项 intake | 1 个 CSV、15 条 | 使用独立 BOP 字段；全部 `contract_frozen=no`，不进入回放分母 |
-| 全部 intake | 2 个 CSV、25 条 | 两类 intake 都不与 H/L 结果混算 |
+| 全部 intake | 2 个 CSV、25 条 | 归并后 22 个底层案例键、3 条跨 schema alias；两类 intake 都不与 H/L 结果混算 |
 | `market_context_id` | 0/60 条已记录 | 当前冻结合同没有可机器审计的共享市场状态标识 |
 
 7 个共享 lineage 为：

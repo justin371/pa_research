@@ -165,6 +165,7 @@ $requiredFiles = @(
     'research/backtesting/validator_engine_contract_parity_audit_2026-08-29_CN.md',
     'research/backtesting/report_index_inventory_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/batch_report_numeric_consistency_audit_2026-08-29_CN.md',
+    'research/backtesting/abc_bop_intake_schema_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_manifest_2026-08-29.json',
@@ -266,33 +267,70 @@ foreach ($entry in $canonicalChecks.GetEnumerator()) {
     }
 }
 
+$intakeRows = @()
+$bopRows = @()
+$intakeIdRecords = [System.Collections.Generic.List[object]]::new()
 $intakePath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/abc_bop_contract_intake_2026-08-28.csv'
 if (Test-Path -LiteralPath $intakePath -PathType Leaf) {
     $intakeRows = @(Import-Csv -LiteralPath $intakePath)
     $requiredIntakeColumns = @(
         'intake_id', 'symbol', 'source_case', 'decision_date', 'direction',
-        'primary_pattern', 'intake_state', 'contract_frozen', 'event_state',
-        'trigger_evidence', 'structural_stop_evidence', 'first_obstacle_evidence',
-        'missing_fields', 'freeze_recommendation'
+        'primary_pattern', 'internal_label', 'contract_branch', 'intake_state',
+        'contract_frozen', 'event_state', 'trigger_evidence',
+        'structural_stop_evidence', 'first_obstacle_evidence', 'space_evidence',
+        'lineage_evidence', 'missing_fields', 'freeze_recommendation'
     )
     if ($intakeRows.Count -eq 0) {
         Add-ValidationError 'ABC/BOP intake CSV has no rows'
     } else {
         $intakePropertyNames = @($intakeRows[0].PSObject.Properties.Name)
+        if ($intakePropertyNames.Count -ne $requiredIntakeColumns.Count) {
+            Add-ValidationError 'ABC/BOP intake CSV schema column count mismatch'
+        }
         foreach ($column in $requiredIntakeColumns) {
             if ($column -notin $intakePropertyNames) {
                 Add-ValidationError "missing ABC/BOP intake column '$column'"
             }
         }
+        if ('sample_id' -in $intakePropertyNames) {
+            Add-ValidationError 'ABC/BOP intake CSV must use intake_id, not sample_id'
+        }
         foreach ($row in $intakeRows) {
+            $intakeId = Get-TrimmedText $row.intake_id
+            foreach ($column in $requiredIntakeColumns) {
+                $value = Get-TrimmedText $row.PSObject.Properties[$column].Value
+                if ([string]::IsNullOrWhiteSpace($value)) {
+                    Add-ValidationError "ABC/BOP intake row missing required value '$column': $intakeId"
+                }
+            }
+            [void]$intakeIdRecords.Add([pscustomobject]@{
+                intake_id = $intakeId
+                file = 'abc_bop_contract_intake_2026-08-28.csv'
+            })
+            $sourceCase = Get-TrimmedText $row.source_case
+            $sourceCaseRelative = $sourceCase -replace '/', [IO.Path]::DirectorySeparatorChar
+            if ([IO.Path]::IsPathRooted($sourceCaseRelative) -or $sourceCaseRelative -match '(^|\\)\.\.(\\|$)') {
+                Add-ValidationError "ABC/BOP intake row source_case escapes repository: $intakeId"
+            } elseif (-not (Test-Path -LiteralPath (Join-Path -Path $repoRoot -ChildPath $sourceCaseRelative) -PathType Leaf)) {
+                Add-ValidationError "ABC/BOP intake row source_case does not exist: $intakeId"
+            }
+            $direction = (Get-TrimmedText $row.direction).ToLowerInvariant()
+            if ($direction -notin @('long', 'short')) {
+                Add-ValidationError "ABC/BOP intake row has invalid direction: $intakeId"
+            }
+            if (-not (Test-ValidDate $row.decision_date)) {
+                Add-ValidationError "ABC/BOP intake row has invalid decision_date: $intakeId"
+            }
+            $primaryPattern = (Get-TrimmedText $row.primary_pattern).ToUpperInvariant()
+            if ($primaryPattern -notin @('ABC_CONT', 'BOP')) {
+                Add-ValidationError "ABC/BOP intake row has invalid primary_pattern: $intakeId"
+            }
+            $internalLabel = (Get-TrimmedText $row.internal_label).ToLowerInvariant()
+            if ($primaryPattern -eq 'BOP' -and $internalLabel -ne 'none') {
+                Add-ValidationError "ABC/BOP intake BOP row must use internal_label=none: $intakeId"
+            }
             if ($row.contract_frozen -ne 'no') {
-                Add-ValidationError "ABC/BOP intake row is not marked contract_frozen=no: $($row.intake_id)"
-            }
-            if ([string]::IsNullOrWhiteSpace($row.source_case)) {
-                Add-ValidationError "ABC/BOP intake row missing source_case: $($row.intake_id)"
-            }
-            if ([string]::IsNullOrWhiteSpace($row.missing_fields)) {
-                Add-ValidationError "ABC/BOP intake row missing missing_fields: $($row.intake_id)"
+                Add-ValidationError "ABC/BOP intake row is not marked contract_frozen=no: $intakeId"
             }
         }
     }
@@ -303,33 +341,66 @@ if (Test-Path -LiteralPath $bopIntakePath -PathType Leaf) {
     $bopRows = @(Import-Csv -LiteralPath $bopIntakePath)
     $requiredBopColumns = @(
         'intake_id', 'symbol', 'source_case', 'decision_date', 'direction',
-        'classification', 'bop_state', 'retest_class', 'order_branch',
-        'contract_frozen', 'event_state', 'missing_fields', 'freeze_recommendation'
+        'classification', 'bop_state', 'old_boundary_evidence',
+        'breakout_acceptance_evidence', 'retest_class', 'role_reversal_evidence',
+        'order_branch', 'intake_state', 'contract_frozen', 'event_state',
+        'first_obstacle_evidence', 'space_evidence', 'lineage_evidence',
+        'missing_fields', 'freeze_recommendation'
     )
     if ($bopRows.Count -eq 0) {
         Add-ValidationError 'BOP intake CSV has no rows'
     } else {
         $bopPropertyNames = @($bopRows[0].PSObject.Properties.Name)
+        if ($bopPropertyNames.Count -ne $requiredBopColumns.Count) {
+            Add-ValidationError 'BOP intake CSV schema column count mismatch'
+        }
         foreach ($column in $requiredBopColumns) {
             if ($column -notin $bopPropertyNames) {
                 Add-ValidationError "missing BOP intake column '$column'"
             }
         }
+        if ('sample_id' -in $bopPropertyNames) {
+            Add-ValidationError 'BOP intake CSV must use intake_id, not sample_id'
+        }
         foreach ($row in $bopRows) {
-            if ($row.contract_frozen -ne 'no') {
-                Add-ValidationError "BOP intake row is not marked contract_frozen=no: $($row.intake_id)"
+            $intakeId = Get-TrimmedText $row.intake_id
+            foreach ($column in $requiredBopColumns) {
+                $value = Get-TrimmedText $row.PSObject.Properties[$column].Value
+                if ([string]::IsNullOrWhiteSpace($value)) {
+                    Add-ValidationError "BOP intake row missing required value '$column': $intakeId"
+                }
             }
-            if ([string]::IsNullOrWhiteSpace($row.source_case)) {
-                Add-ValidationError "BOP intake row missing source_case: $($row.intake_id)"
+            [void]$intakeIdRecords.Add([pscustomobject]@{
+                intake_id = $intakeId
+                file = 'bop_contract_intake_2026-08-28.csv'
+            })
+            $sourceCase = Get-TrimmedText $row.source_case
+            $sourceCaseRelative = $sourceCase -replace '/', [IO.Path]::DirectorySeparatorChar
+            if ([IO.Path]::IsPathRooted($sourceCaseRelative) -or $sourceCaseRelative -match '(^|\\)\.\.(\\|$)') {
+                Add-ValidationError "BOP intake row source_case escapes repository: $intakeId"
+            } elseif (-not (Test-Path -LiteralPath (Join-Path -Path $repoRoot -ChildPath $sourceCaseRelative) -PathType Leaf)) {
+                Add-ValidationError "BOP intake row source_case does not exist: $intakeId"
             }
-            if ([string]::IsNullOrWhiteSpace($row.missing_fields)) {
-                Add-ValidationError "BOP intake row missing missing_fields: $($row.intake_id)"
+            $direction = (Get-TrimmedText $row.direction).ToLowerInvariant()
+            if ($direction -notin @('long', 'short')) {
+                Add-ValidationError "BOP intake row has invalid direction: $intakeId"
+            }
+            if (-not (Test-ValidDate $row.decision_date)) {
+                Add-ValidationError "BOP intake row has invalid decision_date: $intakeId"
             }
             if ($row.retest_class -eq 'multi-day' -or $row.classification -eq 'multi_day_bop_positive') {
-                Add-ValidationError "BOP intake row claims a multi-day positive without a frozen contract: $($row.intake_id)"
+                Add-ValidationError "BOP intake row claims a multi-day positive without a frozen contract: $intakeId"
+            }
+            if ($row.contract_frozen -ne 'no') {
+                Add-ValidationError "BOP intake row is not marked contract_frozen=no: $intakeId"
             }
         }
     }
+}
+
+foreach ($duplicate in @($intakeIdRecords | Group-Object intake_id | Where-Object { $_.Name -and $_.Count -gt 1 })) {
+    $files = ($duplicate.Group | ForEach-Object { $_.file } | Sort-Object -Unique) -join ', '
+    Add-ValidationError "duplicate intake_id across intake CSVs: $($duplicate.Name) [$files]"
 }
 
 $freezeReviewPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/abc_bop_candidate_freeze_review_2026-08-28_CN.md'

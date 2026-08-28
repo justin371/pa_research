@@ -31,7 +31,7 @@
 
 ## 3. Intake 与回放边界
 
-两个 intake CSV 共 25 行，均为 `contract_frozen=no`：
+两个 intake CSV 共 25 行，均为 `contract_frozen=no`；按 `symbol + decision_date + source_case` 归并后是 22 个底层案例键，其中 3 个案例同时出现在两种 intake 视图中，不能把 25 行当成 25 个独立案例：
 
 - `abc_bop_contract_intake_2026-08-28.csv`：10 条，主标签为 `ABC_CONT/BOP`，保留分支选择、事件、空间、lineage 或数值字段缺口；
 - `bop_contract_intake_2026-08-28.csv`：15 条，保留接受、同日回测、缺口/事件和多日回踩边界；其中 `order_branch` 可能是研究层的复合或 `observation_only` 状态。

@@ -40,7 +40,7 @@
 | BOP 专项 intake | 1 | 15 | 使用 BOP 专项字段，不以统一 `primary_pattern` 计数 | 否，全部 `contract_frozen=no` |
 | 全部 intake | 2 | 25 | 两类候选/边界记录 | 否 |
 
-此前个别审计表中的“6 条 ABC、4 条 BOP”只描述统一 `abc_bop_contract_intake_2026-08-28.csv`，不是 25 条 intake 的总量。本轮已在跨 Pattern、lineage、coverage 和 inventory 相关文案中加上文件范围，避免把 BOP 专项 15 条漏掉，或把 intake 行误当成冻结样本。
+此前个别审计表中的“6 条 ABC、4 条 BOP”只描述统一 `abc_bop_contract_intake_2026-08-28.csv`，不是 25 行 intake 的总量。本轮已在跨 Pattern、lineage、coverage 和 inventory 相关文案中加上文件范围，避免把 BOP 专项 15 条漏掉，或把 intake 行误当成冻结样本。两类 intake 按 `symbol + decision_date + source_case` 归并后有 22 个底层案例键，其中 3 个案例同时出现在两种 schema 视图中。
 
 当前 60 条冻结 H/L 中：冻结 `ABC_CONT=0`、冻结 `BOP=0`、冻结 `H3/L3=0`。因此没有把 H/L、ABC、BOP 或三推合并成一个胜率分母。
 

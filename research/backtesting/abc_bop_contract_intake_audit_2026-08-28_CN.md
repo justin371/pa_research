@@ -10,6 +10,8 @@
 
 因此新增[`abc_bop_contract_intake_2026-08-28.csv`](abc_bop_contract_intake_2026-08-28.csv)。它是**候选准入清单**，不是回放输入：所有行都标记 `contract_frozen=no`，回放器不得读取它们作为交易合同。后续多头候选复核见[`多头 ABC/H1/H2 合同审计`](abc_bullish_candidate_contract_audit_2026-08-28_CN.md)。
 
+本文件的数量和字段只对应统一的 10 行 intake；另有 15 行、使用独立字段的 BOP 专项 intake。两种清单有 3 个底层案例重叠，但各行仍是不同 schema 的研究视图，不应相加后当作 25 个独立交易样本。
+
 NFLX/TSM 的后续逐字段冻结复核见[`ABC 候选合同冻结复核`](abc_bop_candidate_freeze_review_2026-08-28_CN.md)。该复核只使用本仓库已有案例，不把替代分支、粗略价格区间或事后路径当成冻结字段。
 
 ## 二、准入清单结果

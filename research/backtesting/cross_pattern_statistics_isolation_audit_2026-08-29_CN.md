@@ -26,7 +26,7 @@
 | 冻结 H3/L3 | 0 条 | 当前没有三推机器合同，不能把空缺解释为零胜率 |
 | 统一 ABC/BOP intake | 10 条（`ABC_CONT` 6、`BOP` 4） | 全部 `contract_frozen=no`，不与 H/L 结果混算 |
 | BOP 专项 intake | 15 条 | 使用独立 BOP 字段记录接受、回踩和边界，不进入回放分母 |
-| 全部 intake | 25 条（2 个 CSV） | 两类 intake 都是候选/缺口记录，不是冻结合同 |
+| 全部 intake | 25 条（2 个 CSV） | 两类 intake 都是候选/缺口记录，不是冻结合同；归并后 22 个底层案例键，3 条跨 schema alias |
 
 现有冻结文件没有发现重复的合同族：同一 `symbol + decision_date + direction + primary_pattern + internal_label + lineage_id` 没有两条替代订单分支同时进入同一文件。共享 lineage 不是错误，但它表示依赖，不能当作相互独立样本。
 
