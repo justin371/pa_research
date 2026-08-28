@@ -1,6 +1,6 @@
 # PA Research 统一输出合同 v0.1
 
-日期：2026-08-25；合同修订：2026-08-26；批次证据字段修订：2026-08-28；回放结果口径修订：2026-08-29；样本独立性字段修订：2026-08-29
+日期：2026-08-25；合同修订：2026-08-26；批次证据字段修订：2026-08-28；回放结果口径修订：2026-08-29；样本独立性字段修订：2026-08-29；回放输入边界修订：2026-08-29
 文档状态：`adopted / research-only / not-quantitative`
 
 ## 目的与适用范围
@@ -21,6 +21,16 @@ stage_1_fast_screen / deep_review / daily_candidate / historical_context_only
 ```
 
 `stage_1_fast_screen` 和 `historical_context_only` 可以暂缺成交、止损、首障碍和 R/R，但必须写 `pending` 或 `unknown`，不能被当作完整候选。
+
+## 0. 研究记录与当前回放输入的边界
+
+本文件是 PA Research 的研究记录超集，统一视觉复核、日线候选和历史案例的字段；它不是当前 `backtesting.py` 输入 CSV 的逐项枚举。提交回放前，必须再按[`冻结合同回放器`](../research/backtesting/README.md)把研究记录收敛成可执行的冻结合同，不能把研究状态或区域文字直接当成订单合同。
+
+- 当前日线候选的顶层 `primary_pattern` 仍只有 `ABC_CONT` 和 `BOP`；H1/H2/L1/L2/H3/L3 通过 `internal_label` 及 `secondary_context` 记录。`H1_L1`、`H2_L2`、`H3_L3`、`RFB`、`MTR` 和 `other` 在统一记录及当前回放器中保留，是历史/兼容冻结合同的 pattern 值，不会扩展日线选股规则。
+- 研究记录的 `direction` 可以是 `no_valid_direction`，但当前回放输入只接受 `long` 或 `short`。没有有效方向的记录只能保留为研究记录，不能送入回放。
+- 研究记录的 `order_branch` 可以记录 `stop_limit` 或 `observation_only`；当前 engine `0.3.9` 的回放输入只接受 `stop_confirmation`、`limit_retest` 和 `market_close`。`observation_only` 不建立交易合同，`stop_limit` 不能静默映射为普通 stop；两者目前不能直接传给当前回放器。
+- 回放输入中的 `entry_trigger`、`structural_stop`、`first_obstacle` 和 `target_price` 必须是有限数值价格；研究卡中的价格区域、`pending` 或 `unknown` 不能直接替代这些冻结数值。`market_close` 可以没有 `entry_trigger`，但仍必须满足该分支的其他合同要求。
+- 记录字段 `actual_fill_or_open_skip` 使用下划线状态，和回放结果字段 `fill_status` 的 `no-fill`、`opening-skip`、`unproven`、`not-traded` 不是同一字段，不能混写或互相推断。
 
 ## 一、证据头与市场闸门
 

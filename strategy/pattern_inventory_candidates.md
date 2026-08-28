@@ -6,6 +6,8 @@
 
 完整案例字段必须遵循[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。本清单是研究优先级，不是 Codex Trading 实现队列；Codex Trading 的材料仅作只读历史图表参考。
 
+本清单的字段用于研究记录和候选 inventory；`order_branch` 可以保留 `stop_limit` 或 `observation_only` 的研究语义，但这两项不是当前 engine `0.3.9` 的直接回放输入。冻结回放合同时必须以[`冻结合同回放器`](../research/backtesting/README.md)的三种支持分支为准。
+
 ## 1. 先统一几个名字
 
 ### H1/H2/H3 与 L1/L2/L3

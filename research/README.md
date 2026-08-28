@@ -25,6 +25,7 @@
 - [`回放结果分母边界 bug 审计（2026-08-29）`](backtesting/result_denominator_boundary_bug_audit_2026-08-29_CN.md)：修复缺失 `path_result` 仍可能进入完成交易分母的问题，并把该结果列纳入当前 artifact schema；不增加样本或改变有效回放语义；
 - [`回放执行语义审计（2026-08-29）`](backtesting/execution_semantics_audit_2026-08-29_CN.md)：用合成 K 线核对多空、订单分支、三种 gap policy、保护性退出和 horizon；补充对称回归覆盖，不改变有效回放语义；
 - [`PA Research authority 与隔离边界审计（2026-08-29）`](authority_boundary_index_audit_2026-08-29_CN.md)：确认当前 authority、历史来源和禁止接入声明没有被 Codex Trading 或外部生产版本标记混入，并增加版本文案防回归检查；
+- [`合同权威与字段一致性审计（2026-08-29）`](backtesting/contract_authority_consistency_audit_2026-08-29_CN.md)：区分研究记录超集与当前回放输入子集，收窄日线候选主标签，明确方向、订单、数值价格和成交状态边界；不增加样本或改变有效回放语义；
 - [`回放版本与结论表述一致性审计（2026-08-29）`](backtesting/version_conclusion_consistency_audit_2026-08-29_CN.md)：统一当前 engine `0.3.9`、历史版本与 `no-new-positive`/`validated win-rate: not-computable` 的语境，保留历史点估计但不升级为验证统计；
 - [`ABC/BOP 合同准入审计（2026-08-28）`](backtesting/abc_bop_contract_intake_audit_2026-08-28_CN.md)：把现有 ABC/BOP 视觉案例分成条件准入和边界案例；intake 清单不进入回放分母；
 - [`ABC 候选合同冻结复核（2026-08-28）`](backtesting/abc_bop_candidate_freeze_review_2026-08-28_CN.md)：逐字段复核 NFLX/TSM 是否具备冻结条件；两者仍未冻结，不增加回放分母；

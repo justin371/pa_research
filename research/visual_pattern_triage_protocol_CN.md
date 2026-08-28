@@ -120,6 +120,8 @@ sector_or_market_context:
 stage_2_status: research_candidate / valid_no_trade / research_positive_conditional / pending
 ```
 
+第二轮字段仍是研究记录，不是当前回放 CSV 的直接输入。`stop_limit` 和 `observation_only` 可以保留其独立语义；若要回放，必须先冻结为当前 engine `0.3.9` 支持的三种 `order_branch`，不能静默转换订单合同。
+
 第二轮仍然是人工研究，不是自动下单授权。第一障碍优先于 MM；结构止损不能为了改善 R/R 而任意缩窄。窄低周期止损和宽日线止损代表不同交易假设，不能混成一个结论。
 
 ## 4. 视觉筛选的统一判断顺序

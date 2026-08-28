@@ -1,6 +1,6 @@
 # PA Research 日线选股规则 v0.1
 
-日期：2026-08-24；合同修订：2026-08-25；三推与股票池修订：2026-08-26；H/L EMA 方向与 META 修订：2026-08-26；批次证据修订：2026-08-28
+日期：2026-08-24；合同修订：2026-08-25；三推与股票池修订：2026-08-26；H/L EMA 方向与 META 修订：2026-08-26；批次证据修订：2026-08-28；回放输入边界修订：2026-08-29
 文档状态：`document_status=adopted / research_state=provisional / handoff_status=not_ready / not-quantitative`
 
 这份文件是 PA Research 的日线候选筛选合同。它用于从美股日线图表中筛选少量值得继续研究的 ABC 和 BOP 候选，不是量化扫描器、生产交易规则或下单授权。
@@ -311,6 +311,8 @@ main_uncertainty_or_exclusion:
 ```
 
 `direction` 是每只候选必填字段；若父级、空间、事件或合同使当前没有可授权方向，写 `no_valid_direction`，不能只写“看多/看空倾向”。输出文字必须区分事实和解释；历史或收盘后数据不能写成实时。形态很像但首障碍、事件、成交或止损不合格时，应保留为 `research_state: observation_only` 或 `trade_state: valid_no_trade`，而不是进入 3–5 只名单。
+
+这里的输出模板是日线研究记录，不是回放输入 CSV。日线候选的顶层 `primary_pattern` 只使用 `ABC_CONT` 或 `BOP`；H1/H2/L1/L2/H3/L3 是 `internal_label`，其他关系写入 `secondary_context`。`direction=no_valid_direction`、`order_branch=stop_limit/observation_only`、区域文字或 `pending/unknown` 只能保留为研究状态。只有冻结为 `contract_frozen=yes`，并把方向、价格字段和订单分支收敛到当前回放器支持的 `long/short`、有限数值价格以及 `stop_confirmation`、`limit_retest`、`market_close` 后，才可以进入回放；不得把记录枚举静默映射成另一种订单。
 
 ## 9. 统计边界
 

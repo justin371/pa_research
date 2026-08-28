@@ -125,9 +125,11 @@ setup_count_bar:
 internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 count_basis:
 count_reset_reason:
-primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / other
+primary_pattern: ABC_CONT / BOP
 secondary_context:
 ```
+
+本卡是当前日线候选记录模板，顶层主标签只使用 `ABC_CONT` 或 `BOP`；H1/H2/L1/L2/H3/L3 放在 `internal_label`，其他结构关系放在 `secondary_context`。历史独立 H/L、三推或其他模式记录遵循统一输出合同的历史/兼容口径，不应反过来扩展当前日线选股主标签。
 
 强 A 只是优先级条件，不是入场信号。通常应看到约 3–4 根连续、实体较饱满、收盘靠方向极值、重叠较少的方向 K 线；缺口是加分项，不是必要条件，也不能让事件跳空替代普通 A 的证据。
 

@@ -4,6 +4,8 @@
 
 新案例的订单字段遵循[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)：`order_branch` 只写基础合同，`branch_role` 单独写反向 stop、角色转换回测或跳空重订。
 
+本协议的五种分支是研究记录层的概念枚举。当前 engine `0.3.9` 的回放输入只支持 `stop_confirmation`、`limit_retest` 和 `market_close`；`stop_limit` 需要独立的成交合同，`observation_only` 不建立交易合同，二者都不能直接传给当前回放器。
+
 ## 目的
 
 同一个 PA pattern 可以有不同的入场方式。视觉助手先判断形态和位置，再选择订单分支；不能因为形态看起来成立，就假设只有一种订单。这里的目标是帮助研究和复盘，不是建立量化下单程序。

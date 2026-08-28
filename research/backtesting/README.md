@@ -4,7 +4,7 @@
 
 这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.9`）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
 
-当前人工冻结合同的方向、H/L 标签、事件、空间和 lineage 覆盖见[`人工冻结合同覆盖审计`](contract_coverage_audit_2026-08-28_CN.md)。该审计只检查合同记录完整性，不代表胜率验证。
+当前人工冻结合同的方向、H/L 标签、事件、空间和 lineage 覆盖见[`人工冻结合同覆盖审计`](contract_coverage_audit_2026-08-28_CN.md)。研究记录与当前回放输入的字段边界见[`合同权威与字段一致性审计`](contract_authority_consistency_audit_2026-08-29_CN.md)。这些审计只检查合同记录/边界完整性，不代表胜率验证。
 
 ABC/BOP 的视觉案例准入清单见[`ABC/BOP 合同准入审计`](abc_bop_contract_intake_audit_2026-08-28_CN.md)及[`abc_bop_contract_intake_2026-08-28.csv`](abc_bop_contract_intake_2026-08-28.csv)。该 CSV 明确标记 `contract_frozen=no`，不是回放输入，不增加胜率分母。NFLX/TSM 的逐字段冻结复核见[`ABC 候选合同冻结复核`](abc_bop_candidate_freeze_review_2026-08-28_CN.md)；V、NVDA、KLAC、CRWD 的多头候选复核见[`多头 ABC/H1/H2 候选合同审计`](abc_bullish_candidate_contract_audit_2026-08-28_CN.md)。
 
@@ -52,6 +52,16 @@ major_high_low_review,ema20_50_200_review,event_context,contract_frozen,lineage_
 ```
 
 `market_context_id` 是可选的人工依赖标识，不是扫描器推断的市场状态。缺失时仍可回放逐行结果，但不能据此宣称跨标的市场环境独立。
+
+### 研究记录与回放输入的边界
+
+统一输出合同和视觉复核卡为了保留边界案例，允许比当前回放器更宽的记录状态。当前 engine `0.3.9` 的回放输入边界如下，必须在冻结合同时显式收敛：
+
+- `direction` 只接受 `long` 或 `short`；`no_valid_direction` 是研究记录状态，不能进入回放。
+- `primary_pattern` 接受 `ABC_CONT`、`BOP`、`H1_L1`、`H2_L2`、`H3_L3`、`RFB`、`MTR`、`other`。其中额外的 H/L、三推和旧模式值是历史/兼容冻结合同的支持，不改变当前日线候选顶层只用 `ABC_CONT/BOP` 的规则。
+- `order_branch` 只接受 `stop_confirmation`、`limit_retest`、`market_close`。研究记录中的 `stop_limit` 和 `observation_only` 不能直接传给当前回放器；`observation_only` 不建立交易合同，`stop_limit` 不能静默当作普通 stop。
+- `entry_trigger`（非 `market_close`）、`structural_stop`、`first_obstacle` 和 `target_price` 必须是有限数值；研究卡中的价格区域、`pending`、`unknown` 或说明性文字必须先冻结为数值合同，不能直接传入。
+- 记录字段 `actual_fill_or_open_skip` 与结果字段 `fill_status` 分开维护。结果字段使用 `filled`、`no-fill`、`opening-skip`、`unproven`、`not-traded` 等 engine 状态，不能用记录字段反推成交或胜率资格。
 
 对于 `internal_label=H1/H2/L1/L2`，还必须填写以下人工看图字段：
 
