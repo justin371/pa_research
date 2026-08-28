@@ -28,6 +28,7 @@
 - [`合同权威与字段一致性审计（2026-08-29）`](backtesting/contract_authority_consistency_audit_2026-08-29_CN.md)：区分研究记录超集与当前回放输入子集，收窄日线候选主标签，明确方向、订单、数值价格和成交状态边界；不增加样本或改变有效回放语义；
 - [`合同 CSV inventory 与资格边界审计（2026-08-29）`](backtesting/contract_csv_inventory_audit_2026-08-29_CN.md)：只读盘点冻结合同、示例合同、intake 和价格快照，固化 loader、入场几何、标签组合及 `contract_frozen` 隔离；不改写历史 CSV 或增加样本；
 - [`文档 validator 与 engine 合同 parity 审计（2026-08-29）`](backtesting/validator_engine_contract_parity_audit_2026-08-29_CN.md)：补齐 validator 与 engine 的必需列、订单/gap、有限数值、入场几何、META 和研究字段校验，并用合成负例验证拒绝边界；不改变 engine 语义或增加样本；
+- [`报告、索引与 inventory 一致性审计（2026-08-29）`](backtesting/report_index_inventory_consistency_audit_2026-08-29_CN.md)：交叉核对当前 CSV、冻结合同、intake、replay 报告、engine/dependency 版本和历史 artifact 边界，并增加动态防回归检查；不改写历史结果；
 - [`回放版本与结论表述一致性审计（2026-08-29）`](backtesting/version_conclusion_consistency_audit_2026-08-29_CN.md)：统一当前 engine `0.3.9`、历史版本与 `no-new-positive`/`validated win-rate: not-computable` 的语境，保留历史点估计但不升级为验证统计；
 - [`ABC/BOP 合同准入审计（2026-08-28）`](backtesting/abc_bop_contract_intake_audit_2026-08-28_CN.md)：把现有 ABC/BOP 视觉案例分成条件准入和边界案例；intake 清单不进入回放分母；
 - [`ABC 候选合同冻结复核（2026-08-28）`](backtesting/abc_bop_candidate_freeze_review_2026-08-28_CN.md)：逐字段复核 NFLX/TSM 是否具备冻结条件；两者仍未冻结，不增加回放分母；
