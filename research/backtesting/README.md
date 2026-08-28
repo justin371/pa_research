@@ -6,7 +6,7 @@
 
 当前人工冻结合同的方向、H/L 标签、事件、空间和 lineage 覆盖见[`人工冻结合同覆盖审计`](contract_coverage_audit_2026-08-28_CN.md)。该审计只检查合同记录完整性，不代表胜率验证。
 
-ABC/BOP 的视觉案例准入清单见[`ABC/BOP 合同准入审计`](abc_bop_contract_intake_audit_2026-08-28_CN.md)及[`abc_bop_contract_intake_2026-08-28.csv`](abc_bop_contract_intake_2026-08-28.csv)。该 CSV 明确标记 `contract_frozen=no`，不是回放输入，不增加胜率分母。NFLX/TSM 的逐字段冻结复核见[`ABC 候选合同冻结复核`](abc_bop_candidate_freeze_review_2026-08-28_CN.md)。
+ABC/BOP 的视觉案例准入清单见[`ABC/BOP 合同准入审计`](abc_bop_contract_intake_audit_2026-08-28_CN.md)及[`abc_bop_contract_intake_2026-08-28.csv`](abc_bop_contract_intake_2026-08-28.csv)。该 CSV 明确标记 `contract_frozen=no`，不是回放输入，不增加胜率分母。NFLX/TSM 的逐字段冻结复核见[`ABC 候选合同冻结复核`](abc_bop_candidate_freeze_review_2026-08-28_CN.md)；V、NVDA、KLAC、CRWD 的多头候选复核见[`多头 ABC/H1/H2 候选合同审计`](abc_bullish_candidate_contract_audit_2026-08-28_CN.md)。
 
 BOP 多日回踩的独立准入清单见[`BOP 合同准入审计`](bop_contract_intake_audit_2026-08-28_CN.md)及[`bop_contract_intake_2026-08-28.csv`](bop_contract_intake_2026-08-28.csv)。该 CSV 只记录现有人工案例的接受、回测和边界状态，全部为 `contract_frozen=no`，不是回放输入。
 

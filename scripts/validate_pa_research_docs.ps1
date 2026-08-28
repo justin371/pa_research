@@ -70,6 +70,7 @@ $requiredFiles = @(
     'research/backtesting/abc_bop_contract_intake_2026-08-28.csv',
     'research/backtesting/abc_bop_contract_intake_audit_2026-08-28_CN.md',
     'research/backtesting/abc_bop_candidate_freeze_review_2026-08-28_CN.md',
+    'research/backtesting/abc_bullish_candidate_contract_audit_2026-08-28_CN.md',
     'research/backtesting/bop_contract_intake_2026-08-28.csv',
     'research/backtesting/bop_contract_intake_audit_2026-08-28_CN.md',
     'strategy/README.md'
@@ -215,6 +216,16 @@ if (Test-Path -LiteralPath $freezeReviewPath -PathType Leaf) {
     foreach ($token in @('NFLX', 'TSM', 'contract_frozen=no', 'no-new-positive', 'max_hold_bars', 'do_not_replay')) {
         if (-not $freezeReviewContent.Contains($token)) {
             Add-ValidationError "missing ABC/BOP freeze-review token '$token'"
+        }
+    }
+}
+
+$bullishCandidateAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/abc_bullish_candidate_contract_audit_2026-08-28_CN.md'
+if (Test-Path -LiteralPath $bullishCandidateAuditPath -PathType Leaf) {
+    $bullishCandidateAuditContent = Get-Content -LiteralPath $bullishCandidateAuditPath -Raw
+    foreach ($token in @('V', 'NVDA', 'KLAC', 'CRWD', 'contract_frozen=no', 'no-new-positive', 'max_hold_bars', 'ABC_CONT')) {
+        if (-not $bullishCandidateAuditContent.Contains($token)) {
+            Add-ValidationError "missing bullish ABC candidate-audit token '$token'"
         }
     }
 }
