@@ -189,6 +189,7 @@ class PaResearchBacktestTests(unittest.TestCase):
         self.assertEqual(result["ambiguous_intrabar"], "yes")
         self.assertEqual(result["trade_result"], "pending")
         self.assertEqual(result["win_rate_eligible"], "no")
+        self.assertEqual(result["first_obstacle_hit"], "unknown")
 
     def test_data_end_before_horizon_is_not_a_completed_trade(self):
         prices = make_prices(
@@ -202,6 +203,93 @@ class PaResearchBacktestTests(unittest.TestCase):
         result = run_contract(make_contract(max_hold_bars=10), prices)
         self.assertEqual(result["fill_status"], "filled")
         self.assertEqual(result["path_result"], "incomplete-horizon")
+        self.assertEqual(result["trade_result"], "pending")
+        self.assertEqual(result["win_rate_eligible"], "no")
+
+    def test_time_exit_respects_max_hold_bars(self):
+        prices = make_prices(
+            [
+                ("2026-01-01", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-02", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-03", 9.5, 10.5, 9.5, 10.2),
+                ("2026-01-04", 10.1, 10.3, 10.1, 10.2),
+                ("2026-01-05", 10.1, 10.3, 10.1, 10.2),
+                ("2026-01-06", 10.1, 10.3, 10.1, 10.2),
+                ("2026-01-07", 10.1, 10.3, 10.1, 10.2),
+            ]
+        )
+        result = run_contract(make_contract(max_hold_bars=3), prices)
+        self.assertEqual(result["entry_date"], "2026-01-03")
+        self.assertEqual(result["exit_date"], "2026-01-07")
+        self.assertEqual(result["exit_reason"], "time_exit")
+        # The contract holds three completed post-entry bars, then the
+        # non-market-close close order fills on the following bar's open.
+        self.assertEqual(result["bars_held"], 4)
+
+    def test_market_close_time_exit_uses_actual_trade_entry_bar(self):
+        prices = make_prices(
+            [
+                ("2026-01-01", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-02", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-03", 10.1, 10.3, 10.1, 10.2),
+                ("2026-01-04", 10.1, 10.3, 10.1, 10.2),
+                ("2026-01-05", 10.1, 10.3, 10.1, 10.2),
+            ]
+        )
+        contract = make_contract(
+            primary_pattern="other",
+            internal_label="none",
+            order_branch="market_close",
+            entry_trigger=None,
+            structural_stop=8.0,
+            first_obstacle=20.0,
+            target_price=20.0,
+            max_hold_bars=2,
+            gap_policy="not_applicable",
+            daily_ema20_slope="",
+            daily_ema50_slope="",
+            h_l_ema_slope_gate="not_applicable",
+            h_l_pullback_location="",
+        )
+        result = run_contract(contract, prices)
+        self.assertEqual(result["entry_date"], "2026-01-02")
+        self.assertEqual(result["exit_date"], "2026-01-04")
+        self.assertEqual(result["exit_reason"], "time_exit")
+        self.assertEqual(result["bars_held"], 2)
+        self.assertLessEqual(result["bars_held"], result["max_hold_bars"])
+
+    def test_time_exit_ignores_post_exit_bar_obstacle_and_ambiguity(self):
+        prices = make_prices(
+            [
+                ("2026-01-01", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-02", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-03", 9.5, 10.5, 9.5, 10.2),
+                ("2026-01-04", 10.0, 10.2, 9.8, 10.0),
+                ("2026-01-05", 10.0, 12.5, 8.5, 10.0),
+                ("2026-01-06", 10.0, 10.2, 9.8, 10.0),
+            ]
+        )
+        result = run_contract(make_contract(max_hold_bars=1), prices)
+        self.assertEqual(result["exit_reason"], "time_exit")
+        self.assertEqual(result["ambiguous_intrabar"], "no")
+        self.assertEqual(result["first_obstacle_hit"], "no")
+        self.assertEqual(result["trade_result"], "scratch")
+
+    def test_time_exit_requested_at_data_end_is_incomplete(self):
+        prices = make_prices(
+            [
+                ("2026-01-01", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-02", 9.0, 9.2, 8.8, 9.0),
+                ("2026-01-03", 9.5, 10.5, 9.5, 10.2),
+                ("2026-01-04", 10.1, 10.3, 10.1, 10.2),
+                ("2026-01-05", 10.1, 10.3, 10.1, 10.2),
+                ("2026-01-06", 10.1, 10.3, 10.1, 10.2),
+            ]
+        )
+        result = run_contract(make_contract(max_hold_bars=3), prices)
+        self.assertEqual(result["fill_status"], "filled")
+        self.assertEqual(result["path_result"], "incomplete-horizon")
+        self.assertEqual(result["exit_reason"], "data_end")
         self.assertEqual(result["trade_result"], "pending")
         self.assertEqual(result["win_rate_eligible"], "no")
 
@@ -424,6 +512,64 @@ class PaResearchBacktestTests(unittest.TestCase):
         summary = build_summary(results)
         self.assertEqual(summary["study_status"], "research_only / descriptive_only / not-validated")
         self.assertEqual(summary["win_rate_pct"], 50.0)
+
+    def test_summary_requires_explicit_eligibility_and_completed_evidence(self):
+        results = [
+            {
+                "primary_pattern": "ABC_CONT",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "BAD-FLAG",
+                "order_branch": "stop_confirmation",
+                "event_context": "none",
+                "fill_status": "filled",
+                "evidence_status": "comparable",
+                "path_result": "target-reached",
+                "trade_result": "win",
+                "win_rate_eligible": "no",
+                "realized_R": 1.0,
+                "ambiguous_intrabar": "no",
+            },
+            {
+                "primary_pattern": "ABC_CONT",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "BAD-PATH",
+                "order_branch": "stop_confirmation",
+                "event_context": "none",
+                "fill_status": "filled",
+                "evidence_status": "comparable",
+                "path_result": "incomplete-horizon",
+                "trade_result": "pending",
+                "win_rate_eligible": "yes",
+                "realized_R": 1.0,
+                "ambiguous_intrabar": "no",
+            },
+            {
+                "primary_pattern": "ABC_CONT",
+                "internal_label": "H1",
+                "direction": "long",
+                "lineage_id": "VALID-LOSS",
+                "order_branch": "stop_confirmation",
+                "event_context": "none",
+                "fill_status": "filled",
+                "evidence_status": "comparable",
+                "path_result": "invalidated",
+                "trade_result": "loss",
+                "win_rate_eligible": "yes",
+                "realized_R": -1.0,
+                "ambiguous_intrabar": "no",
+            },
+        ]
+        summary = build_summary(results)
+        self.assertEqual(summary["win_rate_eligible_count"], 2)
+        self.assertEqual(summary["win_rate_eligibility_mismatch_count"], 2)
+        self.assertEqual(summary["win_rate_guard_exclusion_count"], 1)
+        self.assertEqual(summary["completed_trade_count"], 1)
+        self.assertEqual(summary["win_rate_pct"], 0.0)
+        self.assertEqual(summary["outcome_bucket_counts"]["completed_win_loss_scratch"], 1)
+        self.assertEqual(summary["outcome_bucket_counts"]["incomplete_horizon"], 1)
+        self.assertEqual(summary["outcome_bucket_counts"]["eligibility_flag_mismatch"], 1)
 
     def test_load_prices_normalizes_and_validates(self):
         frame = load_prices(

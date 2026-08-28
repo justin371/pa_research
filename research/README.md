@@ -19,6 +19,7 @@
 - [`多头 ABC/H1/H2 候选合同审计（2026-08-28）`](backtesting/abc_bullish_candidate_contract_audit_2026-08-28_CN.md)：逐字段复核 V、NVDA、KLAC、CRWD；当前没有可冻结的新多头合同，不增加回放分母；
 - [`跨 Pattern 统计隔离审计（2026-08-29）`](backtesting/cross_pattern_statistics_isolation_audit_2026-08-29_CN.md)：检查 ABC/BOP、H/L、三推的标签、订单分支和 lineage 依赖；当前没有冻结 ABC/BOP 或 H3/L3 合同，保持 `no-new-positive`；
 - [`事件与首障碍空间资格审计（2026-08-29）`](backtesting/event_space_eligibility_audit_2026-08-29_CN.md)：隔离事件未核实、财报邻近、空间边界和旧合同未知空间，避免把它们读成普通非事件证据；
+- [`回放结果分母与 horizon 审计（2026-08-29）`](backtesting/replay_outcome_denominator_audit_2026-08-29_CN.md)：检查胜率旗标、完成 horizon、opening-skip、intrabar 歧义、首障碍过程字段和 `realized_R` 的结果隔离；旧产物的 time-exit 偏差不增加验证分母；
 - [`BOP 合同准入审计（2026-08-28）`](backtesting/bop_contract_intake_audit_2026-08-28_CN.md)：逐案隔离接受、同日回测、缺口重订和相邻 H/L/ABC 案例；当前没有日线级多日 BOP 正向候选；
 - [`PA 图表视觉识别冒烟验收`](visual_recognition_smoke_test_2026-08-24_CN.md)：图表识别能力、两年背景和当前 acceptance-pending 状态。
 
@@ -32,7 +33,7 @@
 - [`H/L 首批人工看图合同资产`](assets/visual_recognition/2026-08-26/hl_contract_batch/README.md)：本批五张两年 Daily 图及来源、时区和历史数据边界。
 - [`H/L 大样本人工合同冻结记录`](backtesting/hl_large_selection_2026-08-27_CN.md)：COHR、RBLX、MAR 三标的、37 条人工冻结 H1/H2/L1/L2 合同和用户修正后的 60% 待检验目标。
 - [`H/L 大样本回测人工看图资产`](assets/visual_recognition/2026-08-27/hl_large_backtest/README.md)：23 张 Matplotlib 两年 Daily 背景/局部序列图；无 pattern 标签和结果标记。
-- [`H/L 大样本回放审计`](backtesting/hl_large_replay_2026-08-27_CN.md)：37 条冻结合同的描述性回放、60% 目标检验、严格 `>=1R` 空间子集和 `no-new-positive` 结论。
+- [`H/L 大样本回放审计`](backtesting/hl_large_replay_2026-08-27_CN.md)：37 条冻结合同的描述性回放、60% 目标检验、严格 `>=1R` 空间子集和 `no-new-positive` 结论；旧产物的 time-exit 索引口径见 2026-08-29 分母审计。
 - [`H/L 下一批人工合同冻结记录`](backtesting/hl_next_selection_2026-08-27_CN.md)：ZS、DDOG 两个中等至大型市值标的的 5 条 H1/L1 人工冻结合同；包含两年 Daily 背景、EMA20/50 闸门、重要高低点、事件隔离和首障碍空间。
 - [`H/L 下一批分层回放审计`](backtesting/hl_next_replay_2026-08-27_CN.md)：3 条普通非事件与 2 条事件驱动合同的独立回放；2 条完成成交为 1 胜 1 负，60% 目标仍未验证，结论保持 `no-new-positive`。
 - [`H/L 下一批（二）人工合同冻结记录`](backtesting/hl_next2_selection_2026-08-27_CN.md)：TOL、VEEV 两条普通非事件 H1 合同、两年 Daily 视觉背景、EMA20/50 闸门、事件隔离、首障碍空间和 H2/L2 边界排除记录。
@@ -41,9 +42,9 @@
 - [`H/L 下一批（三）人工候选边界审计`](backtesting/hl_next3_selection_2026-08-27_CN.md)：18 个候选的两年 Daily、重要高低点、支撑阻力、EMA20/50/200、事件、lineage、B 质量和空间复核；新合格交易合同为 0。
 - [`H/L 下一批（三）回放状态审计`](backtesting/hl_next3_replay_2026-08-27_CN.md)：无合格合同，不创建占位回放分母；胜率不可计算，60% 继续待检验，结论保持 `no-new-positive`。
 - [`H/L 下一批（四）人工合同冻结记录`](backtesting/hl_next4_selection_2026-08-27_CN.md)：24 个新市值约 `$3B–$100B` 美国普通股的两年 Daily 人工复核；仅 CBOE、ROST 的 2 条 `long / H1` 通过全部 strong-A、controlled-B、EMA、事件、lineage 和 `>=1R` 闸门。
-- [`H/L 下一批（四）分层回放审计`](backtesting/hl_next4_replay_2026-08-27_CN.md)：2 条合同均成交但均未到达第一障碍，0 胜 2 负、`-1.5090R`；95% Wilson 区间约 `0.00%–65.76%`，60% 目标未验证，结论保持 `no-new-positive`。
+- [`H/L 下一批（四）分层回放审计`](backtesting/hl_next4_replay_2026-08-27_CN.md)：2 条合同均成交但均未到达第一障碍，0 胜 2 负、`-1.5090R`；95% Wilson 区间约 `0.00%–65.76%`，60% 目标未验证，结论保持 `no-new-positive`；time-exit 的完整观察窗口与执行索引已在后续审计中明确。
 - [`H/L 下一批（五）人工合同冻结记录`](backtesting/hl_next5_selection_2026-08-27_CN.md)：12 只新市值约 `$3B–$100B` 美国普通股的两年 Daily 人工复核；仅冻结 MCHP、NDAQ 的 6 条 `short / L1` 合同，没有合格的新 H2 或 L2 正例。
-- [`H/L 下一批（五）分层回放审计`](backtesting/hl_next5_replay_2026-08-27_CN.md)：6 条人工合同中 5 条成交并完成，3 胜 2 负、合并描述性 `60.00%`、`+3.4812R`；普通、财报邻近和财报驱动分层不混算，60% 目标未验证，结论保持 `no-new-positive`。
+- [`H/L 下一批（五）分层回放审计`](backtesting/hl_next5_replay_2026-08-27_CN.md)：6 条人工合同中 5 条成交并完成，3 胜 2 负、合并描述性 `60.00%`、`+3.4812R`；普通、财报邻近和财报驱动分层不混算，60% 目标未验证，结论保持 `no-new-positive`；time-exit 的完整观察窗口与执行索引已在后续审计中明确。
 
 ## 优先研究矩阵与专项框架
 

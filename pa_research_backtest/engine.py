@@ -23,7 +23,7 @@ import pandas as pd
 from backtesting import Backtest, Strategy
 
 
-ENGINE_VERSION = "0.3.2"
+ENGINE_VERSION = "0.3.3"
 SUPPORTED_DIRECTIONS = {"long", "short"}
 SUPPORTED_PATTERNS = {"ABC_CONT", "BOP", "H1_L1", "H2_L2", "H3_L3", "RFB", "MTR", "other"}
 SUPPORTED_LABELS = {"H1", "H2", "L1", "L2", "H3", "L3", "none", "pending"}
@@ -803,6 +803,7 @@ def run_contract(
             self._order_submitted = False
             self._entry_bar: int | None = None
             self._time_exit_submitted = False
+            self._time_exit_request_bar: int | None = None
 
         def next(self) -> None:
             current_date = _normalise_date_index(self.data.index[-1])
@@ -828,19 +829,26 @@ def run_contract(
 
             if self.position:
                 if self._entry_bar is None:
-                    self._entry_bar = current_bar
-                    for trade in list(self.trades):
+                    active_trades = list(self.trades)
+                    if not active_trades:
+                        return
+                    # Use backtesting.py's actual entry bar.  With
+                    # trade_on_close=True a market-close order becomes visible
+                    # one strategy iteration after the trade's entry bar.
+                    self._entry_bar = min(int(trade.entry_bar) for trade in active_trades)
+                    for trade in active_trades:
                         # Attach exits only after the entry bar has completed.
                         # This avoids backtesting.py's documented ambiguity when
                         # a contingent SL/TP is hit in the parent entry candle.
                         trade.sl = contract.structural_stop
                         trade.tp = contract.target_price
-                elif (
+                if (
                     not self._time_exit_submitted
                     and current_bar - self._entry_bar >= contract.max_hold_bars
                 ):
                     self.position.close()
                     self._time_exit_submitted = True
+                    self._time_exit_request_bar = current_bar
 
     trade_on_close = contract.order_branch == "market_close"
     with warnings.catch_warnings(record=True) as captured_warnings:
@@ -875,38 +883,67 @@ def run_contract(
     risk_per_unit = abs(entry_price - contract.structural_stop)
     if risk_per_unit <= 0:
         raise ContractValidationError(f"{contract.sample_id}: realized risk is zero")
+    strategy_state = stats["_strategy"]
+    time_exit_submitted = bool(getattr(strategy_state, "_time_exit_submitted", False))
+    time_exit_request_bar = getattr(strategy_state, "_time_exit_request_bar", None)
+    expected_time_exit_bar = None
+    if time_exit_submitted and time_exit_request_bar is not None:
+        # backtesting.py market orders fill on the next open, except that
+        # trade_on_close=True assigns a market-close order to the current bar.
+        expected_time_exit_bar = (
+            time_exit_request_bar
+            if contract.order_branch == "market_close"
+            else time_exit_request_bar + 1
+        )
+    time_exit_executed = (
+        time_exit_submitted
+        and expected_time_exit_bar is not None
+        and exit_bar == expected_time_exit_bar
+    )
+    protective_exit_reason = _classify_protective_exit(contract, exit_price)
+    # A non-market-close time-exit close order fills at the opening of
+    # exit_bar.  Price action later in that bar occurred after the position
+    # was closed and must not manufacture an ambiguous path or a first-
+    # obstacle hit.  A market-close time exit is indexed to the closing bar,
+    # so that bar remains part of the held path.  The same conservative
+    # boundary applies to backtesting.py's forced final close when the
+    # horizon is incomplete.
+    time_exit_path_end_bar = (
+        exit_bar
+        if contract.order_branch == "market_close" and time_exit_executed
+        else max(entry_bar, exit_bar - 1)
+    )
+    path_end_bar = (
+        time_exit_path_end_bar
+        if time_exit_executed
+        else max(entry_bar, exit_bar - 1)
+        if protective_exit_reason == "data_end"
+        else exit_bar
+    )
     ambiguous_date = _find_ambiguous_bar(
         symbol_prices,
         contract.direction,
         contract.structural_stop,
         contract.target_price,
         entry_bar,
-        exit_bar,
+        path_end_bar,
     )
     obstacle_hit = _first_obstacle_hit(
         symbol_prices,
         contract.direction,
         contract.first_obstacle,
         entry_bar,
-        exit_bar,
+        path_end_bar,
     )
-    strategy_state = stats["_strategy"]
     if ambiguous_date is not None:
         exit_reason = "ambiguous_intrabar_stop_target"
         trade_result = "pending"
         path_result = "ambiguous"
         realized_r: float | None = None
         evidence_status = "excluded_ambiguous"
-    elif getattr(strategy_state, "_time_exit_submitted", False):
-        if math.isclose(exit_price, contract.target_price, rel_tol=1e-9, abs_tol=1e-9):
-            exit_reason = "target"
-        elif math.isclose(exit_price, contract.structural_stop, rel_tol=1e-9, abs_tol=1e-9):
-            exit_reason = "stop"
-        else:
-            exit_reason = "time_exit"
-        path_result = "target-reached" if exit_reason == "target" else (
-            "invalidated" if exit_reason == "stop" else "time_exit"
-        )
+    elif time_exit_executed:
+        exit_reason = "time_exit"
+        path_result = "time_exit"
         net_pnl = float(trade["PnL"])
         realized_r = net_pnl / risk_per_unit
         tolerance = 1e-12
@@ -917,8 +954,17 @@ def run_contract(
         else:
             trade_result = "scratch"
         evidence_status = "comparable"
+    elif time_exit_submitted:
+        # A close request made on the final available bar is executed only by
+        # backtesting.py's synthetic finalization, not at the expected next
+        # market time.  It is an incomplete horizon, not a completed time exit.
+        exit_reason = "data_end"
+        path_result = "incomplete-horizon"
+        trade_result = "pending"
+        realized_r = None
+        evidence_status = "excluded_incomplete_horizon"
     else:
-        exit_reason = _classify_protective_exit(contract, exit_price)
+        exit_reason = protective_exit_reason
         if exit_reason == "data_end":
             path_result = "incomplete-horizon"
             trade_result = "pending"
@@ -968,7 +1014,17 @@ def run_contract(
             "win_rate_eligible": "yes" if trade_result in TRADE_RESULTS else "no",
             "ambiguous_intrabar": "yes" if ambiguous_date is not None else "no",
             "ambiguous_bar": ambiguous_date.strftime("%Y-%m-%d") if ambiguous_date is not None else None,
-            "first_obstacle_hit": "yes" if obstacle_hit else "no",
+            # If the stop/target sequence is ambiguous, an obstacle reached
+            # only on that unresolved path cannot be claimed as reached while
+            # the position was still open.  Keep it out of the win/loss logic
+            # and expose the uncertainty in the process field.
+            "first_obstacle_hit": (
+                "unknown"
+                if ambiguous_date is not None and obstacle_hit
+                else "yes"
+                if obstacle_hit
+                else "no"
+            ),
             "space_to_first_obstacle_R": space_r,
             "space_gate": _space_gate(space_r),
             "risk_per_unit": risk_per_unit,
@@ -1007,8 +1063,97 @@ def _safe_median(values: pd.Series) -> float | None:
     return float(values.median()) if not values.empty else None
 
 
+def _prepare_result_frame(frame: pd.DataFrame) -> pd.DataFrame:
+    """Normalize result fields before any denominator or group calculation."""
+
+    if "trade_result" not in frame:
+        frame["trade_result"] = ""
+    frame["trade_result"] = frame["trade_result"].fillna("").astype(str).str.strip().str.lower()
+    result_labels = frame["trade_result"].isin(TRADE_RESULTS)
+
+    if "win_rate_eligible" not in frame:
+        frame["win_rate_eligible"] = np.where(result_labels, "yes", "no")
+    frame["win_rate_eligible"] = (
+        frame["win_rate_eligible"].fillna("").astype(str).str.strip().str.lower()
+    )
+    eligible_flags = frame["win_rate_eligible"].eq("yes")
+
+    if "evidence_status" not in frame:
+        frame["evidence_status"] = np.where(
+            result_labels & eligible_flags,
+            "comparable",
+            "excluded",
+        )
+    frame["evidence_status"] = frame["evidence_status"].fillna("").astype(str).str.strip().str.lower()
+    if "fill_status" not in frame:
+        frame["fill_status"] = np.where(
+            result_labels & eligible_flags,
+            "filled",
+            "unknown",
+        )
+    frame["fill_status"] = frame["fill_status"].fillna("").astype(str).str.strip().str.lower()
+    if "ambiguous_intrabar" not in frame:
+        frame["ambiguous_intrabar"] = "no"
+    frame["ambiguous_intrabar"] = (
+        frame["ambiguous_intrabar"].fillna("no").astype(str).str.strip().str.lower()
+    )
+    if "path_result" not in frame:
+        frame["path_result"] = ""
+    frame["path_result"] = frame["path_result"].fillna("").astype(str).str.strip().str.lower()
+    if "realized_R" not in frame:
+        frame["realized_R"] = None
+    return frame
+
+
+def _completed_trade_mask(frame: pd.DataFrame) -> pd.Series:
+    """Return the strict, auditable win-rate denominator mask."""
+
+    realized_r = pd.to_numeric(frame["realized_R"], errors="coerce")
+    return (
+        frame["trade_result"].isin(TRADE_RESULTS)
+        & frame["win_rate_eligible"].eq("yes")
+        & frame["evidence_status"].eq("comparable")
+        & frame["fill_status"].eq("filled")
+        & frame["ambiguous_intrabar"].ne("yes")
+        & frame["path_result"].ne("ambiguous")
+        & frame["path_result"].ne("incomplete-horizon")
+        & realized_r.notna()
+        & np.isfinite(realized_r)
+    )
+
+
+def _outcome_bucket_series(frame: pd.DataFrame, completed: pd.Series) -> pd.Series:
+    """Give every row one mutually exclusive outcome/exclusion bucket."""
+
+    buckets = pd.Series("other_excluded", index=frame.index, dtype="object")
+    buckets.loc[completed] = "completed_win_loss_scratch"
+    flag_mismatch = (~completed) & (
+        frame["trade_result"].isin(TRADE_RESULTS) != frame["win_rate_eligible"].eq("yes")
+    )
+    buckets.loc[flag_mismatch] = "eligibility_flag_mismatch"
+    guard_excluded = (~completed) & frame["win_rate_eligible"].eq("yes")
+    buckets.loc[guard_excluded] = "eligibility_guard_excluded"
+    ambiguous = (~completed) & (
+        frame["ambiguous_intrabar"].eq("yes") | frame["path_result"].eq("ambiguous")
+    )
+    buckets.loc[ambiguous] = "ambiguous_intrabar"
+    incomplete = (~completed) & frame["path_result"].eq("incomplete-horizon")
+    buckets.loc[incomplete] = "incomplete_horizon"
+    opening_skip = (~completed) & frame["fill_status"].eq("opening-skip")
+    buckets.loc[opening_skip] = "opening_skip"
+    no_fill = (~completed) & frame["fill_status"].eq("no-fill")
+    buckets.loc[no_fill] = "no_fill"
+    unproven = (~completed) & frame["fill_status"].eq("unproven")
+    buckets.loc[unproven] = "unproven"
+    observation_only = (~completed) & (
+        frame["fill_status"].eq("not-traded") | frame["evidence_status"].eq("observation_only")
+    )
+    buckets.loc[observation_only] = "observation_only"
+    return buckets
+
+
 def _aggregate_group(group: pd.DataFrame) -> dict[str, Any]:
-    completed = group[group["trade_result"].isin(TRADE_RESULTS)]
+    completed = group[_completed_trade_mask(group)]
     r_values = pd.to_numeric(completed["realized_R"], errors="coerce").dropna()
     wins = int((completed["trade_result"] == "win").sum())
     losses = int((completed["trade_result"] == "loss").sum())
@@ -1040,6 +1185,13 @@ def _aggregate_group(group: pd.DataFrame) -> dict[str, Any]:
         "event_context_values": event_context_values,
         "sample_count": int(len(group)),
         "filled_count": int((group["fill_status"] == "filled").sum()),
+        "win_rate_eligible_count": int((group["win_rate_eligible"] == "yes").sum()),
+        "win_rate_eligibility_mismatch_count": int(
+            (group["trade_result"].isin(TRADE_RESULTS) != group["win_rate_eligible"].eq("yes")).sum()
+        ),
+        "win_rate_guard_exclusion_count": int(
+            ((group["win_rate_eligible"] == "yes") & ~_completed_trade_mask(group)).sum()
+        ),
         "completed_trade_count": int(len(completed)),
         "wins": wins,
         "losses": losses,
@@ -1069,13 +1221,18 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             "observation_only_count": 0,
             "pending_contract_count": 0,
             "completed_trade_count": 0,
+            "win_rate_eligible_count": 0,
+            "win_rate_eligibility_mismatch_count": 0,
+            "win_rate_guard_exclusion_count": 0,
             "event_bucket_contract_counts": {},
             "contract_space_bucket_counts": {},
+            "outcome_bucket_counts": {},
             "ordinary_non_event_completed_trade_count": 0,
             "ordinary_non_event_win_rate_pct": None,
             "ordinary_non_event_strict_space_completed_trade_count": 0,
             "ordinary_non_event_strict_space_win_rate_pct": None,
             "ordinary_non_event_strict_space_statistics_status": "not-computable_no-results",
+            "ambiguous_count": 0,
             "unique_lineage_count": 0,
             "missing_lineage_count": 0,
             "shared_lineage_group_count": 0,
@@ -1086,9 +1243,14 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             "independence_statistics_status": "not-computable_no-results",
             "win_rate_pct": None,
             "realized_R_distribution": None,
+            "limitations": [
+                "no results; win rate is not computable",
+                "empty summary is descriptive only and does not create a denominator",
+            ],
             "groups": [],
         }
 
+    frame = _prepare_result_frame(frame)
     stratification_columns = [
         "lineage_id",
         "daily_ema20_slope",
@@ -1128,7 +1290,8 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
             )
         ]
 
-    completed = frame[frame["trade_result"].isin(TRADE_RESULTS)]
+    completed_mask = _completed_trade_mask(frame)
+    completed = frame[completed_mask]
     r_values = pd.to_numeric(completed["realized_R"], errors="coerce").dropna()
     wins = int((completed["trade_result"] == "win").sum())
     lineage_values = frame["lineage_id"].fillna("").astype(str).str.strip()
@@ -1165,10 +1328,10 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
     contract_space_bucket_counts = {
         str(key): int(value) for key, value in frame["contract_space_bucket"].value_counts(dropna=False).items()
     }
-    ordinary_rows = frame[frame["event_bucket"] == "ordinary_non_event"]
-    ordinary_completed = ordinary_rows[ordinary_rows["trade_result"].isin(TRADE_RESULTS)]
-    ordinary_strict_rows = ordinary_rows[ordinary_rows["contract_space_bucket"] == "strict_ge_1R"]
-    ordinary_strict_completed = ordinary_strict_rows[ordinary_strict_rows["trade_result"].isin(TRADE_RESULTS)]
+    ordinary_rows_mask = frame["event_bucket"].eq("ordinary_non_event")
+    ordinary_completed = frame[ordinary_rows_mask & completed_mask]
+    ordinary_strict_rows_mask = ordinary_rows_mask & frame["contract_space_bucket"].eq("strict_ge_1R")
+    ordinary_strict_completed = frame[ordinary_strict_rows_mask & completed_mask]
     ordinary_wins = int((ordinary_completed["trade_result"] == "win").sum())
     ordinary_strict_wins = int((ordinary_strict_completed["trade_result"] == "win").sum())
     ordinary_strict_status = (
@@ -1184,8 +1347,19 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         "observation_only_count": int((frame["contract_eligibility"] == "observation_only").sum()),
         "pending_contract_count": int((frame["contract_eligibility"] == "pending").sum()),
         "completed_trade_count": int(len(completed)),
+        "win_rate_eligible_count": int((frame["win_rate_eligible"] == "yes").sum()),
+        "win_rate_eligibility_mismatch_count": int(
+            (frame["trade_result"].isin(TRADE_RESULTS) != frame["win_rate_eligible"].eq("yes")).sum()
+        ),
+        "win_rate_guard_exclusion_count": int(
+            ((frame["win_rate_eligible"] == "yes") & ~completed_mask).sum()
+        ),
         "event_bucket_contract_counts": event_bucket_contract_counts,
         "contract_space_bucket_counts": contract_space_bucket_counts,
+        "outcome_bucket_counts": {
+            str(key): int(value)
+            for key, value in _outcome_bucket_series(frame, completed_mask).value_counts(dropna=False).items()
+        },
         "ordinary_non_event_completed_trade_count": int(len(ordinary_completed)),
         "ordinary_non_event_win_rate_pct": (
             float(ordinary_wins / len(ordinary_completed) * 100) if len(ordinary_completed) else None
@@ -1217,6 +1391,7 @@ def build_summary(results: list[dict[str, Any]]) -> dict[str, Any]:
         "limitations": [
             "manual_chart_review labels only; no pattern recognition or symbol discovery",
             "results are descriptive and do not establish a validated win rate",
+            "the win-rate denominator requires win_rate_eligible=yes, filled, comparable evidence, no ambiguity or incomplete horizon, a win/loss/scratch result, and finite realized_R",
             "same-bar stop/target ambiguity is excluded from the win-rate denominator",
             "each contract must be frozen before its outcome and must carry >=2y Daily context evidence",
             "lineage_id is preserved for dependence control; contracts sharing a lineage are not independent samples",

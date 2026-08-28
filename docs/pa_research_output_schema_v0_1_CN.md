@@ -1,6 +1,6 @@
 # PA Research 统一输出合同 v0.1
 
-日期：2026-08-25；合同修订：2026-08-26；批次证据字段修订：2026-08-28
+日期：2026-08-25；合同修订：2026-08-26；批次证据字段修订：2026-08-28；回放结果口径修订：2026-08-29
 文档状态：`adopted / research-only / not-quantitative`
 
 ## 目的与适用范围
@@ -153,6 +153,26 @@ main_uncertainty_or_exclusion:
 ```
 
 `order_branch` 只表达基础订单合同；`branch_role` 记录反向 stop、角色转换回测、跳空重订等研究分支。历史文件中的 `stop`、`limit-retest`、`market-close`、`reverse-stop` 和 `limit-edge` 是别名，更新新记录时必须映射到上述字段，不能继续作为同一字段的混合枚举。
+
+### 回放结果和胜率分母
+
+冻结合同回放的结果字段至少应保留：
+
+```text
+fill_status: filled / no-fill / opening-skip / unproven / not-traded
+evidence_status: comparable / excluded / excluded_incomplete_horizon / excluded_ambiguous / observation_only
+win_rate_eligible: yes / no
+trade_result: win / loss / scratch / pending / not-applicable
+path_result: target-reached / invalidated / first-obstacle-reached / time_exit / incomplete-horizon / ambiguous / ...
+ambiguous_intrabar: yes / no
+first_obstacle_hit: yes / no / unknown
+realized_R:
+bars_held:
+```
+
+`first_obstacle_hit` 是路径过程字段，不是胜负标签；触及首障碍不能自动写成 `win`。若首障碍只出现在未解决的 stop/target 歧义路径上，应写 `unknown`。`realized_R` 只有在成交、路径完成、无未解决歧义且 `win_rate_eligible=yes` 时才可进入可比结果。`opening-skip`、`no-fill`、`observation_only`、`incomplete-horizon`、`ambiguous_intrabar` 和 `pending` 不进入胜率分母。`max_hold_bars` 表示实际交易 `entry_bar` 之后允许观察的完整 K 线数；非 `market_close` 的时间退出在观察窗口结束后的下一根 K 线开盘成交，因此 `bars_held` 这个 backtesting.py 的 entry/exit bar 索引距离可能比 `max_hold_bars` 多 1，不能把该执行索引差异误读成额外的自由持仓。`market_close` 按收盘时间索引计数；如果数据末尾没有可执行的时间退出价格，则必须标为 `incomplete-horizon`。
+
+`summary.json` 的 `completed_trade_count` 只统计同时满足 `win_rate_eligible=yes`、`trade_result=win/loss/scratch`、`evidence_status=comparable`、`fill_status=filled`、无歧义/未完成 horizon 且有有限 `realized_R` 的行。`win_rate_eligible_count` 是结果旗标数量，不应在旗标与结果不一致时直接当作分母；`win_rate_eligibility_mismatch_count`、`win_rate_guard_exclusion_count` 和互斥的 `outcome_bucket_counts` 必须保留用于审计。
 
 ## 五、状态轴与交接轴
 
