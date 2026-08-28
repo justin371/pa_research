@@ -866,6 +866,20 @@ class PaResearchBacktestTests(unittest.TestCase):
         self.assertEqual(contract.primary_pattern, "other")
         self.assertEqual(contract.internal_label, "none")
 
+    def test_strict_space_status_requires_numeric_evidence(self):
+        with self.assertRaisesRegex(ContractValidationError, "requires pre_entry_space_R"):
+            run_contract(
+                make_contract(space_status="strict_ge_1R", pre_entry_space_R=None),
+                make_prices([]),
+            )
+
+    def test_blocked_space_status_requires_numeric_evidence(self):
+        with self.assertRaisesRegex(ContractValidationError, "requires pre_entry_space_R"):
+            run_contract(
+                make_contract(space_status="blocked", pre_entry_space_R=None),
+                make_prices([]),
+            )
+
     def test_contract_loader_rejects_duplicate_contract_family(self):
         csv = StringIO(
             "sample_id,symbol,decision_date,direction,primary_pattern,internal_label,order_branch,"

@@ -76,6 +76,7 @@ $requiredFiles = @(
     'research/backtesting/replay_outcome_denominator_audit_2026-08-29_CN.md',
     'research/backtesting/replay_lineage_independence_audit_2026-08-29_CN.md',
     'research/backtesting/replay_provenance_reproducibility_audit_2026-08-29_CN.md',
+    'research/backtesting/frozen_contract_field_partition_audit_2026-08-29_CN.md',
     'research/backtesting/bop_contract_intake_2026-08-28.csv',
     'research/backtesting/bop_contract_intake_audit_2026-08-28_CN.md',
     'strategy/README.md'
@@ -302,11 +303,27 @@ if (Test-Path -LiteralPath $replayProvenanceAuditPath -PathType Leaf) {
     }
 }
 
+$frozenContractFieldAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/frozen_contract_field_partition_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $frozenContractFieldAuditPath -PathType Leaf) {
+    $frozenContractFieldAuditContent = Get-Content -LiteralPath $frozenContractFieldAuditPath -Raw
+    foreach ($token in @('hl_contracts_2026-08-26.csv', 'contract_state', 'space_status', 'strict_ge_1R', 'observation-only', 'ABC_CONT', 'BOP', 'no-new-positive', 'validated win-rate: not-computable')) {
+        if (-not $frozenContractFieldAuditContent.Contains($token)) {
+            Add-ValidationError "missing frozen-contract-field-audit token '$token'"
+        }
+    }
+}
+
 $frozenContractFiles = @(Get-ChildItem -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'research/backtesting') -File -Filter '*contracts*.csv' | Where-Object {
     $_.Name -ne 'contracts.example.csv'
 })
 $frozenContractRecords = [System.Collections.Generic.List[object]]::new()
 $allowedSpaceStatuses = @('strict_ge_1R', 'borderline_ge_1R', 'clearly_positive', 'borderline', 'blocked', 'unknown')
+$allowedDirections = @('long', 'short')
+$allowedPatterns = @('ABC_CONT', 'BOP', 'H1_L1', 'H2_L2', 'H3_L3', 'RFB', 'MTR', 'other')
+$allowedLabels = @('H1', 'H2', 'L1', 'L2', 'H3', 'L3', 'none', 'pending')
+$allowedEmaSlopes = @('up', 'flat', 'down', 'unknown')
+$allowedEmaGates = @('long_pass', 'short_pass', 'fail_flat_or_opposite', 'pending', 'not_applicable')
+$allowedContractStates = @('', 'frozen_pre_outcome')
 foreach ($file in $frozenContractFiles) {
     $rows = @(Import-Csv -LiteralPath $file.FullName)
     if ($rows.Count -eq 0) {
@@ -320,63 +337,145 @@ foreach ($file in $frozenContractFiles) {
         }
     }
     foreach ($row in $rows) {
-        if ($row.contract_frozen -ne 'yes') {
-            Add-ValidationError "non-frozen row in frozen contract CSV: $($file.Name) / $($row.sample_id)"
+        $sampleId = ([string]$row.sample_id).Trim()
+        $symbol = ([string]$row.symbol).Trim()
+        $decisionDate = ([string]$row.decision_date).Trim()
+        $direction = ([string]$row.direction).Trim().ToLowerInvariant()
+        $primaryPattern = ([string]$row.primary_pattern).Trim().ToUpperInvariant()
+        if ($primaryPattern -eq 'OTHER') {
+            $primaryPattern = 'other'
         }
-        if ([string]::IsNullOrWhiteSpace($row.lineage_id)) {
-            Add-ValidationError "frozen contract row missing lineage_id: $($file.Name) / $($row.sample_id)"
+        $internalLabel = ([string]$row.internal_label).Trim()
+        $lineageId = ([string]$row.lineage_id).Trim()
+        $spaceStatus = ([string]$row.space_status).Trim()
+        $spaceStatusLower = $spaceStatus.ToLowerInvariant()
+        $ema20Slope = ([string]$row.daily_ema20_slope).Trim().ToLowerInvariant()
+        $ema50Slope = ([string]$row.daily_ema50_slope).Trim().ToLowerInvariant()
+        $emaGate = ([string]$row.h_l_ema_slope_gate).Trim().ToLowerInvariant()
+        $contractState = ([string]$row.contract_state).Trim().ToLowerInvariant()
+
+        if (([string]$row.contract_frozen).Trim().ToLowerInvariant() -ne 'yes') {
+            Add-ValidationError "non-frozen row in frozen contract CSV: $($file.Name) / $sampleId"
+        }
+        if ([string]::IsNullOrWhiteSpace($sampleId) -or [string]::IsNullOrWhiteSpace($symbol) -or [string]::IsNullOrWhiteSpace($decisionDate)) {
+            Add-ValidationError "frozen contract row missing identity field: $($file.Name) / $sampleId"
+        }
+        if ($direction -notin $allowedDirections) {
+            Add-ValidationError "frozen contract row has invalid direction: $($file.Name) / $sampleId"
+        }
+        if ($primaryPattern -notin $allowedPatterns) {
+            Add-ValidationError "frozen contract row has invalid primary_pattern: $($file.Name) / $sampleId"
+        }
+        if ($internalLabel -notin $allowedLabels) {
+            Add-ValidationError "frozen contract row has invalid internal_label: $($file.Name) / $sampleId"
+        }
+        if ([string]::IsNullOrWhiteSpace($lineageId)) {
+            Add-ValidationError "frozen contract row missing lineage_id: $($file.Name) / $sampleId"
         }
         if ([string]::IsNullOrWhiteSpace($row.event_context)) {
-            Add-ValidationError "frozen contract row missing event_context: $($file.Name) / $($row.sample_id)"
+            Add-ValidationError "frozen contract row missing event_context: $($file.Name) / $sampleId"
         }
-        if (-not [string]::IsNullOrWhiteSpace($row.space_status) -and $row.space_status -notin $allowedSpaceStatuses) {
-            Add-ValidationError "frozen contract row has invalid space_status: $($file.Name) / $($row.sample_id)"
+        if ($spaceStatus -and $spaceStatusLower -notin @($allowedSpaceStatuses | ForEach-Object { $_.ToLowerInvariant() })) {
+            Add-ValidationError "frozen contract row has invalid space_status: $($file.Name) / $sampleId"
         }
-        if ($row.space_status -in @('strict_ge_1R', 'clearly_positive') -and -not [string]::IsNullOrWhiteSpace($row.pre_entry_space_R)) {
-            $spaceValue = 0.0
-            if (-not [double]::TryParse([string]$row.pre_entry_space_R, [ref]$spaceValue)) {
-                Add-ValidationError "frozen contract row has non-numeric pre_entry_space_R: $($file.Name) / $($row.sample_id)"
-            } elseif ($spaceValue -lt 1) {
-                Add-ValidationError "strict space_status is below 1R: $($file.Name) / $($row.sample_id)"
+        if ($contractState -notin $allowedContractStates) {
+            Add-ValidationError "frozen contract row has invalid contract_state: $($file.Name) / $sampleId"
+        }
+        $spaceValue = 0.0
+        $hasSpaceValue = -not [string]::IsNullOrWhiteSpace($row.pre_entry_space_R)
+        if ($hasSpaceValue -and -not [double]::TryParse([string]$row.pre_entry_space_R, [ref]$spaceValue)) {
+            Add-ValidationError "frozen contract row has non-numeric pre_entry_space_R: $($file.Name) / $sampleId"
+            $hasSpaceValue = $false
+        }
+        if ($spaceStatusLower -in @('strict_ge_1r', 'clearly_positive', 'blocked') -and -not $hasSpaceValue) {
+            Add-ValidationError "explicit space_status requires pre_entry_space_R: $($file.Name) / $sampleId"
+        }
+        if ($spaceStatusLower -in @('strict_ge_1r', 'clearly_positive') -and $hasSpaceValue) {
+            if ($spaceValue -lt 1) {
+                Add-ValidationError "strict space_status is below 1R: $($file.Name) / $sampleId"
             }
+        }
+        if ($spaceStatusLower -eq 'blocked' -and $hasSpaceValue -and $spaceValue -gt 0) {
+            Add-ValidationError "blocked space_status is above 0R: $($file.Name) / $sampleId"
+        }
+
+        if ($internalLabel -in @('H1', 'H2') -and $direction -ne 'long') {
+            Add-ValidationError "H1/H2 direction mismatch: $($file.Name) / $sampleId"
+        }
+        if ($internalLabel -in @('L1', 'L2') -and $direction -ne 'short') {
+            Add-ValidationError "L1/L2 direction mismatch: $($file.Name) / $sampleId"
+        }
+        if ($internalLabel -eq 'H3' -and ($direction -ne 'long' -or $primaryPattern -ne 'H3_L3')) {
+            Add-ValidationError "H3 requires long direction and H3_L3 pattern: $($file.Name) / $sampleId"
+        }
+        if ($internalLabel -eq 'L3' -and ($direction -ne 'short' -or $primaryPattern -ne 'H3_L3')) {
+            Add-ValidationError "L3 requires short direction and H3_L3 pattern: $($file.Name) / $sampleId"
+        }
+        if ($internalLabel -in @('H3', 'L3') -and $emaGate -ne 'not_applicable') {
+            Add-ValidationError "H3/L3 requires EMA gate not_applicable: $($file.Name) / $sampleId"
+        }
+        if ($internalLabel -in @('H1', 'H2', 'L1', 'L2')) {
+            if ($ema20Slope -notin $allowedEmaSlopes -or $ema50Slope -notin $allowedEmaSlopes) {
+                Add-ValidationError "H/L row has invalid EMA slope: $($file.Name) / $sampleId"
+            }
+            if ($emaGate -notin $allowedEmaGates) {
+                Add-ValidationError "H/L row has invalid EMA gate: $($file.Name) / $sampleId"
+            }
+            if ($emaGate -eq 'not_applicable') {
+                Add-ValidationError "H/L row cannot use EMA gate not_applicable: $($file.Name) / $sampleId"
+            }
+            $expectedGate = if ($internalLabel -in @('H1', 'H2')) { 'long_pass' } else { 'short_pass' }
+            $expectedSlope = if ($internalLabel -in @('H1', 'H2')) { 'up' } else { 'down' }
+            if ($emaGate -eq $expectedGate -and ($ema20Slope -ne $expectedSlope -or $ema50Slope -ne $expectedSlope)) {
+                Add-ValidationError "EMA pass gate does not match both EMA slopes: $($file.Name) / $sampleId"
+            }
+            if ($emaGate -eq 'fail_flat_or_opposite' -and $ema20Slope -eq $expectedSlope -and $ema50Slope -eq $expectedSlope) {
+                Add-ValidationError "EMA fail gate has two passing slopes: $($file.Name) / $sampleId"
+            }
+            if ($emaGate -eq 'pending' -and ($ema20Slope -ne 'unknown' -and $ema50Slope -ne 'unknown')) {
+                Add-ValidationError "EMA pending gate lacks unknown slope evidence: $($file.Name) / $sampleId"
+            }
+        } elseif ($emaGate -and $emaGate -ne 'not_applicable') {
+            Add-ValidationError "non-H/L row must leave EMA gate blank or not_applicable: $($file.Name) / $sampleId"
         }
         if (([string]$row.event_context -match 'historical_event_filter_not_verified') -and
             ([string]$row.event_context -match 'ordinary_non_event')) {
-            Add-ValidationError "event-unverified row is mislabeled ordinary_non_event: $($file.Name) / $($row.sample_id)"
+            Add-ValidationError "event-unverified row is mislabeled ordinary_non_event: $($file.Name) / $sampleId"
         }
-        if (($row.primary_pattern -eq 'H1_L1') -and ($row.internal_label -notin @('H1', 'L1'))) {
-            Add-ValidationError "H1_L1 mapping mismatch: $($file.Name) / $($row.sample_id)"
+        if (($primaryPattern -eq 'H1_L1') -and ($internalLabel -notin @('H1', 'L1'))) {
+            Add-ValidationError "H1_L1 mapping mismatch: $($file.Name) / $sampleId"
         }
-        if (($row.primary_pattern -eq 'H2_L2') -and ($row.internal_label -notin @('H2', 'L2'))) {
-            Add-ValidationError "H2_L2 mapping mismatch: $($file.Name) / $($row.sample_id)"
+        if (($primaryPattern -eq 'H2_L2') -and ($internalLabel -notin @('H2', 'L2'))) {
+            Add-ValidationError "H2_L2 mapping mismatch: $($file.Name) / $sampleId"
         }
-        if ($row.internal_label -eq 'H3_L3') {
-            Add-ValidationError "ambiguous combined H3_L3 internal label: $($file.Name) / $($row.sample_id)"
+        if ($internalLabel -eq 'H3_L3') {
+            Add-ValidationError "ambiguous combined H3_L3 internal label: $($file.Name) / $sampleId"
         }
-        if (($row.primary_pattern -eq 'BOP') -and ($row.internal_label -in @('H1', 'H2', 'L1', 'L2', 'H3', 'L3'))) {
-            Add-ValidationError "BOP row mixes an internal PA label: $($file.Name) / $($row.sample_id)"
+        if (($primaryPattern -eq 'BOP') -and ($internalLabel -in @('H1', 'H2', 'L1', 'L2', 'H3', 'L3'))) {
+            Add-ValidationError "BOP row mixes an internal PA label: $($file.Name) / $sampleId"
         }
         [void]$frozenContractRecords.Add([pscustomobject]@{
             file = $file.Name
-            sample_id = [string]$row.sample_id
-            symbol = [string]$row.symbol
-            decision_date = [string]$row.decision_date
-            direction = [string]$row.direction
-            primary_pattern = [string]$row.primary_pattern
-            internal_label = [string]$row.internal_label
-            lineage_id = [string]$row.lineage_id
+            sample_id = $sampleId
+            sample_id_key = $sampleId.ToLowerInvariant()
+            symbol = $symbol
+            decision_date = $decisionDate
+            direction = $direction
+            primary_pattern = $primaryPattern
+            internal_label = $internalLabel
+            lineage_id = $lineageId
             contract_family_key = @(
-                [string]$row.symbol,
-                [string]$row.decision_date,
-                [string]$row.direction,
-                [string]$row.primary_pattern,
-                [string]$row.internal_label,
-                [string]$row.lineage_id
+                $symbol.ToLowerInvariant(),
+                $decisionDate.ToLowerInvariant(),
+                $direction,
+                $primaryPattern.ToLowerInvariant(),
+                $internalLabel.ToLowerInvariant(),
+                $lineageId.ToLowerInvariant()
             ) -join '|'
         })
     }
 }
-foreach ($duplicate in @($frozenContractRecords | Group-Object sample_id | Where-Object { $_.Name -and $_.Count -gt 1 })) {
+foreach ($duplicate in @($frozenContractRecords | Group-Object sample_id_key | Where-Object { $_.Name -and $_.Count -gt 1 })) {
     Add-ValidationError "duplicate frozen sample_id across contract CSVs: $($duplicate.Name)"
 }
 foreach ($duplicate in @($frozenContractRecords | Where-Object { $_.lineage_id } | Group-Object contract_family_key | Where-Object { $_.Count -gt 1 })) {

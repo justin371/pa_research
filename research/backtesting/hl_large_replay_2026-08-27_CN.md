@@ -32,7 +32,7 @@
 
 本批的历史事件过滤没有逐条独立核实，合同保留 `historical_event_filter_not_verified;exploratory_only`，所以不能把结果当作已完成事件过滤的胜率。
 
-口径更新（2026-08-29）：本报告外部 artifact 使用 engine `0.3.1`，其唯一 time-exit 记录的 `bars_held=11` 对应十根完整 post-entry K 线后下一根开盘执行，属于执行索引距离，不是额外自由持仓。2026-08-29 当时的 engine `0.3.3` 已用实际交易 `entry_bar` 复核同一份仓库价格快照，结果计数仍为 17 条完成交易、13 胜 4 负；当前 engine `0.3.5` 在保留该语义的基础上增加了样本独立性、artifact 输入/结果指纹和源码指纹防护。本报告的历史数值未被静默改写，分母和 horizon 说明见[`回放结果分母与 horizon 审计`](replay_outcome_denominator_audit_2026-08-29_CN.md)，独立性说明见[`回放 lineage 与样本独立性审计`](replay_lineage_independence_audit_2026-08-29_CN.md)，再现性说明见[`回放 provenance 与再现性审计`](replay_provenance_reproducibility_audit_2026-08-29_CN.md)。
+口径更新（2026-08-29）：本报告外部 artifact 使用 engine `0.3.1`，其唯一 time-exit 记录的 `bars_held=11` 对应十根完整 post-entry K 线后下一根开盘执行，属于执行索引距离，不是额外自由持仓。2026-08-29 当时的 engine `0.3.3` 已用实际交易 `entry_bar` 复核同一份仓库价格快照，结果计数仍为 17 条完成交易、13 胜 4 负；当前 engine `0.3.6` 在保留该语义的基础上增加了样本独立性、artifact 输入/结果指纹、源码指纹和显式空间证据防护。本报告的历史数值未被静默改写，分母和 horizon 说明见[`回放结果分母与 horizon 审计`](replay_outcome_denominator_audit_2026-08-29_CN.md)，独立性说明见[`回放 lineage 与样本独立性审计`](replay_lineage_independence_audit_2026-08-29_CN.md)，再现性说明见[`回放 provenance 与再现性审计`](replay_provenance_reproducibility_audit_2026-08-29_CN.md)。
 
 ## 统计口径
 

@@ -25,7 +25,7 @@ import pandas as pd
 from backtesting import Backtest, Strategy
 
 
-ENGINE_VERSION = "0.3.5"
+ENGINE_VERSION = "0.3.6"
 SUPPORTED_DIRECTIONS = {"long", "short"}
 SUPPORTED_PATTERNS = {"ABC_CONT", "BOP", "H1_L1", "H2_L2", "H3_L3", "RFB", "MTR", "other"}
 SUPPORTED_LABELS = {"H1", "H2", "L1", "L2", "H3", "L3", "none", "pending"}
@@ -347,11 +347,15 @@ def validate_contract(contract: BacktestContract, entry_reference: float | None 
     space_status = _as_string(contract.space_status).lower()
     if space_status and space_status not in {item.lower() for item in SUPPORTED_SPACE_STATUSES}:
         errors.append(f"space_status must be one of {sorted(SUPPORTED_SPACE_STATUSES)}")
-    if space_status in {"strict_ge_1r", "clearly_positive"} and contract.pre_entry_space_R is not None:
-        if contract.pre_entry_space_R < 1:
+    if space_status in {"strict_ge_1r", "clearly_positive"}:
+        if contract.pre_entry_space_R is None:
+            errors.append("strict space_status requires pre_entry_space_R")
+        elif contract.pre_entry_space_R < 1:
             errors.append("strict space_status requires pre_entry_space_R >= 1")
-    if space_status == "blocked" and contract.pre_entry_space_R is not None:
-        if contract.pre_entry_space_R > 0:
+    if space_status == "blocked":
+        if contract.pre_entry_space_R is None:
+            errors.append("blocked space_status requires pre_entry_space_R")
+        elif contract.pre_entry_space_R > 0:
             errors.append("blocked space_status requires pre_entry_space_R <= 0")
 
     if contract.internal_label == "H3_L3":
