@@ -53,6 +53,64 @@ main_uncertainty:
 stage_1_status: pattern_like / boundary / not_this_pattern / pending
 ```
 
+### 第一阶段字段与 canonical 合同映射
+
+上面的 `pattern_candidate`、`stage_1_status`、`parent_leg` 和
+`local_A_B_C_or_attempts` 是快筛的工作字段，不是新的主标签或交易状态。每个
+标的/案例在快筛记录中还必须能回溯到下列 canonical 轴；缺失证据写
+`pending`/`unknown`，不能用“like”或后续走势补齐：
+
+```text
+contract_scope: stage_1_fast_screen / historical_context_only
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+timeframes_seen:
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
+a_leg_quality: strong / ordinary / unclear / event_driven
+b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear
+b_leg_location:
+special_subtype: ordinary / deep_late_controlled_B / bull_flag / earnings_driven / event_driven / gap_reprice / none
+h_l_pullback_location:
+meta_confluence: present / absent / unknown
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+directional_bias: bull / bear / balanced / changing
+direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+secondary_context:
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+lineage_status: same_lineage / reset / unclear / pending
+attempt_direction: bullish_attempts / bearish_attempts / unknown
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
+first_reverse: none / touch / structural_break
+second_confirmation: yes / no / pending
+range_edge_three_push: yes / no / pending
+range_edge_side: upper / lower / none / pending
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+```
+
+映射规则固定如下：`pattern_candidate` 只表示视觉候选；只有进入完整且已闭合的
+研究合同后，才把它映射为 `primary_pattern`。`H1/H2/L1/L2/H3/L3` 只能进入
+`internal_label`，三推方向进入 `attempt_direction`，而 `direction` 仍表示当前
+研究合同方向。`attempt_or_count` 不能替代 `lineage_status`；同一 lineage 未被
+证明时，计数保留 `pending`。`stage_1_status: pattern_like / boundary /
+not_this_pattern / pending` 分别只可作为视觉阶段别名，不能直接写成交易授权；
+通常映射为 `research_state: pattern_like / observation_only / valid_no_trade /
+pending`，但具体状态仍须由证据决定。`directional_bias` 不能覆盖
+`direction: no_valid_direction`。
+
+`major_high_low_review`、`ema20_50_200_review` 和 `daily_context_window` 是证据
+provenance，不是“图上出现一条线”的同义词。若图像没有两年 Daily 左侧、重要
+高低点或 EMA20/50/200 复核，就保留对应缺失状态，不能仅凭局部图冻结 H/L、三推、
+BOP 或 MTR。
+
 ### 第一轮可以使用的证据
 
 - 左侧是否有清楚的趋势、交易区间、过渡或高潮背景；
@@ -112,17 +170,27 @@ stage_1_status: pattern_like / boundary / not_this_pattern / pending
 signal_bar / confirmation_bar:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 trigger_zone:
 structural_stop_zone:
 first_independent_obstacle:
 rough_space: clearly_positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 measured_move_or_AB_CD:
 event_filter:
 sector_or_market_context:
-stage_2_status: research_candidate / valid_no_trade / research_positive_conditional / pending
+research_state: research_candidate / valid_no_trade / research_positive_conditional / observation_only / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 
-第二轮字段仍是研究记录，不是当前回放 CSV 的直接输入。`stop_limit` 和 `observation_only` 可以保留其独立语义；若要回放，必须先冻结为当前 engine `0.3.9` 支持的三种 `order_branch`，不能静默转换订单合同。
+第二轮字段仍是研究记录，不是当前回放 CSV 的直接输入。`rough_space` 和
+`stage_2_status` 是历史工作别名，分别映射到 `space_status` 与
+`research_state`；新记录优先写 canonical 字段。`stop_limit` 和
+`observation_only` 可以保留其独立语义；若要回放，必须先冻结为当前 engine
+`0.3.9` 支持的三种 `order_branch`，不能静默转换订单合同。`gap_policy` 必须在
+入场前冻结，不能由回放结果倒填。
 
 第二轮仍然是人工研究，不是自动下单授权。第一障碍优先于 MM；结构止损不能为了改善 R/R 而任意缩窄。窄低周期止损和宽日线止损代表不同交易假设，不能混成一个结论。
 
@@ -158,6 +226,20 @@ stage_2_status: research_candidate / valid_no_trade / research_positive_conditio
 ## 6. 定性视觉语言：先描述质量，不先打分
 
 为了让助手真正读懂图，而不是把图变成量化扫描器，第一轮统一使用定性标签。标签可以随着完整图表改变，但不要把它们强行换算成分数或固定百分比。
+
+下列带连字符的写法只保留为历史显示别名，不能写入 canonical 字段：
+
+| 历史显示词 | canonical 读取 |
+| --- | --- |
+| `strong-looking-A` / `ordinary-directional-A` / `unclear-A` | `a_leg_quality: strong / ordinary / unclear` |
+| `controlled-B` / `deep-but-late-controlled-B` / `uncontrolled-B` | `b_leg_class: controlled / deep_but_late_controlled / uncontrolled` |
+| `H2-like` / `L1/L2-like` | `internal_label: pending`，并在说明中保留候选方向 |
+| `same-lineage provisional` / `lineage provisional` | `lineage_status: pending` |
+| `three-push candidate` | `third_push_state: unclear`，除非已有可分流证据 |
+| `rough_space` | `space_status`；未冻结触发/止损时通常为 `unknown` |
+
+这些映射只收紧字段含义，不改变历史案例的原始描述或结果；`research_state`、
+`trade_state` 和 `gate_result` 仍必须分别记录，不能把 `pattern_like` 当成交易许可。
 
 ### A 腿质量
 

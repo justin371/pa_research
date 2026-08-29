@@ -11,6 +11,36 @@
 
 本轮使用公开网页中的历史图表图片作为能力冒烟样本；图片只在本地临时查看，没有复制进仓库。公开图片有的带有作者画线或文字标注，所以本轮不是盲测，也不能作为最终验收集。所有图片的周期、标的、事件和完整左侧背景，以图中直接可见内容为准；图中看不到的字段按缺失处理。
 
+本文件包含两个不同的历史视觉范围：前五张公开网页图片是资料不完整的
+`stage_1_fast_screen` 冒烟样本；TSLA、第二轮多标的和 Round3 是已保存资产的
+`historical_context_only`/快筛复核。两者都只记录视觉研究证据，不建立可回放合同。
+每个范围的 `data_status`、`as_of_time`、`timezone`、`session_state`、
+`chart_scope`、`daily_context_window`、`major_high_low_review` 和
+`ema20_50_200_review` 必须按实际图像覆盖单独读取，不能把一组图的汇总状态套给另一组。
+
+### 与 canonical 合同的读取边界
+
+本记录保留 `visual_pattern_label`、`pattern_candidate`、`attempt_or_count` 和
+`recognition_result` 作为冒烟显示字段。它们的 canonical 读取方式如下：
+
+| 冒烟/历史显示字段 | canonical 读取 |
+| --- | --- |
+| `visual_pattern_label`、`pattern_candidate` | 仅为视觉候选说明；进入完整且闭合的研究合同后才映射到 `primary_pattern` |
+| `H1-like`、`H2-like`、`L1/L2-like`、`three-push candidate` | `internal_label: pending` 或 `third_push_state: unclear`，除非同一周期、同一 lineage 和分流证据已完成 |
+| `attempt_or_count`、`count-pending` | 计数工作备注；另填 `lineage_status: same_lineage / reset / unclear / pending` |
+| `same-lineage provisional`、`lineage provisional` | `lineage_status: pending` |
+| `unclear-to-range`、区间重复 | `parent_state: trading_range / range_edge`（按证据选择）；三推状态用 `third_push_state: range_repeat_test` |
+| `BOP-like`、`MTR / recovery candidate`、`failed-reclaim boundary` | `secondary_context` 或状态候选说明；不能直接写成已接受的 `primary_pattern`、订单或授权 |
+| `pattern_candidate`、`boundary_candidate`、`observation_only` | 视觉阶段结果；完整记录仍分别填写 `research_state`、`trade_state` 和 `gate_result` |
+
+两年 Daily 左侧、重要高低点和 EMA20/50/200 是 provenance 前置条件，不是单个
+EMA 触碰或局部图可见就算完成。缺失时保留 `partial`/`unavailable`、`pending` 或
+`unknown`；不会因为历史结果或后续 K 线而回填。
+
+若后续完整研究记录需要填写三推轴，只能使用 canonical
+`third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear`；
+本冒烟文件中的三推显示仍未达到冻结条件。
+
 ## 识别输出合同
 
 每张图先输出以下字段，暂不填写订单、结构止损、第一障碍、R/R、评分或管理规则：
@@ -34,6 +64,30 @@ recognition_result:
 `recognition_result` 只允许：`pattern_candidate`、`boundary_candidate`、`observation_only`、`not_enough_image_evidence`。只有在未标注、周期和价格轴清晰、父级与局部结构均可复核的图像集上重复通过，才可以从 `smoke-test` 升级为 `acceptance`。
 
 ## 本轮图像结果
+
+### 前五张公开网页图片的证据头
+
+```text
+contract_scope: stage_1_fast_screen
+data_source: public web historical chart images
+data_status: historical
+as_of_time: unavailable_in_original_images
+timezone: unavailable_in_original_images
+session_state: unknown
+timeframes_seen: case-specific; not uniformly visible
+chart_scope: partial
+daily_context_window: unavailable
+major_high_low_review: unavailable
+ema20_50_200_review: unavailable
+direction: no_valid_direction
+research_state: observation_only
+trade_state: observation_only
+gate_result: observation_only
+handoff_status: not_ready
+```
+
+这是五张图片的保守汇总，不把其中某张图片可见的局部方向扩展为整组的
+`direction`，也不把作者标注或图片中的单一水平线升级为 canonical 结构字段。
 
 | 样本 | 图上直接可见事实 | 视觉识别 | 仍不能从图上确认的内容 | 结果 |
 | --- | --- | --- | --- | --- |
@@ -83,10 +137,18 @@ data_status_note: public data; not Futu; not live authorization
 asset_generated_date: 2026-08-24
 query_period_end: 2026-08-25 00:00 UTC
 latest_complete_rth_bar: 2026-08-21 16:00 America/New_York
+as_of_time: 2026-08-21 16:00 America/New_York
+timezone: America/New_York
+session_state: historical_close
 timeframes_seen: Daily (~2Y left context) / 4H-like / 1H / 15m
 event_context: unknown; this round does not declare event-clean
 chart_scope: full
 daily_context_window: >=2y
+major_high_low_review: complete
+ema20_50_200_review: complete
+daily_ema20_slope: unknown
+daily_ema50_slope: unknown
+h_l_ema_slope_gate: pending
 chart_scope_note: full two-year Daily context plus nested recent intraday windows
 ```
 
@@ -135,10 +197,18 @@ data_status_note: public data; not Futu; not live authorization
 asset_generated_date: 2026-08-24
 query_period_end: 2026-08-25 00:00 UTC
 latest_complete_rth_bar: 2026-08-21 16:00 America/New_York
+as_of_time: 2026-08-21 16:00 America/New_York
+timezone: America/New_York
+session_state: historical_close
 timeframes_seen: Daily (~2Y left context) / 4H-like / 1H / 15m
 event_context: unknown; this round does not declare event-clean
 chart_scope: full
 daily_context_window: >=2y
+major_high_low_review: complete
+ema20_50_200_review: complete
+daily_ema20_slope: unknown
+daily_ema50_slope: unknown
+h_l_ema_slope_gate: pending
 chart_scope_note: full two-year Daily context plus nested recent intraday windows
 ```
 
@@ -148,10 +218,10 @@ chart_scope_note: full two-year Daily context plus nested recent intraday window
 
 | 标的 | Daily ~2Y、EMA 与重要锚点 | 4H-like / 1H / 15m 的直接视觉读法 | 主识别、计数与边界 | 结果 |
 | --- | --- | --- | --- | --- |
-| **AAPL** | 2026-08-21 收 `309.35`；EMA20/50/200 为 `312.04 / 309.38 / 283.39`。两年高低约为 `2026-07-29 344.57` 与 `2025-04-08 169.21`；2026 窗口低点约 `2026-01-20 243.42`。图上先保留 `300–307` 支撑、`312–320` 近期角色转换区、`344–345` 前高压力。 | 4H-like/1H 先从 `300–306` 一带恢复至 `319–320`，随后跌回 `310` 附近；15m 可见 8-19 向上越过约 `311–312` 后推进至 `319–320`，接着重新回到原突破区内。 | `primary_pattern: failed-breakout / failed-reclaim boundary`；可看到一次突破尝试和失去接受，但不能把它升级为成功 BOP。8-19 的局部 H1/H2 计数与 8-20/21 的反向腿发生状态切换，`lineage: unclear`。 | `boundary_candidate / BOP no-new-positive` |
-| **NVDA** | 2026-08-21 收 `214.72`；EMA20/50/200 为 `215.45 / 210.54 / 195.60`。两年高低约为 `2026-05-14 236.54` 与 `2025-04-07 86.62`；2026 窗口低点约 `2026-03-30 164.27`。主要可见支撑先看 `210–215`、`195–202`，压力看 `224–230`、`236–237`。 | 4H-like 可读出约 `197` 到 `227–230` 的强多头 A 腿，8-18 至 8-21 出现两段重叠回调至约 `214.5`；1H/15m 的局部却持续偏空，低点逐步下移。 | `primary_pattern: bullish ABC continuation / H2-like candidate`；A/B 关系能看出来，但 H2 是否属于同一回调、何处为信号 K 不能冻结。低周期没有给出与 Daily/4H 一致的确认，不能用 15m 的空头腿倒灌成多头 H2，也不能把它当独立空头 L1/L2。 | `pattern_candidate / count-pending / observation-only` |
-| **SPY** | 2026-08-21 收 `765.72`；EMA20/50/200 为 `763.73 / 752.96 / 710.94`。两年高低约为 `2026-08-13 779.37` 与 `2025-04-07 481.80`；2026 窗口低点约 `2026-03-30 629.28`。主要支撑先看 `763–765`、`752–755`，压力看 `779–780`。 | Daily 保持明显多头；4H-like 从 `735–754` 区域向上突破并在 `775` 上方停留，随后转为高位震荡和回落；1H/15m 从 `778` 附近逐步下行至 `763–766`。 | `primary_pattern: breakout-acceptance followed by late-trend pullback`；能识别接受后的状态，但没有清楚的旧边界回测—再次离开路径，所以不冻结为干净 BOP。低周期可见 L1/L2-like 空头尝试，但与 Daily 多头背景冲突，属于边界而非正例。 | `boundary_candidate / no-new-positive-for-clean-BOP` |
-| **RBLX** | 2026-08-21 收 `38.37`；EMA20/50/200 为 `40.26 / 44.55 / 60.78`，价格仍在三条 EMA 下方。两年高低约为 `2025-07-31 150.59` 与 `2026-07-31 33.88`；2026 窗口高点约 `2026-01-16 91.09`。主要支撑先看 `33.9–36.2`，压力看 `38.7–40.4`、`44.5–47`。 | Daily 是长周期空头；4H-like 显示下跌后进入 `35–40` 双向区间。15m 可见围绕同一压力区的多次向上推动，最后一次曾扩张到约 `40.19`，之后回到 `38` 附近。 | `primary_pattern: three-push / H3-like candidate`，但 `parent_state: mature-range / bearish-transition`，`lineage: unclear-to-range-repeat`；第三推不能直接叫衰竭楔形，也不能升级 MTR。计数若不能在主周期分开复核，必须重置为 `not_h3_l3`。 | `boundary_candidate / observation-only` |
+| **AAPL** | 2026-08-21 收 `309.35`；EMA20/50/200 为 `312.04 / 309.38 / 283.39`。两年高低约为 `2026-07-29 344.57` 与 `2025-04-08 169.21`；2026 窗口低点约 `2026-01-20 243.42`。图上先保留 `300–307` 支撑、`312–320` 近期角色转换区、`344–345` 前高压力。 | 4H-like/1H 先从 `300–306` 一带恢复至 `319–320`，随后跌回 `310` 附近；15m 可见 8-19 向上越过约 `311–312` 后推进至 `319–320`，接着重新回到原突破区内。 | `visual_pattern_label: failed-breakout / failed-reclaim boundary`；可看到一次突破尝试和失去接受，但不能把它升级为成功 BOP。8-19 的局部 H1/H2 计数与 8-20/21 的反向腿发生状态切换，`lineage_status: unclear`。 | `boundary_candidate / BOP no-new-positive` |
+| **NVDA** | 2026-08-21 收 `214.72`；EMA20/50/200 为 `215.45 / 210.54 / 195.60`。两年高低约为 `2026-05-14 236.54` 与 `2025-04-07 86.62`；2026 窗口低点约 `2026-03-30 164.27`。主要可见支撑先看 `210–215`、`195–202`，压力看 `224–230`、`236–237`。 | 4H-like 可读出约 `197` 到 `227–230` 的强多头 A 腿，8-18 至 8-21 出现两段重叠回调至约 `214.5`；1H/15m 的局部却持续偏空，低点逐步下移。 | `visual_pattern_label: bullish ABC continuation / H2-like candidate`；A/B 关系能看出来，但 H2 是否属于同一回调、何处为信号 K 不能冻结。低周期没有给出与 Daily/4H 一致的确认，不能用 15m 的空头腿倒灌成多头 H2，也不能把它当独立空头 L1/L2。 | `pattern_candidate / count-pending / observation-only` |
+| **SPY** | 2026-08-21 收 `765.72`；EMA20/50/200 为 `763.73 / 752.96 / 710.94`。两年高低约为 `2026-08-13 779.37` 与 `2025-04-07 481.80`；2026 窗口低点约 `2026-03-30 629.28`。主要支撑先看 `763–765`、`752–755`，压力看 `779–780`。 | Daily 保持明显多头；4H-like 从 `735–754` 区域向上突破并在 `775` 上方停留，随后转为高位震荡和回落；1H/15m 从 `778` 附近逐步下行至 `763–766`。 | `visual_pattern_label: breakout-acceptance followed by late-trend pullback`；能识别接受后的状态，但没有清楚的旧边界回测—再次离开路径，所以不冻结为干净 BOP。低周期可见 L1/L2-like 空头尝试，但与 Daily 多头背景冲突，属于边界而非正例。 | `boundary_candidate / no-new-positive-for-clean-BOP` |
+| **RBLX** | 2026-08-21 收 `38.37`；EMA20/50/200 为 `40.26 / 44.55 / 60.78`，价格仍在三条 EMA 下方。两年高低约为 `2025-07-31 150.59` 与 `2026-07-31 33.88`；2026 窗口高点约 `2026-01-16 91.09`。主要支撑先看 `33.9–36.2`，压力看 `38.7–40.4`、`44.5–47`。 | Daily 是长周期空头；4H-like 显示下跌后进入 `35–40` 双向区间。15m 可见围绕同一压力区的多次向上推动，最后一次曾扩张到约 `40.19`，之后回到 `38` 附近。 | `visual_pattern_label: three-push / H3-like candidate`；`parent_state: trading_range / transition`；`lineage_status: unclear`；`third_push_state: range_repeat_test`。第三推不能直接叫衰竭楔形，也不能升级 MTR；计数若不能在主周期分开复核，保持 `internal_label: pending`。 | `boundary_candidate / observation-only` |
 
 ### 这一轮实际覆盖了什么
 
@@ -174,14 +244,50 @@ chart_scope_note: full two-year Daily context plus nested recent intraday window
 
 第二轮已经能发现“像 H2”或“像三推”，但还没有把第一次失败和第二次尝试在局部图上单独拉出来复核。本轮对 SPY 和 NVDA 使用未标注的 1H/15m 局部放大图；同标的两年 Daily 背景仍从第二轮资产读取。局部资产见[`H1/H2 与 L1/L2 局部盲测资产`](assets/visual_recognition/2026-08-24/round3_hl_drills/README.md)。
 
+### 证据头
+
+```text
+contract_scope: historical_context_only
+data_source: public Yahoo Finance Chart API via Jina Reader
+data_status: historical
+as_of_time: 2026-08-21 16:00 America/New_York
+timezone: America/New_York
+session_state: historical_close
+timeframes_seen: 1H / 15m plus paired Daily from Round2
+chart_scope: partial
+daily_context_window: >=2y
+major_high_low_review: complete in paired review
+ema20_50_200_review: complete in paired review; Daily EMA only
+daily_ema20_slope: unknown
+daily_ema50_slope: unknown
+h_l_ema_slope_gate: pending
+direction: no_valid_direction (aggregate; per-case visual direction remains descriptive)
+lineage_status: pending unless the case row states otherwise
+internal_label: pending for H/L-like labels
+third_push_state: unclear unless the case row states otherwise
+first_reverse: none / touch / structural_break (not frozen in this drill)
+second_confirmation: pending
+range_edge_three_push: pending
+range_edge_side: pending
+research_state: observation_only
+trade_state: observation_only
+gate_result: observation_only
+handoff_status: not_ready
+```
+
+Round3 局部图只负责观察 A/B、第一次失败和后续尝试；配对的 Round2 Daily
+复核负责两年左侧、重要高低点和 EMA20/50/200。表中的 `H2-like`、
+`L1/L2-like` 和 `three-push` 均是历史显示别名，未完成同一周期、同一 lineage
+和状态分流前，不写入冻结的 `internal_label` 或 `third_push_state`。
+
 ### 直接可见事实与计数读法
 
 | 样本 | 直接可见的推动序列 | 计数识别与失效边界 | 结果 |
 | --- | --- | --- | --- |
-| **SPY 2026-08-03–08-07** | 1H/15m 从 8-03 约 `749.10` 连续推进到 8-04 高约 `773.41`；8-05 先上探约 `776.85` 后收回至约 `769.74`；8-06 回落到约 `767.46`；8-07 再次恢复并到约 `773.91`。 | 可把 8-03–04 读成局部 A，把 8-05–06 读成 B；8-05 的第一次恢复/突破尝试没有被接受，8-07 是 `H2-like` 第二次恢复候选。由于左侧已经接近高位区、第一次尝试与 A 的边界重叠，`same-lineage` 只能暂定，不能冻结成唯一 H2。若价格重新接受到 `767` 下方，局部多头计数失效；若强收盘接受 `776.85` 上方，则转为新的突破接受状态。 | `H2-like pattern_candidate / count-pending` |
-| **NVDA 2026-08-05–08-12** | 1H/15m 先从 8-05 高约 `222.22`、8-07 高约 `224.76` 形成多头推进；8-10–11 回落并探到约 `216.77/216.30`；8-10 有一次恢复到约 `224.14` 后失败，8-12 再次从约 `220.20` 推到约 `225.10`。 | 这是一组更清楚的 `A → B → first attempt → second attempt` 外形：8-10 可视为第一次恢复失败，8-12 为 H2-like。此前 8-03–07 的更早推动又与当前结构嵌套，说明 H2 只能在本局部回调内计数，不能把更早的高点继续混入。跌回 `216.30` 下方会否定本局部恢复；重新接受 `224–225` 上方则应重建为新的突破/延续状态。 | `H2-like pattern_candidate / same-lineage provisional` |
+| **SPY 2026-08-03–08-07** | 1H/15m 从 8-03 约 `749.10` 连续推进到 8-04 高约 `773.41`；8-05 先上探约 `776.85` 后收回至约 `769.74`；8-06 回落到约 `767.46`；8-07 再次恢复并到约 `773.91`。 | 可把 8-03–04 读成局部 A，把 8-05–06 读成 B；8-05 的第一次恢复/突破尝试没有被接受，8-07 是 `H2-like` 第二次恢复候选。由于左侧已经接近高位区、第一次尝试与 A 的边界重叠，`lineage_status: pending`（历史显示别名：same-lineage provisional），不能冻结成唯一 H2。若价格重新接受到 `767` 下方，局部多头计数失效；若强收盘接受 `776.85` 上方，则转为新的突破接受状态。 | `H2-like pattern_candidate / count-pending` |
+| **NVDA 2026-08-05–08-12** | 1H/15m 先从 8-05 高约 `222.22`、8-07 高约 `224.76` 形成多头推进；8-10–11 回落并探到约 `216.77/216.30`；8-10 有一次恢复到约 `224.14` 后失败，8-12 再次从约 `220.20` 推到约 `225.10`。 | 这是一组更清楚的 `A → B → first attempt → second attempt` 外形：8-10 可视为第一次恢复失败，8-12 为 H2-like。此前 8-03–07 的更早推动又与当前结构嵌套，说明 H2 只能在本局部回调内计数，不能把更早的高点继续混入。跌回 `216.30` 下方会否定本局部恢复；重新接受 `224–225` 上方则应重建为新的突破/延续状态。 | `H2-like pattern_candidate / lineage_status: pending`（历史显示别名：same-lineage provisional） |
 | **AAPL 2026-08-19–08-21** | 15m/1H 先从约 `311` 上冲至 8-19/20 的 `319–320`，随后 8-20 向下扩张至约 `310.65`，8-21 再探约 `307.01`，反弹仍在 `311–312` 附近受限。 | 这不是把原多头尝试继续数成 H2；突破失败后父级状态已改变，空头腿应从失败边界开始重新计数，可暂记 `L1/L2-like new-lineage`，但 8-20/21 之间没有足够独立的 B 回调来冻结 L2。重新接受 `319–320` 上方会废弃该失败突破后的空头读法。 | `new-lineage L1/L2 boundary / count-pending` |
-| **RBLX 2026-08-17–08-21** | 15m 在 8-19 围绕 `37.7–38.5`、`38.5–39.2`、`39.2–40.19` 出现多段向上推动；8-20 回落至约 `37.20`，8-21 反弹高约 `39.38` 后收约 `38.37`。 | “三次上推”可以被直接看见，但 Daily 空头与 4H-like 区间背景先否决开放趋势 H3；三段也可能只是区间内部的嵌套摆动。应保留 `three-push / H3-like candidate`，但 `lineage: unclear-to-range-repeat`，不叫衰竭楔形，也不升级 MTR。 | `three-push boundary / observation-only` |
+| **RBLX 2026-08-17–08-21** | 15m 在 8-19 围绕 `37.7–38.5`、`38.5–39.2`、`39.2–40.19` 出现多段向上推动；8-20 回落至约 `37.20`，8-21 反弹高约 `39.38` 后收约 `38.37`。 | “三次上推”可以被直接看见，但 Daily 空头与 4H-like 区间背景先否决开放趋势 H3；三段也可能只是区间内部的嵌套摆动。应保留 `three-push / H3-like candidate`，但 `lineage_status: unclear`（历史显示别名：unclear-to-range-repeat），`third_push_state: range_repeat_test`，不叫衰竭楔形，也不升级 MTR。 | `three-push boundary / observation-only` |
 
 ### H/L 计数专项裁决
 
@@ -196,6 +302,32 @@ chart_scope_note: full two-year Daily context plus nested recent intraday window
 
 资产见[`MAR 空头 L1/L2-like 视觉资产`](assets/visual_recognition/2026-08-24/round3_l1_l2_mar/README.md)。
 
+### 证据头
+
+```text
+symbol: MAR
+contract_scope: historical_context_only
+data_source: public Yahoo Finance Chart API via Jina Reader
+data_status: historical
+as_of_time: 2026-06-26; latest complete Daily bar in asset request
+timezone: unavailable_in_original_log
+session_state: historical_close
+timeframes_seen: Daily (~2Y left context) / 4H-like / 60m proxy
+chart_scope: partial
+daily_context_window: >=2y
+major_high_low_review: complete
+ema20_50_200_review: complete
+direction: no_valid_direction (asset is unlabeled; paired reading is bearish candidate)
+lineage_status: pending
+internal_label: pending
+research_state: observation_only
+trade_state: observation_only
+gate_result: observation_only
+```
+
+`60m proxy` 不是 15m；`15m-evidence-missing` 是覆盖限制说明，不是
+`research_state`、`trade_state` 或 `gate_result` 的新枚举。
+
 ### 直接可见事实
 
 - **Daily ~2Y：** 2026-06-26 收约 `377.31`，EMA20/50/200 约为 `384.60 / 372.93 / 331.92`；2026-06-15 的重要高点约 `410.98`，2026-01-05 的窗口低点约 `308.31`，两年可见低点约为 `2024-08-05 204.55`。图上是长期上行背景中的高位转弱/局部过渡，不应直接当成开放空头趋势。
@@ -204,7 +336,7 @@ chart_scope_note: full two-year Daily context plus nested recent intraday window
 
 ### 识别与边界
 
-`visual_pattern_label: bearish ABC / L1-L2-like candidate`；`parent_state: bullish-background-to-transition`；`A_quality: directional but late against the larger background`；`lineage: provisional`。较保守的读法是：6-24 后段是第一次有意义的空头恢复候选，6-25/26 是后续推进；不能因为连续下跌就自动把它升级为严格 L2。
+`visual_pattern_label: bearish ABC / L1-L2-like candidate`；`parent_state: transition`；`a_leg_quality: ordinary`（历史说明：directional but late against the larger background）；`lineage_status: pending`。较保守的读法是：6-24 后段是第一次有意义的空头恢复候选，6-25/26 是后续推进；不能因为连续下跌就自动把它升级为严格 L2。
 
 视觉失效边界是重新接受 `392.63–400` 反弹/角色转换区；若价格在该区上方重新建立结构，当前空头恢复读法应废弃或重建。相反，`372–383` 一带是左侧和当前窗口都可见的支撑背景，不能用后续更低点把它事后抹掉。
 

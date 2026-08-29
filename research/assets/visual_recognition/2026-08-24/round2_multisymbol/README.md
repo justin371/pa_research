@@ -14,6 +14,37 @@
 - 1H：`2026-08-01` 至 `2026-08-24`
 - 15m：`2026-08-17` 至 `2026-08-24`，RTH
 
+## Canonical provenance boundary
+
+```text
+contract_scope: historical_context_only
+data_source: public Yahoo Finance Chart API via Jina Reader
+data_status: historical
+as_of_time: 2026-08-21 16:00 America/New_York
+timezone: America/New_York
+session_state: historical_close
+timeframes_seen: Daily / 4H-like / 1H / 15m
+chart_scope: full
+daily_context_window: >=2y
+major_high_low_review: complete in paired smoke review; not drawn on the asset
+ema20_50_200_review: complete in paired smoke review; Daily EMA only
+daily_ema20_slope: unknown
+daily_ema50_slope: unknown
+h_l_ema_slope_gate: pending
+direction: no_valid_direction (unlabeled asset; per-case reading is in the paired review)
+lineage_status: pending
+internal_label: pending
+research_state: observation_only
+trade_state: observation_only
+gate_result: observation_only
+handoff_status: not_ready
+```
+
+`primary_pattern`、`secondary_context`、H1/H2/L1/L2、三推、BOP 和 MTR 在这组
+无标签资产中不冻结；对应显示标签和保守映射见配对的[`PA 图表视觉识别冒烟验收`](../../../../visual_recognition_smoke_test_2026-08-24_CN.md)。
+资产 README 的 `major_high_low_review` 与 `ema20_50_200_review` 只表示配对
+历史复核已记录这些字段，不表示图片上的线条本身产生交易信号。
+
 ## 图像入口
 
 | 标的 | 四周期合图 | Daily | 4H-like | 1H | 15m |

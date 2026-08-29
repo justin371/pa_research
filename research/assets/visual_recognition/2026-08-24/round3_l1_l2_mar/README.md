@@ -2,6 +2,37 @@
 
 这组图用于补充一个未标注的空头 ABC/L1-L2-like 对照：先看两年 Daily 背景，再看 4H-like 与 60m 低周期。图上没有 L1/L2、ABC 或交易标签。
 
+## Canonical provenance boundary
+
+```text
+contract_scope: historical_context_only
+data_source: public Yahoo Finance Chart API via Jina Reader
+data_status: historical
+as_of_time: 2026-06-26; latest complete Daily bar in asset request
+timezone: unavailable_in_original_log
+session_state: historical_close
+timeframes_seen: Daily (~2Y left context) / 4H-like / 60m proxy
+chart_scope: partial
+daily_context_window: >=2y
+major_high_low_review: complete in paired smoke review; not drawn on the asset
+ema20_50_200_review: complete in paired smoke review; Daily EMA only
+daily_ema20_slope: unknown
+daily_ema50_slope: unknown
+h_l_ema_slope_gate: pending
+direction: no_valid_direction (unlabeled asset; paired reading is a bearish candidate)
+lineage_status: pending
+internal_label: pending
+research_state: observation_only
+trade_state: observation_only
+gate_result: observation_only
+handoff_status: not_ready
+```
+
+`60m proxy` 不是 15m；原记录中的 `15m-evidence-missing` 只是来源窗口限制，
+不属于 `research_state`、`trade_state` 或 `gate_result` 的新枚举。`primary_pattern`、
+`secondary_context`、L1/L2 和订单字段只在配对历史复核中按证据映射，不能从资产
+README 的标题或文件名自动冻结。
+
 - 标的：`MAR`
 - 数据状态：公开历史 OHLC；通过 Jina Reader 读取 Yahoo Finance Chart API；不是 Futu 数据，也不是实时授权
 - Daily 窗口：`2024-06-18`–`2026-06-26`，显示 EMA20/50/200

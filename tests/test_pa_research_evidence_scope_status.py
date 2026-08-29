@@ -102,8 +102,8 @@ class EvidenceScopeStatusTests(unittest.TestCase):
             self.assertIn("session_state: historical_close", read(path))
 
         smoke = read(SMOKE)
-        self.assertEqual(len(re.findall(r"^data_status: historical$", smoke, re.MULTILINE)), 2)
-        self.assertEqual(len(re.findall(r"^daily_context_window: >=2y$", smoke, re.MULTILINE)), 2)
+        self.assertEqual(len(re.findall(r"^data_status: historical$", smoke, re.MULTILINE)), 5)
+        self.assertEqual(len(re.findall(r"^daily_context_window: >=2y$", smoke, re.MULTILINE)), 4)
         self.assertIn("data_status_note: public data; not Futu; not live authorization", smoke)
 
     def test_replay_and_candidate_inventory_disclose_upstream_boundary(self):
