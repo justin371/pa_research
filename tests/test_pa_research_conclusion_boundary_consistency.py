@@ -242,6 +242,11 @@ class PaResearchConclusionBoundaryConsistencyTests(unittest.TestCase):
             "handoff_status               # research_only / not_ready / ready_for_system",
             inventory,
         )
+        self.assertIn(
+            "上表是未来晋级路径的说明性词汇，不是当前 checkout 的状态声明",
+            handoff,
+        )
+        self.assertIn("当前 PA Research 没有任何案例或规则达到", handoff)
 
 
 if __name__ == "__main__":

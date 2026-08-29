@@ -60,6 +60,8 @@ Codex Trading 中已有的研究、代码和案例不在 PA Research 中整份�
 | `system_implemented` | 已在 Codex Trading 中实现并通过系统测试 | 不等于可实盘 |
 | `production_candidate` | 经过额外风险、模拟和用户明确授权 | 仍不自动授权真实下单 |
 
+上表是未来晋级路径的说明性词汇，不是当前 checkout 的状态声明。当前 PA Research 没有任何案例或规则达到 `validated`、`implementation_ready`、`system_implemented` 或 `production_candidate`；当前结论仍为 `no-new-positive` / `validated win-rate: not-computable`，历史视觉、回放和候选记录不能据此取得生产规则或交易授权。
+
 ## 交接时必须携带的字段
 
 成熟规则交接时，PA Research 必须提供一份完整规格，而不是只提供形态名称：

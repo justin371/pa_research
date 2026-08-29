@@ -112,7 +112,17 @@ Daily-first stage1 / historical inventory
   -> replay / trade-log 结果分开记录
 ```
 
-## 七、结论
+## 七、历史、视觉与回放后验语义扫描
+
+本轮进一步对五个已索引的历史视觉候选入口及全部仓库 Markdown 做了只读语义扫描：
+
+- CRM、META、MSFT、NVDA 和候选网格五个入口仍为 `research_state: pattern_like`、`trade_state: not_authorized`；没有把 `entry_price`、`fill_status`、`trade_result`、`realized_R`、`path_result` 等后验字段写入这些入场前记录；
+- 全部 Markdown 没有活动字段 `research_state: validated`、`trade_state: authorized` 或 `handoff_status: ready_for_system`；`research_positive_conditional` 仍只表示条件性研究状态，不表示已验证正例；
+- 回放结果、首障碍到达和历史路径继续只在独立 replay/result 或审计语境中出现；它们不能倒灌成 `daily_candidate`、生产规则或交易授权。
+
+没有发现新的违规活动语句；本轮把上述检查固化到 validator 和回归测试，防止历史视觉候选或后验结果以后发生职责漂移。该修复不新增样本、不改变历史结果，也不改变 `no-new-positive` / `validated win-rate: not-computable`。
+
+## 八、结论
 
 修正后，PA Research 的记录链为：
 

@@ -1,6 +1,7 @@
 """Regression checks for PA Research candidate/visual-record boundaries."""
 
 import csv
+import re
 import unittest
 from collections import Counter
 from pathlib import Path
@@ -59,6 +60,16 @@ TRACKED_HISTORICAL_VISUAL_CANDIDATE_ENTRIES = (
     "msft_bearish_abc_l1_l2_visual_candidate_2025-10-28_2025-11-20.md",
     "nvda_bullish_abc_h1_visual_candidate_2025-06-23_2025-07-03.md",
     "visual_screen_candidate_grid_2024_2025_CN.md",
+)
+
+POST_OUTCOME_FIELD_RE = re.compile(
+    r"(?im)^\s*(?:entry_price|entry_date|exit_price|exit_date|exit_reason|bars_held|"
+    r"fill_status|trade_result|realized_R|win_rate_eligible|path_result|"
+    r"first_obstacle_hit|ambiguous_intrabar|gap_adjustment|evidence_status)\s*:"
+)
+PROMOTED_STATUS_RE = re.compile(
+    r"(?im)^\s*(?:trade_state|handoff_status|research_state)\s*:\s*"
+    r"(?:authorized|ready_for_system|validated)\s*$"
 )
 
 
@@ -423,6 +434,20 @@ class CandidateVisualConsistencyTests(unittest.TestCase):
                 self.assertIn(filename, strategy_readme)
                 self.assertIn(filename, validator)
                 self.assertIn(filename, audit)
+
+    def test_historical_visual_candidate_entries_keep_pre_entry_and_research_boundaries(self):
+        for filename in TRACKED_HISTORICAL_VISUAL_CANDIDATE_ENTRIES:
+            content = (REPO_ROOT / "research" / filename).read_text(encoding="utf-8")
+            with self.subTest(candidate=filename):
+                self.assertIsNone(POST_OUTCOME_FIELD_RE.search(content))
+                self.assertIsNone(PROMOTED_STATUS_RE.search(content))
+                self.assertIn("trade_state: not_authorized", content)
+
+        validator = (REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("post-outcome field leaked into tracked historical visual candidate", validator)
+        self.assertIn("active promoted research/authorization status is not allowed", validator)
 
 
 if __name__ == "__main__":

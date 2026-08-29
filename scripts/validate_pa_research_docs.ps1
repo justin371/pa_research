@@ -395,10 +395,17 @@ $trackedHistoricalVisualCandidatePaths = @(
     'research/nvda_bullish_abc_h1_visual_candidate_2025-06-23_2025-07-03.md',
     'research/visual_screen_candidate_grid_2024_2025_CN.md'
 )
+$historicalVisualCandidatePostOutcomeFieldPattern = '(?im)^\s*(?:entry_price|entry_date|exit_price|exit_date|exit_reason|bars_held|fill_status|trade_result|realized_R|win_rate_eligible|path_result|first_obstacle_hit|ambiguous_intrabar|gap_adjustment|evidence_status)\s*:'
 foreach ($relativePath in $trackedHistoricalVisualCandidatePaths) {
     $expectedPath = [IO.Path]::GetFullPath((Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')))
     if (-not $canonicalResearchIndexLinkedPaths.Contains($expectedPath)) {
         Add-ValidationError "tracked historical visual candidate is not referenced by a canonical index: $relativePath"
+    }
+    if (Test-Path -LiteralPath $expectedPath -PathType Leaf) {
+        $content = Get-Utf8Text -Path $expectedPath
+        if ($content -match $historicalVisualCandidatePostOutcomeFieldPattern) {
+            Add-ValidationError "post-outcome field leaked into tracked historical visual candidate: $relativePath"
+        }
     }
 }
 
@@ -409,6 +416,10 @@ $markdownFiles = Get-ChildItem -LiteralPath $repoRoot -Recurse -File -Filter '*.
 foreach ($file in $markdownFiles) {
     $relativePath = $file.FullName.Substring($repoRoot.Length + 1)
     $content = Get-Utf8Text -Path $file.FullName
+
+    if ($content -match '(?im)^\s*(?:trade_state|handoff_status|research_state)\s*:\s*(?:authorized|ready_for_system|validated)\s*$') {
+        Add-ValidationError "active promoted research/authorization status is not allowed in PA Research Markdown: $relativePath"
+    }
 
     foreach ($match in [regex]::Matches($content, '(?<!\!)\[[^\]]*\]\(([^)\r\n]+)\)|!\[[^\]]*\]\(([^)\r\n]+)\)')) {
         $target = if ($match.Groups[1].Success) { $match.Groups[1].Value } else { $match.Groups[2].Value }
