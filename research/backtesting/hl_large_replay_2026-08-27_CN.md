@@ -29,7 +29,7 @@ validated win-rate: not-computable
 | --- | --- |
 | 标的 / 合同 | COHR 10、RBLX 14、MAR 13；合计 37 条 |
 | 标签 | H1 15、H2 5、L1 12、L2 5 |
-| lineage | 31 个已记录 lineage；共享局部结构不当作独立同分布样本 |
+| lineage / 市场状态 | 31 个已记录 lineage，其中 6 组共享、12 条依赖行；`market_context_id=0/37`，不把不同 lineage 当成独立同分布样本 |
 | 数据 | Yahoo Chart API 历史 Daily OHLCV，经 agent-reach 的 Jina 公开路由获取；最新完整 RTH 日线为 `2026-08-26 America/New_York`，复核时间为 `2026-08-27 Asia/Shanghai` |
 | 数据状态 | `historical`，不是 Futu、不是实时；本 session 没有成功调用 Futu MCP |
 | 回放 | 引擎 `0.3.1`、`backtesting.py 0.6.6`、`stop_confirmation`、`max_hold_bars=10`、`gap_policy=skip` |

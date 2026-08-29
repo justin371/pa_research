@@ -168,6 +168,7 @@ $requiredFiles = @(
     'research/backtesting/hl_leg_quality_location_axis_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/event_bucket_label_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md',
+    'research/backtesting/hl_lineage_market_context_independence_audit_2026-08-29_CN.md',
     'research/backtesting/replay_outcome_denominator_audit_2026-08-29_CN.md',
     'research/backtesting/replay_lineage_independence_audit_2026-08-29_CN.md',
     'research/backtesting/replay_provenance_reproducibility_audit_2026-08-29_CN.md',
@@ -861,6 +862,21 @@ if (Test-Path -LiteralPath $hlVisualPreflightContractAuditPath -PathType Leaf) {
     )) {
         if (-not $hlVisualPreflightContractAuditContent.Contains($token)) {
             Add-ValidationError "missing H/L visual-preflight-contract-audit token '$token'"
+        }
+    }
+}
+
+$hlLineageMarketContextAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_lineage_market_context_independence_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $hlLineageMarketContextAuditPath -PathType Leaf) {
+    $hlLineageMarketContextAuditContent = Get-Utf8Text -Path $hlLineageMarketContextAuditPath
+    foreach ($token in @(
+        'lineage_id', 'market_context_id', '53', '7', '14', '0/60',
+        '不同 `lineage_id`', '不能证明市场状态', 'selection', 'replay',
+        'no-new-positive', 'validated win-rate: not-computable', 'PA Research only',
+        'no Codex Trading', 'no quantitative scanner', 'no Execution Agent'
+    )) {
+        if (-not $hlLineageMarketContextAuditContent.Contains($token)) {
+            Add-ValidationError "missing H/L lineage/market-context-independence-audit token '$token'"
         }
     }
 }

@@ -22,7 +22,8 @@
 | COHR / RBLX / MAR | 10 / 14 / 13 |
 | H1 / H2 / L1 / L2 | 15 / 5 / 12 / 5 |
 | `long_pass` / `short_pass` / EMA 闸门观察 | 16 / 17 / 4 |
-| 已知局部 lineage | 31 |
+| 已记录 lineage / 共享组 | 31 / 6 组（12 条依赖行） |
+| `market_context_id` | 0/37 条 |
 | 冻结时历史几何空间 `>=1R` / `<1R` | 5 / 32 |
 
 方向分布：`long=20`、`short=17`；标签分布为 `H1=15`、`H2=5`、`L1=12`、`L2=5`。H/L 标签不能替代多空方向，后续报告必须同时保留两者。
@@ -44,7 +45,7 @@
 3. 多头 H1/H2 只在 Daily EMA20、EMA50 均向上且视觉上不是走平时设为 `long_pass`；空头 L1/L2 对称设为 `short_pass`。无法满足的样本明确写 `fail_flat_or_opposite`，引擎会保留但不交易。
 4. `meta_confluence=present` 只表示 EMA、前期支撑/阻力、重复高低点等至少两个独立位置证据重合；META 不改变方向、触发、止损或授权。
 5. 所有合同统一使用 `stop_confirmation`、`max_hold_bars=10`、`gap_policy=skip`。这些是本批历史回放合同，不是 PA Research 生产持仓规则。开盘跳过不补成交；缺口分支不与普通触发混算。
-6. `lineage_id` 保留同一局部 A/B 或连续尝试的依赖关系；同一 lineage 内的 H1/H2 或 L1/L2 不能在最终解释中当成相互独立样本。
+6. `lineage_id` 保留同一局部 A/B 或连续尝试的依赖关系；本批 37 条中有 31 个已记录 lineage，其中 6 组共享、共 12 条依赖行。同一 lineage 内的 H1/H2 或 L1/L2 不能在最终解释中当成相互独立样本；本批没有 `market_context_id`，不同 lineage 也不能证明市场状态独立。
 
 ## 范围边界
 

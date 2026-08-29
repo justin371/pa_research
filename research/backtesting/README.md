@@ -16,6 +16,8 @@ H/L META 状态、组件与空间/授权边界见[`H/L META 字段与授权边�
 
 H/L 视觉前置字段、资产映射与决策日 provenance 边界见[`H/L 视觉前置证据与冻结资格审计`](hl_visual_preflight_contract_audit_2026-08-29_CN.md)。
 
+H/L lineage、共享父级、缺失市场状态和独立性分母边界见[`H/L lineage、市场状态与独立性分母审计`](hl_lineage_market_context_independence_audit_2026-08-29_CN.md)。当前 60 条 H/L 合同有 53 个规范化 lineage、7 个共享组（14 条依赖行），且 `market_context_id=0/60`；不同 lineage 不能自动解释为独立样本。
+
 BOP 多日回踩的独立准入清单见[`BOP 合同准入审计`](bop_contract_intake_audit_2026-08-28_CN.md)及[`bop_contract_intake_2026-08-28.csv`](bop_contract_intake_2026-08-28.csv)。该 CSV 只记录现有人工案例的接受、回测和边界状态，全部为 `contract_frozen=no`，不是回放输入。两类 intake 合计 25 行，按底层案例键归并为 22 个案例，其中 3 个案例同时出现在统一和 BOP 专项视图中；详细 schema、方向和引用核对见[`ABC/BOP intake schema 一致性审计`](abc_bop_intake_schema_consistency_audit_2026-08-29_CN.md)。
 
 ## 运行

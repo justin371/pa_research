@@ -23,9 +23,9 @@
 
 旧案例中的 Futu 数值与当前公共历史数据存在尺度/数值差异；本批的 KLAC、TSM、ADBE 合同全部使用同一份公共价格快照重新核对，不把旧记录的精确价位和新快照混写。`max_hold_bars=10` 是本批回放参数，不是生产规则或持仓承诺。
 
-## 三个独立 lineage 的冻结合同
+## 三个记录了不同 lineage 的冻结合同
 
-三行合同分别属于不同 symbol/episode，且不与首批 TSLA/CRWD 合同共享局部 A/B lineage。`primary_pattern` 仍写母结构，`internal_label` 单独写 H2 或 L1；这不是把 H2/L1 变成新的生产 setup。
+三行合同分别属于不同 symbol/episode，且不与首批 TSLA/CRWD 合同共享已知局部 A/B lineage。这里的“不同 lineage”不是统计独立声明；当前 3 条合同也没有记录 `market_context_id`，不能据此证明市场状态或结果 artifact 独立。`primary_pattern` 仍写母结构，`internal_label` 单独写 H2 或 L1；这不是把 H2/L1 变成新的生产 setup。
 
 本批旧合同 CSV 没有显式 `pre_entry_space_R` 或 `space_status` 列；下文的 `xR` 是由冻结时已经写入的触发、结构止损和第一障碍做出的历史几何审计值。按当前 engine `0.3.9` 的字段分层，这 3 条合同的 `contract_space_bucket` 仍是 `unknown_contract_space`，不能把下文几何值回填成当前显式 strict-space 状态。
 
@@ -74,7 +74,7 @@
 - 引擎层（只按 EMA 闸门判断合同是否可回放）：`contract_count=3`、`eligible=3`、`filled=3`、`completed=3`、`ambiguous=0`；描述性结果为 `3/3 wins = 100.00%`，平均 `+1.6248R`，中位数 `+1.8449R`，合计 `+4.8743R`。
 - 历史几何空间 `>=1R` 敏感性层：KLAC 的 `0.6956R` 属于历史几何 `<1R`、当前 `valid_no_trade`，不作为合格交易样本；TSM 与 ADBE 为 `2/2 wins`、平均 `+2.0894R`、合计 `+4.1788R`。这两个样本同为 short，且样本量只有 2，不能称为 L1 胜率或收益优势。
 - 标签层：H2 `1` 个、L1 `2` 个；本批没有新增 H1 或 L2 合同，不能为了覆盖四个标签而把后续跟随强行命名为新尝试。
-- lineage 层：三个合同各自独立；独立 lineage 只说明不共享已知局部 A/B，不等于独立同分布，也不能抵消公共数据重审、父级状态和事件/市场边界。
+- lineage 层：三个合同各自记录了不同的 `lineage_id`；这只说明不共享已知局部 A/B，不等于统计独立同分布，也不能抵消缺失 `market_context_id`、公共数据重审、父级状态和事件/市场边界。
 - 缺口层：TSM 为 `accepted_open`；KLAC、ADBE 没有触发日开盘穿越。缺口分支没有和普通 stop 混算。
 - META 层：三个合同均记录 `present`，但 META 只是位置/背景证据；它不能解释 KLAC 的首障碍不足，也不能替代触发和结构止损。
 
