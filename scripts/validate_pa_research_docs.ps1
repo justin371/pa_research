@@ -272,6 +272,7 @@ $requiredFiles = @(
     'research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md',
     'research/backtesting/historical_case_entry_inventory_contract_audit_2026-08-29_CN.md',
     'research/backtesting/top_level_research_entry_boundary_audit_2026-08-30_CN.md',
+    'research/backtesting/canonical_entry_cross_coverage_audit_2026-08-30_CN.md',
     'research/backtesting/required_report_index_coverage_audit_2026-08-29_CN.md',
     'research/backtesting/conclusion_boundary_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/visual_capability_boundary_audit_2026-08-29_CN.md',
@@ -322,6 +323,28 @@ foreach ($relativePath in $requiredResearchReportPaths) {
     }
 }
 
+$backtestingReportPaths = @(
+    Get-ChildItem -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'research/backtesting') -File -Filter '*.md' |
+        Where-Object { $_.Name -ne 'README.md' }
+)
+foreach ($reportFile in $backtestingReportPaths) {
+    if (-not $canonicalResearchIndexLinkedPaths.Contains($reportFile.FullName)) {
+        $relativePath = $reportFile.FullName.Substring($repoRoot.Length + 1).Replace('\', '/')
+        Add-ValidationError "backtesting report is not referenced by a canonical index: $relativePath"
+    }
+}
+$canonicalSectionEntryPaths = @(
+    Get-ChildItem -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'docs') -Recurse -File -Filter '*.md'
+    Get-ChildItem -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'foundations') -Recurse -File -Filter 'README.md'
+    Get-ChildItem -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'patterns') -Recurse -File -Filter 'README.md'
+    Get-ChildItem -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'strategy') -Recurse -File -Filter '*.md'
+)
+foreach ($entryFile in $canonicalSectionEntryPaths) {
+    if (-not $canonicalResearchIndexLinkedPaths.Contains($entryFile.FullName)) {
+        $relativePath = $entryFile.FullName.Substring($repoRoot.Length + 1).Replace('\', '/')
+        Add-ValidationError "active section entry is not referenced by a canonical index: $relativePath"
+    }
+}
 $visualAssetReadmePaths = @(
     Get-ChildItem -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'research/assets/visual_recognition') -Recurse -File -Filter 'README.md'
 )
@@ -725,6 +748,43 @@ $canonicalChecks = @{
         '本文件只属于 PA Research',
         '不创建量化扫描器',
         '不连接 Execution Agent'
+    )
+    'research/backtesting/canonical_entry_cross_coverage_audit_2026-08-30_CN.md' = @(
+        'inventory_scope: canonical_entry_cross_coverage_audit_only',
+        'canonical_index_count: 7',
+        'report_link_resolution: real_local_markdown_and_machine_target',
+        'section_entry_policy: direct_canonical_for_active_sections',
+        'research_root_policy: non_self_markdown_reachable',
+        'asset_png_policy: README_manifest_exact_inventory',
+        'template_inventory: Markdown_authority_cards_and_section_readmes',
+        'docs_markdown_entries: 7',
+        'foundations_readme_entries: 9',
+        'patterns_readme_entries: 17',
+        'strategy_markdown_entries: 7',
+        'backtesting_reports: 75',
+        'required_research_reports: 61',
+        'visual_asset_readmes: 11',
+        'png_assets: 105',
+        'backtesting_csv: 18',
+        'backtesting_json: 1',
+        'backtesting_executable_entries: 3',
+        'top_level_research_reports: 171',
+        'canonical_direct_top_level: 55',
+        'topical_only_top_level: 116',
+        'all_top_level_research_reachable: yes',
+        'missing_backtesting_reports: 0',
+        'missing_section_entries: 0',
+        'missing_required_reports: 0',
+        'missing_asset_readmes: 0',
+        'missing_machine_artifacts: 0',
+        'missing_executable_entries: 0',
+        'png_manifest_gap: 0',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
     )
     'research/backtesting/conclusion_boundary_consistency_audit_2026-08-29_CN.md' = @(
         'validated win-rate: not-computable',

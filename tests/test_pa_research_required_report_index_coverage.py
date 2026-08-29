@@ -104,6 +104,27 @@ def backtesting_report_paths() -> list[str]:
     )
 
 
+def canonical_section_entry_paths() -> list[str]:
+    paths = set()
+    paths.update(
+        path.relative_to(REPO_ROOT).as_posix()
+        for path in (REPO_ROOT / "docs").rglob("*.md")
+    )
+    paths.update(
+        path.relative_to(REPO_ROOT).as_posix()
+        for path in (REPO_ROOT / "foundations").rglob("README.md")
+    )
+    paths.update(
+        path.relative_to(REPO_ROOT).as_posix()
+        for path in (REPO_ROOT / "patterns").rglob("README.md")
+    )
+    paths.update(
+        path.relative_to(REPO_ROOT).as_posix()
+        for path in (REPO_ROOT / "strategy").rglob("*.md")
+    )
+    return sorted(paths)
+
+
 def backtesting_machine_artifact_paths() -> list[str]:
     return sorted(
         f"research/backtesting/{path.name}"
@@ -128,6 +149,16 @@ class RequiredReportIndexCoverageTests(unittest.TestCase):
         self.assertIn("$researchRootReportPaths", text)
         self.assertIn(
             "required research report is not referenced by a canonical index",
+            text,
+        )
+        self.assertIn("$backtestingReportPaths", text)
+        self.assertIn(
+            "backtesting report is not referenced by a canonical index",
+            text,
+        )
+        self.assertIn("$canonicalSectionEntryPaths", text)
+        self.assertIn(
+            "active section entry is not referenced by a canonical index",
             text,
         )
         self.assertIn(
@@ -164,6 +195,15 @@ class RequiredReportIndexCoverageTests(unittest.TestCase):
         ]
         self.assertEqual(missing, [])
 
+    def test_all_active_section_entries_are_in_a_canonical_index(self):
+        indexed_paths = canonical_index_linked_paths()
+        missing = [
+            path
+            for path in canonical_section_entry_paths()
+            if path not in indexed_paths
+        ]
+        self.assertEqual(missing, [])
+
     def test_all_backtesting_machine_artifacts_and_entries_are_in_a_canonical_index(self):
         indexed_paths = canonical_index_linked_paths()
         missing_artifacts = [
@@ -192,9 +232,9 @@ class RequiredReportIndexCoverageTests(unittest.TestCase):
         self.assertIn(AUDIT_PATH.name, read(BACKTEST_ROOT / "README.md"))
         self.assertIn(AUDIT_PATH.name, read(REPO_ROOT / "strategy" / "README.md"))
         for token in (
-            "87 个必需文件",
-            "60 个是",
-            "74 个是报告文件",
+            "88 个必需文件",
+            "61 个是",
+            "75 个是报告文件",
             "没有孤立报告",
             "no-new-positive",
             "validated win-rate: not-computable",

@@ -91,6 +91,7 @@
 - [`Pattern 案例矩阵、策略入口与历史别名合同审计`](backtesting/pattern_case_matrix_strategy_entry_contract_audit_2026-08-29_CN.md)：展示行不冻结 canonical 字段，历史别名不覆盖主标签/订单/空间，后续路径不进入事前证据或胜率分母。
 - [`历史案例入口合同盘点审计`](backtesting/historical_case_entry_inventory_contract_audit_2026-08-29_CN.md)：盘点五个聚合矩阵之外的历史案例入口，只补必要的历史边界，不新增样本或结果。
 - [`顶层 research 历史正向条件入口边界审计`](backtesting/top_level_research_entry_boundary_audit_2026-08-30_CN.md)：为 9 个未自包含 scope 的条件性历史入口补最小边界，不新增样本或结果。
+- [`PA Research canonical 入口交叉覆盖审计`](backtesting/canonical_entry_cross_coverage_audit_2026-08-30_CN.md)：交叉核对 canonical index、requiredFiles、报告/资产/模板、历史 inventory 与 validator/test 守卫。
 
 ## 冻结合同回放
 
