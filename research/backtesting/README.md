@@ -10,6 +10,8 @@ validator `requiredFiles` 中研究报告与 canonical 索引的覆盖关系见[
 
 统计结论、正例表述和研究/交接边界的统一检查见[`统计结论、正例表述与授权边界一致性审计`](conclusion_boundary_consistency_audit_2026-08-29_CN.md)；它只清理非 canonical 状态别名，不增加回放分母。
 
+视觉识别能力、人工 `pattern_like` 边界和图表 provenance 的统一检查见[`视觉识别能力与图表 provenance 边界审计`](visual_capability_boundary_audit_2026-08-29_CN.md)；它不测试准确率、不创建扫描器，也不增加回放分母。
+
 视觉资产、冻结合同截止图与事前/结果证据隔离见[`视觉资产与事前证据边界审计`](visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md)。该审计区分仓库内 105 张 PNG 与 `hl_next4/hl_next5` 的外部 artifact，不把人工画面抽查当作自动识别或胜率证据。外部 PNG 的逻辑文件清单、哈希和 ROST 决策日图缺失边界见[`外部视觉 artifact provenance 审计`](external_visual_artifact_provenance_audit_2026-08-29_CN.md)及[`外部视觉 artifact manifest`](external_visual_artifact_manifest_2026-08-29.json)。
 
 ABC/BOP 的视觉案例准入清单见[`ABC/BOP 合同准入审计`](abc_bop_contract_intake_audit_2026-08-28_CN.md)及[`abc_bop_contract_intake_2026-08-28.csv`](abc_bop_contract_intake_2026-08-28.csv)。该 CSV 明确标记 `contract_frozen=no`，不是回放输入，不增加胜率分母。NFLX/TSM 的逐字段冻结复核见[`ABC 候选合同冻结复核`](abc_bop_candidate_freeze_review_2026-08-28_CN.md)；V、NVDA、KLAC、CRWD 的多头候选复核见[`多头 ABC/H1/H2 候选合同审计`](abc_bullish_candidate_contract_audit_2026-08-28_CN.md)。

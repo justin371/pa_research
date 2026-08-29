@@ -24,8 +24,8 @@
 | 无后见之明地描述 A/B/C | `abc_h1_h2_h3_l1_l2_l3_scope_CN.md`、`docs/common_context.md`、视觉复核卡，以及 TSLA/NFLX/TSM/CRWD 等案例都要求按决策时点切片，禁止用后续 C、MM 或盈利倒灌 | **已形成工作框架** |
 | H1/H2/H3 与 L1/L2/L3 | H1/H2、L1/L2 有多空条件样本；H3/L3 有 KLAC 候选和 TSLA、ANET、COIN、XOM、UBER、NFLX、ASML、NOW、DELL 等反例 | **条件性可用；H3/L3 未冻结** |
 | 订单类型 | `order_branch_visual_protocol_CN.md` 已分开 stop、stop-limit、limit-retest、market-close、observation-only，并把跳空重订作为新合同；八个 pattern 的默认分支见[`八个 Pattern 的订单合同与 R/R 审计`](order_contract_cross_pattern_audit_CN.md) | **研究协议已形成；stop-limit 尚无独立成交样本** |
-| 结构止损、第一支撑/阻力与 R/R | 决策矩阵和案例普遍先记录结构失效区，再找第一独立障碍；KLAC、NFLX、TSM、TSLA 等提供正向与 no-trade 对照；基础视觉层见[`Support / Resistance`](../foundations/01_support_resistance/README.md)，专项审计见[`Support / Resistance 专项视觉证据审计`](support_resistance_visual_evidence_gap_audit_2026-08-24_CN.md)，跨 pattern 位置排序见[`支撑/阻力强度与八个 Pattern 的位置审计`](support_resistance_cross_pattern_audit_CN.md) | **视觉原则稳定；不设固定阈值** |
-| 足够的多空历史对照 | 已有多空、开放趋势、区间、过渡、事件/跳空、首障碍否决和计数重置样本；不是统计抽样，也不声称胜率 | **足以支持视觉助手当前工作版** |
+| 结构止损、第一支撑/阻力与 R/R | 决策矩阵和案例普遍先记录结构失效区，再找第一独立障碍；KLAC、NFLX、TSM、TSLA 等提供正向与 no-trade 对照；基础视觉层见[`Support / Resistance`](../foundations/01_support_resistance/README.md)，专项审计见[`Support / Resistance 专项视觉证据审计`](support_resistance_visual_evidence_gap_audit_2026-08-24_CN.md)，跨 pattern 位置排序见[`支撑/阻力强度与八个 Pattern 的位置审计`](support_resistance_cross_pattern_audit_CN.md) | **现有案例中的视觉原则可复用；不设固定阈值** |
+| 足够的多空历史对照 | 已有多空、开放趋势、区间、过渡、事件/跳空、首障碍否决和计数重置样本；不是统计抽样，也不声称胜率 | **足以支持视觉助手在研究范围内使用工作版字段** |
 | 成熟结论沉淀到 PA Research | 共同上下文、范围定义、视觉综合、决策矩阵、订单协议和案例文件均已同步；Codex Trading 未修改 | **已完成研究层沉淀** |
 
 这张表的含义是：普通 ABC 的视觉识别已经可以作为后续筛图的工作能力使用；剩余问题集中在 H3/L3 的衰竭与延续边界、不同订单合同的统计口径，以及是否存在更干净的开放趋势正向样本。它们是未决研究问题，不应再迫使每个普通 ABC 候选重复完整深审。

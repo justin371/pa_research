@@ -221,6 +221,7 @@ $requiredFiles = @(
     'research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md',
     'research/backtesting/required_report_index_coverage_audit_2026-08-29_CN.md',
     'research/backtesting/conclusion_boundary_consistency_audit_2026-08-29_CN.md',
+    'research/backtesting/visual_capability_boundary_audit_2026-08-29_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_manifest_2026-08-29.json',
@@ -338,6 +339,19 @@ $canonicalChecks = @{
         'win_rate_eligible',
         'research_positive_conditional',
         'ready_for_system',
+        '不修改 Codex Trading',
+        '不创建量化扫描器',
+        '不连接 Execution Agent'
+    )
+    'research/backtesting/visual_capability_boundary_audit_2026-08-29_CN.md' = @(
+        'visual_capability: human_chart_review / approximate_pattern_like_only',
+        'validated win-rate: not-computable',
+        'conclusion: no-new-positive',
+        'daily_context_window: <2y / unavailable',
+        'major_high_low_review',
+        'ema20_50_200_review',
+        'pattern_like',
+        'research_positive_conditional',
         '不修改 Codex Trading',
         '不创建量化扫描器',
         '不连接 Execution Agent'
