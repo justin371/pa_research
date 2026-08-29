@@ -98,6 +98,7 @@
 - 日线候选卡现显式要求 `contract_scope: daily_candidate`、`directional_bias`、`direction`、`permission`、`lineage_id`、`market_context_id` 以及 BOP 的边界/接受/回踩字段；该合同的 `timeframes_seen` 只能是 `Daily`。4H/1H/60m/15m 只能在日线闸门通过后进入独立 `deep_review` 或订单合同，不能补写日线缺失证据。
 - 六份 `hl_*_selection_2026-08-27_CN.md` 现明确为 `contract_scope: historical_context_only`、`timeframes_seen: Daily`。它们是历史选择/冻结前记录，不是当前 `daily_candidate`；CSV 内既有的字段覆盖缺口和市场/事件证据边界保持原样，不通过本轮回填或改写。
 - CRM、META、MSFT、NVDA 和候选网格五个较早入口现分别声明 `historical_context_only` 或 `stage_1_fast_screen`，并逐项标出方向、可见周期、图表完整度、两年 Daily 覆盖、事件/市场状态及 `research_state`/`trade_state`/`gate_result`。缺失项保留 `unknown`、`unavailable` 或 `pending`；这些记录不能因出现 H/L-like、低周期或后见之明而升级为授权。
+- 本审计追踪的五个入口已在 `research/README.md` 和 `strategy/README.md` 建立直接索引：[`CRM`](crm_bearish_abc_l1_l2_visual_candidate_2025-03-10_2025-03-28.md)、[`META`](meta_bullish_h1_h2_visual_candidate_2024-09-11_2024-10-11.md)、[`MSFT`](msft_bearish_abc_l1_l2_visual_candidate_2025-10-28_2025-11-20.md)、[`NVDA`](nvda_bullish_abc_h1_visual_candidate_2025-06-23_2025-07-03.md) 和[`候选网格`](visual_screen_candidate_grid_2024_2025_CN.md)。该索引修复只改善可追溯性，不改变任何历史字段、样本或结果状态。
 - 候选目录的流程已固定为 Daily-first：`stage_1_fast_screen`/观察行不等于 `daily_candidate`；只有通过日线前置并补齐字段后，才可建立独立深审/订单合同。`outcome` 仅属于独立 replay/result 的事后字段，不能反向改变候选状态。
 
 因此，本链条的可追溯路径是：

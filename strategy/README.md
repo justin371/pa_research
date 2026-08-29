@@ -12,6 +12,17 @@
 - [`META 多重优势区域`](meta_multiple_edge.md)：位置汇聚背景，不是独立触发器；
 - [`概率原则学习参考`](probability_principles_pages_1_7.md)：外部启发式，只作学习材料，不进入胜率或回测基准；
 - [`TSLA/META 历史复盘`](reviews/2026-06-25-tsla-meta-example.md)：历史案例，不是实盘授权。
+
+### 当前审计追踪的历史视觉候选
+
+以下五个入口属于历史 `stage_1_fast_screen`/`historical_context_only` 记录，保留各自的方向、周期和缺失闸门；它们不是 `daily_candidate`、冻结合同、交易授权或胜率样本：
+
+- [`CRM 空头 ABC L1/L2 历史视觉候选`](../research/crm_bearish_abc_l1_l2_visual_candidate_2025-03-10_2025-03-28.md)；
+- [`META 多头 ABC H1/H2 历史视觉候选`](../research/meta_bullish_h1_h2_visual_candidate_2024-09-11_2024-10-11.md)；
+- [`MSFT 空头 ABC L1/L2 历史视觉候选`](../research/msft_bearish_abc_l1_l2_visual_candidate_2025-10-28_2025-11-20.md)；
+- [`NVDA 多头 ABC H1 历史视觉候选`](../research/nvda_bullish_abc_h1_visual_candidate_2025-06-23_2025-07-03.md)；
+- [`2024–2025 视觉候选网格`](../research/visual_screen_candidate_grid_2024_2025_CN.md)：批次级混合记录，`direction=no_valid_direction`，不代表逐标的候选。
+
 - [`候选、视觉复核与交易日志边界一致性审计`](../research/candidate_visual_record_consistency_audit_2026-08-29_CN.md)：核对方向、候选状态、事前证据和事后路径的分轴边界。
 - [`Pattern 索引、别名与主次标签边界审计`](../research/pattern_index_alias_boundary_audit_2026-08-29_CN.md)：核对 16 个 pattern 目录入口、核心/独立层级和 canonical 主次标签边界。
 - [`Pattern 视觉复核前置证据审计`](../research/pattern_visual_preflight_audit_2026-08-29_CN.md)：核对完整图表左侧、EMA、适用路径的 A/B 质量（强 A→H1/L1 优先；区间边缘三推不要求强 A）、位置与首障碍的共同前置证据。

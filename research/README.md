@@ -116,9 +116,19 @@
 - [`三推/H3-L3 压力状态框架`](three_push_pressure_state_framework_CN.md)：区间边缘三推、区间中部重复测试、趋势/通道延续和反向确认的分流；
 - [`跨 Pattern 视觉优先级与冲突消解审计`](cross_pattern_visual_priority_audit_2026-08-24_CN.md)。
 
+## 当前审计追踪的历史视觉候选入口
+
+以下五个入口是[`候选、视觉复核与交易日志边界一致性审计（2026-08-29）`](candidate_visual_record_consistency_audit_2026-08-29_CN.md)明确追踪的历史视觉候选。它们的 `stage_1_fast_screen`/`historical_context_only` 范围、方向和缺失闸门均保留在原记录中，不代表 `daily_candidate`、冻结合同、交易授权或胜率样本：
+
+- [`CRM 空头 ABC L1/L2 历史视觉候选`](crm_bearish_abc_l1_l2_visual_candidate_2025-03-10_2025-03-28.md)；
+- [`META 多头 ABC H1/H2 历史视觉候选`](meta_bullish_h1_h2_visual_candidate_2024-09-11_2024-10-11.md)；
+- [`MSFT 空头 ABC L1/L2 历史视觉候选`](msft_bearish_abc_l1_l2_visual_candidate_2025-10-28_2025-11-20.md)；
+- [`NVDA 多头 ABC H1 历史视觉候选`](nvda_bullish_abc_h1_visual_candidate_2025-06-23_2025-07-03.md)；
+- [`2024–2025 视觉候选网格`](visual_screen_candidate_grid_2024_2025_CN.md)：批次级混合记录，`direction=no_valid_direction`，不代表逐标的候选。
+
 ## 已归档但仍可复核的独立案例入口
 
-这些文件此前没有 Markdown 入链；它们都是历史研究材料，不代表生产规则或统计样本：
+以下四个额外归档入口此前没有 Markdown 入链；它们都是历史研究材料，不代表生产规则或统计样本：
 
 - [`Codex Trading H1/H2/L1/L2 只读导入摘要`](codex_trading_h1_h2_l1_l2_import.md)：只读图表参考，PA Research 规则优先；
 - [`TSLA 空头 ABC 候选筛选`](tsla_bearish_abc_candidate_screen_2026-08-22.md)；

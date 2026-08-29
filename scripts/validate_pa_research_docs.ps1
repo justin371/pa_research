@@ -264,6 +264,21 @@ foreach ($relativePath in $requiredResearchReportPaths) {
     }
 }
 
+$trackedHistoricalVisualCandidatePaths = @(
+    'research/crm_bearish_abc_l1_l2_visual_candidate_2025-03-10_2025-03-28.md',
+    'research/meta_bullish_h1_h2_visual_candidate_2024-09-11_2024-10-11.md',
+    'research/msft_bearish_abc_l1_l2_visual_candidate_2025-10-28_2025-11-20.md',
+    'research/nvda_bullish_abc_h1_visual_candidate_2025-06-23_2025-07-03.md',
+    'research/visual_screen_candidate_grid_2024_2025_CN.md'
+)
+foreach ($relativePath in $trackedHistoricalVisualCandidatePaths) {
+    $fileName = [IO.Path]::GetFileName($relativePath)
+    $indexMatches = @($canonicalResearchIndexContents | Where-Object { $_.Contains($fileName) })
+    if ($indexMatches.Count -eq 0) {
+        Add-ValidationError "tracked historical visual candidate is not referenced by a canonical index: $relativePath"
+    }
+}
+
 $markdownFiles = Get-ChildItem -LiteralPath $repoRoot -Recurse -File -Filter '*.md' | Where-Object {
     $relative = $_.FullName.Substring($repoRoot.Length + 1)
     -not $relative.StartsWith('.codex' + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)

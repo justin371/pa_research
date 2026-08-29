@@ -53,6 +53,14 @@ DETAILED_CONTRACT_FILES = {
     "hl_next5_contracts_2026-08-27.csv",
 }
 
+TRACKED_HISTORICAL_VISUAL_CANDIDATE_ENTRIES = (
+    "crm_bearish_abc_l1_l2_visual_candidate_2025-03-10_2025-03-28.md",
+    "meta_bullish_h1_h2_visual_candidate_2024-09-11_2024-10-11.md",
+    "msft_bearish_abc_l1_l2_visual_candidate_2025-10-28_2025-11-20.md",
+    "nvda_bullish_abc_h1_visual_candidate_2025-06-23_2025-07-03.md",
+    "visual_screen_candidate_grid_2024_2025_CN.md",
+)
+
 
 def read_contracts(filename):
     with (BACKTEST_ROOT / filename).open(newline="", encoding="utf-8-sig") as handle:
@@ -388,6 +396,33 @@ class CandidateVisualConsistencyTests(unittest.TestCase):
         self.assertIn("candidate_visual_record_consistency_audit_2026-08-29_CN.md", research_readme)
         self.assertIn("candidate_visual_record_consistency_audit_2026-08-29_CN.md", strategy_readme)
         self.assertIn("candidate_visual_record_consistency_audit_2026-08-29_CN.md", validator)
+
+    def test_tracked_historical_visual_candidate_entries_are_indexed(self):
+        canonical_indexes = (
+            REPO_ROOT / "README.md",
+            REPO_ROOT / "docs" / "README.md",
+            REPO_ROOT / "research" / "README.md",
+            REPO_ROOT / "research" / "backtesting" / "README.md",
+            REPO_ROOT / "patterns" / "README.md",
+            REPO_ROOT / "foundations" / "README.md",
+            REPO_ROOT / "strategy" / "README.md",
+        )
+        index_texts = tuple(path.read_text(encoding="utf-8") for path in canonical_indexes)
+        research_readme = index_texts[2]
+        strategy_readme = index_texts[6]
+        validator = (REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1").read_text(
+            encoding="utf-8"
+        )
+        audit = (
+            REPO_ROOT / "research" / "candidate_visual_record_consistency_audit_2026-08-29_CN.md"
+        ).read_text(encoding="utf-8")
+        for filename in TRACKED_HISTORICAL_VISUAL_CANDIDATE_ENTRIES:
+            with self.subTest(candidate=filename):
+                self.assertTrue(any(filename in text for text in index_texts))
+                self.assertIn(filename, research_readme)
+                self.assertIn(filename, strategy_readme)
+                self.assertIn(filename, validator)
+                self.assertIn(filename, audit)
 
 
 if __name__ == "__main__":
