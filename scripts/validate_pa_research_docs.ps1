@@ -219,6 +219,7 @@ $requiredFiles = @(
     'research/backtesting/visual_asset_provenance_coverage_audit_2026-08-29_CN.md',
     'research/backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md',
     'research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md',
+    'research/backtesting/required_report_index_coverage_audit_2026-08-29_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_manifest_2026-08-29.json',
@@ -231,6 +232,33 @@ foreach ($relativePath in $requiredFiles) {
     $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
     if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) {
         Add-ValidationError "missing required file: $relativePath"
+    }
+}
+
+$canonicalResearchIndexRelativePaths = @(
+    'README.md',
+    'docs/README.md',
+    'research/README.md',
+    'research/backtesting/README.md',
+    'patterns/README.md',
+    'foundations/README.md',
+    'strategy/README.md'
+)
+$canonicalResearchIndexContents = foreach ($indexRelativePath in $canonicalResearchIndexRelativePaths) {
+    $indexAbsolutePath = Join-Path -Path $repoRoot -ChildPath ($indexRelativePath -replace '/', '\')
+    if (Test-Path -LiteralPath $indexAbsolutePath -PathType Leaf) {
+        Get-Utf8Text -Path $indexAbsolutePath
+    }
+}
+$requiredResearchReportPaths = @($requiredFiles | Where-Object {
+    ($_ -match '^research/[^/]+\.md$' -or $_ -match '^research/backtesting/[^/]+\.md$') -and
+    $_ -notmatch '/README\.md$'
+})
+foreach ($relativePath in $requiredResearchReportPaths) {
+    $fileName = [IO.Path]::GetFileName($relativePath)
+    $indexMatches = @($canonicalResearchIndexContents | Where-Object { $_.Contains($fileName) })
+    if ($indexMatches.Count -eq 0) {
+        Add-ValidationError "required research report is not referenced by a canonical index: $relativePath"
     }
 }
 

@@ -6,6 +6,8 @@
 
 当前人工冻结合同的方向、H/L 标签、事件、空间和 lineage 覆盖见[`人工冻结合同覆盖审计`](contract_coverage_audit_2026-08-28_CN.md)。研究记录与当前回放输入的字段边界见[`合同权威与字段一致性审计`](contract_authority_consistency_audit_2026-08-29_CN.md)；现有 CSV inventory 与资格隔离见[`合同 CSV inventory 与资格边界审计`](contract_csv_inventory_audit_2026-08-29_CN.md)；validator 与 engine 的合同 parity 见[`文档 validator 与 engine 合同 parity 审计`](validator_engine_contract_parity_audit_2026-08-29_CN.md)；报告、索引与 inventory 的当前一致性见[`报告、索引与 inventory 一致性审计`](report_index_inventory_consistency_audit_2026-08-29_CN.md)；各批次报告数字、方向/标签、事件/空间和 lineage 的逐批重算见[`批次报告数字与分层一致性审计`](batch_report_numeric_consistency_audit_2026-08-29_CN.md)。这些审计只检查合同记录/边界完整性，不代表胜率验证。
 
+validator `requiredFiles` 中研究报告与 canonical 索引的覆盖关系见[`requiredFiles 与研究报告索引覆盖审计`](required_report_index_coverage_audit_2026-08-29_CN.md)；`research/README.md` 是研究报告的综合入口，本文档只保留回放、合同和版本边界的重点入口，不要求逐一重复所有历史审计报告。
+
 视觉资产、冻结合同截止图与事前/结果证据隔离见[`视觉资产与事前证据边界审计`](visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md)。该审计区分仓库内 105 张 PNG 与 `hl_next4/hl_next5` 的外部 artifact，不把人工画面抽查当作自动识别或胜率证据。外部 PNG 的逻辑文件清单、哈希和 ROST 决策日图缺失边界见[`外部视觉 artifact provenance 审计`](external_visual_artifact_provenance_audit_2026-08-29_CN.md)及[`外部视觉 artifact manifest`](external_visual_artifact_manifest_2026-08-29.json)。
 
 ABC/BOP 的视觉案例准入清单见[`ABC/BOP 合同准入审计`](abc_bop_contract_intake_audit_2026-08-28_CN.md)及[`abc_bop_contract_intake_2026-08-28.csv`](abc_bop_contract_intake_2026-08-28.csv)。该 CSV 明确标记 `contract_frozen=no`，不是回放输入，不增加胜率分母。NFLX/TSM 的逐字段冻结复核见[`ABC 候选合同冻结复核`](abc_bop_candidate_freeze_review_2026-08-28_CN.md)；V、NVDA、KLAC、CRWD 的多头候选复核见[`多头 ABC/H1/H2 候选合同审计`](abc_bullish_candidate_contract_audit_2026-08-28_CN.md)。
