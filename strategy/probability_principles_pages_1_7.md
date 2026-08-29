@@ -1,5 +1,11 @@
 # Price Action Probability Principles — Pages 1–7
 
+文档状态：document_status=research_only / document_maturity=provisional / handoff_status=not_ready / external_reference / not-quantitative
+
+范围：PA Research only；本页是外部参考，不是当前规则 authority。
+
+本页不是 PA Research 当前规则 authority；它是用户提供的教育性外部参考，只用于提出待检验假设。页面中的百分比不是 PA Research 的验证胜率、生产规则、量化扫描器输入、交易授权或 Execution Agent 输入；项目当前结论仍为 no-new-positive，validated win-rate: not-computable，60% 只是待检验目标。
+
 > Working reference extracted from the user's Brooks Price Action probability table. These are contextual/empirical heuristics, not guaranteed win rates or universal statistical claims.
 
 ```text

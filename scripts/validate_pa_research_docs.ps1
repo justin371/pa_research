@@ -1292,6 +1292,37 @@ $canonicalChecks = @{
         '当前 PA Research checkout 不包含券商或账户的真实交易日志；研究合同、历史回放结果和运行 metadata 都不能代替真实交易日志。',
         '记录回放器的模拟成交状态、模拟退出状态'
     )
+    'strategy/00_trading_framework.md' = @(
+        'document_status=research_only / document_maturity=provisional / handoff_status=not_ready / not-quantitative',
+        'PA Research only',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        '不是 Codex Trading 生产规则',
+        '量化扫描器',
+        'Execution Agent',
+        'pa_research_output_schema_v0_1_CN.md'
+    )
+    'strategy/meta_multiple_edge.md' = @(
+        'document_status=research_only / document_maturity=provisional / handoff_status=not_ready / not-quantitative',
+        'PA Research',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        '不是 Codex Trading 生产规则',
+        '量化扫描器',
+        'Execution Agent',
+        'pa_research_output_schema_v0_1_CN.md'
+    )
+    'strategy/probability_principles_pages_1_7.md' = @(
+        'document_status=research_only / document_maturity=provisional / handoff_status=not_ready / external_reference / not-quantitative',
+        'PA Research',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        '不是 PA Research 当前规则 authority',
+        '量化扫描器',
+        'Execution Agent',
+        'source_version: not_provided',
+        'evidence_status: external_heuristic_not_validated'
+    )
     'strategy/pattern_inventory_candidates.md' = @(
         '如果目标是 `daily_candidate`，第一步只能看完成的 Daily',
         '只要“看起来像”只能先进入研究 inventory 的 `stage_1_fast_screen`/观察行',

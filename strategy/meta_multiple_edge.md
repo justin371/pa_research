@@ -1,5 +1,11 @@
 # META — Multiple Edge Trading Area
 
+文档状态：document_status=research_only / document_maturity=provisional / handoff_status=not_ready / not-quantitative
+
+范围：PA Research only。
+
+本页是 PA Research 的位置研究框架。META 只能描述多个事前位置/背景优势的汇聚，不能单独产生方向、触发、订单、统计资格或交易授权；它不是 Codex Trading 生产规则、量化扫描器或 Execution Agent 输入。当前统计结论仍为 no-new-positive，validated win-rate: not-computable，60% 只是待检验目标。完整记录必须回到[PA Research 统一输出合同 v0.1](../docs/pa_research_output_schema_v0_1_CN.md)。
+
 ## Definition
 
 META means **Multiple Edge Trading Area**.

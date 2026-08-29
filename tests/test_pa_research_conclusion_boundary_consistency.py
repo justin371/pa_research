@@ -28,6 +28,22 @@ CORE_BOUNDARY_TOKENS = (
     "Execution Agent",
 )
 
+STANDALONE_STRATEGY_PATHS = (
+    REPO_ROOT / "strategy" / "00_trading_framework.md",
+    REPO_ROOT / "strategy" / "meta_multiple_edge.md",
+    REPO_ROOT / "strategy" / "probability_principles_pages_1_7.md",
+)
+
+STANDALONE_STRATEGY_TOKENS = (
+    "document_status=research_only",
+    "document_maturity=provisional",
+    "handoff_status=not_ready",
+    "no-new-positive",
+    "validated win-rate: not-computable",
+    "量化扫描器",
+    "Execution Agent",
+)
+
 LEGACY_STATUS_PATTERNS = (
     re.compile(r"(?m)^\s*validated_win_rate\s*:"),
     re.compile(r"(?m)^\s*win_rate\s*:\s*not-computable\s*$"),
@@ -111,6 +127,17 @@ class PaResearchConclusionBoundaryConsistencyTests(unittest.TestCase):
         backtesting_readme = read(BACKTEST_ROOT / "README.md")
         self.assertIn("study_status", backtesting_readme)
         self.assertIn("统一统计结论", backtesting_readme)
+
+    def test_standalone_strategy_pages_declare_scope_and_conclusion(self):
+        for path in STANDALONE_STRATEGY_PATHS:
+            text = read(path)
+            with self.subTest(path=path):
+                for token in STANDALONE_STRATEGY_TOKENS:
+                    self.assertIn(token, text, token)
+        probability = read(STANDALONE_STRATEGY_PATHS[-1])
+        self.assertIn("external_reference", probability)
+        self.assertIn("source_version: not_provided", probability)
+        self.assertIn("evidence_status: external_heuristic_not_validated", probability)
 
     def test_research_indexes_disclose_simulated_results_and_no_actual_logs(self):
         transaction_log_boundary = (

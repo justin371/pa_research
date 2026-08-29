@@ -21,19 +21,31 @@
 - Futu/OpenD 的出现位置是历史数据来源、可选数据来源或“未连接”的边界说明；回放 executable code 没有 Futu/OpenD、broker、网络、账户或订单导入；
 - `量化扫描器`、`scanner` 和 `Execution Agent` 的出现位置是能力排除、交接边界或 schema/validator 检查，不是已实现的模块或运行时依赖；
 - 文档校验继续拒绝不可移植的 Codex Trading checkout 路径，并确认根 README、docs README、research README 和回放 README 的索引可达；
-- 没有需要删除或改写的 stale/misleading authority 文案，因此不修改现有历史案例引用；合法的历史来源和禁止性边界全部保留。
+- 未发现把参考材料写成当前 production authority 的既有断言；但三份直接从 Strategy 索引进入的框架/参考页缺少自包含的状态、当前结论和执行隔离声明，已在本轮补齐；不修改现有历史案例引用，合法的历史来源和禁止性边界全部保留。
 
-## 三、固化内容
+## 三、独立 Strategy 页面自描述边界复核
+
+以下页面此前依赖 strategy/README.md 才能看出其研究范围，单独打开时无法直接看到统一的状态、统计结论和生产/执行隔离：
+
+- strategy/00_trading_framework.md：研究流程框架；
+- strategy/meta_multiple_edge.md：位置汇聚框架，不是独立触发器；
+- strategy/probability_principles_pages_1_7.md：用户提供的外部教育性参考，source_version 仍为 not_provided，不进入 PA Research 胜率或回测基准。
+
+三页现在都明确 research_only / provisional / not_ready、no-new-positive、validated win-rate: not-computable 和不连接量化扫描器/Execution Agent；概率页另外保留 external_reference 与 evidence_status: external_heuristic_not_validated。这只是可发现性与边界修复，不是新规则、新样本或新统计结论。
+
+## 四、固化内容
+
+- 为三个独立 Strategy 页面补充统一的研究状态、当前结论和执行隔离声明，并由 validator/回归测试守护；
 
 - 在 `tests/test_pa_research_scope_boundary.py` 增加 PA Research Markdown 的外部 `V1.x` 版本标记防回归检查；
 - 在 `research/README.md` 增加本审计入口；
 - 不修改任何市场数据、合同 CSV、回放结果、pattern 定义或 Codex Trading 文件。
 
-## 四、验证结果
+## 五、验证结果
 
 ```text
 external V1.x authority-marker scan: 0 matches
-full unittest suite: 67 passed
+full unittest suite: 277 passed
 document validation: passed
 compileall and git diff --check: passed
 ```

@@ -1,5 +1,7 @@
 # PA Research Docs 索引
 
+- [PA Research authority 与隔离边界审计](../research/authority_boundary_index_audit_2026-08-29_CN.md)
+
 - [`PA Research 日线选股规则 v0.1`](pa_research_daily_selection_rules_v0_1_CN.md)
 - [`PA Research 统一输出合同 v0.1`](pa_research_output_schema_v0_1_CN.md)
 - [`PA 图表视觉复核卡`](visual_pa_review_card_CN.md)
