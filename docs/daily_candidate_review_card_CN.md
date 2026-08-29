@@ -203,6 +203,8 @@ main_uncertainty_or_exclusion:
 
 如果还没有可执行触发价，必须写 `pending`，不能用审查时的当前价格冒充历史入场价。若首障碍和几何已经可复核，但空间不足或只能通过缩窄结构止损制造 `1R`，记录 `valid_no_trade`；若关键图表、事件、触发或空间证据尚不完整，记录 `observation_only` 或 `pending`。两者都不建立订单，不能互换。
 
+本卡只记录入场前候选证据，不填写实际成交、退出、胜负、`realized_R` 或 broker/account transaction log；若后续需要评估价格路径，必须链接独立的 replay/result 记录，不能把候选卡改成交易日志。
+
 ## 六、最终状态分轴
 
 ```text

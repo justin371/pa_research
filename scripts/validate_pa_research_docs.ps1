@@ -367,7 +367,9 @@ $canonicalChecks = @{
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'gap_policy: accept_open / skip / flag_only / not_applicable',
         'gate_result:',
-        'contract_scope:'
+        'contract_scope:',
+        '`actual_fill_or_open_skip` 只表示研究合同/历史回放的订单路径注释，不是券商或账户的实际成交日志',
+        '真实交易日志必须来自另立的独立来源'
     )
     'research/backtesting/contract_coverage_audit_2026-08-28_CN.md' = @(
         'validated win-rate: not-computable',
@@ -457,7 +459,8 @@ $canonicalChecks = @{
         'gap_policy: accept_open / skip / flag_only / not_applicable',
         'gate_result:',
         'contract_scope:',
-        '硬闸门阻止新交易'
+        '硬闸门阻止新交易',
+        '本卡的订单字段是事前研究假设，不是 broker/account fill record'
     )
     'docs/daily_candidate_review_card_CN.md' = @(
         'contract_scope: daily_candidate',
@@ -499,7 +502,8 @@ $canonicalChecks = @{
         'research_state:',
         '本卡逐标的记录的 `contract_scope` 固定为 `daily_candidate`：`timeframes_seen` 只能填写 `Daily`',
         'Execution Agent',
-        '关键图表、事件、触发或空间证据尚不完整'
+        '关键图表、事件、触发或空间证据尚不完整',
+        '本卡只记录入场前候选证据，不填写实际成交、退出、胜负、`realized_R` 或 broker/account transaction log'
     )
     'patterns/08_three_push_h3_l3/README.md' = @(
         'attempt_direction: bullish_attempts / bearish_attempts / unknown',
@@ -1190,6 +1194,8 @@ $canonicalChecks = @{
         'contract_scope: stage_1_fast_screen / deep_review / daily_candidate / historical_context_only',
         'outcome                     # 仅独立 replay/result 的事后字段；候选记录保持 pending，不用于授权',
         '`research_state`、`trade_state`、`gate_result` 和 `outcome` 分别属于研究状态、交易状态、闸门状态和事后结果',
+        '入场前可复核的结构和粗略 R/R',
+        'actual_fill_or_open_skip       # 研究/回放订单路径；不是券商/账户交易日志；候选阶段不写 filled',
         'timeframes_seen',
         'data_status: historical / delayed / live_confirmed / incomplete',
         'chart_scope: full / partial / unavailable',
@@ -2497,6 +2503,7 @@ $foundationCanonicalChecks = @{
         'order_price_or_zone:',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable',
+        '`actual_fill_or_open_skip` 和 `original_order_status` 只描述研究/回放订单路径，不是券商或账户的实际成交日志',
         'structural_invalidation:',
         'structural_stop:',
         'first_independent_obstacle:',

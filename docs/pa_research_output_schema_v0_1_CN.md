@@ -35,6 +35,8 @@ stage_1_fast_screen / deep_review / daily_candidate / historical_context_only
 - 回放输入中的 `entry_trigger`、`structural_stop`、`first_obstacle` 和 `target_price` 必须是有限数值价格；研究卡中的价格区域、`pending` 或 `unknown` 不能直接替代这些冻结数值。`market_close` 可以没有 `entry_trigger`，但仍必须满足该分支的其他合同要求。
 - 记录字段 `actual_fill_or_open_skip` 使用下划线状态，和回放结果字段 `fill_status` 的 `no-fill`、`opening-skip`、`unproven`、`not-traded` 不是同一字段，不能混写或互相推断。
 
+`actual_fill_or_open_skip` 只表示研究合同/历史回放的订单路径注释，不是券商或账户的实际成交日志。仅有入场前证据的候选/视觉记录不得写 `filled`；若统一模板保留此字段，应写 `not_applicable`。真实交易日志必须来自另立的独立来源，不能由该字段或回放结果冒充。
+
 ## 一、证据头与市场闸门
 
 ```text

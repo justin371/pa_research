@@ -72,6 +72,8 @@ handoff_status: research_only / not_ready / ready_for_system
 
 `structural_stop_zone`、`stop_price_or_area`、`original_order_status` 和 `management_action` 是订单层的补充字段；canonical 结构止损、成交/跳过、空间和状态字段仍分别保留。数值可以先是区域和粗略范围；订单语义、因果时点和失效条件不能含糊。历史 `decision_time`、`timeframe_and_parent_contract`、`trigger_or_zone`、`actual_or_assumed_fill`、`space_to_first_obstacle` 和 `final_status` 不能作为新记录字段使用。
 
+`actual_fill_or_open_skip` 和 `original_order_status` 只描述研究/回放订单路径，不是券商或账户的实际成交日志；真实交易日志若存在，也必须以独立来源记录，不能由订单卡或回放结果代替。
+
 ## 4. 订单选择顺序
 
 ```text

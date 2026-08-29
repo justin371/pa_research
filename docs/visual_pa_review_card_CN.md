@@ -334,6 +334,8 @@ why_this_order_branch:
 
 本卡的 `order_branch` 是视觉研究记录枚举。`stop_limit` 与 `observation_only` 用来保留尚未进入当前回放输入的独立研究状态；当前 engine `0.3.9` 只接受 `stop_confirmation`、`limit_retest` 和 `market_close`。`observation_only` 不建立交易合同，`stop_limit` 不能静默映射成普通 stop。
 
+本卡的订单字段是事前研究假设，不是 broker/account fill record；实际成交、退出、胜负和 `realized_R` 只可出现在独立 replay/result，真实交易日志必须另立来源。
+
 - H1/H2/L1/L2 的默认研究分支是：信号 K 后用 stop 等待确认；
 - 结构支撑/阻力上的回测可以作为独立的 limit/retest 分支研究；
 - 市价或收盘进场适用于强突破后的特殊情况，但要接受滑点和更宽止损；

@@ -74,9 +74,8 @@ class PaResearchPreEntryPostOutcomeBoundaryTests(unittest.TestCase):
         paths = sorted(
             path
             for path in BACKTEST_ROOT.glob("*contracts*.csv")
-            if path.name != "contracts.example.csv"
         )
-        self.assertEqual(len(paths), 7)
+        self.assertEqual(len(paths), 8)
 
         for path in paths:
             with path.open(encoding="utf-8-sig", newline="") as handle:
@@ -98,6 +97,45 @@ class PaResearchPreEntryPostOutcomeBoundaryTests(unittest.TestCase):
                     POST_OUTCOME_FIELD_RE.search(path.read_text(encoding="utf-8")),
                     f"post-outcome field leaked into candidate card: {path.name}",
                 )
+
+    def test_research_templates_separate_order_paths_from_actual_transaction_logs(self):
+        schema = (REPO_ROOT / "docs" / "pa_research_output_schema_v0_1_CN.md").read_text(
+            encoding="utf-8"
+        )
+        daily_card = (REPO_ROOT / "docs" / "daily_candidate_review_card_CN.md").read_text(
+            encoding="utf-8"
+        )
+        visual_card = (REPO_ROOT / "docs" / "visual_pa_review_card_CN.md").read_text(
+            encoding="utf-8"
+        )
+        inventory = (REPO_ROOT / "strategy" / "pattern_inventory_candidates.md").read_text(
+            encoding="utf-8"
+        )
+        order_card = (
+            REPO_ROOT / "foundations" / "06_order_risk_contracts" / "README.md"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn(
+            "`actual_fill_or_open_skip` 只表示研究合同/历史回放的订单路径注释，不是券商或账户的实际成交日志",
+            schema,
+        )
+        self.assertIn(
+            "本卡只记录入场前候选证据，不填写实际成交、退出、胜负、`realized_R` 或 broker/account transaction log",
+            daily_card,
+        )
+        self.assertIn(
+            "本卡的订单字段是事前研究假设，不是 broker/account fill record",
+            visual_card,
+        )
+        self.assertIn("入场前可复核的结构和粗略 R/R", inventory)
+        self.assertIn(
+            "actual_fill_or_open_skip       # 研究/回放订单路径；不是券商/账户交易日志；候选阶段不写 filled",
+            inventory,
+        )
+        self.assertIn(
+            "`actual_fill_or_open_skip` 和 `original_order_status` 只描述研究/回放订单路径，不是券商或账户的实际成交日志",
+            order_card,
+        )
 
     def test_next3_replay_keeps_the_no_contract_boundary(self):
         selection = (BACKTEST_ROOT / "hl_next3_selection_2026-08-27_CN.md").read_text(

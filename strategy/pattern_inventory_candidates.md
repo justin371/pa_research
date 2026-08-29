@@ -215,7 +215,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 2. 在 Daily 层面先问它是否真的有方向性 A 腿，B 是否是回调而不是区间中部摆动，C 是否已经开始；低周期不能替代这些判断。
 3. 只要“看起来像”只能先进入研究 inventory 的 `stage_1_fast_screen`/观察行，不等于 `daily_candidate`；只有通过日线硬闸门并补齐日线字段后，才可提升为日线候选。
 4. 把研究记录分成“值得深入”“形态像但不值得交易”“明显不是这个 pattern”三类，并保留其 `contract_scope`、方向和缺失证据。
-5. 只对已经通过日线前置、且确有必要深入的第一类记录补 4H/1H/60m/15m 触发、事件过滤、实际 R/R 和失败状态；低周期结果必须留在独立合同，不能改写父级日线记录。第二类本身仍保留为过滤样本。
+5. 只对已经通过日线前置、且确有必要深入的第一类记录补 4H/1H/60m/15m 触发、事件过滤、入场前可复核的结构和粗略 R/R 以及失败状态；低周期结果必须留在独立合同，不能改写父级日线记录。第二类本身仍保留为过滤样本。
 
 ## 4. 用户确认的长期形态主线
 
@@ -273,7 +273,7 @@ location_and_left_structure
 signal_bar / confirmation_bar
 order_branch               # stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role
-actual_fill_or_open_skip
+actual_fill_or_open_skip       # 研究/回放订单路径；不是券商/账户交易日志；候选阶段不写 filled
 AB_equals_CD               # absent / approximate / present / unknown
 measured_move_type
 first_independent_obstacle
