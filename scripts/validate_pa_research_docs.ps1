@@ -264,6 +264,34 @@ foreach ($relativePath in $requiredResearchReportPaths) {
     }
 }
 
+$coreBoundaryIndexPaths = @(
+    'README.md',
+    'docs/README.md',
+    'patterns/README.md',
+    'research/README.md',
+    'strategy/README.md',
+    'research/backtesting/README.md'
+)
+$coreBoundaryTokens = @(
+    'PA Research only',
+    'no-new-positive',
+    'validated win-rate: not-computable',
+    '60%',
+    '不是 Codex Trading 生产规则',
+    '量化扫描器',
+    'Execution Agent'
+)
+foreach ($relativePath in $coreBoundaryIndexPaths) {
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    foreach ($token in $coreBoundaryTokens) {
+        if (-not $content.Contains($token)) {
+            Add-ValidationError "core boundary index is missing token '$token': $relativePath"
+        }
+    }
+}
+
 $trackedHistoricalVisualCandidatePaths = @(
     'research/crm_bearish_abc_l1_l2_visual_candidate_2025-03-10_2025-03-28.md',
     'research/meta_bullish_h1_h2_visual_candidate_2024-09-11_2024-10-11.md',

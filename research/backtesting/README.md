@@ -1,8 +1,12 @@
 # PA Research 冻结合同回放器
 
-状态：`research_only / descriptive_only / not-validated / no-new-positive`
+`study_status`：`research_only / descriptive_only / not-validated`
 
-这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.9`）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
+统一统计结论：`no-new-positive`；`validated win-rate: not-computable`。`60%` 只是待检验目标，不是已验证胜率。
+
+这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.9`；当前维护版本仅指研究引擎）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
+
+统一边界：`v0.x` 规则/合同与研究引擎 `0.3.9` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；不创建量化扫描器，不连接 Execution Agent。
 
 当前人工冻结合同的方向、H/L 标签、事件、空间和 lineage 覆盖见[`人工冻结合同覆盖审计`](contract_coverage_audit_2026-08-28_CN.md)。研究记录与当前回放输入的字段边界见[`合同权威与字段一致性审计`](contract_authority_consistency_audit_2026-08-29_CN.md)；现有 CSV inventory 与资格隔离见[`合同 CSV inventory 与资格边界审计`](contract_csv_inventory_audit_2026-08-29_CN.md)；validator 与 engine 的合同 parity 见[`文档 validator 与 engine 合同 parity 审计`](validator_engine_contract_parity_audit_2026-08-29_CN.md)；报告、索引与 inventory 的当前一致性见[`报告、索引与 inventory 一致性审计`](report_index_inventory_consistency_audit_2026-08-29_CN.md)；各批次报告数字、方向/标签、事件/空间和 lineage 的逐批重算见[`批次报告数字与分层一致性审计`](batch_report_numeric_consistency_audit_2026-08-29_CN.md)。这些审计只检查合同记录/边界完整性，不代表胜率验证。
 

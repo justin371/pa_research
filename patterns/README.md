@@ -6,6 +6,8 @@
 
 所有目录的新案例统一使用[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。本索引中的 pattern-specific “最小视觉协议”是差异字段，不是完整候选合同；每条记录仍必须有 `contract_scope`、`direction`、证据时间、事件/板块/大盘闸门、订单合同、结构止损、第一独立障碍和分轴状态。
 
+统一边界：`v0.x` 规则/合同与回放引擎 `0.3.9` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；`no-new-positive` 和 `validated win-rate: not-computable` 保持不变，`60%` 仅是待检验目标；不创建量化扫描器，不连接 Execution Agent。
+
 日线筛选优先级与全局研究优先级分开：日线只优先筛选 `ABC_CONT` 和 `BOP`；H2/L2 仍是全局 pattern 研究主线，但不覆盖日线主标签，也不代表已进入系统实现队列。
 
 这里是 PA Research 当前阶段的核心研究入口。目标是让视觉助手能够在完整图表上：

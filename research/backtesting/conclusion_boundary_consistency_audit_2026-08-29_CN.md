@@ -71,3 +71,9 @@ trade_state: not_authorized
 ```
 
 本轮只修复统计状态的文字一致性和防回归检查，没有新增正向样本，也没有改变任何研究结论：PA Research 仍不能声称 H1/H2/L1/L2、ABC、BOP 或三推已经达到 60% 的验证目标，不能把历史描述性胜率当作生产规则，也不连接 Codex Trading、量化扫描器或 Execution Agent。
+
+## 六、核心入口的统一摘要
+
+本次版本/结论复核进一步把根 README、`docs/README.md`、`patterns/README.md`、`research/README.md`、`strategy/README.md` 和 `research/backtesting/README.md` 的共同摘要统一为：`v0.x` 规则/合同及研究引擎 `0.3.9` 只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；`no-new-positive` 与 `validated win-rate: not-computable` 保持不变，`60%` 仅为待检验目标；不创建量化扫描器，不连接 Execution Agent。
+
+回放 README 另将 `study_status`（`research_only / descriptive_only / not-validated`）与全局统计结论分开显示，避免把研究成熟度、统计状态和结果结论误读为同一枚举。该修复只改善入口可读性和防回归覆盖，不新增样本、结果或 engine 语义。

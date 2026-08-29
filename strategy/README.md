@@ -4,6 +4,8 @@
 
 本目录只保存研究框架、候选清单和历史复盘入口，不是 Codex Trading 实现队列。所有新案例必须使用[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)，并明确 `direction`、`research_state`、`trade_state` 和 `handoff_status`。
 
+统一边界：`v0.x` 规则/合同与回放引擎 `0.3.9` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；`no-new-positive` 和 `validated win-rate: not-computable` 保持不变，`60%` 仅是待检验目标；不创建量化扫描器，不连接 Execution Agent。
+
 ## 入口
 
 - [`候选形态清单`](pattern_inventory_candidates.md)：当前研究优先级、共同字段和边界案例；

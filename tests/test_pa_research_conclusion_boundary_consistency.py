@@ -10,6 +10,23 @@ BACKTEST_ROOT = REPO_ROOT / "research" / "backtesting"
 VALIDATOR_PATH = REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1"
 AUDIT_NAME = "conclusion_boundary_consistency_audit_2026-08-29_CN.md"
 CONTRACT_COVERAGE_NAME = "contract_coverage_audit_2026-08-28_CN.md"
+CORE_BOUNDARY_INDEX_PATHS = (
+    REPO_ROOT / "README.md",
+    REPO_ROOT / "docs" / "README.md",
+    REPO_ROOT / "patterns" / "README.md",
+    REPO_ROOT / "research" / "README.md",
+    REPO_ROOT / "strategy" / "README.md",
+    REPO_ROOT / "research" / "backtesting" / "README.md",
+)
+CORE_BOUNDARY_TOKENS = (
+    "PA Research only",
+    "no-new-positive",
+    "validated win-rate: not-computable",
+    "60%",
+    "不是 Codex Trading 生产规则",
+    "量化扫描器",
+    "Execution Agent",
+)
 
 LEGACY_STATUS_PATTERNS = (
     re.compile(r"(?m)^\s*validated_win_rate\s*:"),
@@ -80,6 +97,20 @@ class PaResearchConclusionBoundaryConsistencyTests(unittest.TestCase):
         ):
             with self.subTest(index=index_path):
                 self.assertIn(AUDIT_NAME, read(index_path))
+
+    def test_core_boundary_indexes_share_version_and_conclusion_summary(self):
+        for index_path in CORE_BOUNDARY_INDEX_PATHS:
+            text = read(index_path)
+            with self.subTest(index=index_path):
+                for token in CORE_BOUNDARY_TOKENS:
+                    self.assertIn(token, text)
+
+        audit = read(BACKTEST_ROOT / AUDIT_NAME)
+        for token in CORE_BOUNDARY_TOKENS:
+            self.assertIn(token, audit)
+        backtesting_readme = read(BACKTEST_ROOT / "README.md")
+        self.assertIn("study_status", backtesting_readme)
+        self.assertIn("统一统计结论", backtesting_readme)
 
 
 if __name__ == "__main__":
