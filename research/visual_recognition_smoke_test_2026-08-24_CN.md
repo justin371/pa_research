@@ -76,14 +76,18 @@ recognition_result:
 
 ```text
 symbol: TSLA
+contract_scope: stage_1_fast_screen
 data_source: public Yahoo Finance Chart API via Jina Reader
-data_status: historical public data; not Futu; not live authorization
+data_status: historical
+data_status_note: public data; not Futu; not live authorization
 asset_generated_date: 2026-08-24
 query_period_end: 2026-08-25 00:00 UTC
 latest_complete_rth_bar: 2026-08-21 16:00 America/New_York
 timeframes_seen: Daily (~2Y left context) / 4H-like / 1H / 15m
 event_context: unknown; this round does not declare event-clean
-chart_scope: full two-year Daily context plus nested recent intraday windows
+chart_scope: full
+daily_context_window: >=2y
+chart_scope_note: full two-year Daily context plus nested recent intraday windows
 ```
 
 `4H-like` 是同一来源 60m RTH bar 按每个交易日连续四根聚合，不冒充原生 4H。Daily 图显示 EMA20/50/200；这些均为背景层，不能创造 setup、trigger 或 authorization。
@@ -124,14 +128,18 @@ chart_scope: full two-year Daily context plus nested recent intraday windows
 
 ```text
 symbols: AAPL / NVDA / SPY / RBLX
+contract_scope: stage_1_fast_screen
 data_source: public Yahoo Finance Chart API via Jina Reader
-data_status: historical public data; not Futu; not live authorization
+data_status: historical
+data_status_note: public data; not Futu; not live authorization
 asset_generated_date: 2026-08-24
 query_period_end: 2026-08-25 00:00 UTC
 latest_complete_rth_bar: 2026-08-21 16:00 America/New_York
 timeframes_seen: Daily (~2Y left context) / 4H-like / 1H / 15m
 event_context: unknown; this round does not declare event-clean
-chart_scope: full two-year Daily context plus nested recent intraday windows
+chart_scope: full
+daily_context_window: >=2y
+chart_scope_note: full two-year Daily context plus nested recent intraday windows
 ```
 
 请求结束日为 `2026-08-25`，但来源实际返回的最新完整 RTH bar 是 `2026-08-21`；因此下面的“当前”均指该历史截点，不是实时市场状态。Daily 图的 EMA20/50/200 只作为背景和位置参考，不创造 setup、trigger 或 authorization。

@@ -14,9 +14,11 @@
 
 ```text
 symbol: US.JPM
-timeframe_seen: Daily / 60m / 15m
-data_source: Futu OpenD historical QFQ
-data_status: historical / after-close; not live
+timeframes_seen: Daily / 60m / 15m
+data_source: Futu OpenD historical QFQ; after-close; not live
+data_status: historical
+chart_scope: unavailable
+daily_context_window: unavailable
 review_window: 2025-08-22–2025-09-05
 sector_context: XLF
 event_context: pending; must be checked before any real use
@@ -80,5 +82,4 @@ current_status: pattern_like / valid_no_trade
 - 不能由单次失败推出 H1 的胜率；
 - 远端 MM/AB=CD 没有资格覆盖首阻力；
 - 若研究短线分支，必须另定低周期止损，不能套用日线结构结论。
-
 

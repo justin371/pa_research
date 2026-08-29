@@ -44,6 +44,8 @@ py -3 .\scripts\validate_pa_research_artifact.py .\research\backtesting\example-
 
 价格文件必须包含 `Date,Open,High,Low,Close`，可以包含 `Symbol,Volume`。多标的文件用 `Symbol` 分组；单标的文件必须在命令行传 `--symbol`。程序不会替代数据源、复权、公司行动或两年图表审查。
 
+`contract_scope`、`data_status`、`chart_scope` 和 `timeframes_seen` 属于上游视觉/研究记录的证据 provenance，不从价格 CSV 推断，也不会被回放器补写；输入 CSV 只保留冻结合同需要的 `daily_context_window` 及其余机器字段。`daily_context_window` 不是“CSV 有两年价格”这一事实的别名，必须来自逐标的人工看图记录；缺失时按合同不完整处理。
+
 合同文件的通用字段必须包含：
 
 ```text

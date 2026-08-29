@@ -37,9 +37,11 @@ PA Research 的第一阶段任务，是让助手从完整图表里筛出“看�
 ```text
 symbol:
 review_window:
-timeframe_seen:
+contract_scope: stage_1_fast_screen
+timeframes_seen:
 data_status: historical / delayed / live_confirmed / incomplete
-chart_scope: full / partial
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
 market_state: trend / trading_range / transition / climax / unclear
 directional_bias: bull / bear / balanced / changing
 direction: long / short / no_valid_direction

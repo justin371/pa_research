@@ -16,9 +16,11 @@
 
 ```text
 symbol: US.NVDA
-timeframe_seen: Daily / 60m / 15m
-data_source: Futu OpenD historical QFQ
-data_status: historical / after-close; not live
+timeframes_seen: Daily / 60m / 15m
+data_source: Futu OpenD historical QFQ; after-close; not live
+data_status: historical
+chart_scope: unavailable
+daily_context_window: unavailable
 review_window: 2025-04-21–2025-05-08
 sector_context: SMH; market reference SPY
 event_context: pending; not used as positive evidence
@@ -103,4 +105,3 @@ current_status: pattern_like / valid_no_trade
 - 财报及其他事件背景尚未独立核对，因此不把它升级为条件正向样本；
 - 不能由 `05-08` 之后的走势反推 `05-07` 的原始 H1 合同应当执行；
 - 不把这个案例转成固定数值阈值或 Codex Trading 规则。
-

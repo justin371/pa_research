@@ -252,8 +252,12 @@ EMA、AB=CD 和 measured move 都只能作为背景、位置、空间或目标�
 ```text
 contract_scope: deep_review / historical_context_only
 symbol
-timeframe
-data_source / data_status / as_of_time
+timeframes_seen
+data_source
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
 parent_state              # trend / range / transition / climax
 direction                  # long / short / no_valid_direction
 A_leg_origin / A_leg_end

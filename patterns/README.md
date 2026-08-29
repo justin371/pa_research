@@ -131,6 +131,8 @@ main_uncertainty_or_exclusion / failure_or_no_trade_reason
 
 16 个目录的日线主标签白名单、H/L 内部标签、三推/区间边缘分隔和 BOP 旧合同失效边界见[`Pattern 主标签映射与 BOP 状态迁移审计`](../research/pattern_label_transition_audit_2026-08-29_CN.md)。
 
+16 个入口的逐标的图表范围、两年 Daily 覆盖、周期集合和数据状态边界见[`证据范围与数据状态一致性审计`](../research/evidence_scope_status_boundary_audit_2026-08-29_CN.md)。
+
 MTR 与三推/H3-L3 的边界复核见[`MTR 与三推/H3-L3 视觉边界复核`](../research/mtr_three_push_visual_boundary_audit_2026-08-24_CN.md)：三推是压力观察入口；成熟区间边缘的第三推可以先成为独立反转候选，MTR 仍需要控制权改变和反向二次确认。
 
 H1/L1 第一次入场的边界复核见[`H1/L1 第一次入场视觉边界复核`](../research/h1_l1_first_entry_visual_boundary_audit_2026-08-24_CN.md)：强 A 和受控 B 只是筛选入口，第一次失败要保留 H2/L2 或 no-trade 分支。

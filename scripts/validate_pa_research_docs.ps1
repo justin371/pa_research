@@ -182,6 +182,7 @@ $requiredFiles = @(
     'research/pattern_case_entry_status_audit_2026-08-29_CN.md',
     'research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md',
     'research/common_visual_preflight_field_consistency_audit_2026-08-29_CN.md',
+    'research/evidence_scope_status_boundary_audit_2026-08-29_CN.md',
     'research/entry_geometry_state_boundary_audit_2026-08-29_CN.md',
     'research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
@@ -227,6 +228,7 @@ $canonicalChecks = @{
         'b_leg_location:',
         'direction: long / short / no_valid_direction',
         'daily_candidate` 只允许 `ABC_CONT` 或 `BOP`',
+        '当 `contract_scope: daily_candidate` 时，`timeframes_seen` 必须只写 `Daily`',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'range_edge_three_push` 只是区间边缘位置/分支旗标，不是 `primary_pattern`',
         'event_bucket:',
@@ -292,6 +294,7 @@ $canonicalChecks = @{
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate',
         'pattern_family` 是本卡的视觉速记字段，不是统一合同的额外主标签',
+        '当 `contract_scope: daily_candidate` 时，`timeframes_seen` 只能填写 `Daily`',
         '原 pattern/反向 thesis 与旧订单合同失效',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'gate_result:',
@@ -381,6 +384,24 @@ $canonicalChecks = @{
         'lineage_status: same_lineage / reset / unclear / pending',
         'lineage_id:'
     )
+    'research/visual_pattern_triage_protocol_CN.md' = @(
+        'contract_scope: stage_1_fast_screen',
+        'timeframes_seen:',
+        'data_status: historical / delayed / live_confirmed / incomplete',
+        'chart_scope: full / partial / unavailable',
+        'daily_context_window: >=2y / <2y / unavailable',
+        '不把 4H/1H/15m 倒灌成日线选股证据'
+    )
+    'research/backtesting/README.md' = @(
+        'contract_scope`、`data_status`、`chart_scope` 和 `timeframes_seen` 属于上游视觉/研究记录的证据 provenance',
+        'daily_context_window` 不是“CSV 有两年价格”这一事实的别名'
+    )
+    'strategy/pattern_inventory_candidates.md' = @(
+        'timeframes_seen',
+        'data_status: historical / delayed / live_confirmed / incomplete',
+        'chart_scope: full / partial / unavailable',
+        'daily_context_window: >=2y / <2y / unavailable'
+    )
 }
 foreach ($entry in $canonicalChecks.GetEnumerator()) {
     $absolutePath = Join-Path -Path $repoRoot -ChildPath ($entry.Key -replace '/', '\')
@@ -454,6 +475,7 @@ foreach ($relativePath in $patternCaseReadmeRelativePaths) {
         'data_status: historical / delayed / live_confirmed / incomplete',
         'as_of_time',
         'chart_scope',
+        'daily_context_window',
         'timeframes_seen',
         '至少两年的 Daily 左侧背景',
         'EMA20/50/200',
@@ -872,6 +894,58 @@ if (Test-Path -LiteralPath $visualRecognitionSmokeTestPath -PathType Leaf) {
     }
     if ($visualRecognitionSmokeTestContent -match '(?m)^primary_pattern:') {
         Add-ValidationError 'visual recognition smoke test must not use free-text primary_pattern field'
+    }
+}
+
+$canonicalEvidenceLegacyPaths = @(
+    'research/cost_bullish_abc_h2_visual_boundary_2025-04-21_2025-05-16.md',
+    'research/jnj_bullish_h1_first_obstacle_2025-09-18_2025-10-08.md',
+    'research/jpm_bullish_h1_first_obstacle_failure_2025-08-22_2025-09-05.md',
+    'research/nvda_bullish_h1_trigger_branch_first_obstacle_2025-04-21_2025-05-08.md',
+    'research/tsla_bearish_abc_candidate_screen_2026-08-22.md',
+    'research/tsla_h1_h2_candidate_screen_2024-08-22_2026-08-21.md',
+    'research/visual_recognition_smoke_test_2026-08-24_CN.md'
+)
+foreach ($relativePath in $canonicalEvidenceLegacyPaths) {
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    if ($content -match '(?m)^timeframe_seen:') {
+        Add-ValidationError "legacy singular timeframe field remains: $relativePath"
+    }
+    if ($content -match '(?m)^data_status:\s*(?:historical_close|historical / after-close|historical public)') {
+        Add-ValidationError "non-canonical data_status remains: $relativePath"
+    }
+    foreach ($token in @('data_status:', 'timeframes_seen:', 'chart_scope:', 'daily_context_window:')) {
+        if (-not $content.Contains($token)) {
+            Add-ValidationError "canonical evidence field missing '$token': $relativePath"
+        }
+    }
+}
+
+$evidenceScopeStatusAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/evidence_scope_status_boundary_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $evidenceScopeStatusAuditPath -PathType Leaf) {
+    $evidenceScopeStatusAuditContent = Get-Utf8Text -Path $evidenceScopeStatusAuditPath
+    foreach ($token in @(
+        'contract_scope: daily_candidate',
+        'timeframes_seen: Daily',
+        'daily_context_window',
+        'chart_scope',
+        'data_status',
+        'historical_close` 是 `session_state` 的值',
+        '回放 CSV',
+        '16 个 `patterns/*/README.md`',
+        'historical',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
+    )) {
+        if (-not $evidenceScopeStatusAuditContent.Contains($token)) {
+            Add-ValidationError "missing evidence-scope/status audit token '$token'"
+        }
     }
 }
 

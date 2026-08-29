@@ -14,9 +14,11 @@
 
 ```text
 symbol: US.JNJ
-timeframe_seen: Daily / 60m / 15m
-data_source: Futu OpenD historical QFQ
-data_status: historical / after-close; not live
+timeframes_seen: Daily / 60m / 15m
+data_source: Futu OpenD historical QFQ; after-close; not live
+data_status: historical
+chart_scope: unavailable
+daily_context_window: unavailable
 review_window: 2025-09-18–2025-10-08
 sector_context: XLV
 event_context: pending; must be checked before any real use

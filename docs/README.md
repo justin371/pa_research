@@ -8,6 +8,7 @@
 - [`共同视觉前置字段一致性审计`](../research/common_visual_preflight_field_consistency_audit_2026-08-29_CN.md)
 - [`入场几何与不交易状态边界审计`](../research/entry_geometry_state_boundary_audit_2026-08-29_CN.md)
 - [`Pattern 主标签映射与 BOP 状态迁移审计`](../research/pattern_label_transition_audit_2026-08-29_CN.md)
+- [`证据范围与数据状态一致性审计`](../research/evidence_scope_status_boundary_audit_2026-08-29_CN.md)
 - [`PA Research → Codex Trading 研究交接规范`](research_to_system_handoff_CN.md)
 - [`冻结合同回放器（backtesting.py）`](../research/backtesting/README.md)
 

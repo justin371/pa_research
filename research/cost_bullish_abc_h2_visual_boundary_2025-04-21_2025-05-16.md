@@ -10,9 +10,11 @@
 
 ```text
 symbol: US.COST
-timeframe_seen: Daily / 60m / 15m
-data_source: Futu OpenD historical QFQ
-data_status: historical / after-close; not live
+timeframes_seen: Daily / 60m / 15m
+data_source: Futu OpenD historical QFQ; after-close; not live
+data_status: historical
+chart_scope: unavailable
+daily_context_window: unavailable
 review_window: 2025-04-21–2025-05-16
 sector_context: XLP; market reference SPY
 event_context: pending; not used as positive evidence
@@ -95,4 +97,3 @@ current_status: pattern_like / valid_no_trade
 - 财报和其他事件背景尚未独立核对；
 - A 的起点可能采用更大或更晚尺度，当前不冻结唯一 ABC 锚点；
 - 不把 `0.8R` 边界升级为固定阈值，也不把本案例移交 Codex Trading。
-

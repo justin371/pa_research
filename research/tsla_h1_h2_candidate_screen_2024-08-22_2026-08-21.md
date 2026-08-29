@@ -13,8 +13,12 @@
 ```text
 contract_scope: historical_context_only
 direction: long
-data_status: historical_close
+data_status: historical
 as_of_time: 2026-08-21
+session_state: historical_close
+timeframes_seen: Daily
+chart_scope: partial
+daily_context_window: >=2y
 research_state: research_candidate
 trade_state: not_authorized
 gate_result: pending

@@ -60,6 +60,8 @@ gate_result: pass / conditional / observation_only / valid_no_trade / pending
 handoff_status: research_only / not_ready / ready_for_system
 ```
 
+本卡模板覆盖 `daily_candidate`、`deep_review` 和 `historical_context_only` 三种范围：当 `contract_scope: daily_candidate` 时，`timeframes_seen` 只能填写 `Daily`，`daily_context_window`、`chart_scope` 和两项 review 完整度必须逐标的填写；低周期只可在深审或独立订单合同中记录，不能改写日线候选。
+
 主标签不是“最漂亮的名字”，而是当前最先值得研究的合同。对于 `contract_scope: daily_candidate`，`primary_pattern` 只允许 `ABC_CONT` 或 `BOP`；H1/H2/L1/L2/H3/L3 只能写入 `internal_label`，其他关系写入 `secondary_context`。`deep_review`/`historical_context_only` 才能在合同已闭合时使用 `H1_L1`、`H2_L2`、`H3_L3`、`RFB`、`MTR` 或 `other` 等兼容值。已经接受的 BOP 优先于旧的双顶、三推或 MTR；成熟区间边缘优先于区间中部的 ABC/H2；VCP 保留独立体系标签，不和 Brooks H/L 计数合并。`secondary_context` 可以写 `H2_within_ABC`、`double_bottom_at_range_edge` 或 `three_push_evidence_for_MTR`，但不把它们加成多个独立优势。
 
 ## 快速视觉初筛：先判断像不像

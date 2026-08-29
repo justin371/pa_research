@@ -75,6 +75,8 @@ gate_result: pass / conditional / observation_only / valid_no_trade / pending
 
 `chart_scope` 描述整张图表的可见完整度；`daily_context_window` 单独描述 Daily 左侧是否覆盖至少两年。批次卡中的 `two_year_chart_coverage` 只表示该批次的汇总覆盖率，不能替代逐标的 `daily_context_window`。`a_leg_quality` 和 `b_leg_class` 是共同的 A/B 视觉质量字段；独立主题可以记录它们作为背景对照，但不能因此继承 ABC/H-L 计数。
 
+当 `contract_scope: daily_candidate` 时，`timeframes_seen` 必须只写 `Daily`；4H/1H/15m 只能放在候选入选后的 `deep_review` 或另立的订单合同中，不能倒灌成日线选股证据。若低周期已经改变研究问题，必须新建独立合同并重新记录范围、状态和入场几何。
+
 每日批次记录还应使用[`每日候选批次与图表审查卡`](daily_candidate_review_card_CN.md)补充以下证据。它们是候选池和视觉审查字段，不会把回放合同变成扫描器输入：
 
 ```text
