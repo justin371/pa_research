@@ -34,7 +34,7 @@
 | H/L 下一批（二） | 3 | 2 条冻结 H1 图和 1 张 PHM 边界图 |
 | **合计** | **105** | — |
 
-Round4 的 `two_year_daily: pending` 仍然正确：它的约一年 Daily 窗口不能被图像数量或局部周期误读为完整两年背景。相反，首批、第二批、`hl_next` 和 `hl_next2` 的合同图像文件分别按 symbol/decision date 与合同逐行匹配；`hl_large` 的 README 明确记录窗口资产与 37 条合同不是一对一关系，避免把局部窗口数误读成样本数。
+Round4 的 canonical `daily_context_window: <2y`（旧显示别名为 `two_year_daily: pending`）仍然正确：它的约一年 Daily 窗口不能被图像数量或局部周期误读为完整两年背景。相反，首批、第二批、`hl_next` 和 `hl_next2` 的合同图像文件分别按 symbol/decision date 与合同逐行匹配；`hl_large` 的 README 明确记录窗口资产与 37 条合同不是一对一关系，避免把局部窗口数误读成样本数。
 
 ## 合同与事前字段
 

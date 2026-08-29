@@ -101,7 +101,7 @@ Codex Trading 中已有的研究、代码和案例不在 PA Research 中整份�
 | `H3/L3` | `pattern_like` | `research_only` | L3 不等于三推衰竭；`2025-03-07/10` 与 `2026-03-26` 是延续风险反例/候选 |
 | `GAP-RETEST-ORDER-BRANCH` | `research_candidate` | `not_ready` | 跳空后回测是新订单分支，不能沿用原始 stop 的 R/R；尚未转系统 |
 | 三推楔形 | `pattern_like` | `research_only` | 需要逐推效率、位置和反向触发；不以“三次触碰”单独授权 |
-| BOP/突破交易 | `research_candidate` | `not_ready` | BOP 已是日线筛选的独立研究族，但多日回踩正例仍为 `no_new_positive`，尚未进入系统交接 |
+| BOP/突破交易 | `research_candidate` | `not_ready` | BOP 已是日线筛选的独立研究族，但多日回踩正例仍为 `no-new-positive`，尚未进入系统交接 |
 
 ## 后续工作规则
 

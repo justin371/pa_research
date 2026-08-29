@@ -2,6 +2,44 @@
 
 状态：`visual_review_asset / no_pattern_labels / frozen_pre_outcome`
 
+## Canonical provenance boundary
+
+```text
+contract_scope: historical_context_only
+data_source: public Yahoo Chart API historical Daily OHLCV via Jina Reader
+data_status: historical
+as_of_time: 2026-08-26 latest complete RTH bar
+review_time: 2026-08-27 Asia/Shanghai
+timezone: America/New_York
+session_state: historical_close
+timeframes_seen: Daily
+chart_scope: full
+daily_context_window: >=2y
+major_high_low_review: complete in paired frozen-contract review
+ema20_50_200_review: complete in paired frozen-contract review
+daily_ema20_slope: unknown
+daily_ema50_slope: unknown
+h_l_ema_slope_gate: pending
+direction: no_valid_direction
+lineage_status: pending
+internal_label: pending
+third_push_state: unclear
+range_edge_three_push: pending
+range_edge_side: pending
+research_state: observation_only
+trade_state: observation_only
+gate_result: observation_only
+first_independent_obstacle: paired contract only; not frozen in this asset
+pre_entry_space_R: unknown unless trigger and structural stop are independently frozen
+space_status: unknown
+order_branch: observation_only
+label_source: human_chart_review
+handoff_status: not_ready
+```
+
+这是五条人工冻结合同的无标签图像资产；`direction`、`internal_label`、EMA gate、事件和
+空间必须按配对合同逐行读取。资产本身不冻结 `primary_pattern`、订单或回放结果。
+
 本目录保存 PA Research 下一批 H1/L1 人工冻结合同的证据图。每张 PNG 都包含：
 
 - 截至决策日的两年 Daily 左侧背景；

@@ -30,6 +30,8 @@ H/L selection/replay 每批合同数与状态计数见[`H/L selection/replay 状
 
 Round4、Round5 与 TSLA 资产的 canonical provenance、两年 Daily/重要高低点/EMA 和多周期职责见[`Round4、Round5 与 TSLA 视觉资产 canonical 边界审计`](visual_asset_canonical_boundary_audit_2026-08-29_CN.md)：短窗口保持 `daily_context_window: <2y`，三组资产都不新增 pattern、订单或统计结果。
 
+全部视觉资产 README 的 canonical provenance、11 个目录/105 张 PNG 的配对职责和历史别名覆盖见[`全部视觉资产 README canonical provenance 覆盖审计`](visual_asset_provenance_coverage_audit_2026-08-29_CN.md)：资产数量不等于合同样本数，`no-new-positive` 与 `validated win-rate: not-computable` 保持不变。
+
 BOP 多日回踩的独立准入清单见[`BOP 合同准入审计`](bop_contract_intake_audit_2026-08-28_CN.md)及[`bop_contract_intake_2026-08-28.csv`](bop_contract_intake_2026-08-28.csv)。该 CSV 只记录现有人工案例的接受、回测和边界状态，全部为 `contract_frozen=no`，不是回放输入。两类 intake 合计 25 行，按底层案例键归并为 22 个案例，其中 3 个案例同时出现在统一和 BOP 专项视图中；详细 schema、方向和引用核对见[`ABC/BOP intake schema 一致性审计`](abc_bop_intake_schema_consistency_audit_2026-08-29_CN.md)。
 
 ## 运行

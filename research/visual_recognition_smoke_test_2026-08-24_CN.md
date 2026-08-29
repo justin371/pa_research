@@ -346,7 +346,7 @@ gate_result: observation_only
 
 ```text
 visual_candidate_reading: pass-for-research
-two_year_daily_context: pass
+daily_context_window_review: saved assets >=2y; public five unavailable
 ema20_50_200_and_major_high_low_review: pass
 background_location_pattern_leg_and_invalidation: pass-at-candidate-level
 strict_h1_h2_l1_l2_same-lineage_freeze: pending / evidence-limited

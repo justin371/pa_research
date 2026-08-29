@@ -2,6 +2,45 @@
 
 状态：`visual_review_asset / no_pattern_labels / pre-outcome`
 
+## Canonical provenance boundary
+
+```text
+contract_scope: historical_context_only
+data_source: public Yahoo Chart API historical Daily OHLCV via Jina Reader
+data_status: historical
+as_of_time: 2026-08-26 latest complete RTH bar
+review_time: 2026-08-27 Asia/Shanghai
+timezone: America/New_York
+session_state: historical_close
+timeframes_seen: Daily
+chart_scope: full
+daily_context_window: >=2y
+major_high_low_review: complete in paired frozen-contract review
+ema20_50_200_review: complete in paired frozen-contract review
+daily_ema20_slope: unknown
+daily_ema50_slope: unknown
+h_l_ema_slope_gate: pending
+direction: no_valid_direction
+lineage_status: pending
+internal_label: pending
+third_push_state: unclear
+range_edge_three_push: pending
+range_edge_side: pending
+research_state: observation_only
+trade_state: observation_only
+gate_result: observation_only
+first_independent_obstacle: paired contract only; not frozen in this asset
+pre_entry_space_R: unknown unless trigger and structural stop are independently frozen
+space_status: unknown
+order_branch: observation_only
+label_source: human_chart_review
+handoff_status: not_ready
+```
+
+这是 23 个局部窗口对应 37 条合同的人工视觉资产；`direction`、`lineage_status`、
+`internal_label`、EMA gate 和空间字段必须按配对合同逐行读取，不能把窗口数当成样本数。
+资产本身没有 pattern、订单或结果标签，也不把 `hl_large` 的历史回放数字写回图像。
+
 本目录服务于 PA Research 的一轮人工看图合同冻结。每张 PNG 都包含：
 
 - 上方：截至窗口末日的两年 Daily 背景；

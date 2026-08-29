@@ -2,6 +2,45 @@
 
 状态：`visual_review_asset / no_pattern_labels / frozen_pre_outcome`
 
+## Canonical provenance boundary
+
+```text
+contract_scope: historical_context_only
+data_source: public Yahoo Chart API historical Daily OHLCV via Jina Reader
+data_status: historical
+as_of_time: 2026-08-26 latest complete RTH bar
+review_time: 2026-08-27 Asia/Shanghai
+timezone: America/New_York
+session_state: historical_close
+timeframes_seen: Daily
+chart_scope: full
+daily_context_window: >=2y
+major_high_low_review: complete in paired frozen-contract review
+ema20_50_200_review: complete in paired frozen-contract review
+daily_ema20_slope: unknown
+daily_ema50_slope: unknown
+h_l_ema_slope_gate: pending
+direction: no_valid_direction
+lineage_status: pending
+internal_label: pending
+third_push_state: unclear
+range_edge_three_push: pending
+range_edge_side: pending
+research_state: observation_only
+trade_state: observation_only
+gate_result: observation_only
+first_independent_obstacle: paired contract or boundary review only; not frozen in this asset
+pre_entry_space_R: unknown unless trigger and structural stop are independently frozen
+space_status: unknown
+order_branch: observation_only
+label_source: human_chart_review
+handoff_status: not_ready
+```
+
+这是两条冻结 H1 合同和一张 H2-like 闸门拒绝边界图的混合资产；`direction`、
+`internal_label`、EMA gate、空间和 `PHM` 的观察状态必须按配对记录逐行读取。资产本身不冻结
+`primary_pattern`、订单或回放结果，边界图也不增加 H2/L2 分母。
+
 本目录保存下一批 H/L 人工合同的证据图。每张图都在决策日截断，并包含：
 
 - 至少两年 Daily 左侧背景；

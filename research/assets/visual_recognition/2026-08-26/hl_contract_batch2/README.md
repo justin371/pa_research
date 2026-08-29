@@ -2,6 +2,45 @@
 
 状态：`research_only / historical_visual_evidence / contract-frozen / not-validated`
 
+## Canonical provenance boundary
+
+```text
+contract_scope: historical_context_only
+data_source: public Yahoo Chart API historical Daily OHLCV via Jina Reader
+data_status: historical
+as_of_time: per-case decision cutoff
+review_time: 2026-08-26; timezone recorded in source notes
+timezone: America/New_York
+session_state: historical_close
+timeframes_seen: Daily
+chart_scope: full
+daily_context_window: >=2y
+major_high_low_review: complete in paired contract review
+ema20_50_200_review: complete in paired contract review
+daily_ema20_slope: unknown
+daily_ema50_slope: unknown
+h_l_ema_slope_gate: pending
+direction: no_valid_direction
+lineage_status: pending
+internal_label: pending
+third_push_state: unclear
+range_edge_three_push: pending
+range_edge_side: pending
+research_state: observation_only
+trade_state: observation_only
+gate_result: observation_only
+first_independent_obstacle: paired contract only; not frozen in this asset
+pre_entry_space_R: unknown unless trigger and structural stop are independently frozen
+space_status: unknown
+order_branch: observation_only
+label_source: human_chart_review
+handoff_status: not_ready
+```
+
+这里的 `direction`、`lineage_status` 和 `internal_label` 是三个案例的聚合占位；每个
+案例的 long/short、H2/L1、EMA gate、首障碍和订单字段只以配对的合同 CSV/回放审计为准。
+资产本身不冻结 `primary_pattern`、订单、空间或统计结果。
+
 本目录保存第二批相互独立 lineage 的人工看图证据。每张图都先看至少两年 Daily 左侧，再复核重要高点、低点、支撑阻力、EMA20/50/200、A/B、回调位置和 META；图上的 H2/L1 只是人工复核后的合同标签，不是程序自动识别结果。合同字段、空间边界和回放结果见[`H/L 第二批合同回放审计`](../../../../backtesting/hl_contract_batch2_replay_2026-08-26_CN.md)。
 
 ## 来源与时间边界
