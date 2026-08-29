@@ -320,6 +320,23 @@ foreach ($relativePath in $requiredResearchReportPaths) {
     }
 }
 
+$visualAssetReadmePaths = @(
+    Get-ChildItem -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'research/assets/visual_recognition') -Recurse -File -Filter 'README.md'
+)
+foreach ($assetReadmeFile in $visualAssetReadmePaths) {
+    if (-not $canonicalResearchIndexLinkedPaths.Contains($assetReadmeFile.FullName)) {
+        $relativePath = $assetReadmeFile.FullName.Substring($repoRoot.Length + 1).Replace('\', '/')
+        Add-ValidationError "visual asset README is not referenced by a canonical index: $relativePath"
+    }
+}
+$externalVisualManifestRelativePath = 'research/backtesting/external_visual_artifact_manifest_2026-08-29.json'
+$externalVisualManifestAbsolutePath = [IO.Path]::GetFullPath(
+    (Join-Path -Path $repoRoot -ChildPath ($externalVisualManifestRelativePath -replace '/', '\'))
+)
+if ($canonicalResearchIndexLinkedPaths.Contains($externalVisualManifestAbsolutePath) -eq $false) {
+    Add-ValidationError "external visual artifact manifest is not referenced by a canonical index: $externalVisualManifestRelativePath"
+}
+
 $coreBoundaryIndexPaths = @(
     'README.md',
     'docs/README.md',

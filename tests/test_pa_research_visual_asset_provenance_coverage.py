@@ -29,13 +29,77 @@ INDEXES = (
     REPO_ROOT / "patterns" / "README.md",
     REPO_ROOT / "research" / "backtesting" / "README.md",
 )
+CANONICAL_INDEXES = (
+    REPO_ROOT / "README.md",
+    REPO_ROOT / "docs" / "README.md",
+    REPO_ROOT / "research" / "README.md",
+    REPO_ROOT / "research" / "backtesting" / "README.md",
+    REPO_ROOT / "patterns" / "README.md",
+    REPO_ROOT / "foundations" / "README.md",
+    REPO_ROOT / "strategy" / "README.md",
+)
+MARKDOWN_LINK_RE = re.compile(
+    r"(?<!\!)\[[^\]]*\]\(([^)\r\n]+)\)|!\[[^\]]*\]\(([^)\r\n]+)\)"
+)
 
 
 def read(path):
     return path.read_text(encoding="utf-8")
 
 
+def linked_paths(index_path):
+    paths = set()
+    for match in MARKDOWN_LINK_RE.finditer(read(index_path)):
+        target = (match.group(1) or match.group(2)).strip()
+        if target.startswith("<") and target.endswith(">"):
+            target = target[1:-1]
+        target = target.split("#", 1)[0].split("?", 1)[0].strip()
+        if not target or re.match(r"(?i)^(?:[a-z][a-z0-9+.-]*:|//)", target):
+            continue
+        resolved = (index_path.parent / target).resolve()
+        try:
+            paths.add(resolved.relative_to(REPO_ROOT).as_posix())
+        except ValueError:
+            continue
+    return paths
+
+
+def canonical_index_linked_paths():
+    return set().union(*(linked_paths(path) for path in CANONICAL_INDEXES))
+
+
+def visual_asset_readme_paths():
+    return sorted(
+        path.relative_to(REPO_ROOT).as_posix()
+        for path in ASSET_ROOT.glob("**/README.md")
+    )
+
+
 class VisualAssetProvenanceCoverageTests(unittest.TestCase):
+    def test_visual_asset_readmes_and_external_manifest_are_in_canonical_indexes(self):
+        indexed_paths = canonical_index_linked_paths()
+        self.assertEqual(
+            sorted(set(visual_asset_readme_paths()) - indexed_paths),
+            [],
+        )
+        self.assertIn(
+            "research/backtesting/external_visual_artifact_manifest_2026-08-29.json",
+            indexed_paths,
+        )
+
+    def test_validator_declares_visual_asset_index_guards(self):
+        validator = read(REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1")
+        self.assertIn("$visualAssetReadmePaths", validator)
+        self.assertIn(
+            "visual asset README is not referenced by a canonical index",
+            validator,
+        )
+        self.assertIn("$externalVisualManifestRelativePath", validator)
+        self.assertIn(
+            "external visual artifact manifest is not referenced by a canonical index",
+            validator,
+        )
+
     def test_all_eleven_asset_readmes_expose_canonical_provenance(self):
         self.assertEqual(len(ASSET_READMES), 11)
         common = (

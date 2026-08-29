@@ -45,6 +45,16 @@ Round4 的短窗口仍明确为 `daily_context_window: <2y`，`major_high_low_re
 3. 交接文档中的 `no_new_positive` 改为 canonical 结论 `no-new-positive`。批次级 `two_year_chart_coverage`、历史报告的 `round4_two_year_daily_complete_cases` 和显式 alias mapping 仍按各自用途保留，不冒充逐标的 provenance 字段。
 4. 五个新增 header、Round4/Round5/TSLA 资产和本审计已加入 `docs/README.md`、`research/README.md`、`strategy/README.md`、`patterns/README.md`、`research/backtesting/README.md` 及 validator 必需文件/字段检查。
 
+## 资产 README 与外部 manifest 入口复核
+
+11 个视觉资产 README 均被至少一个 canonical index 实际直接链接；当前入口由
+`research/README.md`、`research/backtesting/README.md` 和 `patterns/README.md`
+共同承载，不要求每个 README 重复列出全部资产。外部
+`external_visual_artifact_manifest_2026-08-29.json` 也有 canonical index 实际链接。
+validator 现在会解析这些真实本地链接，拒绝新增后没有 canonical 入口的资产 README，
+并拒绝外部视觉 manifest 失去 canonical 入口；这只是 provenance/可发现性守卫，不把
+资产升级为 pattern、结果、统计样本或执行输入。
+
 ## 统计与安全结论
 
 - 本轮只改善 README、配对入口、历史别名、索引、validator 和回归覆盖；没有新增图像、CSV 行、冻结合同、回放结果或统计分母。
