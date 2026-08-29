@@ -99,5 +99,5 @@ second_leg_trap_risk:
 - 能从完整图表先确认区间，而不是先寻找 H/L 标签；
 - 能区分上沿/下沿二次入场、失败突破重返和区间中部 no-trade；
 - 能把 second-leg trap 与趋势 ABC 分开；
-- 能分别记录 limit、stop、retest 的成交和 R/R；
+- 能分别记录 limit、stop、retest 的研究/回放成交路径和 R/R；真实券商/账户成交日志必须来自独立来源；
 - 目标顺序固定为中线、另一侧边缘/独立磁铁，接受突破后才重新使用趋势 MM。

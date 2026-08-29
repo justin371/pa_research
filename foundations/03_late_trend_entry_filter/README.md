@@ -160,6 +160,8 @@ gate_result: pass / conditional / observation_only / valid_no_trade / pending
 handoff_status: research_only / not_ready / ready_for_system
 ```
 
+本补充卡中的 `actual_fill_or_open_skip` 只表示研究合同或历史回放的订单路径，不是券商或账户的真实交易日志；真实交易日志若存在，必须来自独立来源。
+
 `parent_structural_stop`、`actual_fill_assumption`、`rough_R_R_to_first_obstacle` 和 `final_state` 不再作为活动统一字段；若历史笔记出现，只按旧说明阅读，不能替代 `structural_stop`、`actual_fill_or_open_skip`、`pre_entry_space_R`/`space_status` 或分轴状态。
 
 ## 8. 证据入口

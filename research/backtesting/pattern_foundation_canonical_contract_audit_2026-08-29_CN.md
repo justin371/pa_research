@@ -87,6 +87,12 @@ handoff_status: research_only / not_ready / ready_for_system
 
 `01`/`02` 的位置和测量层没有独立序列化合同；`05` 的卡只覆盖事件/板块/大盘闸门。这是职责边界，不是缺失：需要形成完整案例时，必须回到统一合同，不能把基础层局部卡当成完整交易记录。
 
+## 追加交易日志边界复核（2026-08-29）
+
+后续逐项复核发现，`foundations/03`、`foundations/04`、`patterns/06` 和 `patterns/08` 的局部卡虽然使用了 canonical `actual_fill_or_open_skip`，但原文没有在卡旁明确说明它是研究/回放订单路径，容易被误读成券商或账户成交日志；MM、事件闸门和少数独立 pattern 的“实际成交”措辞也存在同样的阅读风险。现已在 `foundations/README.md`、`patterns/README.md` 及相关局部卡补充统一限定，并将 `foundations/02` 的“实际成交假设”改成研究/回放路径表述。
+
+边界固定为：订单卡中的 `actual_fill_or_open_skip` 只描述研究合同/历史回放订单路径；回放结果的 `fill_status`、`trade_result`、`realized_R` 等仍只能出现在独立 replay/result 记录；真实券商/账户交易日志必须来自独立来源。当前 PA Research checkout 不包含真实交易日志，不能用订单卡或回放结果代替它。此次只修改文档、索引校验和回归测试，不新增样本、成交、回放结果或胜率分母。
+
 ## 验收结论
 
 - 16 个 pattern README 的目录和索引入口完整；核心八个与独立八个保持分层；

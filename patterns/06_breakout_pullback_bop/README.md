@@ -62,6 +62,8 @@ rough_R_R:
 failure: reacceptance_inside_old_range / no_follow_through / event-risk
 ```
 
+本最小复核卡中的 `actual_fill_or_open_skip` 只表示研究合同或历史回放的订单路径，不是券商或账户的真实交易日志；真实交易日志若存在，必须来自独立来源。
+
 ## 交易合同纪律
 
 - 突破前的 H1/H2、三推或 MTR 假设，在突破被接受后必须重新分类，不把旧合同继续套用；

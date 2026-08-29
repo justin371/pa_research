@@ -137,6 +137,30 @@ class PaResearchPreEntryPostOutcomeBoundaryTests(unittest.TestCase):
             order_card,
         )
 
+        for path in (
+            REPO_ROOT / "foundations" / "README.md",
+            REPO_ROOT / "patterns" / "README.md",
+        ):
+            with self.subTest(path=path.as_posix()):
+                content = path.read_text(encoding="utf-8")
+                for phrase in ("研究合同", "历史回放", "真实交易日志", "独立来源"):
+                    self.assertIn(phrase, content)
+
+        order_template_paths = sorted(
+            path
+            for root_name in ("foundations", "patterns")
+            for path in (REPO_ROOT / root_name).rglob("README.md")
+            if re.search(
+                r"(?im)^\s*actual_fill_or_open_skip:",
+                path.read_text(encoding="utf-8"),
+            )
+        )
+        for path in order_template_paths:
+            with self.subTest(path=path.as_posix()):
+                content = path.read_text(encoding="utf-8")
+                for phrase in ("订单路径", "交易日志", "独立来源"):
+                    self.assertIn(phrase, content)
+
     def test_next3_replay_keeps_the_no_contract_boundary(self):
         selection = (BACKTEST_ROOT / "hl_next3_selection_2026-08-27_CN.md").read_text(
             encoding="utf-8"

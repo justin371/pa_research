@@ -2364,7 +2364,11 @@ if (Test-Path -LiteralPath $patternFoundationCanonicalAuditPath -PathType Leaf) 
         'PA Research only',
         'no Codex Trading',
         'no quantitative scanner',
-        'no Execution Agent'
+        'no Execution Agent',
+        '追加交易日志边界复核',
+        '研究/回放订单路径',
+        '真实交易日志',
+        '独立来源'
     )) {
         if (-not $patternFoundationCanonicalAuditContent.Contains($token)) {
             Add-ValidationError "missing pattern-foundation-canonical-audit token '$token'"
@@ -2576,6 +2580,37 @@ foreach ($entry in $foundationLegacyFieldChecks.GetEnumerator()) {
     foreach ($legacyPattern in $entry.Value) {
         if ($content -match $legacyPattern) {
             Add-ValidationError "active foundation legacy field remains '$legacyPattern': $($entry.Key)"
+        }
+    }
+}
+
+$transactionBoundaryIndexPaths = @(
+    'foundations/README.md',
+    'patterns/README.md'
+)
+foreach ($relativePath in $transactionBoundaryIndexPaths) {
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    foreach ($token in @('研究合同', '历史回放', '真实交易日志', '独立来源')) {
+        if (-not $content.Contains($token)) {
+            Add-ValidationError "transaction-log boundary index missing '$token': $relativePath"
+        }
+    }
+}
+
+$activeOrderTemplateReadmes = @(
+    Get-ChildItem -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'foundations') -Recurse -File -Filter 'README.md'
+    Get-ChildItem -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'patterns') -Recurse -File -Filter 'README.md'
+)
+foreach ($file in $activeOrderTemplateReadmes) {
+    $relativePath = $file.FullName.Substring($repoRoot.Length + 1)
+    $content = Get-Utf8Text -Path $file.FullName
+    if ($content -match '(?im)^\s*actual_fill_or_open_skip:') {
+        foreach ($token in @('订单路径', '交易日志', '独立来源')) {
+            if (-not $content.Contains($token)) {
+                Add-ValidationError "active order template missing transaction-log boundary '$token': $relativePath"
+            }
         }
     }
 }

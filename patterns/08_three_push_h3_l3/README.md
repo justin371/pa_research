@@ -91,6 +91,8 @@ thesis_state: working / failed / replaced / pending
 handoff_status: research_only / not_ready / ready_for_system
 ```
 
+本最小视觉协议中的 `actual_fill_or_open_skip` 只表示研究合同或历史回放的订单路径，不是券商或账户的真实交易日志；真实交易日志若存在，必须来自独立来源。
+
 研究记录必须先填完 `lineage_status` 和 `third_push_state`，再讨论 H3/L3。`timeframes_seen` 记录实际查看过的全部周期；若需要只在一个周期计数，另填 pattern-specific 的 `count_timeframe`，不能用单数 `timeframe` 或 `context_timeframes_seen` 替代 canonical 证据范围。若三次推进不能在当时被分开识别，标签写成 `not_h3_l3` 或 `new_lineage_pending`，`third_push_state` 写 `unclear`，不得用最终走势反推计数。
 
 ## 同一 lineage 的计数纪律

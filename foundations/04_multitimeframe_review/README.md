@@ -172,6 +172,8 @@ handoff_status: research_only / not_ready / ready_for_system
 failure_condition:
 ```
 
+本补充卡中的 `actual_fill_or_open_skip` 只表示研究合同或历史回放的订单路径，不是券商或账户的真实交易日志；真实交易日志若存在，必须来自独立来源。
+
 旧字段 `parent_pattern`、`actual_or_assumed_fill`、`gap_state` 和 `decision` 不再作为活动 canonical 输出；历史说明可保留，但新记录分别使用 `primary_pattern`、`actual_fill_or_open_skip`、`gap_policy` 以及 `research_state`/`trade_state`/`gate_result`。
 
 ## 9. 证据入口与边界
