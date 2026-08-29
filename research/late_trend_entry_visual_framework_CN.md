@@ -144,11 +144,14 @@ signal_and_trigger:
 direction: long / short / no_valid_direction
 primary_pattern: ABC_CONT / BOP / RFB / MTR / other
 secondary_context: late_trend_entry_filter
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
 signal_bar:
 confirmation_bar:
 new_trigger:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 structural_stop:
 structural_invalidation:

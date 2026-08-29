@@ -177,8 +177,12 @@ internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 lineage_status: same_lineage / reset / unclear / pending
 lineage_id:
 state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+signal_bar:
+confirmation_bar:
+new_trigger:
 order_branch: stop_confirmation / limit_retest / market_close / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 structural_stop: where and why
 structural_invalidation:

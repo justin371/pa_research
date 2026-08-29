@@ -78,7 +78,7 @@ ABC 的判断顺序是：
 - `branch_role: same_contract` + `order_branch: stop_confirmation`：C 的信号 K 外 stop，结构止损按父级失效位；
 - `low_cycle_confirmation`：低周期只确认高周期 ABC，不改变父级止损；
 - `limit_retest`：回测支撑/阻力的独立合同；
-- `reprice_after_gap`：开盘跳过旧触发后重新计算成交、止损、首障碍；
+- `branch_role: gap_reprice`（配合新的 `order_branch`）：开盘跳过旧触发后重新计算成交、止损、首障碍；
 - `observation_only`：形态像但首障碍尚未确认、事件/板块证据不完整或市场状态不清。
 - `valid_no_trade`：首障碍和结构几何已经可复核，但空间不足或已知事件/合同闸门否决交易。
 

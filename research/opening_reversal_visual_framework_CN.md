@@ -118,24 +118,57 @@
 
 ```text
 contract_scope: deep_review / historical_context_only
-pre_open_context / market_state
-gap_or_open_position
-first_opening_pressure
-failure_or_acceptance
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+completed_bar_as_of:
+timeframes_seen:
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
 parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+directional_bias: bull / bear / balanced / changing
 direction: long / short / no_valid_direction
-primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+primary_pattern: ABC_CONT / BOP / RFB / MTR / other
+secondary_context: opening_reversal
 internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
+pre_open_context:
+gap_or_open_position:
+first_opening_pressure:
+failure_or_acceptance:
 signal_bar:
+confirmation_bar:
 new_trigger:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+gap_policy: accept_open / skip / flag_only / not_applicable
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 structural_stop:
-first_independent_obstacle / measured_move
-rough_R_R
-event_and_sector_filter
-outcome_at_decision_time
+structural_invalidation:
+first_independent_obstacle:
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+rough_R_R:
+event_context: none / earnings / macro / gap / other / unknown
+event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
+sector_reference:
+sector_state: aligned / mixed / counter / unknown
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
 
-本卡中的 `pre_open_context`、开盘压力和事件字段是开盘专用补充；canonical `direction`、`primary_pattern` 和 `internal_label` 仍按统一合同填写，不能用 `market_state` 或旧的 H/L 合并字段代替。
+本卡中的 `pre_open_context`、开盘压力和事件字段是开盘专用补充；canonical `direction`、
+`primary_pattern`、`internal_label`、`state_transition` 和 `order_branch` 仍按统一合同填写，
+不能用 `market_state`、`order_branch_and_actual_fill`、`first_obstacle / measured_move` 或
+`outcome_at_decision_time` 等合并字段代替。入场前记录不写结果；结果只能进入独立的
+历史回放/结果字段。
 
 参考资料：[`PAHubCN Trading the Open`](../pahubcn_courses/05_advanced_trading_modules.md)、[`PAHubCN Foundations`](../pahubcn_courses/01_foundations.md)、[`PAHubCN Reversals and Probability`](../pahubcn_courses/03_reversals_patterns_probability.md)、[`交易区间边缘二次入场框架`](range_edge_second_entry_framework_CN.md)、[`MTR visual framework`](mtr_visual_framework_CN.md)、[`Final Flag visual framework`](final_flag_visual_framework_CN.md)。

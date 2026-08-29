@@ -40,9 +40,9 @@
 
 - patterns/ 下有 16 个 pattern 目录，foundations/ 下有 8 个基础层目录；
 - research/assets/visual_recognition/ 下有 11 个资产 README 和 105 张 PNG；
-- research/ 顶层有 171 个历史研究报告，research/backtesting/ 有 70 个报告文件、18 个 CSV 和 1 个 JSON 机器产物；
+- research/ 顶层有 171 个历史研究报告，research/backtesting/ 有 71 个报告文件、18 个 CSV 和 1 个 JSON 机器产物；
 - 六个核心索引均指向当前 PA Research 规则/合同，并保留回放引擎 0.3.9、no-new-positive、validated win-rate: not-computable 和研究/生产执行隔离；
-- 文档 validator 已检查 305 个 Markdown 文件、2046 个 Markdown 链接；其中本地链接、动态 machine-artifact coverage 和核心边界检查全部通过。
+- 文档 validator 已检查 306 个 Markdown 文件、2052 个 Markdown 链接；其中本地链接、动态 machine-artifact coverage 和核心边界检查全部通过。
 
 这些数量是当前 checkout 快照，不把历史批次的 37 条、24 个、12 只、13 份等报告内数字改写成当前总量；历史回放、视觉资产、冻结合同和真实交易日志仍按各自 provenance 分层。
 
@@ -59,7 +59,7 @@
 
 ```text
 external V1.x authority-marker scan: 0 matches
-full unittest suite: 281 passed
+full unittest suite: 297 passed
 document validation: passed
 compileall and git diff --check: passed
 ```

@@ -30,3 +30,5 @@
 - `05` 的 `permission` 与 `gate_result` 只表示前置闸门，不能代替方向、几何或交易状态。
 
 逐项覆盖、活动视觉复核卡、枚举和旧字段边界见[`Pattern README 与基础视觉框架 canonical 输出覆盖审计`](../research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md)。
+
+其余视觉框架与订单分支协议的统一字段补齐见[`remaining visual frameworks 合同边界审计`](../research/backtesting/remaining_visual_framework_contract_audit_2026-08-29_CN.md)：基础层仍只提供研究补充语义，不创建新 pattern、统计分母或交易授权。

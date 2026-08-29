@@ -137,6 +137,8 @@ signal_bar:
 confirmation_bar:
 new_trigger:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 structural_stop:
 structural_invalidation:
@@ -144,6 +146,7 @@ first_independent_obstacle:
 rough_space_to_first_obstacle_R:
 pre_entry_space_R:
 space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+rough_R_R:
 state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
 state_switch_condition:
 research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending

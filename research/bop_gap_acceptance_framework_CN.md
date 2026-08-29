@@ -95,17 +95,63 @@
 ## 7. 最小复核卡
 
 ```text
-breakout_level / prior_market_state
-close_acceptance_or_wick_only
-follow_through
-pullback_holds_old_level
-order_branch_and_actual_fill
-structural_stop
-first_obstacle / measured_move
-rough_R_R
-gap_and_event_filter
+contract_scope: deep_review / historical_context_only
+symbol:
+review_date:
+data_source:
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+completed_bar_as_of:
+timeframes_seen:
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+directional_bias: bull / bear / balanced / changing
+direction: long / short / no_valid_direction
+primary_pattern: BOP / ABC_CONT / RFB / MTR / other
+secondary_context: gap_acceptance / breakout_pullback / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
+signal_bar:
+confirmation_bar:
+new_trigger:
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+gap_policy: accept_open / skip / flag_only / not_applicable
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
+structural_stop:
+structural_invalidation:
+first_independent_obstacle:
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+rough_R_R:
+bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation
+breakout_boundary:
+acceptance_close:
+follow_through:
+retest_zone:
+role_reversal_held: yes / no / unclear / not_occurred
+event_context: none / earnings / macro / gap / other / unknown
+event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 failure_condition: reacceptance_inside_old_range
 ```
+
+`breakout_boundary`、`acceptance_close`、`follow_through`、`retest_zone` 和
+`role_reversal_held` 是 BOP 专用补充字段；它们不能合并回
+`parent_state`、`state_transition`、`order_branch` 或
+`first_independent_obstacle`。`actual_fill_or_open_skip` 只记录研究/回放订单
+路径，不代表券商或账户的真实成交。
 
 当前结论：BOP 的可复用核心是“旧边界先明确、突破接受再分类、回踩合同单独记账、首障碍优先于 MM”。下一轮只在出现新的方向、订单或边界问题时补案例，不再重复堆叠相同的 ABC/缺口样本。
 

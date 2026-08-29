@@ -13,6 +13,12 @@ AUDIT = (
     / "backtesting"
     / "visual_authority_schema_alignment_audit_2026-08-29_CN.md"
 )
+REMAINING_FRAMEWORK_AUDIT = (
+    REPO_ROOT
+    / "research"
+    / "backtesting"
+    / "remaining_visual_framework_contract_audit_2026-08-29_CN.md"
+)
 VISUAL_CARD = REPO_ROOT / "docs" / "visual_pa_review_card_CN.md"
 DAILY_RULES = REPO_ROOT / "docs" / "pa_research_daily_selection_rules_v0_1_CN.md"
 VALIDATOR_PATH = REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1"
@@ -33,6 +39,14 @@ ACTIVE_FRAMEWORKS = (
     REPO_ROOT / "research" / "late_trend_entry_visual_framework_CN.md",
     REPO_ROOT / "research" / "multitimeframe_visual_review_framework_CN.md",
     REPO_ROOT / "research" / "channel_visual_framework_CN.md",
+    REPO_ROOT / "research" / "bop_gap_acceptance_framework_CN.md",
+    REPO_ROOT / "research" / "order_branch_visual_protocol_CN.md",
+    REPO_ROOT / "research" / "failed_breakout_climax_visual_framework_CN.md",
+    REPO_ROOT / "research" / "final_flag_visual_framework_CN.md",
+    REPO_ROOT / "research" / "mtr_visual_framework_CN.md",
+    REPO_ROOT / "research" / "head_shoulders_rounded_top_bottom_visual_framework_CN.md",
+    REPO_ROOT / "research" / "opening_reversal_visual_framework_CN.md",
+    REPO_ROOT / "research" / "three_push_pressure_state_framework_CN.md",
 )
 
 CANONICAL_MAPPING_TEMPLATES = (
@@ -177,7 +191,19 @@ class VisualAuthoritySchemaAlignmentTests(unittest.TestCase):
             "ema20_50_200_review:",
             CANONICAL_PARENT_STATE,
             "direction: long / short / no_valid_direction",
+            "internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending",
+            "state_transition:",
             "order_branch:",
+            "branch_role:",
+            "gap_policy:",
+            "actual_fill_or_open_skip:",
+            "structural_stop:",
+            "structural_invalidation:",
+            "first_independent_obstacle:",
+            "rough_space_to_first_obstacle_R:",
+            "pre_entry_space_R:",
+            "space_status:",
+            "rough_R_R:",
             "research_state:",
             "trade_state:",
             "gate_result:",
@@ -206,6 +232,112 @@ class VisualAuthoritySchemaAlignmentTests(unittest.TestCase):
                 self.assertIn(first_obstacle_field, content)
                 for field in stale_fields:
                     self.assertFalse(has_active_field(content, field), field)
+
+    def test_remaining_frameworks_keep_pattern_specific_fields_separate(self):
+        checks = {
+            "bop_gap_acceptance_framework_CN.md": (
+                "breakout_boundary:",
+                "acceptance_close:",
+                "follow_through:",
+                "retest_zone:",
+                "role_reversal_held:",
+            ),
+            "failed_breakout_climax_visual_framework_CN.md": (
+                "breakout_boundary:",
+                "breakout_state:",
+                "first_reverse:",
+                "second_confirmation:",
+                "third_push_state:",
+            ),
+            "final_flag_visual_framework_CN.md": (
+                "final_flag_state:",
+                "last_attempt_state:",
+                "breakout_state:",
+            ),
+            "mtr_visual_framework_CN.md": (
+                "mtr_state: reversal_attempt / mtr_candidate / mtr_confirmed_for_research / failed_mtr_thesis",
+                "first_reverse:",
+                "second_confirmation:",
+            ),
+            "head_shoulders_rounded_top_bottom_visual_framework_CN.md": (
+                "shape_type:",
+                "neckline:",
+                "shoulder_separation:",
+                "rounded_phase:",
+                "breakout_state:",
+            ),
+            "opening_reversal_visual_framework_CN.md": (
+                "pre_open_context:",
+                "gap_or_open_position:",
+                "first_opening_pressure:",
+                "failure_or_acceptance:",
+            ),
+            "three_push_pressure_state_framework_CN.md": (
+                "data_status:",
+                "as_of_time:",
+                "timeframes_seen:",
+                "actual_fill_or_open_skip:",
+                "handoff_status:",
+            ),
+            "visual_pattern_triage_protocol_CN.md": (
+                "contract_scope: deep_review / historical_context_only",
+                "signal_bar:",
+                "confirmation_bar:",
+                "new_trigger:",
+                "order_branch:",
+                "structural_stop:",
+                "first_independent_obstacle:",
+                "rough_space_to_first_obstacle_R:",
+                "space_status:",
+                "handoff_status:",
+            ),
+        }
+        for name, tokens in checks.items():
+            path = REPO_ROOT / "research" / name
+            content = read(path)
+            with self.subTest(path=path.relative_to(REPO_ROOT).as_posix()):
+                for token in tokens:
+                    self.assertIn(token, content, token)
+
+    def test_order_protocol_has_no_merged_active_geometry_aliases(self):
+        content = read(REPO_ROOT / "research" / "order_branch_visual_protocol_CN.md")
+        for field in (
+            "decision_time",
+            "trigger_price_or_zone",
+            "actual_or_assumed_fill",
+            "structural_stop_zone",
+            "rough_space_to_obstacle",
+            "gap_or_event_state",
+        ):
+            self.assertFalse(has_active_field(content, field), field)
+        self.assertIn("as_of_time:", content)
+        self.assertIn("actual_fill_or_open_skip:", content)
+        self.assertIn("rough_space_to_first_obstacle_R:", content)
+
+    def test_opening_and_matrix_examples_do_not_merge_contract_fields(self):
+        opening = read(REPO_ROOT / "research" / "opening_reversal_visual_framework_CN.md")
+        for field in (
+            r"(?m)^\s*pre_open_context\s*/\s*market_state\s*$",
+            r"(?m)^\s*first_independent_obstacle\s*/\s*measured_move\s*$",
+            r"(?m)^\s*event_and_sector_filter\s*$",
+            r"(?m)^\s*outcome_at_decision_time\s*$",
+        ):
+            self.assertIsNone(re.search(field, opening), field)
+
+        matrix = read(
+            REPO_ROOT
+            / "research"
+            / "priority_pattern_visual_candidate_matrix_2026-08-24_CN.md"
+        )
+        self.assertIn("rough_R_R", matrix)
+        self.assertNotRegex(matrix, r"(?m)^rough_RR:")
+        self.assertNotRegex(matrix, r"(?m)^order:")
+        self.assertNotRegex(matrix, r"(?m)^gate:")
+
+    def test_abc_gap_reprice_uses_canonical_branch_role(self):
+        content = read(REPO_ROOT / "patterns" / "03_abc_continuation" / "README.md")
+        self.assertIn("branch_role: gap_reprice", content)
+        self.assertNotRegex(content, r"(?m)^reprice_after_gap:")
 
     def test_daily_rules_and_migrated_templates_use_canonical_parent_state(self):
         self.assertIn(CANONICAL_PARENT_STATE, read(DAILY_RULES))
@@ -286,6 +418,26 @@ class VisualAuthoritySchemaAlignmentTests(unittest.TestCase):
 
         for path in INDEXES:
             self.assertIn(AUDIT.name, read(path), path.as_posix())
+
+    def test_remaining_framework_audit_is_indexed_and_preserves_boundary(self):
+        audit = read(REMAINING_FRAMEWORK_AUDIT)
+        for token in (
+            "remaining visual frameworks",
+            "order_branch_visual_protocol_CN.md",
+            "opening_reversal_visual_framework_CN.md",
+            "state_transition",
+            "actual_fill_or_open_skip",
+            "no-new-positive",
+            "validated win-rate: not-computable",
+            "PA Research only",
+            "no Codex Trading",
+            "no quantitative scanner",
+            "no Execution Agent",
+        ):
+            self.assertIn(token, audit, token)
+
+        for path in INDEXES:
+            self.assertIn(REMAINING_FRAMEWORK_AUDIT.name, read(path), path.as_posix())
 
 
 if __name__ == "__main__":

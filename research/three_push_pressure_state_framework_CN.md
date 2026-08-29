@@ -149,6 +149,16 @@ H3/L3 的“第三次”与反转方向的 H1/H2、L1/L2 是两套计数：前�
 
 ```text
 contract_scope: deep_review / daily_candidate / historical_context_only
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+completed_bar_as_of:
+timeframes_seen: Daily / 4H / 1H / 15m / other
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
 parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
 internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
@@ -161,16 +171,24 @@ first_reverse: none / touch / structural_break
 second_confirmation: yes / no / pending
 direction: long / short / no_valid_direction
 state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+signal_bar:
+confirmation_bar:
+new_trigger:
 order_branch: stop_confirmation / limit_retest / market_close / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / management
 gap_policy: accept_open / skip / flag_only / not_applicable
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 structural_stop: where and why
+structural_invalidation:
 first_independent_obstacle: where and why
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
 pre_entry_space_R:
 space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+rough_R_R:
 research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
 trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
 gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
 
 当 `range_edge_three_push=yes` 时，`range_edge_side` 必须是 `upper` 或 `lower`；上沿只建立空头研究方向，下沿只建立多头研究方向，但触发、空间或合同未冻结时仍可写 `direction: no_valid_direction`。这份输出允许“看起来像三推”与“值得交易”同时得到不同结论，符合视觉研究目标；`third_push_state`、`first_reverse` 和 `second_confirmation` 不替代订单分支或闸门结果。

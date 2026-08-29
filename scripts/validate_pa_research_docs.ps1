@@ -2637,13 +2637,43 @@ if (Test-Path -LiteralPath $visualAuthoritySchemaAlignmentAuditPath -PathType Le
     }
 }
 
+$remainingVisualFrameworkAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/remaining_visual_framework_contract_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $remainingVisualFrameworkAuditPath -PathType Leaf) {
+    $remainingVisualFrameworkAuditContent = Get-Utf8Text -Path $remainingVisualFrameworkAuditPath
+    foreach ($token in @(
+        'remaining visual frameworks',
+        'order_branch_visual_protocol_CN.md',
+        'opening_reversal_visual_framework_CN.md',
+        'state_transition',
+        'actual_fill_or_open_skip',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
+    )) {
+        if (-not $remainingVisualFrameworkAuditContent.Contains($token)) {
+            Add-ValidationError "missing remaining-visual-framework audit token '$token'"
+        }
+    }
+}
+
 $visualAuthorityActiveTemplateRelativePaths = @(
     'research/market_state_context_visual_evidence_audit_2026-08-24_CN.md',
     'research/inside_bar_two_bar_reversal_visual_framework_CN.md',
     'research/triangle_expanding_range_visual_framework_CN.md',
     'research/late_trend_entry_visual_framework_CN.md',
     'research/multitimeframe_visual_review_framework_CN.md',
-    'research/channel_visual_framework_CN.md'
+    'research/channel_visual_framework_CN.md',
+    'research/bop_gap_acceptance_framework_CN.md',
+    'research/order_branch_visual_protocol_CN.md',
+    'research/failed_breakout_climax_visual_framework_CN.md',
+    'research/final_flag_visual_framework_CN.md',
+    'research/mtr_visual_framework_CN.md',
+    'research/head_shoulders_rounded_top_bottom_visual_framework_CN.md',
+    'research/opening_reversal_visual_framework_CN.md',
+    'research/three_push_pressure_state_framework_CN.md'
 )
 foreach ($relativePath in $visualAuthorityActiveTemplateRelativePaths) {
     $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
@@ -2659,7 +2689,19 @@ foreach ($relativePath in $visualAuthorityActiveTemplateRelativePaths) {
         'ema20_50_200_review:',
         'parent_state: open_trend / trading_range / range_edge / transition / climax / unclear',
         'direction: long / short / no_valid_direction',
+        'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
+        'state_transition:',
         'order_branch:',
+        'branch_role:',
+        'gap_policy:',
+        'actual_fill_or_open_skip:',
+        'structural_stop:',
+        'structural_invalidation:',
+        'first_independent_obstacle:',
+        'rough_space_to_first_obstacle_R:',
+        'pre_entry_space_R:',
+        'space_status:',
+        'rough_R_R:',
         'research_state:',
         'trade_state:',
         'gate_result:',
@@ -2669,11 +2711,7 @@ foreach ($relativePath in $visualAuthorityActiveTemplateRelativePaths) {
             Add-ValidationError "visual authority template missing canonical token '$token': $relativePath"
         }
     }
-    $requiredGeometryToken = if ($relativePath -eq 'research/multitimeframe_visual_review_framework_CN.md') {
-        'parent_first_independent_obstacle:'
-    } else {
-        'first_independent_obstacle:'
-    }
+    $requiredGeometryToken = 'first_independent_obstacle:'
     if (-not $content.Contains($requiredGeometryToken)) {
         Add-ValidationError "visual authority template missing canonical obstacle '$requiredGeometryToken': $relativePath"
     }
@@ -2692,6 +2730,58 @@ foreach ($relativePath in $visualAuthorityActiveTemplateRelativePaths) {
     )) {
         if ($content -match $legacyToken) {
             Add-ValidationError "legacy visual authority template field remains '$legacyToken': $relativePath"
+        }
+    }
+}
+
+$visualFrameworkMergedFieldChecks = @{
+    'research/bop_gap_acceptance_framework_CN.md' = @(
+        '(?m)^\s*breakout_level\s*/',
+        '(?m)^\s*close_acceptance_or_wick_only\s*$',
+        '(?m)^\s*pullback_holds_old_level\s*$',
+        '(?m)^\s*order_branch_and_actual_fill\s*$',
+        '(?m)^\s*first_obstacle\s*/\s*measured_move\s*$',
+        '(?m)^\s*gap_and_event_filter\s*$'
+    )
+    'research/order_branch_visual_protocol_CN.md' = @(
+        '(?m)^\s*decision_time\s*:',
+        '(?m)^\s*trigger_price_or_zone\s*:',
+        '(?m)^\s*actual_or_assumed_fill\s*:',
+        '(?m)^\s*structural_stop_zone\s*:',
+        '(?m)^\s*rough_space_to_obstacle\s*:',
+        '(?m)^\s*gap_or_event_state\s*:'
+    )
+    'research/opening_reversal_visual_framework_CN.md' = @(
+        '(?m)^\s*pre_open_context\s*/\s*market_state\s*$',
+        '(?m)^\s*first_independent_obstacle\s*/\s*measured_move\s*$',
+        '(?m)^\s*event_and_sector_filter\s*$',
+        '(?m)^\s*outcome_at_decision_time\s*$'
+    )
+    'research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md' = @(
+        '(?m)^\s*rough_RR\s*:',
+        '(?m)^\s*order\s*:',
+        '(?m)^\s*gate\s*:'
+    )
+    'research/visual_pattern_triage_protocol_CN.md' = @(
+        '(?m)^\s*signal_bar\s*/\s*confirmation_bar\s*:',
+        '(?m)^\s*trigger_zone\s*:',
+        '(?m)^\s*structural_stop_zone\s*:',
+        '(?m)^\s*rough_space\s*:',
+        '(?m)^\s*measured_move_or_AB_CD\s*:',
+        '(?m)^\s*event_filter\s*:',
+        '(?m)^\s*sector_or_market_context\s*:'
+    )
+    'patterns/03_abc_continuation/README.md' = @(
+        '(?m)^\s*reprice_after_gap\s*:'
+    )
+}
+foreach ($entry in $visualFrameworkMergedFieldChecks.GetEnumerator()) {
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($entry.Key -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    foreach ($legacyPattern in $entry.Value) {
+        if ($content -match $legacyPattern) {
+            Add-ValidationError "merged or legacy visual framework field remains '$legacyPattern': $($entry.Key)"
         }
     }
 }

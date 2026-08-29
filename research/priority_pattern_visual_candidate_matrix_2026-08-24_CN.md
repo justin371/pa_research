@@ -21,6 +21,16 @@ PA Research 已经分别审计了 H1/L1、H2/L2、ABC、BOP、MTR/三推和交�
 每个案例只允许一个 `primary_pattern`：深审/历史矩阵可以使用 `ABC_CONT`、`BOP`、`RFB`、`MTR`、`H3_L3` 或必要时 `other`；若案例进入 `daily_candidate`，主标签收窄为 `ABC_CONT` 或 `BOP`。H1/H2/L1/L2/H3/L3 只写入 `internal_label` 或关系描述；接受/失败等状态写入 `state_transition`，不能把内部计数或状态别名塞进主标签。这样可以避免同一组 K 线被 H2、ABC、三推、双顶和 MTR 重复计分。
 
 ```text
+contract_scope
+data_status
+as_of_time
+timezone
+session_state
+timeframes_seen
+chart_scope
+daily_context_window
+major_high_low_review
+ema20_50_200_review
 primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
 secondary_context
 direction: long / short / no_valid_direction
@@ -28,12 +38,24 @@ internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 state_transition
 A/B pressure
-signal_or_confirmation
-order_branch / branch_role / actual_fill_or_open_skip
+signal_bar
+confirmation_bar
+new_trigger
+order_branch
+branch_role
+gap_policy
+actual_fill_or_open_skip
 structural_stop
+structural_invalidation
 first_independent_obstacle
-rough_RR
-event_sector_timeframe_gate / permission / gate_result
+rough_space_to_first_obstacle_R
+pre_entry_space_R
+space_status
+rough_R_R
+event_context
+event_bucket
+permission
+gate_result
 research_state
 trade_state
 handoff_status
@@ -116,23 +138,46 @@ handoff_status
 以后遇到一张新图，先用下面这种短输出，而不是先讲一长串形态名称：
 
 ```text
+contract_scope: historical_context_only
+data_status: historical
+as_of_time: unavailable_in_original_matrix
+timezone: unavailable_in_original_matrix
+session_state: historical_close
+timeframes_seen: Daily
+chart_scope: partial
+daily_context_window: unavailable
+major_high_low_review: partial
+ema20_50_200_review: unavailable
 primary_pattern: ABC_CONT
 internal_label: H2
 secondary_context: H2_within_ABC / support_ema_cluster
 parent_state: open_trend
 parent_state_note: open bull trend; not range-middle
 state_transition: none
-A/B: strong A; deep but late-controlled B
-signal: setup/count bar and confirmation/trigger separated
-order: buy-stop above confirmation bar; low-cycle trigger separate
-structural_stop: below support cluster, not below one signal-K tail
-first_independent_obstacle: prior-high cluster; space is borderline
-rough_RR: first obstacle about 0.8R–1.0R; extended MM is not used to rescue it
-gate: event/sector/timeframe must be checked
 direction: long
-research_state: research_positive_conditional
-trade_state: conditional / valid_no_trade if strict obstacle branch
+lineage_status: pending
+lineage_id:
+A/B: strong A; deep but late-controlled B
+signal_bar: setup/count bar
+confirmation_bar: confirmation bar, if present
+new_trigger: buy-stop above confirmation bar; low-cycle trigger separate
+order_branch: stop_confirmation
+branch_role: same_contract
+gap_policy: not_applicable
+actual_fill_or_open_skip: not_applicable
+structural_stop: below support cluster, not below one signal-K tail
+structural_invalidation: below the parent support/structure
+first_independent_obstacle: prior-high cluster
+rough_space_to_first_obstacle_R: borderline
+pre_entry_space_R: borderline
+space_status: borderline
+rough_R_R: first obstacle about 0.8R–1.0R; extended MM is not used to rescue it
+event_context: unknown
+event_bucket: event_unverified_or_pending
 gate_result: conditional
+research_state: research_positive_conditional
+trade_state: conditional
+strict_obstacle_branch: valid_no_trade
 handoff_status: research_only
 ```
 

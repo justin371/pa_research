@@ -185,6 +185,13 @@ parent_first_independent_obstacle:
 parent_pre_entry_space_R:
 parent_space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 parent_rough_R_R:
+structural_stop:
+structural_invalidation:
+first_independent_obstacle:
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+rough_R_R:
 
 lower_timeframe: 1H / 60m / 15m
 lower_role: confirmation / independent-trade / reprice / observation
@@ -196,8 +203,12 @@ lower_structural_stop_if_independent:
 lower_first_independent_obstacle_if_independent:
 lower_rough_R_R_if_independent:
 
+signal_bar:
+confirmation_bar:
+new_trigger:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
 research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
 trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending

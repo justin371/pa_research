@@ -76,25 +76,56 @@ Stop-limit 不是普通 stop 的别名，而是另一份执行合同：
 ## 3. 订单分支的最低记录字段
 
 ```text
+contract_scope: deep_review / historical_context_only
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+completed_bar_as_of:
+timeframes_seen:
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP / RFB / MTR / other
+secondary_context: order_branch_protocol
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
+signal_bar:
+confirmation_bar:
+new_trigger:
 research_state: pattern_like / research_candidate / research_positive_conditional / valid_no_trade / pending
 trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
 gap_policy: accept_open / skip / flag_only / not_applicable
-decision_time:
-signal_bar:
-trigger_price_or_zone:
-actual_or_assumed_fill:
-structural_stop_zone:
+order_price_or_zone:
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
+structural_stop:
+structural_invalidation:
 first_independent_obstacle:
-rough_space_to_obstacle:
-gap_or_event_state:
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+rough_R_R:
+event_context: none / earnings / macro / gap / other / unknown
+event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
 gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 why_this_branch:
 what_would_cancel_it:
 ```
 
 数值可以先是区域和粗略范围；关键是订单语义、因果时点和失效条件不能含糊。
+历史材料中的 `decision_time`、`trigger_price_or_zone`、
+`actual_or_assumed_fill`、`structural_stop_zone`、`rough_space_to_obstacle` 和
+`gap_or_event_state` 只按别名读取；新记录必须分别落到 `as_of_time`、
+`new_trigger`、`actual_fill_or_open_skip`、`structural_stop`、
+`rough_space_to_first_obstacle_R` 和事件字段，不能作为合并字段继续使用。
 
 ## 4. 跨案例证据
 
