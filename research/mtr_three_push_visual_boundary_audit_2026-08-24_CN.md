@@ -35,14 +35,14 @@
 contract_scope: historical_context_only
 primary_pattern: H3_L3 / MTR / other
 direction: long / short / no_valid_direction
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
 range_edge_three_push: yes / no / pending
 range_edge_side: upper / lower / none / pending
-mtr_state: not_started / reversal_attempt / candidate / confirmed_for_research / failed
+mtr_state: reversal_attempt / mtr_candidate / mtr_confirmed_for_research / failed_mtr_thesis
 reverse_lineage: none / H1-like / H2-like / L1-like / L2-like
 lineage_status: same_lineage / reset / unclear / pending
 lineage_id:
-internal_label: H3 / L3 / none / pending
 first_independent_obstacle:
 pre_entry_space_R:
 space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown

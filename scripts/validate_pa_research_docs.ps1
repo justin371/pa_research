@@ -1551,6 +1551,13 @@ foreach ($relativePath in $canonicalParentStatePaths) {
 }
 
 $canonicalLabelMappingTemplateRelativePaths = @(
+    'strategy/01_three_push_wedge_candidate.md',
+    'research/three_push_pressure_state_framework_CN.md',
+    'research/h3_l3_research_gate_CN.md',
+    'research/h3_l3_visual_comparison_CN.md',
+    'research/three_push_h3_l3_visual_evidence_gap_audit_2026-08-24_CN.md',
+    'research/backtesting/three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md',
+    'research/mtr_three_push_visual_boundary_audit_2026-08-24_CN.md',
     'research/cross_pattern_visual_priority_audit_2026-08-24_CN.md',
     'research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md',
     'strategy/pattern_inventory_candidates.md',
@@ -1593,6 +1600,23 @@ foreach ($relativePath in $canonicalLabelMappingTemplateRelativePaths) {
         if ($content -match $legacyFieldPattern) {
             Add-ValidationError "legacy canonical label field remains '$legacyFieldPattern': $relativePath"
         }
+    }
+}
+
+$mtrStateCanonicalToken = 'mtr_state: reversal_attempt / mtr_candidate / mtr_confirmed_for_research / failed_mtr_thesis'
+$mtrStateContractRelativePaths = @(
+    'patterns/07_mtr_reversal/README.md',
+    'research/mtr_three_push_visual_boundary_audit_2026-08-24_CN.md'
+)
+foreach ($relativePath in $mtrStateContractRelativePaths) {
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    if (-not $content.Contains($mtrStateCanonicalToken)) {
+        Add-ValidationError "canonical MTR state token is missing: $relativePath"
+    }
+    if ($content -match '(?m)^\s*mtr_state:\s*not_started\s*/\s*reversal_attempt\s*/\s*candidate\s*/\s*confirmed_for_research\s*/\s*failed\s*$') {
+        Add-ValidationError "legacy MTR state enum remains: $relativePath"
     }
 }
 

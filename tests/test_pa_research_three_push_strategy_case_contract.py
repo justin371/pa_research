@@ -9,6 +9,7 @@ GATE = REPO_ROOT / "research" / "h3_l3_research_gate_CN.md"
 VISUAL = REPO_ROOT / "research" / "h3_l3_visual_comparison_CN.md"
 PRESSURE = REPO_ROOT / "research" / "three_push_pressure_state_framework_CN.md"
 MTR = REPO_ROOT / "research" / "mtr_visual_framework_CN.md"
+MTR_THREE_PUSH = REPO_ROOT / "research" / "mtr_three_push_visual_boundary_audit_2026-08-24_CN.md"
 AUDIT = REPO_ROOT / "research" / "backtesting" / "three_push_strategy_case_contract_audit_2026-08-29_CN.md"
 
 
@@ -20,6 +21,14 @@ LINEAGE_ENUM = "lineage_status: same_lineage / reset / unclear / pending"
 SPACE_ENUM = (
     "space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / "
     "borderline / blocked / unknown"
+)
+PRIMARY_ENUM = (
+    "primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other"
+)
+INTERNAL_ENUM = "internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending"
+MTR_STATE_ENUM = (
+    "mtr_state: reversal_attempt / mtr_candidate / "
+    "mtr_confirmed_for_research / failed_mtr_thesis"
 )
 
 
@@ -34,6 +43,9 @@ class ThreePushStrategyCaseContractTests(unittest.TestCase):
             "no-new-positive",
             "validated win-rate: not-computable",
             "A/B/C 是解释性分流，不是新的状态枚举",
+            "contract_scope: deep_review / daily_candidate / historical_context_only",
+            PRIMARY_ENUM,
+            INTERNAL_ENUM,
             LINEAGE_ENUM,
             "attempt_direction: bullish_attempts / bearish_attempts / unknown",
             THIRD_PUSH_ENUM,
@@ -54,6 +66,8 @@ class ThreePushStrategyCaseContractTests(unittest.TestCase):
     def test_active_three_push_documents_use_canonical_axes(self):
         for path in (GATE, VISUAL, PRESSURE):
             content = read(path)
+            self.assertIn(PRIMARY_ENUM, content, path.as_posix())
+            self.assertIn(INTERNAL_ENUM, content, path.as_posix())
             self.assertIn(THIRD_PUSH_ENUM, content, path.as_posix())
             self.assertIn(LINEAGE_ENUM, content, path.as_posix())
             self.assertIn("first_reverse: none / touch / structural_break", content, path.as_posix())
@@ -74,6 +88,23 @@ class ThreePushStrategyCaseContractTests(unittest.TestCase):
             "status: research_candidate / short_reaction / continuation / valid_no_trade",
         ):
             self.assertNotIn(legacy, pressure, legacy)
+
+    def test_mtr_state_uses_the_mtr_pattern_enum(self):
+        for path in (REPO_ROOT / "patterns" / "07_mtr_reversal" / "README.md", MTR_THREE_PUSH):
+            content = read(path)
+            self.assertIn(MTR_STATE_ENUM, content, path.as_posix())
+            self.assertIsNone(
+                re.search(
+                    r"(?m)^mtr_state: not_started / reversal_attempt / candidate / "
+                    r"confirmed_for_research / failed$",
+                    content,
+                ),
+            )
+        self.assertRegex(
+            read(MTR_THREE_PUSH),
+            r"(?m)^primary_pattern: H3_L3 / MTR / other$",
+        )
+        self.assertIn(INTERNAL_ENUM, read(MTR_THREE_PUSH))
 
     def test_mtr_framework_does_not_use_short_reaction_as_pressure_state(self):
         content = read(MTR)

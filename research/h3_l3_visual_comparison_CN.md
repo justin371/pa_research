@@ -7,6 +7,9 @@
 本表的结构化回填统一使用：
 
 ```text
+contract_scope: deep_review / daily_candidate / historical_context_only
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 lineage_status: same_lineage / reset / unclear / pending
 attempt_direction: bullish_attempts / bearish_attempts / unknown
 third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear

@@ -123,7 +123,12 @@
 
 本页的 A/B/C 是解释性分流，不是新的状态枚举。新研究记录统一使用以下字段；字段值必须来自统一合同：
 
+`primary_pattern` 是当前合同的主标签，`internal_label` 只记录 H1/H2/L1/L2/H3/L3；若 `contract_scope: daily_candidate`，主标签只能是 `ABC_CONT` 或 `BOP`，三推/H3/L3 只能作为内部标签或 `secondary_context`。
+
 ```text
+contract_scope: deep_review / daily_candidate / historical_context_only
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 lineage_status: same_lineage / reset / unclear / pending
 attempt_direction: bullish_attempts / bearish_attempts / unknown
 third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear

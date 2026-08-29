@@ -30,8 +30,8 @@
 - [`视觉识别能力与图表 provenance 边界审计（2026-08-29）`](backtesting/visual_capability_boundary_audit_2026-08-29_CN.md)：把人工大体识别、两年 Daily/重要高低点/EMA 前置证据与准确率、自动扫描、交易授权分开；不新增样本或结果；
 - [`入场几何与不交易状态边界审计（2026-08-29）`](entry_geometry_state_boundary_audit_2026-08-29_CN.md)：统一首障碍、结构止损、入场前空间、粗略 R/R 与 pattern-specific 短字段映射，并区分 `observation_only` 与 `valid_no_trade`；不新增样本或结果；
 - [`Pattern 主标签映射与 BOP 状态迁移审计（2026-08-29）`](pattern_label_transition_audit_2026-08-29_CN.md)：核对 16 个 pattern 入口、日线 `ABC_CONT`/`BOP` 白名单、H/L 内部标签、三推/区间边缘分隔、BOP 接受后的旧合同失效和视觉冒烟字段；不新增样本或结果；
-- [`三推/H3-L3 与区间边缘合同边界审计（2026-08-29）`](backtesting/three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md)：统一 `third_push_state`、`range_edge_side`、多空研究方向、订单/状态分轴，并确认当前没有冻结 H3/L3 统计分母；不新增样本或结果；
-- [`三推策略与历史案例合同一致性审计（2026-08-29）`](backtesting/three_push_strategy_case_contract_audit_2026-08-29_CN.md)：统一 A/B/C 解释层、三推案例状态、订单/首障碍/空间字段与统计结论；不新增样本或结果；
+- [`三推/H3-L3 与区间边缘合同边界审计（2026-08-29）`](backtesting/three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md)：统一 `primary_pattern`/`internal_label`、`third_push_state`、`range_edge_side`、多空研究方向、订单/状态分轴，并确认当前没有冻结 H3/L3 统计分母；不新增样本或结果；
+- [`三推策略与历史案例合同一致性审计（2026-08-29）`](backtesting/three_push_strategy_case_contract_audit_2026-08-29_CN.md)：统一 A/B/C 解释层、canonical 主次标签、三推案例状态、MTR 专用状态、订单/首障碍/空间字段与统计结论；不新增样本或结果；
 - [`H3/L3 历史候选筛选日志证据与统计边界审计（2026-08-29）`](backtesting/h3_l3_candidate_screen_provenance_audit_2026-08-29_CN.md)：核对两份历史候选日志的数据状态、事件来源、canonical 字段和 no-new-positive 边界；不新增样本或结果；
 - [`证据范围与数据状态一致性审计（2026-08-29）`](evidence_scope_status_boundary_audit_2026-08-29_CN.md)：统一 `contract_scope`、`data_status`、`chart_scope`、逐标的两年 Daily 覆盖和 `timeframes_seen`，修复历史状态/周期字段漂移；不新增样本或结果；
 - [`人工冻结合同覆盖审计（2026-08-28）`](backtesting/contract_coverage_audit_2026-08-28_CN.md)：统计现有 H/L 合同的方向、标签、事件、空间和 lineage 覆盖，不把它解释为胜率；
@@ -79,7 +79,7 @@
 - [`历史回放结果、交易日志与分母 provenance 审计（2026-08-29）`](backtesting/historical_replay_result_log_provenance_audit_2026-08-29_CN.md)：确认 13 组外部历史结果全部是 `historical_incomplete`，区分模拟 `results.csv`、冻结合同、运行 metadata 与实际交易日志，固定重复样本和当前胜率分母边界；不新增样本；
 - [`BOP 合同准入审计（2026-08-28）`](backtesting/bop_contract_intake_audit_2026-08-28_CN.md)：逐案隔离接受、同日回测、缺口重订和相邻 H/L/ABC 案例；当前没有日线级多日 BOP 正向候选；
 - [`PA 图表视觉识别冒烟验收`](visual_recognition_smoke_test_2026-08-24_CN.md)：图表识别能力、两年背景和当前 acceptance-pending 状态。
-- [`三推/H3-L3 视觉证据缺口审计`](three_push_h3_l3_visual_evidence_gap_audit_2026-08-24_CN.md)：区分衰竭、扩张/高潮、区间重复和通道延续，并保留 KLAC 条件候选与 L3 `no-new-positive` 边界。
+- [`三推/H3-L3 视觉证据缺口审计`](three_push_h3_l3_visual_evidence_gap_audit_2026-08-24_CN.md)：区分衰竭、扩张/高潮、区间重复和通道延续，分开 canonical 主标签/内部标签，并保留 KLAC 条件候选与 L3 `no-new-positive` 边界。
 - [`Round4 历史图表视觉练习`](visual_recognition_round4_historical_practice_2026-08-24_CN.md)：历史图表练习、H/L/ABC 复核和 Daily 左侧不足两年的证据边界。
 - [`Round5 两年 Daily 左侧背景视觉练习`](visual_recognition_round5_two_year_daily_2026-08-24_CN.md)：4 个标的、8 个历史截断案例的两年背景、重要高低点、EMA 和 H/L/三推边界。
 - [`历史视觉证据与 canonical 边界审计`](backtesting/visual_evidence_canonical_boundary_audit_2026-08-29_CN.md)：统一三推/H-L 历史显示标签、两年背景证据头、方向、订单/空间和统计隔离。
@@ -118,7 +118,7 @@
 - [`事件/板块/大盘视觉证据审计`](event_sector_market_gate_visual_evidence_audit_2026-08-24_CN.md)；
 - [`订单类型与风险合同视觉证据审计`](order_risk_contract_visual_evidence_audit_2026-08-24_CN.md)；
 - [`H/L lineage 与三推状态视觉边界复核`](h_l_lineage_visual_boundary_audit_2026-08-24_CN.md)；
-- [`三推/H3-L3 压力状态框架`](three_push_pressure_state_framework_CN.md)：区间边缘三推、区间中部重复测试、趋势/通道延续和反向确认的分流；
+- [`三推/H3-L3 压力状态框架`](three_push_pressure_state_framework_CN.md)：区间边缘三推、区间中部重复测试、趋势/通道延续和反向确认的分流，并要求主标签、内部标签与压力状态分轴；
 - [`跨 Pattern 视觉优先级与冲突消解审计`](cross_pattern_visual_priority_audit_2026-08-24_CN.md)。
 
 ## 当前审计追踪的历史视觉候选入口

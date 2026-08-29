@@ -67,3 +67,11 @@ MTR 框架曾把 `short_reaction_candidate` 与第三推状态并列。已改为
 - `no-new-positive` 与 `validated win-rate: not-computable` 保持不变。
 
 本审计只属于 PA Research：`PA Research only; no Codex Trading; no quantitative scanner; no Execution Agent`。
+
+## 6. 追加 canonical 主标签、内部标签与 MTR 状态复核（2026-08-29）
+
+后续对三推策略页、压力状态框架、H3/L3 研究闸门、视觉比较/证据审计和区间边界审计的输出块逐项复核，发现这些“统一合同”示例仍漏写 `primary_pattern`/`internal_label`，容易让记录只保存压力状态而丢失主次标签映射。现已补齐 canonical `primary_pattern`、`internal_label` 与 `contract_scope`；`direction` 继续单独保留，`attempt_direction` 不得替代它，`daily_candidate` 主标签仍只允许 `ABC_CONT`/`BOP`。
+
+同时复核 MTR 专用轴：`mtr_state` 只属于 MTR pattern-specific 观察，不替代 `thesis_state`、`research_state`、`trade_state` 或 `gate_result`。MTR/三推边界审计原先使用 `not_started / candidate / confirmed_for_research / failed` 的未登记简写，现收敛到 `reversal_attempt / mtr_candidate / mtr_confirmed_for_research / failed_mtr_thesis`；未开启 MTR 分支的记录使用三推自身的 `third_push_state` 与 `research_state` 表达，不把 MTR 字段强行写入普通三推。
+
+本 follow-up 只修正 PA Research 文档、validator、索引说明和回归测试，不新增图表、合同、成交、回放或统计分母；`no-new-positive` 与 `validated win-rate: not-computable` 保持不变。

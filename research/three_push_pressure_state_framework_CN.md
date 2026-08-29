@@ -145,8 +145,13 @@ H3/L3 的“第三次”与反转方向的 H1/H2、L1/L2 是两套计数：前�
 
 遇到三推/H3/L3 候选，先输出：
 
+`primary_pattern` 是当前研究合同的主标签，`internal_label` 只记录 H1/H2/L1/L2/H3/L3；`contract_scope: daily_candidate` 时主标签仍只允许 `ABC_CONT` 或 `BOP`，压力状态不直接扩展日线白名单。
+
 ```text
+contract_scope: deep_review / daily_candidate / historical_context_only
 parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 attempt_direction: bullish_attempts / bearish_attempts / unknown
 range_edge_three_push: yes / no / pending
 range_edge_side: upper / lower / none / pending

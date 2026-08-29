@@ -42,7 +42,7 @@ exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_cont
 
 ### 2.4 当前回放输入没有静默承载三推位置字段
 
-当前 `backtesting.py` engine `0.3.9` 支持兼容的 `primary_pattern: H3_L3` 和明确的 `internal_label: H3/L3`，但冻结合同 CSV 的最小列没有 `range_edge_three_push`、`range_edge_side` 或 `third_push_state`。这里的边界是订单/状态分轴，不是缺陷：三推位置和压力状态必须先保留在人工研究记录，只有经过人工闭合、方向和数值订单字段收敛后，才能决定是否进入兼容回放合同；回放器不会从 OHLC 自动识别三推或区间边缘。
+当前 `backtesting.py` engine `0.3.9` 支持兼容的 `primary_pattern: H3_L3` 和明确的 `internal_label: H3` 或 `L3`，但冻结合同 CSV 的最小列没有 `range_edge_three_push`、`range_edge_side` 或 `third_push_state`。这里的边界是订单/状态分轴，不是缺陷：三推位置和压力状态必须先保留在人工研究记录，只有经过人工闭合、方向和数值订单字段收敛后，才能决定是否进入兼容回放合同；回放器不会从 OHLC 自动识别三推或区间边缘。
 
 ## 3. 当前冻结合同和统计事实
 
@@ -64,6 +64,9 @@ exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_cont
 三推相关的新研究记录按以下字段填写：
 
 ```text
+contract_scope: deep_review / daily_candidate / historical_context_only
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 attempt_direction: bullish_attempts / bearish_attempts / unknown
 third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
 first_reverse: none / touch / structural_break

@@ -36,7 +36,7 @@ H/L 订单分支、预冻结 `gap_policy`、opening-skip/accepted-open/no-fill �
 
 H/L selection/replay 每批合同数与状态计数见[`H/L selection/replay 状态计数一致性审计`](hl_report_state_count_consistency_audit_2026-08-29_CN.md)。该审计将 `eligible`/`filled` 与当前空间资格、严格胜率分母分开，并保留 `next3` 零合同控制批次和 `next4` 旧 artifact 冲突，不改写历史结果。
 
-三推/H3-L3 与成熟区间边缘的字段、方向、订单状态和统计隔离见[`三推/H3-L3 与区间边缘合同边界审计`](three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md)。当前 7 份冻结 CSV 的 60 条合同没有 H3/L3 或区间边缘三推行；本审计不增加分母。
+三推/H3-L3 与成熟区间边缘的 canonical 主次标签、字段、方向、订单状态和统计隔离见[`三推/H3-L3 与区间边缘合同边界审计`](three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md)。当前 7 份冻结 CSV 的 60 条合同没有 H3/L3 或区间边缘三推行；本审计不增加分母。
 
 历史视觉证据与 canonical 字段边界见[`历史视觉证据与 canonical 边界审计`](visual_evidence_canonical_boundary_audit_2026-08-29_CN.md)：核对 H/L lineage、Round5 两年 Daily、三推状态、订单/空间显示和 `no-new-positive`；不新增 CSV 或统计分母。
 

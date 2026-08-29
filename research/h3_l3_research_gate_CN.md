@@ -14,7 +14,12 @@
 
 本页的 A/A1/B/C 是研究解释层，不是新的状态枚举。逐案例记录仍必须使用统一输出合同：
 
+`primary_pattern` 是当前合同的主标签，`internal_label` 只记录 H1/H2/L1/L2/H3/L3；若记录进入 `daily_candidate`，主标签只能写 `ABC_CONT` 或 `BOP`，H3/L3 通过内部标签和关系字段保存。
+
 ```text
+contract_scope: deep_review / daily_candidate / historical_context_only
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 lineage_status: same_lineage / reset / unclear / pending
 attempt_direction: bullish_attempts / bearish_attempts / unknown
 third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
