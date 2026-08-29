@@ -256,16 +256,18 @@ same_lineage: yes / no / unclear
 third_push_efficiency: weaker / similar / expanding / unclear
 third_push_follow_through: weakening / mixed / strengthening / unclear
 third_push_location:
-reverse_trigger_present: yes / no / unclear
-h3_l3_state: exhaustion_candidate / short_reaction_candidate / continuation_or_climax / not_h3_l3
+attempt_direction: bullish_attempts / bearish_attempts / unknown
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
+first_reverse: none / touch / structural_break
+second_confirmation: yes / no / pending
 range_edge_three_push: yes / no / pending
 range_edge_side: upper / lower / none / pending
 ```
 
 - `exhaustion_candidate` 需要同一 lineage、压力效率下降、重要位置和反向触发；它也必须通过结构止损与第一障碍审计；
-- `short_reaction_candidate` 只表示支撑/阻力可能带来一次反应，不能升级成主要趋势反转；
 - `continuation_or_climax` 表示第三推仍在扩张或获得跟随，不能因为计数到 3 就逆势交易；
-- `range_edge_three_push` 表示第三推位于成熟区间上沿/下沿；上沿只研究空头、下沿只研究多头，第一反向触发可形成候选，强接受外侧则切换 BOP；区间中部仍为观察；
+- `range_repeat_test` 表示第三推属于区间重复测试；若 `range_edge_three_push=yes`，`range_edge_side` 必须是 `upper` 或 `lower`，上沿只研究空头、下沿只研究多头，第一反向触发可形成候选，强接受外侧则切换 BOP；区间中部仍为观察；
+- `first_reverse` 和 `second_confirmation` 只记录反向证据，不能把一次反向触碰直接升级成 MTR 或订单；
 - 若 lineage 不清楚、已经进入区间或结构被重置，使用 `not_h3_l3`，转回区间/过渡逻辑。
 
 ## 5. Pattern 分类

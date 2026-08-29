@@ -66,7 +66,7 @@ parent_state / market_context_id
 direction: long / short / no_valid_direction
 left_structure_and_location / major_highs_lows / support_resistance_and_role_zones
 daily_ema20_50_200 / a_leg_quality / b_leg_class / b_leg_location / special_subtype
-lineage_status / lineage_id / internal_label / range_edge_three_push
+lineage_status / lineage_id / internal_label / attempt_direction / third_push_state / first_reverse / second_confirmation / range_edge_three_push / range_edge_side
 daily_context_window / major_high_low_review / ema20_50_200_review
 daily_ema20_slope / daily_ema50_slope / h_l_ema_slope_gate / h_l_pullback_location
 primary_pattern / secondary_context / pattern_like_reason
@@ -152,6 +152,8 @@ H/L selection/replay 的合同数、成交状态和严格分母计数见[`H/L se
 16 个入口的逐标的图表范围、两年 Daily 覆盖、周期集合和数据状态边界见[`证据范围与数据状态一致性审计`](../research/evidence_scope_status_boundary_audit_2026-08-29_CN.md)。
 
 MTR 与三推/H3-L3 的边界复核见[`MTR 与三推/H3-L3 视觉边界复核`](../research/mtr_three_push_visual_boundary_audit_2026-08-24_CN.md)：三推是压力观察入口；成熟区间边缘的第三推可以先成为独立反转候选，MTR 仍需要控制权改变和反向二次确认。
+
+三推字段、区间边缘方向和统计隔离的专项复核见[`三推/H3-L3 与区间边缘合同边界审计`](../research/backtesting/three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md)：新记录统一使用 `third_push_state`、`range_edge_side` 和 canonical 方向，当前没有冻结 H3/L3 合同，不新增统计分母。
 
 H1/L1 第一次入场的边界复核见[`H1/L1 第一次入场视觉边界复核`](../research/h1_l1_first_entry_visual_boundary_audit_2026-08-24_CN.md)：强 A 和受控 B 只是筛选入口，第一次失败要保留 H2/L2 或 no-trade 分支。
 

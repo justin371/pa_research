@@ -38,7 +38,7 @@ BOP 状态迁移：若事前可见边界被日线强收盘越过、获得跟随�
 
 ```text
 parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
-attempt_direction: bullish_attempts / bearish_attempts
+attempt_direction: bullish_attempts / bearish_attempts / unknown
 timeframe:
 context_timeframes_seen: Daily / 4H / 1H / 15m / unknown
 daily_context_window: >=2y / <2y / unavailable
@@ -51,8 +51,8 @@ push_3: origin -> extreme / quality / separation
 pressure_change: weakening / expanding / mixed / unknown
 location_and_left_structure:
 event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
-third_push_state: exhaustion / expansion-or-climax / range-repeat / channel-continuation
-first_reverse: none / touch / structural-break
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
+first_reverse: none / touch / structural_break
 second_confirmation: yes / no / pending
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / management
@@ -68,7 +68,7 @@ thesis_state: working / failed / replaced / pending
 handoff_status: research_only / not_ready / ready_for_system
 ```
 
-研究记录必须先填完 `lineage_status` 和 `third_push_state`，再讨论 H3/L3。若三次推进不能在当时被分开识别，标签写成 `not_h3_l3` 或 `new_lineage_pending`，不得用最终走势反推计数。
+研究记录必须先填完 `lineage_status` 和 `third_push_state`，再讨论 H3/L3。若三次推进不能在当时被分开识别，标签写成 `not_h3_l3` 或 `new_lineage_pending`，`third_push_state` 写 `unclear`，不得用最终走势反推计数。
 
 ## 同一 lineage 的计数纪律
 
@@ -86,24 +86,24 @@ H3/L3 描述的是第三次有意义的方向尝试；“三推”描述的是�
 
 | 状态 | 视觉特征 | 默认处理 |
 | --- | --- | --- |
-| `exhaustion-candidate` | 推进效率下降、位置重要、第三次尝试后反向压力出现 | 等反向 stop 或第二次确认；不要凭“三次”直接反向 |
-| `expansion-or-climax` | 第三推更长、更快、实体扩大或跳空 | 优先考虑趋势延续/高潮后区间；不把扩张误叫衰竭 |
-| `range-retest` | 三次测试落在双向区间边缘，方向没有持续接受 | 若第三推在上沿/下沿并出现拒绝，可进入区间边缘三推候选；区间中部仍观望 |
-| `channel-continuation` | 推进沿宽/紧通道继续，边界尚未被破坏 | 顺势等待 H1/H2 或 L1/L2；不自动做 MTR |
+| `exhaustion_candidate` | 推进效率下降、位置重要、第三次尝试后反向压力出现 | 等反向 stop 或第二次确认；不要凭“三次”直接反向 |
+| `continuation_or_climax` | 第三推更长、更快、实体扩大或跳空 | 优先考虑趋势延续/高潮后区间；不把扩张误叫衰竭 |
+| `range_repeat_test` | 三次测试落在双向区间边缘，方向没有持续接受 | 若第三推在上沿/下沿并出现拒绝，可进入区间边缘三推候选；区间中部仍观望 |
+| `channel_continuation` | 推进沿宽/紧通道继续，边界尚未被破坏 | 顺势等待 H1/H2 或 L1/L2；不自动做 MTR |
 
 ### 状态分流的核心
 
 - `exhaustion-candidate` 要求“效率变差 + 重要位置 + 第一反向压力”，不是只要求第三次出现；
 - `expansion-or-climax` 看到实体扩大、跳空、收盘靠极值和跟随增强时，默认原方向仍有控制权；
-- `range-repeat` 先使用区间上沿/下沿和 second-leg trap 逻辑，不能继承趋势中的 ABC 腿数；
-- `channel-continuation` 先问通道是否仍被接受，通道内的第三次触碰不能自动升级为反转；
+- `range_repeat_test` 先使用区间上沿/下沿和 second-leg trap 逻辑，不能继承趋势中的 ABC 腿数；
+- `channel_continuation` 先问通道是否仍被接受，通道内的第三次触碰不能自动升级为反转；
 - 只有状态判断之后，才把 H3/L3 作为订单候选；没有第二次反向确认就保留为 `pattern_like` 或 `observation_only`。
 
 ### 区间边缘三推：从重复测试到反转候选
 
-`range_edge_three_push` 是 `range-repeat` 内的独立位置分支，不是把区间边缘重新命名成开放趋势 H3/L3：
+`range_edge_three_push` 是 `range_repeat_test` 内的独立位置分支，不是把区间边缘重新命名成开放趋势 H3/L3：
 
-1. 先确认成熟区间的上沿/下沿、两年以上左侧结构和当前边缘位置；
+1. 先确认成熟区间的上沿/下沿、两年以上左侧结构和当前边缘位置，并填写 `range_edge_side`；
 2. 第三推到达上沿时，只研究空头反转候选；到达下沿时，只研究多头反转候选；
 3. 需要拒绝、假突破重新回区间或反向信号 K。第一反向触发可以形成 `range_edge_three_push_candidate`，不必先升级为 MTR；
 4. 结构止损放在第三推极端/边缘外，第一目标先看区间中线或最近独立障碍；若首障碍不足约 1R，仍为 `valid_no_trade`；
@@ -133,7 +133,7 @@ H3/L3 描述的是第三次有意义的方向尝试；“三推”描述的是�
 6. **首障碍**：先看最近独立左侧支撑/阻力、区间中线、通道边界和角色转换区，再看 MM；首障碍不足约 `1R` 时记录 `valid_no_trade`。
 7. **事件与跳空**：财报窗口、跳空改变触发价或实际成交后，重新审计风险；不能沿用理想价格。
 
-区间边缘三推在第一次反向触发后可以保留为 `range_edge_three_push_candidate`；“第二次确认”是升级为 MTR/主要趋势反转研究合同的要求，不是把所有区间边缘反应都挡在观察层之外。
+区间边缘三推在第一次反向触发后可以保留为 `range_edge_three_push_candidate`；`range_edge_side=upper` 只建立空头研究方向，`range_edge_side=lower` 只建立多头研究方向，最终 `direction` 仍要等触发、空间和合同冻结，未冻结时可写 `no_valid_direction`；“第二次确认”是升级为 MTR/主要趋势反转研究合同的要求，不是把所有区间边缘反应都挡在观察层之外。
 
 ## 当前案例对照
 

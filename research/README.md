@@ -22,6 +22,7 @@
 - [`Pattern 状态轴、字段与枚举一致性审计（2026-08-29）`](pattern_state_axis_field_enum_audit_2026-08-29_CN.md)：核对 16 个目录、统一输出合同和视觉复核卡的字段命名、状态轴与 pattern-specific 边界；不新增样本或结果；
 - [`入场几何与不交易状态边界审计（2026-08-29）`](entry_geometry_state_boundary_audit_2026-08-29_CN.md)：统一首障碍、结构止损、入场前空间、粗略 R/R 与 pattern-specific 短字段映射，并区分 `observation_only` 与 `valid_no_trade`；不新增样本或结果；
 - [`Pattern 主标签映射与 BOP 状态迁移审计（2026-08-29）`](pattern_label_transition_audit_2026-08-29_CN.md)：核对 16 个 pattern 入口、日线 `ABC_CONT`/`BOP` 白名单、H/L 内部标签、三推/区间边缘分隔、BOP 接受后的旧合同失效和视觉冒烟字段；不新增样本或结果；
+- [`三推/H3-L3 与区间边缘合同边界审计（2026-08-29）`](backtesting/three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md)：统一 `third_push_state`、`range_edge_side`、多空研究方向、订单/状态分轴，并确认当前没有冻结 H3/L3 统计分母；不新增样本或结果；
 - [`证据范围与数据状态一致性审计（2026-08-29）`](evidence_scope_status_boundary_audit_2026-08-29_CN.md)：统一 `contract_scope`、`data_status`、`chart_scope`、逐标的两年 Daily 覆盖和 `timeframes_seen`，修复历史状态/周期字段漂移；不新增样本或结果；
 - [`人工冻结合同覆盖审计（2026-08-28）`](backtesting/contract_coverage_audit_2026-08-28_CN.md)：统计现有 H/L 合同的方向、标签、事件、空间和 lineage 覆盖，不把它解释为胜率；
 - [`冻结合同字段覆盖与分层完整性审计（2026-08-29）`](backtesting/frozen_contract_field_partition_audit_2026-08-29_CN.md)：逐文件核对方向、Pattern/内部标签、EMA gate、事件、空间、合同状态和 lineage；旧合同缺失字段不回填，继续隔离 ABC/BOP/H3/L3；

@@ -146,11 +146,12 @@ H3/L3 的“第三次”与反转方向的 H1/H2、L1/L2 是两套计数：前�
 遇到三推/H3/L3 候选，先输出：
 
 ```text
-parent_state: open_trend / mature_range / channel / transition
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+attempt_direction: bullish_attempts / bearish_attempts / unknown
 range_edge_three_push: yes / no / pending
 range_edge_side: upper / lower / none / pending
 same_lineage: yes / no / unclear
-push_state: exhaustion / expansion / range_repeat / channel_continuation
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
 first_reverse: none / touch / structural_break
 second_confirmation: yes / no / pending
 order_branch: stop_confirmation / limit_retest / market_close / observation_only
@@ -161,7 +162,7 @@ rough_rr: wide / borderline / insufficient / not_frozen
 status: research_candidate / short_reaction / continuation / valid_no_trade
 ```
 
-这份输出允许“看起来像三推”与“值得交易”同时得到不同结论，符合视觉研究目标。
+当 `range_edge_three_push=yes` 时，`range_edge_side` 必须是 `upper` 或 `lower`；上沿只建立空头研究方向，下沿只建立多头研究方向，但触发、空间或合同未冻结时仍可写 `direction: no_valid_direction`。这份输出允许“看起来像三推”与“值得交易”同时得到不同结论，符合视觉研究目标；`third_push_state`、`first_reverse` 和 `second_confirmation` 不替代订单分支或闸门结果。
 
 ## 9. 当前结论与研究缺口
 

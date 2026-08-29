@@ -296,6 +296,11 @@ state_transition: none / breakout_acceptance / role_reversal / failed_breakout /
 lineage_status: same_lineage / reset / unclear / pending
 internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 range_edge_three_push: yes / no / pending
+range_edge_side: upper / lower / none / pending
+attempt_direction: bullish_attempts / bearish_attempts / unknown
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
+first_reverse: none / touch / structural_break
+second_confirmation: yes / no / pending
 bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable
 breakout_boundary:
 acceptance_close:
@@ -324,7 +329,7 @@ handoff_status: research_only / not_ready / ready_for_system
 main_uncertainty_or_exclusion:
 ```
 
-`direction` 是每只候选必填字段；若父级、空间、事件或合同使当前没有可授权方向，写 `no_valid_direction`，不能只写“看多/看空倾向”。输出文字必须区分事实和解释；历史或收盘后数据不能写成实时。形态很像但首障碍、事件、成交或止损不合格时，应保留为 `research_state: observation_only` 或 `trade_state: valid_no_trade`，而不是进入 3–5 只名单。
+`direction` 是每只候选必填字段；若父级、空间、事件或合同使当前没有可授权方向，写 `no_valid_direction`，不能只写“看多/看空倾向”。输出文字必须区分事实和解释；历史或收盘后数据不能写成实时。形态很像但首障碍、事件、成交或止损不合格时，应保留为 `research_state: observation_only` 或 `trade_state: valid_no_trade`，而不是进入 3–5 只名单。若 `range_edge_three_push: yes`，必须同时记录 `range_edge_side: upper / lower`；上沿仅研究空头、下沿仅研究多头，但在触发、空间或合同未冻结时仍可写 `direction: no_valid_direction`，不可把位置旗标当作交易授权。`third_push_state`、`first_reverse` 和 `second_confirmation` 只描述三推压力/反向证据，不能替代订单分支或闸门结果。
 
 这里的输出模板是日线研究记录，不是回放输入 CSV。日线候选的顶层 `primary_pattern` 只使用 `ABC_CONT` 或 `BOP`；H1/H2/L1/L2/H3/L3 是 `internal_label`，其他关系写入 `secondary_context`。`direction=no_valid_direction`、`order_branch=stop_limit/observation_only`、区域文字或 `pending/unknown` 只能保留为研究状态。只有冻结为 `contract_frozen=yes`，并把方向、价格字段和订单分支收敛到当前回放器支持的 `long/short`、有限数值价格以及 `stop_confirmation`、`limit_retest`、`market_close` 后，才可以进入回放；不得把记录枚举静默映射成另一种订单。
 

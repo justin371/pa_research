@@ -49,7 +49,7 @@ class PatternStateAxisFieldEnumTests(unittest.TestCase):
     def test_pattern_index_uses_expanded_canonical_field_names(self):
         index = read(PATTERNS_INDEX)
         for token in (
-            "lineage_status / lineage_id / internal_label / range_edge_three_push",
+            "lineage_status / lineage_id / internal_label / attempt_direction / third_push_state / first_reverse / second_confirmation / range_edge_three_push / range_edge_side",
             "daily_context_window / major_high_low_review / ema20_50_200_review",
             "signal_bar / confirmation_bar / new_trigger / follow_through",
             "structural_stop / structural_invalidation",

@@ -129,6 +129,12 @@ b_leg_location:
 lineage_status: same_lineage / reset / unclear / pending
 setup_count_bar:
 internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+attempt_direction: bullish_attempts / bearish_attempts / unknown
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
+first_reverse: none / touch / structural_break
+second_confirmation: yes / no / pending
+range_edge_three_push: yes / no / pending
+range_edge_side: upper / lower / none / pending
 count_basis:
 count_reset_reason:
 primary_pattern: ABC_CONT / BOP

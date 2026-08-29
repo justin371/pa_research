@@ -187,6 +187,7 @@ $requiredFiles = @(
     'research/candidate_visual_record_consistency_audit_2026-08-29_CN.md',
     'research/unified_output_state_axis_audit_2026-08-29_CN.md',
     'research/pattern_index_alias_boundary_audit_2026-08-29_CN.md',
+    'research/backtesting/three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md',
     'research/pattern_visual_preflight_audit_2026-08-29_CN.md',
     'research/pattern_case_entry_status_audit_2026-08-29_CN.md',
     'research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md',
@@ -241,6 +242,11 @@ $canonicalChecks = @{
         '当 `contract_scope: daily_candidate` 时，`timeframes_seen` 必须只写 `Daily`',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'range_edge_three_push` 只是区间边缘位置/分支旗标，不是 `primary_pattern`',
+        'attempt_direction: bullish_attempts / bearish_attempts / unknown',
+        'third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear',
+        'first_reverse: none / touch / structural_break',
+        'second_confirmation: yes / no / pending',
+        'range_edge_side: upper / lower / none / pending',
         'event_bucket:',
         'win_rate_eligible:',
         'pre_entry_provenance_status:',
@@ -282,6 +288,11 @@ $canonicalChecks = @{
         '日线候选的 `primary_pattern` 白名单只有 `ABC_CONT` 和 `BOP`',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'range_edge_three_push` 只表示成熟区间边缘的第三推位置，不是 `H3_L3` 主标签',
+        'range_edge_side: upper / lower / none / pending',
+        'attempt_direction: bullish_attempts / bearish_attempts / unknown',
+        'third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear',
+        'first_reverse: none / touch / structural_break',
+        'second_confirmation: yes / no / pending',
         'event_bucket:',
         'bop_state:',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
@@ -306,6 +317,11 @@ $canonicalChecks = @{
         'direction: long / short / no_valid_direction',
         'pattern_family: ABC_CONT | BOP | RFB_SECOND | H3_L3 | MTR | other',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
+        'attempt_direction: bullish_attempts / bearish_attempts / unknown',
+        'third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear',
+        'first_reverse: none / touch / structural_break',
+        'second_confirmation: yes / no / pending',
+        'range_edge_side: upper / lower / none / pending',
         'state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate',
         'pattern_family` 是本卡的视觉速记字段，不是统一合同的额外主标签',
         '当 `contract_scope: daily_candidate` 时，`timeframes_seen` 只能填写 `Daily`',
@@ -325,6 +341,8 @@ $canonicalChecks = @{
         'universe_coverage: complete / partial / discovery_only / unknown',
         'avg_20d_dollar_volume_usd:',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
+        'range_edge_side: upper / lower / none / pending',
+        'third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear',
         'event_bucket:',
         'daily_context_window: >=2y / <2y / unavailable',
         'major_high_low_review: complete / partial / unavailable',
@@ -342,9 +360,13 @@ $canonicalChecks = @{
         '关键图表、事件、触发或空间证据尚不完整'
     )
     'patterns/08_three_push_h3_l3/README.md' = @(
-        'attempt_direction: bullish_attempts / bearish_attempts',
+        'attempt_direction: bullish_attempts / bearish_attempts / unknown',
         'canonical `direction`',
         'lineage_status: same_lineage / reset / unclear / pending',
+        'third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear',
+        'first_reverse: none / touch / structural_break',
+        'second_confirmation: yes / no / pending',
+        'range_edge_side: upper / lower / none / pending',
         'context_timeframes_seen:',
         'event_bucket:',
         'space_status:',
@@ -356,7 +378,7 @@ $canonicalChecks = @{
         'timeframes_seen / data_status / as_of_time / timezone / session_state / chart_scope',
         'left_structure_and_location / major_highs_lows / support_resistance_and_role_zones',
         'daily_ema20_50_200 / a_leg_quality / b_leg_class / b_leg_location / special_subtype',
-        'lineage_status / lineage_id / internal_label / range_edge_three_push',
+        'lineage_status / lineage_id / internal_label / attempt_direction / third_push_state / first_reverse / second_confirmation / range_edge_three_push / range_edge_side',
         'daily_context_window / major_high_low_review / ema20_50_200_review',
         'signal_bar / confirmation_bar / new_trigger / follow_through',
         'structural_stop / structural_invalidation',
@@ -1105,6 +1127,28 @@ if (Test-Path -LiteralPath $patternLabelTransitionAuditPath -PathType Leaf) {
     )) {
         if (-not $patternLabelTransitionAuditContent.Contains($token)) {
             Add-ValidationError "missing pattern-label-transition-audit token '$token'"
+        }
+    }
+}
+
+$threePushContractBoundaryAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $threePushContractBoundaryAuditPath -PathType Leaf) {
+    $threePushContractBoundaryAuditContent = Get-Utf8Text -Path $threePushContractBoundaryAuditPath
+    foreach ($token in @(
+        'third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear',
+        'range_edge_side: upper / lower / none / pending',
+        'range_edge_three_push=yes',
+        'H3/L3 冻结行 | 0',
+        '订单/状态分轴',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
+    )) {
+        if (-not $threePushContractBoundaryAuditContent.Contains($token)) {
+            Add-ValidationError "missing three-push contract-boundary audit token '$token'"
         }
     }
 }

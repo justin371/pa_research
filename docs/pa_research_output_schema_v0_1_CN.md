@@ -130,6 +130,11 @@ lineage_status: same_lineage / reset / unclear / pending
 lineage_id:
 market_context_id:
 internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+attempt_direction: bullish_attempts / bearish_attempts / unknown
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
+first_reverse: none / touch / structural_break
+second_confirmation: yes / no / pending
+range_edge_side: upper / lower / none / pending
 pattern_like_reason:
 ```
 
@@ -151,9 +156,11 @@ pattern_like_reason:
 
 `market_context_id` 是可选的人工市场状态依赖标识，用于记录多只股票共享的同一市场/板块状态；它不是行情扫描器，也不由回放器推断。缺失、共享或与其他记录的持仓区间重叠时，回放器可以保留逐行描述值，但不得输出 independence-adjusted 胜率。没有该字段不等于市场状态已经独立。
 
-`primary_pattern: H3_L3` 时，`internal_label` 必须明确写成 `H3`（多头第三次尝试）或 `L3`（空头第三次尝试），不得使用含混的 `H3_L3`；还必须额外区分 `range_edge_three_push: yes`、`no` 或 `pending`。区间边缘三推允许 A 腿普通或偏弱，但必须记录上沿/下沿位置、反向确认和区间外接受分流；区间中部重复测试不能凭次数升级。
+`primary_pattern: H3_L3` 时，`internal_label` 必须明确写成 `H3`（多头第三次尝试）或 `L3`（空头第三次尝试），不得使用含混的 `H3_L3`；还必须额外区分 `range_edge_three_push: yes`、`no` 或 `pending`，并记录 `range_edge_side: upper / lower / none / pending`。区间边缘三推允许 A 腿普通或偏弱，但必须记录上沿/下沿位置、反向确认和区间外接受分流；区间中部重复测试不能凭次数升级。
 
-`range_edge_three_push` 只是区间边缘位置/分支旗标，不是 `primary_pattern`，也不等同于 `H3_L3`。在 `daily_candidate` 中，三推只可作为 `internal_label: H3 / L3` 与 `secondary_context` 的研究关系，且仍受日线主标签白名单约束；只有深审或历史记录已闭合同一 lineage、第三推状态和反向/延续分流时，才可使用兼容 `primary_pattern: H3_L3`。
+`range_edge_three_push` 只是区间边缘位置/分支旗标，不是 `primary_pattern`，也不等同于 `H3_L3`。当它为 `yes` 时，`range_edge_side` 必须是 `upper` 或 `lower`：上沿只建立空头研究方向假设，下沿只建立多头研究方向假设；这不是自动授权，若触发、空间或合同尚未冻结，canonical `direction` 仍可写 `no_valid_direction`。当它为 `no` 时 side 写 `none`；当它为 `pending` 时 side 写 `pending`。在 `daily_candidate` 中，三推只可作为 `internal_label: H3 / L3` 与 `secondary_context` 的研究关系，且仍受日线主标签白名单约束；只有深审或历史记录已闭合同一 lineage、第三推状态和反向/延续分流时，才可使用兼容 `primary_pattern: H3_L3`。
+
+三推状态统一使用 `third_push_state` 的 canonical 枚举：`exhaustion_candidate`、`continuation_or_climax`、`range_repeat_test` 和 `channel_continuation`；`unclear` 表示第三推状态不能从当时证据中分开。`attempt_direction` 只描述三次尝试的朝向，`direction` 仍是当前研究合同方向；`first_reverse`、`second_confirmation`、`order_branch`、`trade_state` 和 `gate_result` 分别记录反向证据、订单状态和闸门结果，不能互相替代。历史文档中的连字符或 `h3_l3_state`/`push_state` 仅按已登记别名阅读，新记录必须使用 canonical 字段。
 
 ## 三、BOP 专用字段
 
