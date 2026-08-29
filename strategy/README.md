@@ -23,6 +23,7 @@
 - [`证据范围与数据状态一致性审计`](../research/evidence_scope_status_boundary_audit_2026-08-29_CN.md)：核对多周期证据范围、逐标的两年 Daily 覆盖、数据状态与历史 session 的字段边界。
 - [`选择记录与回放结果证据边界审计`](../research/backtesting/pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md)：核对选择报告、候选卡、视觉记录和 replay/result 的事前/事后字段边界；不新增样本或结果。
 - [`事件、空间与独立性字段引用一致性审计`](../research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md)：核对事件、空间、lineage 和市场状态字段的来源与跨文件表述；修正历史几何与显式空间资格的边界。
+- [`H/L event bucket 标签一致性审计`](../research/backtesting/event_bucket_label_consistency_audit_2026-08-29_CN.md)：重算 raw `event_context` 与 canonical `event_bucket`，统一 selection/replay 的事件分层显示并保留 pending/unknown 隔离。
 - [`H/L 报告空间、版本与结论表述一致性审计`](../research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md)：核对 H/L selection/replay 的历史几何、显式空间状态、自定义敏感性阈值、engine 版本和结论边界；不新增样本或结果。
 
 Codex Trading 的链接或历史材料只作为用户指定的只读参考；本目录不导入其规则、代码、实现状态或执行能力。

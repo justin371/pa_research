@@ -6,9 +6,9 @@
 
 ## 结论
 
-本批回放 6 条人工冻结合同，全部是**空头 L1**；其中 5 条成交并完成，1 条因开盘跳过旧触发位而未成交。完成交易为 **3 胜 2 负，描述性胜率 `60.00%`，总实现 `+3.4812R`，平均 `+0.6962R`，Profit Factor `3.1762`**。这个 60% 只是在极小样本上的合并描述值，不能把普通非事件、财报邻近和财报驱动样本混成一个胜率；本批仍是 `no-new-positive`，没有验证 H1/H2/L1/L2 的长期胜率。
+本批回放 6 条人工冻结合同，全部是**空头 L1**；其中 5 条成交并完成，1 条因开盘跳过旧触发位而未成交。完成交易为 **3 胜 2 负，描述性胜率 `60.00%`，总实现 `+3.4812R`，平均 `+0.6962R`，Profit Factor `3.1762`**。这个 60% 只是在极小样本上的合并描述值，不能把 `ordinary_non_event`、`earnings_adjacent` 和 `event_driven` 样本混成一个胜率；本批仍是 `no-new-positive`，没有验证 H1/H2/L1/L2 的长期胜率。
 
-按事件分层后：普通非事件完成交易为 2 胜 1 负（`66.67%`，`n=3`）；`earnings_adjacent` 为 0 胜 1 负；`earnings-driven` 为 1 胜 0 负。每个 lineage 只有一个样本，且没有多头 H2、空头 L2 或多标的同质重复样本。95% Wilson 区间很宽，目标 `60%` 仍只能作为下一批待检验目标。
+按 canonical `event_bucket` 分层后：`ordinary_non_event` 完成交易为 2 胜 1 负（`66.67%`，`n=3`）；`earnings_adjacent` 为 0 胜 1 负；`event_driven` 为 1 胜 0 负（raw `event_context=earnings-driven`）。报告正文中的 `earnings-adjacent` 只可作为 `earnings_adjacent` 的可读别名。每个 lineage 只有一个样本，且没有多头 H2、空头 L2 或多标的同质重复样本。95% Wilson 区间很宽，目标 `60%` 仍只能作为下一批待检验目标。
 
 ## 回放配置与证据边界
 
@@ -31,12 +31,12 @@
 
 | 合同 | 方向 / 标签 | 事件分组 | 入场 | 出场 | 结果 | 实现 R | 首障碍 |
 | --- | --- | --- | --- | --- | --- | ---: | --- |
-| MCHP 2022-06-14 | `short / L1` | ordinary | 未成交 | — | `opening-skip` | — | 6/16 开盘 `59.84` 低于旧触发 `59.99`，按规则跳过 |
-| NDAQ 2022-01-06 | `short / L1` | ordinary | 1/7 @ `63.73` | 1/14 @ `61.50` | `win / target` | `+1.1925R` | 已触及 `61.50` |
-| NDAQ 2022-04-25 | `short / L1` | earnings-driven | 4/26 @ `54.89` | 5/2 @ `52.00` | `win / target` | `+2.3884R` | 已触及 `52.00` |
-| NDAQ 2022-05-10 | `short / L1` | earnings-adjacent | 5/11 @ `48.06` | 5/26 @ `49.4033` | `loss / time_exit` | `-0.5997R` | 未触及 `45.00` |
-| NDAQ 2022-12-19 | `short / L1` | ordinary | 12/20 @ `60.08` | 12/21 @ `61.20` | `loss / stop` | `-1.0000R` | 未触及 `57.50` |
-| NDAQ 2026-06-22 | `short / L1` | ordinary | 6/24 @ `81.48` | 6/25 @ `78.00` | `win / target` | `+1.5000R` | 已触及 `78.00` |
+| MCHP 2022-06-14 | `short / L1` | `ordinary_non_event` | 未成交 | — | `opening-skip` | — | 6/16 开盘 `59.84` 低于旧触发 `59.99`，按规则跳过 |
+| NDAQ 2022-01-06 | `short / L1` | `ordinary_non_event` | 1/7 @ `63.73` | 1/14 @ `61.50` | `win / target` | `+1.1925R` | 已触及 `61.50` |
+| NDAQ 2022-04-25 | `short / L1` | `event_driven`（raw `earnings-driven`） | 4/26 @ `54.89` | 5/2 @ `52.00` | `win / target` | `+2.3884R` | 已触及 `52.00` |
+| NDAQ 2022-05-10 | `short / L1` | `earnings_adjacent`（raw `earnings_adjacent`；正文别名 `earnings-adjacent`） | 5/11 @ `48.06` | 5/26 @ `49.4033` | `loss / time_exit` | `-0.5997R` | 未触及 `45.00` |
+| NDAQ 2022-12-19 | `short / L1` | `ordinary_non_event` | 12/20 @ `60.08` | 12/21 @ `61.20` | `loss / stop` | `-1.0000R` | 未触及 `57.50` |
+| NDAQ 2026-06-22 | `short / L1` | `ordinary_non_event` | 6/24 @ `81.48` | 6/25 @ `78.00` | `win / target` | `+1.5000R` | 已触及 `78.00` |
 
 `time_exit` 的 `-0.5997R` 是观察十根完整 post-entry K 线后、在下一根开盘按市场价退出的实际路径，不改写成止损或 scratch；因此该旧产物的 `bars_held=11` 是执行索引距离，不是额外自由持仓。`opening-skip` 不进入胜负分母，也不把跳空后的价格事后填回旧合同。当前 engine 还会把数据末尾无法执行的时间退出保留为 `incomplete-horizon`。
 
@@ -53,7 +53,7 @@
 | 全部合同 | 6 | 5 | 3 / 2 | `60.00%` | `+3.4812R` | `23.07%–88.24%` | not-validated |
 | ordinary_non_event | 4 | 3 | 2 / 1 | `66.67%` | `+1.6925R` | `20.77%–93.85%` | descriptive_only |
 | earnings_adjacent | 1 | 1 | 0 / 1 | `0.00%` | `-0.5997R` | `0.00%–79.35%` | descriptive_only |
-| earnings-driven | 1 | 1 | 1 / 0 | `100.00%` | `+2.3884R` | `20.65%–100.00%` | descriptive_only |
+| event_driven（raw `earnings-driven`） | 1 | 1 | 1 / 0 | `100.00%` | `+2.3884R` | `20.65%–100.00%` | descriptive_only |
 | 事前空间 `>=1.50R` 敏感性子集 | 4 | 3 | 2 / 1 | `66.67%` | `+2.8884R` | `20.77%–93.85%` | 附加敏感性分层；not-validated |
 | short | 6 | 5 | 3 / 2 | `60.00%` | `+3.4812R` | `23.07%–88.24%` | not-validated |
 | L1 | 6 | 5 | 3 / 2 | `60.00%` | `+3.4812R` | `23.07%–88.24%` | not-validated |
@@ -68,7 +68,7 @@
 合并后的 3/5 恰好等于用户修正后的 `60%`，但合并不满足可比性：
 
 - 普通组只有 3 条完成交易；
-- earnings-adjacent 和 earnings-driven 各只有 1 条，且结果相反；
+- `earnings_adjacent` 和 `event_driven` 各只有 1 条，且结果相反；前者正文有时写作 `earnings-adjacent`，后者 raw `event_context` 为 `earnings-driven`；
 - 5 条完成交易中有 4 条来自 NDAQ；
 - 全部标签都是 L1，没有 H2、L2 或多头对照；
 - 每个 lineage 只有一次触发，不能检验重复尝试是否真正独立；

@@ -29,7 +29,7 @@
 | URI | `$65.83B` | `$470.3M` | 排除：代表性强 A 与财报重合，其他 B 偏大或首障碍贴近 |
 | TGT | `$74.52B` | `$757.1M` | 排除：财报/重定价和宽幅回撤，不能冻结 ordinary H/L |
 | DAL | `$54.34B` | `$408.9M` | 排除：运营新闻/转折边界，缺少受控 B 和稳定 lineage |
-| NDAQ | `$55.60B` | `$268.7M` | **选入：5 条空头 L1**，其中 1 条 earnings-driven、1 条 earnings-adjacent |
+| NDAQ | `$55.60B` | `$268.7M` | **选入：5 条空头 L1**，其中 raw `event_context=earnings-driven`（canonical `event_bucket=event_driven`）1 条、raw `event_context=earnings_adjacent`（canonical `event_bucket=earnings_adjacent`）1 条 |
 
 市值参考入口为 [StockAnalysis](https://stockanalysis.com/)。历史价格输入为两个 symbol 的 Daily CSV，复核范围为 `2020-01-02` 至 `2026-08-26`，每个窗口均有至少两年左侧 Daily 背景。未标注图像、原始下载文本和缓存保留在本机外部审计目录：
 
@@ -44,7 +44,7 @@
 3. 空头 L1/L2 必须同时满足 Daily EMA20、EMA50 向下；本批 6 条合同均为 `short_pass`。EMA200 只用于背景和位置，不替代 H/L 闸门。
 4. 标签按同一 Daily lineage 计数；本批只在能说明第一次有意义的空头尝试、失败/不足、A-B 和当前触发的窗口使用 `L1`。没有为了制造 L2 而把新的父级走势追记成旧 lineage。
 5. 首障碍、结构止损、触发和事件状态均在回放前冻结；所有合同的事前几何空间都为 `>=1R`。`target_price` 取冻结的第一独立障碍，不能用后续走势移动目标。
-6. 财报/重定价窗口单独分组。NDAQ 2022-04-25 的 A 从 2022-04-20 Q1 结果开始，标为 `earnings-driven`；NDAQ 2022-05-10 距该结果 14 个交易 session，保守标为 `earnings_adjacent`，不与 ordinary 混算。NDAQ 官方 Q1 2022 结果公告见 [Nasdaq IR](https://ir.nasdaq.com/news-releases/news-release-details/nasdaq-reports-first-quarter-2022-results-delivers-strong-growth)。
+6. 财报/重定价窗口单独分组。合同 CSV 保留 raw `event_context`，canonical `event_bucket` 由当前 engine 派生：`earnings-driven` -> `event_driven`，`earnings_adjacent` -> `earnings_adjacent`，`ordinary_non_event` -> `ordinary_non_event`。NDAQ 2022-04-25 的 A 从 2022-04-20 Q1 结果开始，raw 标为 `earnings-driven`；NDAQ 2022-05-10 距该结果 14 个交易 session，保守 raw 标为 `earnings_adjacent`，不与 `ordinary_non_event` 混算。报告正文中的 `earnings-adjacent` 只是可读别名，不是新的 canonical bucket。NDAQ 官方 Q1 2022 结果公告见 [Nasdaq IR](https://ir.nasdaq.com/news-releases/news-release-details/nasdaq-reports-first-quarter-2022-results-delivers-strong-growth)。
 
 ## 冻结合同
 
@@ -54,8 +54,8 @@
 | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
 | MCHP | `short / L1` | 2022-06-14 | 59.99 | 61.80 | 55.00 | 2.7569R | 6/8–6/13 四根红 K 推进；6/14 小实体停顿，位于 60 附近既有支撑/角色转换；普通非事件 |
 | NDAQ | `short / L1` | 2022-01-06 | 63.73 | 65.60 | 61.50 | 1.1925R | 1/3–1/5 三根红 K；1/6 小绿 K 回测 65 附近破位区；普通非事件 |
-| NDAQ | `short / L1` | 2022-04-25 | 54.89 | 56.10 | 52.00 | 2.3884R | 4/20–4/22 事件下跌后小 B；`earnings-driven`，单独统计 |
-| NDAQ | `short / L1` | 2022-05-10 | 48.06 | 50.30 | 45.00 | 1.3616R | 5/5–5/9 三根红 K；5/10 在 48 附近支撑/角色转换停顿；`earnings_adjacent` |
+| NDAQ | `short / L1` | 2022-04-25 | 54.89 | 56.10 | 52.00 | 2.3884R | 4/20–4/22 事件下跌后小 B；raw `earnings-driven`，canonical `event_driven`，单独统计 |
+| NDAQ | `short / L1` | 2022-05-10 | 48.06 | 50.30 | 45.00 | 1.3616R | 5/5–5/9 三根红 K；5/10 在 48 附近支撑/角色转换停顿；raw/canonical `earnings_adjacent` |
 | NDAQ | `short / L1` | 2022-12-19 | 60.08 | 61.20 | 57.50 | 2.3036R | 12/14–12/16 三根红 K；12/19 极小停顿；60 附近既有支撑与 EMA200 形成 META |
 | NDAQ | `short / L1` | 2026-06-22 | 81.48 | 83.80 | 78.00 | 1.5000R | 6/16–6/18 三根宽幅红 K；6/22 在 82 附近支撑停顿；普通非事件，B 为低置信度敏感性样本 |
 
@@ -69,7 +69,7 @@
 
 ### NDAQ 2022-04-25 与 2022-05-10
 
-这两个窗口共享 Q1 结果后的市场背景，但不是同一个 lineage：4/25 是结果日后第三个交易 session 的事件延续，单独标为 `earnings-driven`；5/10 已相隔 14 个交易 session，A/B 没有新的公司事件跳空，但为避免把近期财报影响藏进 ordinary，保守标为 `earnings_adjacent`。两条均有 EMA20/50 向下和首障碍 `>=1R`，但 5/10 的 B 不是高质量反向收缩，保留为敏感性样本而不是规则升级证据。
+这两个窗口共享 Q1 结果后的市场背景，但不是同一个 lineage：4/25 是结果日后第三个交易 session 的事件延续，raw `earnings-driven` 映射为 canonical `event_driven`；5/10 已相隔 14 个交易 session，A/B 没有新的公司事件跳空，但为避免把近期财报影响藏进 `ordinary_non_event`，保守 raw/canonical 标为 `earnings_adjacent`。两条均有 EMA20/50 向下和首障碍 `>=1R`，但 5/10 的 B 不是高质量反向收缩，保留为敏感性样本而不是规则升级证据。
 
 ### NDAQ 2022-12-19
 

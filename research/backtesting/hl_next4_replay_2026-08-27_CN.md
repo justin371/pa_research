@@ -46,8 +46,8 @@ opening-skip、未成交、`observation_only`、pending 和 ambiguous intrabar �
 | 分层 | 合同 | 成交 | 完成 | 胜 / 负 | 描述性胜率 | 总实现 R | 状态 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | 全部 | 2 | 2 | 2 | 0 / 2 | 0.00% | -1.5090R | not-validated |
-| ordinary non-event（按当前隔离口径） | 2 | 2 | 2 | 0 / 2 | 0.00% | -1.5090R | descriptive_only |
-| event-driven | 0 | 0 | 0 | 0 / 0 | 不可计算 | — | 未形成分母 |
+| `ordinary_non_event`（按当前隔离口径） | 2 | 2 | 2 | 0 / 2 | 0.00% | -1.5090R | descriptive_only |
+| `event_driven` | 0 | 0 | 0 | 0 / 0 | 不可计算 | — | 未形成分母 |
 | long | 2 | 2 | 2 | 0 / 2 | 0.00% | -1.5090R | not-validated |
 | short | 0 | 0 | 0 | 0 / 0 | 不可计算 | — | 未形成样本 |
 | H1 | 2 | 2 | 2 | 0 / 2 | 0.00% | -1.5090R | not-validated |

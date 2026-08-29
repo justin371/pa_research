@@ -164,6 +164,7 @@ $requiredFiles = @(
     'research/backtesting/cross_pattern_statistics_isolation_audit_2026-08-29_CN.md',
     'research/backtesting/event_space_eligibility_audit_2026-08-29_CN.md',
     'research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md',
+    'research/backtesting/event_bucket_label_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/replay_outcome_denominator_audit_2026-08-29_CN.md',
     'research/backtesting/replay_lineage_independence_audit_2026-08-29_CN.md',
@@ -763,6 +764,21 @@ if (Test-Path -LiteralPath $eventSpaceLineageAuditPath -PathType Leaf) {
     )) {
         if (-not $eventSpaceLineageAuditContent.Contains($token)) {
             Add-ValidationError "missing event/space/lineage-consistency-audit token '$token'"
+        }
+    }
+}
+
+$eventBucketLabelAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/event_bucket_label_consistency_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $eventBucketLabelAuditPath -PathType Leaf) {
+    $eventBucketLabelAuditContent = Get-Utf8Text -Path $eventBucketLabelAuditPath
+    foreach ($token in @(
+        'event_context', 'event_bucket', 'earnings-driven', 'earnings_adjacent', 'ordinary_non_event',
+        'event_reviewed_non_event', 'event_unverified_or_pending', 'unknown', '60', 'no-new-positive',
+        'validated win-rate: not-computable', 'PA Research', 'no Codex Trading', 'no quantitative scanner',
+        'no Execution Agent'
+    )) {
+        if (-not $eventBucketLabelAuditContent.Contains($token)) {
+            Add-ValidationError "missing event-bucket-label-audit token '$token'"
         }
     }
 }

@@ -25,11 +25,11 @@
 
 | 合同 | 方向 / 标签 | 分组 | 结果 | 实现 R |
 | --- | --- | --- | --- | ---: |
-| ZS 2021-07-19 | long / H1 | ordinary non-event | opening-skip | — |
-| DDOG 2021-07-19 | long / H1 | ordinary non-event | opening-skip | — |
-| DDOG 2023-07-24 | long / H1 | ordinary non-event | opening-skip | — |
-| ZS 2023-09-19 | long / H1 | event-driven | 2023-09-20 成交，2023-09-21 止损 | `-1.2169R` |
-| DDOG 2023-03-07 | short / L1 | event-driven aftershock | 2023-03-08 成交，2023-03-13 到达目标 | `+2.6232R` |
+| ZS 2021-07-19 | long / H1 | `ordinary_non_event` | opening-skip | — |
+| DDOG 2021-07-19 | long / H1 | `ordinary_non_event` | opening-skip | — |
+| DDOG 2023-07-24 | long / H1 | `ordinary_non_event` | opening-skip | — |
+| ZS 2023-09-19 | long / H1 | `event_driven` | 2023-09-20 成交，2023-09-21 止损 | `-1.2169R` |
+| DDOG 2023-03-07 | short / L1 | `event_driven`（raw aftershock） | 2023-03-08 成交，2023-03-13 到达目标 | `+2.6232R` |
 
 `opening-skip` 是冻结的跳空处理路径，不追价补成交；它既不是胜利，也不是已成交亏损，不进入已完成交易的胜率分母，但必须作为失败/不可成交路径保留。没有 ambiguous intrabar 结果。
 
@@ -38,8 +38,8 @@
 | 分层 | 合同 | 成交 | 完成 | 胜 / 负 | 描述性胜率 | 总实现 R | 统计状态 |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
 | 全部 | 5 | 2 | 2 | 1 / 1 | 50.00% | `+1.4063R` | not-validated |
-| ordinary non-event | 3 | 0 | 0 | 0 / 0 | 不可计算 | — | 无成交分母 |
-| event-driven（含 aftershock） | 2 | 2 | 2 | 1 / 1 | 50.00% | `+1.4063R` | not-validated |
+| `ordinary_non_event` | 3 | 0 | 0 | 0 / 0 | 不可计算 | — | 无成交分母 |
+| `event_driven`（含 aftershock） | 2 | 2 | 2 | 1 / 1 | 50.00% | `+1.4063R` | not-validated |
 | H1 | 4 | 1 | 1 | 0 / 1 | 0.00% | `-1.2169R` | 样本不足 |
 | L1 | 1 | 1 | 1 | 1 / 0 | 100.00% | `+2.6232R` | 样本不足 |
 
