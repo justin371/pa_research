@@ -2,6 +2,41 @@
 
 状态：`pattern_like / research_positive_conditional / strong-A / controlled-B / L1-like / gap-reprice-space-positive / sector-aligned / earnings-filter-passed / process-target-reached / original-stop-not-filled / pending`
 
+## Canonical historical-entry boundary（2026-08-30）
+
+```text
+contract_scope: historical_context_only
+data_source: Futu OpenD historical QFQ Daily plus historical 60m/15m review
+data_status: historical
+as_of_time: 2025-03-26 historical decision cutoff; original query timestamp unavailable
+timezone: unavailable_in_original_log
+session_state: historical_close
+timeframes_seen: Daily / 60m / 15m
+chart_scope: partial
+daily_context_window: <2y
+major_high_low_review: partial
+ema20_50_200_review: unavailable
+parent_state: open_trend
+direction: short
+lineage_status: pending
+state_transition: none
+order_branch: observation_only
+actual_fill_or_open_skip: not_applicable
+structural_stop: pending
+structural_invalidation: pending
+first_independent_obstacle: visual support cluster near 167.99–165.05; not frozen
+pre_entry_space_R: unknown
+space_status: unknown
+rough_R_R: unknown
+research_state: research_positive_conditional
+trade_state: not_authorized
+gate_result: conditional
+handoff_status: research_only
+```
+
+本块只固定强 A、受控 B 和缺口重订分支的历史研究范围；不激活
+`primary_pattern`/`internal_label`，不把过程到达或假设成交写成 broker/account 结果或胜率样本。
+
 ## 1. 证据头
 
 - 标的：`US.TSM`

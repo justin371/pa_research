@@ -47,6 +47,7 @@
 - [`Pattern README 与基础视觉框架 canonical 输出覆盖审计`](../research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md)：核对 16 个 pattern README、8 个基础层、活动视觉复核卡和局部模板的 canonical 字段/枚举覆盖与索引入口。
 - [`Pattern 案例矩阵、策略入口与历史别名合同审计`](../research/backtesting/pattern_case_matrix_strategy_entry_contract_audit_2026-08-29_CN.md)：区分聚合展示行、逐案合同、事前空间/结果路径和历史显示别名；不新增样本或结果。
 - [`历史案例入口合同盘点审计`](../research/backtesting/historical_case_entry_inventory_contract_audit_2026-08-29_CN.md)：登记矩阵之外的 candidate/screen/case-study 入口及其 canonical、历史别名和结果边界；不新增样本或结果。
+- [`顶层 research 历史正向条件入口边界审计`](../research/backtesting/top_level_research_entry_boundary_audit_2026-08-30_CN.md)：登记 9 个条件性正向历史入口的 evidence/status、事前/事后和授权边界；不新增样本或结果。
 - [`requiredFiles 与研究报告索引覆盖审计`](../research/backtesting/required_report_index_coverage_audit_2026-08-29_CN.md)：核对 validator requiredFiles 中研究报告与 canonical 索引的映射，不新增样本或结果。
 - [`统计结论、正例表述与授权边界一致性审计`](../research/backtesting/conclusion_boundary_consistency_audit_2026-08-29_CN.md)：统一统计状态别名、60% 待检验目标与研究/交接边界，不新增样本或结果。
 - [`视觉识别能力与图表 provenance 边界审计`](../research/backtesting/visual_capability_boundary_audit_2026-08-29_CN.md)：限定人工大体识别的研究用途，核对两年 Daily、重要高低点和 EMA 前置证据，不新增样本或结果。

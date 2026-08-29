@@ -1,5 +1,40 @@
 # AMZN 多头 H2-like：强势背景、浅 B、低周期触发与后续空间边界（2024-12-09 至 2024-12-11）
 
+## Canonical historical-entry boundary（2026-08-30）
+
+```text
+contract_scope: historical_context_only
+data_source: Futu OpenD historical QFQ Daily plus historical 60m/15m review
+data_status: historical
+as_of_time: 2024-12-11 historical decision cutoff; original query timestamp unavailable
+timezone: unavailable_in_original_log
+session_state: historical_close
+timeframes_seen: Daily / 60m / 15m
+chart_scope: partial
+daily_context_window: <2y
+major_high_low_review: partial
+ema20_50_200_review: unavailable
+parent_state: open_trend
+direction: long
+lineage_status: pending
+state_transition: none
+order_branch: observation_only
+actual_fill_or_open_skip: not_applicable
+structural_stop: pending
+structural_invalidation: pending
+first_independent_obstacle: visual 230.08 trigger/magnet area; not frozen
+pre_entry_space_R: unknown
+space_status: unknown
+rough_R_R: unknown
+research_state: research_positive_conditional
+trade_state: not_authorized
+gate_result: conditional
+handoff_status: research_only
+```
+
+本块只固定 H2-like、浅 B 和空间未证实的历史研究边界；不激活
+`primary_pattern`/`internal_label`，也不把低周期假设或后续路径变成成交/胜率记录。
+
 ## 研究状态
 
 这是一个视觉上成立、但交易几何仍需保留分支的候选。它用于训练助手识别：强势上涨背景中，第一次高位尝试失败或没有被接受，随后浅回调后出现第二次多头尝试。它不是已验证规则、胜率样本或真实交易记录。

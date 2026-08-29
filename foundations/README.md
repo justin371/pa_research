@@ -35,3 +35,4 @@
 
 聚合矩阵、Strategy inventory 与历史案例入口的字段/别名边界见[`Pattern 案例矩阵、策略入口与历史别名合同审计`](../research/backtesting/pattern_case_matrix_strategy_entry_contract_audit_2026-08-29_CN.md)：基础层字段不能替代逐案 canonical 合同。
 历史案例入口的逐案 evidence、状态和事前/事后边界见[`历史案例入口合同盘点审计`](../research/backtesting/historical_case_entry_inventory_contract_audit_2026-08-29_CN.md)：基础层与历史显示别名都不能替代 canonical 合同。
+顶层历史正向条件入口的 evidence/status 边界见[`顶层 research 历史正向条件入口边界审计`](../research/backtesting/top_level_research_entry_boundary_audit_2026-08-30_CN.md)：研究状态与授权、结果和统计分母分开。

@@ -1,5 +1,40 @@
 # NVDA 多头 H2 视觉与低周期条件候选：2024-09-11 至 2024-09-25
 
+## Canonical historical-entry boundary（2026-08-30）
+
+```text
+contract_scope: historical_context_only
+data_source: Futu OpenD historical QFQ Daily plus historical 60m/15m review
+data_status: historical
+as_of_time: 2024-09-24 historical decision cutoff; original query timestamp unavailable
+timezone: unavailable_in_original_log
+session_state: historical_close
+timeframes_seen: Daily / 60m / 15m
+chart_scope: partial
+daily_context_window: <2y
+major_high_low_review: partial
+ema20_50_200_review: unavailable
+parent_state: open_trend
+direction: long
+lineage_status: pending
+state_transition: none
+order_branch: observation_only
+actual_fill_or_open_skip: not_applicable
+structural_stop: pending
+structural_invalidation: pending
+first_independent_obstacle: visual resistance cluster near 120.6–121.6; not frozen
+pre_entry_space_R: unknown
+space_status: unknown
+rough_R_R: unknown
+research_state: research_positive_conditional
+trade_state: not_authorized
+gate_result: conditional
+handoff_status: research_only
+```
+
+本块只固定 H2、深但后段受控 B 和低周期条件候选的历史范围；不激活
+`primary_pattern`/`internal_label`，不把低周期假设或后续走势变成日线成交/统计结果。
+
 ## 研究状态
 
 这是一个比单纯“看起来像”更进一步的条件候选，但仍不是已验证规则或真实交易记录。重点是把日线结构、60m/15m 触发、宽结构止损和窄低周期止损分开。
@@ -74,4 +109,3 @@
 3. 日线结构止损与 15m/60m 窄止损代表不同交易 thesis，不能用窄止损把日线首障碍人为做得漂亮；
 4. 原触发没有被开盘跳过时，stop 分支可以独立审计；后续强跟随只作为过程结果；
 5. 在进入真实规则前，仍需核对事件日期、更多同类样本和失败分支。
-

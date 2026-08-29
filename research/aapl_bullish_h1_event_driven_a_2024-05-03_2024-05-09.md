@@ -2,6 +2,41 @@
 
 状态：\`pattern_like / research_positive_conditional / event-driven-A / earnings-filter-passed / sector-aligned / low-cycle-confirmed / first-obstacle-borderline\`
 
+## Canonical historical-entry boundary（2026-08-30）
+
+```text
+contract_scope: historical_context_only
+data_source: Futu OpenD historical QFQ Daily plus historical 60m/15m review
+data_status: historical
+as_of_time: 2024-05-09 historical decision cutoff; original query timestamp unavailable
+timezone: unavailable_in_original_log
+session_state: historical_close
+timeframes_seen: Daily / 60m / 15m
+chart_scope: partial
+daily_context_window: <2y
+major_high_low_review: partial
+ema20_50_200_review: partial
+parent_state: transition
+direction: long
+lineage_status: pending
+state_transition: range_transition
+order_branch: observation_only
+actual_fill_or_open_skip: not_applicable
+structural_stop: pending
+structural_invalidation: pending
+first_independent_obstacle: visual resistance near 184.98; not frozen
+pre_entry_space_R: unknown
+space_status: unknown
+rough_R_R: unknown
+research_state: research_positive_conditional
+trade_state: not_authorized
+gate_result: conditional
+handoff_status: research_only
+```
+
+本块只把事件驱动 A、H1-like 和首阻力边界固定为历史研究语义；不激活
+`primary_pattern`/`internal_label`，不把假设订单或后续上涨改写成成交或胜率证据。
+
 ## 证据头
 
 - 标的：\`US.AAPL\`

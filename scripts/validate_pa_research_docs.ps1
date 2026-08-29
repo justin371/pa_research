@@ -271,6 +271,7 @@ $requiredFiles = @(
     'research/backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md',
     'research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md',
     'research/backtesting/historical_case_entry_inventory_contract_audit_2026-08-29_CN.md',
+    'research/backtesting/top_level_research_entry_boundary_audit_2026-08-30_CN.md',
     'research/backtesting/required_report_index_coverage_audit_2026-08-29_CN.md',
     'research/backtesting/conclusion_boundary_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/visual_capability_boundary_audit_2026-08-29_CN.md',
@@ -555,6 +556,93 @@ foreach ($relativePath in $historicalScreenBoundaryPaths) {
     foreach ($token in $historicalScreenBoundaryTokens) {
         if (-not $content.Contains($token)) {
             Add-ValidationError "historical screen boundary is missing token '$token': $relativePath"
+        }
+    }
+}
+
+$topLevelConditionalEntryBoundaryAuditPath = 'research/backtesting/top_level_research_entry_boundary_audit_2026-08-30_CN.md'
+$topLevelConditionalEntryPaths = @(
+    'research/aapl_bullish_h1_event_driven_a_2024-05-03_2024-05-09.md',
+    'research/amzn_bullish_h2_shallow_b_boundary_2024-12-09_2024-12-11.md',
+    'research/crwd_bullish_h2_deep_b_late_stabilization_2024-09-11_2024-10-11.md',
+    'research/klac_h1_case_study_2025-10-14_2025-10-24.md',
+    'research/klac_h3_bear_flag_case_2025-03-12_2025-03-28.md',
+    'research/nflx_bearish_abc_l1_no_gap_space_2025-02-14_2025-03-28.md',
+    'research/nvda_bullish_h2_60m_conditional_2024-09-11_2024-09-25.md',
+    'research/tsla_abc_h1_h2_case_study_2025-08-06_2025-08-22.md',
+    'research/tsm_bearish_abc_l1_gap_reprice_space_2025-02-14_2025-03-28.md'
+)
+$topLevelConditionalEntryBoundaryTokens = @(
+    'contract_scope: historical_context_only',
+    'data_status: historical',
+    'as_of_time:',
+    'timezone:',
+    'session_state: historical_close',
+    'timeframes_seen:',
+    'chart_scope: partial',
+    'daily_context_window: <2y',
+    'major_high_low_review:',
+    'ema20_50_200_review:',
+    'parent_state:',
+    'direction:',
+    'lineage_status: pending',
+    'order_branch: observation_only',
+    'actual_fill_or_open_skip:',
+    'structural_stop:',
+    'structural_invalidation:',
+    'first_independent_obstacle:',
+    'pre_entry_space_R:',
+    'space_status:',
+    'rough_R_R:',
+    'research_state: research_positive_conditional',
+    'trade_state:',
+    'gate_result:',
+    'handoff_status: research_only'
+)
+$topLevelConditionalEntryBoundaryAuditAbsolutePath = [IO.Path]::GetFullPath((Join-Path -Path $repoRoot -ChildPath ($topLevelConditionalEntryBoundaryAuditPath -replace '/', '\')))
+if (-not (Test-Path -LiteralPath $topLevelConditionalEntryBoundaryAuditAbsolutePath -PathType Leaf)) {
+    Add-ValidationError "top-level conditional entry boundary audit is missing: $topLevelConditionalEntryBoundaryAuditPath"
+} else {
+    $topLevelConditionalAuditContent = Get-Utf8Text -Path $topLevelConditionalEntryBoundaryAuditAbsolutePath
+    foreach ($token in @(
+        'inventory_scope: top_level_research_entry_boundary_audit_only',
+        'scan_scope: research_root_markdown_non_readme',
+        'case_like_selection: filename_and_header_heuristic',
+        'row_contract_source: linked_entry_file',
+        'row_contract_scope: per_entry',
+        'row_result_boundary: independent_replay_or_result_only',
+        'historical_alias_policy: display_only_until_mapped',
+        'research_positive_conditional',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
+    )) {
+        if (-not $topLevelConditionalAuditContent.Contains($token)) {
+            Add-ValidationError "top-level conditional entry audit is missing token '$token'"
+        }
+    }
+    foreach ($relativePath in $topLevelConditionalEntryPaths) {
+        if (-not $topLevelConditionalAuditContent.Contains([IO.Path]::GetFileName($relativePath))) {
+            Add-ValidationError "top-level conditional entry is missing from boundary audit: $relativePath"
+        }
+        $expectedPath = [IO.Path]::GetFullPath((Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')))
+        if (-not (Test-Path -LiteralPath $expectedPath -PathType Leaf)) {
+            Add-ValidationError "top-level conditional entry is missing: $relativePath"
+            continue
+        }
+        $entryContent = Get-Utf8Text -Path $expectedPath
+        foreach ($token in $topLevelConditionalEntryBoundaryTokens) {
+            if (-not $entryContent.Contains($token)) {
+                Add-ValidationError "top-level conditional entry is missing token '$token': $relativePath"
+            }
+        }
+        if ($entryContent -match $historicalCaseEntryPostOutcomeFieldPattern) {
+            Add-ValidationError "post-outcome field leaked into top-level conditional entry: $relativePath"
+        }
+        if ($entryContent -match '(?im)^\s*(?:trade_state|handoff_status|research_state)\s*:\s*(?:authorized|ready_for_system|validated)\s*$') {
+            Add-ValidationError "active promoted status leaked into top-level conditional entry: $relativePath"
         }
     }
 }

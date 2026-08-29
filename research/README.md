@@ -90,6 +90,7 @@
 - [`remaining visual frameworks 合同边界审计`](backtesting/remaining_visual_framework_contract_audit_2026-08-29_CN.md)：补齐其余视觉框架、订单分支协议和 pattern-specific 案例入口的证据头、状态轴、订单/空间字段与历史别名边界；不新增样本或结果。
 - [`Pattern 案例矩阵、策略入口与历史别名合同审计`](backtesting/pattern_case_matrix_strategy_entry_contract_audit_2026-08-29_CN.md)：展示行不冻结 canonical 字段，历史别名不覆盖主标签/订单/空间，后续路径不进入事前证据或胜率分母。
 - [`历史案例入口合同盘点审计`](backtesting/historical_case_entry_inventory_contract_audit_2026-08-29_CN.md)：盘点五个聚合矩阵之外的历史案例入口，只补必要的历史边界，不新增样本或结果。
+- [`顶层 research 历史正向条件入口边界审计`](backtesting/top_level_research_entry_boundary_audit_2026-08-30_CN.md)：为 9 个未自包含 scope 的条件性历史入口补最小边界，不新增样本或结果。
 
 ## 冻结合同回放
 

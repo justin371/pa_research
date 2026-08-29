@@ -57,8 +57,8 @@ inventory 的视觉候选表只有索引层 `direction`、代表性入口和“�
 
 ## 验证记录
 
-- 定向回归：39 tests passed；全量测试：310 tests passed；
-- 文档 validator：passed，检查 308 个 Markdown 文件和 2134 条本地链接；
+- 定向回归：39 tests passed；全量测试：316 tests passed；
+- 文档 validator：passed，检查 309 个 Markdown 文件和 2150 条本地链接；
 - `git diff --check`：passed；
 - 验证只使用 PA Research 本地文件；Trading checkout 仅做只读隔离确认；
 - 最终提交和远端 `main` SHA 以本轮完成后的 Git 记录为准。

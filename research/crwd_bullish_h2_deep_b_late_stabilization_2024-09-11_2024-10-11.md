@@ -1,5 +1,40 @@
 # CRWD 多头 H2-like：强 A、深 B 后段稳定与首阻力审计（2024-09-11 至 2024-10-11）
 
+## Canonical historical-entry boundary（2026-08-30）
+
+```text
+contract_scope: historical_context_only
+data_source: Futu OpenD historical QFQ Daily plus historical 60m/15m review
+data_status: historical
+as_of_time: 2024-10-03 historical decision cutoff; original query timestamp unavailable
+timezone: unavailable_in_original_log
+session_state: historical_close
+timeframes_seen: Daily / 60m / 15m
+chart_scope: partial
+daily_context_window: <2y
+major_high_low_review: partial
+ema20_50_200_review: unavailable
+parent_state: open_trend
+direction: long
+lineage_status: pending
+state_transition: none
+order_branch: observation_only
+actual_fill_or_open_skip: not_applicable
+structural_stop: pending
+structural_invalidation: pending
+first_independent_obstacle: visual resistance near 75.11–75.54; not frozen
+pre_entry_space_R: unknown
+space_status: unknown
+rough_R_R: unknown
+research_state: research_positive_conditional
+trade_state: not_authorized
+gate_result: conditional
+handoff_status: research_only
+```
+
+本块只固定深 B 后段稳定和首阻力未冻结的历史研究语义；不激活
+`primary_pattern`/`internal_label`，不把后续穿越阻力区倒灌为入场前证据。
+
 ## 研究状态
 
 这是一个视觉上值得继续研究的条件候选，不是已经验证的规则、胜率样本或真实交易记录。它的作用是测试：强方向 A 之后，较深的 B 回调在后段稳定，是否仍能形成 H2-like 的多头恢复；同时保留 A 内跳空、计数和首阻力的边界。
