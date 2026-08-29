@@ -26,6 +26,7 @@
 - [`2024–2025 视觉候选网格`](../research/visual_screen_candidate_grid_2024_2025_CN.md)：批次级混合记录，`direction=no_valid_direction`，不代表逐标的候选。
 
 - [`候选、视觉复核与交易日志边界一致性审计`](../research/candidate_visual_record_consistency_audit_2026-08-29_CN.md)：核对方向、候选状态、事前证据和事后路径的分轴边界。
+- [`历史回放结果、交易日志与分母 provenance 审计`](../research/backtesting/historical_replay_result_log_provenance_audit_2026-08-29_CN.md)：区分冻结合同、模拟回放结果、运行 metadata 与实际交易日志；当前没有真实成交日志，结论仍为 `no-new-positive` / `validated win-rate: not-computable`。
 - [`Pattern 索引、别名与主次标签边界审计`](../research/pattern_index_alias_boundary_audit_2026-08-29_CN.md)：核对 16 个 pattern 目录入口、核心/独立层级和 canonical 主次标签边界。
 - [`Pattern 视觉复核前置证据审计`](../research/pattern_visual_preflight_audit_2026-08-29_CN.md)：核对完整图表左侧、EMA、适用路径的 A/B 质量（强 A→H1/L1 优先；区间边缘三推不要求强 A）、位置与首障碍的共同前置证据。
 - [`Pattern 案例入口与状态一致性审计`](../research/pattern_case_entry_status_audit_2026-08-29_CN.md)：核对 16 个 pattern 的案例入口、条件/边界/no-trade 文案和状态别名。

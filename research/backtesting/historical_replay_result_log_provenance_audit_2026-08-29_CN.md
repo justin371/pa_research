@@ -127,7 +127,7 @@ realized_R 为有限数值
 
 ## 七、已落实的修复与剩余边界
 
-本次新增本审计及回归测试，并把它加入 PA Research 研究索引、回放 README 和文档 validator。修复内容只固化历史结果/交易日志/当前分母的语义边界，没有改写旧报告数字、没有新增合同、没有修改 engine 有效语义。
+本次新增本审计及回归测试，并把它加入 PA Research 研究索引、`docs/README.md`、`strategy/README.md`、回放 README、研究交接规范和文档 validator。修复内容只固化历史结果/交易日志/当前分母的语义边界，没有改写旧报告数字、没有新增合同、没有修改 engine 有效语义。
 
 当前可接受的读取顺序是：先看冻结合同的事前证据，再看当前 artifact validator 状态，最后才看旧 `results.csv` 的描述性路径；不能从旧结果反向补合同字段或选择胜率更好的一份变体。
 

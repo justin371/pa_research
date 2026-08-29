@@ -26,6 +26,7 @@
 - [`视觉识别能力与图表 provenance 边界审计`](../research/backtesting/visual_capability_boundary_audit_2026-08-29_CN.md)
 - [`证据范围与数据状态一致性审计`](../research/evidence_scope_status_boundary_audit_2026-08-29_CN.md)
 - [`选择记录与回放结果证据边界审计`](../research/backtesting/pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md)
+- [`历史回放结果、交易日志与分母 provenance 审计`](../research/backtesting/historical_replay_result_log_provenance_audit_2026-08-29_CN.md)：区分冻结合同、模拟回放结果、运行 metadata 与实际交易日志；当前没有真实成交日志，结论仍为 `no-new-positive` / `validated win-rate: not-computable`。
 - [`事件、空间与独立性字段引用一致性审计`](../research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md)
 - [`H/L event bucket 标签一致性审计`](../research/backtesting/event_bucket_label_consistency_audit_2026-08-29_CN.md)
 - [`H/L special subtype 与事件轴一致性审计`](../research/backtesting/special_subtype_event_axis_consistency_audit_2026-08-29_CN.md)

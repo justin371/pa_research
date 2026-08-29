@@ -58,17 +58,25 @@ class HistoricalReplayResultLogProvenanceTests(unittest.TestCase):
             self.assertIn(phrase, text)
 
     def test_audit_is_indexed_and_validator_guarded(self):
+        docs_readme = (REPO_ROOT / "docs" / "README.md").read_text(encoding="utf-8")
         research_readme = (REPO_ROOT / "research" / "README.md").read_text(encoding="utf-8")
         backtesting_readme = (BACKTEST_ROOT / "README.md").read_text(encoding="utf-8")
+        strategy_readme = (REPO_ROOT / "strategy" / "README.md").read_text(encoding="utf-8")
+        handoff = (REPO_ROOT / "docs" / "research_to_system_handoff_CN.md").read_text(
+            encoding="utf-8"
+        )
         validator = (REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1").read_text(
             encoding="utf-8"
         )
         filename = AUDIT_PATH.name
 
-        self.assertIn(filename, research_readme)
-        self.assertIn(filename, backtesting_readme)
+        for index_text in (docs_readme, research_readme, backtesting_readme, strategy_readme, handoff):
+            self.assertIn(filename, index_text)
         self.assertIn(filename, validator)
         self.assertIn("historical replay/result-log provenance audit", validator)
+        self.assertIn("当前 PA Research checkout 没有 `journal/`、`trade_log/`、`transaction/` 或 `ledger/` 目录", handoff)
+        self.assertIn("no-new-positive", handoff)
+        self.assertIn("validated win-rate: not-computable", handoff)
 
 
 if __name__ == "__main__":

@@ -18,6 +18,10 @@ Execution Agent（模拟/真实执行）
 
 记录字段的统一定义见[`PA Research 统一输出合同 v0.1`](pa_research_output_schema_v0_1_CN.md)。本文件只负责交接边界和晋级闸门，不重新定义方向、订单或研究状态。
 
+## 当前交易日志与回放结果边界
+
+当前 PA Research checkout 没有 `journal/`、`trade_log/`、`transaction/` 或 `ledger/` 目录，也没有实际订单、实际成交、持仓、账户 P&L 或 Execution Agent 交易日志。冻结合同属于入场前研究记录；`results.csv` 属于历史回放的模拟结果；`summary.json` 属于聚合摘要；`run_metadata.json` 属于运行 provenance，均不能改称真实交易日志。详细盘点见[`历史回放结果、交易日志与分母 provenance 审计`](../research/backtesting/historical_replay_result_log_provenance_audit_2026-08-29_CN.md)。当前结论仍为 `no-new-positive` / `validated win-rate: not-computable`；真实订单、账户连接和 Execution Agent 仍需另行明确授权。
+
 ## 两个 Repo 各自负责什么
 
 ### PA Research
