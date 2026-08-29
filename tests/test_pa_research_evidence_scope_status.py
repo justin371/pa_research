@@ -50,6 +50,7 @@ class EvidenceScopeStatusTests(unittest.TestCase):
     def test_daily_candidate_scope_is_daily_only(self):
         schema = read(REPO_ROOT / "docs" / "pa_research_output_schema_v0_1_CN.md")
         visual = read(REPO_ROOT / "docs" / "visual_pa_review_card_CN.md")
+        daily_card = read(REPO_ROOT / "docs" / "daily_candidate_review_card_CN.md")
         daily_rules = read(REPO_ROOT / "docs" / "pa_research_daily_selection_rules_v0_1_CN.md")
         common = read(REPO_ROOT / "docs" / "common_context.md")
 
@@ -63,6 +64,17 @@ class EvidenceScopeStatusTests(unittest.TestCase):
         )
         self.assertIn("timeframes_seen: Daily", daily_rules)
         self.assertIn("4H/60m/15m 只在候选入选后的独立深审或订单合同中使用", common)
+        for token in (
+            "contract_scope: daily_candidate",
+            "directional_bias: bull / bear / balanced / changing",
+            "permission: long_allowed / short_allowed / both_allowed / no_direction / unknown",
+            "lineage_id:",
+            "market_context_id:",
+            "bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable",
+            "role_reversal_held: yes / no / unclear / not_occurred",
+            "本卡逐标的记录的 `contract_scope` 固定为 `daily_candidate`：`timeframes_seen` 只能填写 `Daily`",
+        ):
+            self.assertIn(token, daily_card, token)
 
     def test_triage_protocol_uses_canonical_scope_fields(self):
         content = read(TRIAGE)
@@ -119,6 +131,10 @@ class EvidenceScopeStatusTests(unittest.TestCase):
             "data_status: historical / delayed / live_confirmed / incomplete",
             "chart_scope: full / partial / unavailable",
             "daily_context_window: >=2y / <2y / unavailable",
+            "如果目标是 `daily_candidate`，第一步只能看完成的 Daily",
+            "只要“看起来像”只能先进入研究 inventory 的 `stage_1_fast_screen`/观察行",
+            "contract_scope: stage_1_fast_screen / deep_review / daily_candidate / historical_context_only",
+            "outcome                     # 仅独立 replay/result 的事后字段；候选记录保持 pending，不用于授权",
         ):
             self.assertIn(token, inventory)
         self.assertNotRegex(inventory, r"(?m)^timeframe$")

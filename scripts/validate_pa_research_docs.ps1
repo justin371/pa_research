@@ -417,6 +417,9 @@ $canonicalChecks = @{
         '硬闸门阻止新交易'
     )
     'docs/daily_candidate_review_card_CN.md' = @(
+        'contract_scope: daily_candidate',
+        'directional_bias: bull / bear / balanced / changing',
+        'direction: long / short / no_valid_direction',
         'chart_scope: full / partial / unavailable',
         'timeframes_seen:',
         'ema20_50_200_review: complete / partial / unavailable',
@@ -428,6 +431,17 @@ $canonicalChecks = @{
         'range_edge_side: upper / lower / none / pending',
         'third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear',
         'event_bucket:',
+        'permission: long_allowed / short_allowed / both_allowed / no_direction / unknown',
+        'lineage_id:',
+        'market_context_id:',
+        'state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate',
+        'bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable',
+        'breakout_boundary:',
+        'acceptance_close:',
+        'follow_through:',
+        'retest_zone:',
+        'role_reversal_held: yes / no / unclear / not_occurred',
+        'key_breakout_or_structure_location:',
         'daily_context_window: >=2y / <2y / unavailable',
         'major_high_low_review: complete / partial / unavailable',
         'h_l_ema_slope_gate:',
@@ -440,6 +454,7 @@ $canonicalChecks = @{
         'space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown',
         'rough_R_R:',
         'research_state:',
+        '本卡逐标的记录的 `contract_scope` 固定为 `daily_candidate`：`timeframes_seen` 只能填写 `Daily`',
         'Execution Agent',
         '关键图表、事件、触发或空间证据尚不完整'
     )
@@ -1127,12 +1142,137 @@ $canonicalChecks = @{
         '`filled` 只表示历史订单路径有成交'
     )
     'strategy/pattern_inventory_candidates.md' = @(
+        '如果目标是 `daily_candidate`，第一步只能看完成的 Daily',
+        '只要“看起来像”只能先进入研究 inventory 的 `stage_1_fast_screen`/观察行',
+        'contract_scope: stage_1_fast_screen / deep_review / daily_candidate / historical_context_only',
+        'outcome                     # 仅独立 replay/result 的事后字段；候选记录保持 pending，不用于授权',
+        '`research_state`、`trade_state`、`gate_result` 和 `outcome` 分别属于研究状态、交易状态、闸门状态和事后结果',
         'timeframes_seen',
         'data_status: historical / delayed / live_confirmed / incomplete',
         'chart_scope: full / partial / unavailable',
         'daily_context_window: >=2y / <2y / unavailable',
         '| 视觉候选 ID | direction | 先看什么 | 代表性入口 | 当前状态 |',
         '完整候选卡和冻结合同仍必须逐行写 canonical `direction`'
+    )
+    'research/crm_bearish_abc_l1_l2_visual_candidate_2025-03-10_2025-03-28.md' = @(
+        'contract_scope: historical_context_only',
+        'directional_bias: bear',
+        'direction: short',
+        'data_status: historical',
+        'timeframes_seen: Daily / 60m / 15m',
+        'chart_scope: partial',
+        'daily_context_window: <2y',
+        'major_high_low_review: partial',
+        'ema20_50_200_review: unavailable',
+        'a_leg_quality: unclear',
+        'b_leg_class: unclear',
+        'event_context: unknown',
+        'event_bucket: event_unverified_or_pending',
+        'sector_state: aligned',
+        'market_state: aligned',
+        'permission: short_allowed',
+        'first_independent_obstacle: pending',
+        'pre_entry_space_R: unknown',
+        'space_status: unknown',
+        'research_state: pattern_like',
+        'trade_state: not_authorized',
+        'gate_result: pending'
+    )
+    'research/meta_bullish_h1_h2_visual_candidate_2024-09-11_2024-10-11.md' = @(
+        'contract_scope: stage_1_fast_screen',
+        'directional_bias: bull',
+        'direction: long',
+        'data_status: historical',
+        'timeframes_seen: Daily',
+        'chart_scope: partial',
+        'daily_context_window: unavailable',
+        'major_high_low_review: partial',
+        'ema20_50_200_review: partial',
+        'a_leg_quality: unclear',
+        'b_leg_class: unclear',
+        'event_context: unknown',
+        'event_bucket: event_unverified_or_pending',
+        'sector_state: unknown',
+        'market_state: unknown',
+        'permission: unknown',
+        'first_independent_obstacle: pending',
+        'pre_entry_space_R: unknown',
+        'space_status: unknown',
+        'research_state: pattern_like',
+        'trade_state: not_authorized',
+        'gate_result: pending'
+    )
+    'research/msft_bearish_abc_l1_l2_visual_candidate_2025-10-28_2025-11-20.md' = @(
+        'contract_scope: stage_1_fast_screen',
+        'directional_bias: bear',
+        'direction: short',
+        'data_status: historical',
+        'timeframes_seen: Daily',
+        'chart_scope: partial',
+        'daily_context_window: <2y',
+        'major_high_low_review: partial',
+        'ema20_50_200_review: unavailable',
+        'a_leg_quality: unclear',
+        'b_leg_class: unclear',
+        'event_context: unknown',
+        'event_bucket: event_unverified_or_pending',
+        'sector_state: unknown',
+        'market_state: unknown',
+        'permission: unknown',
+        'first_independent_obstacle: pending',
+        'pre_entry_space_R: unknown',
+        'space_status: unknown',
+        'research_state: pattern_like',
+        'trade_state: not_authorized',
+        'gate_result: pending'
+    )
+    'research/nvda_bullish_abc_h1_visual_candidate_2025-06-23_2025-07-03.md' = @(
+        'contract_scope: stage_1_fast_screen',
+        'directional_bias: bull',
+        'direction: long',
+        'data_status: historical',
+        'timeframes_seen: Daily',
+        'chart_scope: partial',
+        'daily_context_window: <2y',
+        'major_high_low_review: partial',
+        'ema20_50_200_review: partial',
+        'a_leg_quality: unclear',
+        'b_leg_class: unclear',
+        'event_context: unknown',
+        'event_bucket: event_unverified_or_pending',
+        'sector_state: unknown',
+        'market_state: unknown',
+        'permission: unknown',
+        'first_independent_obstacle: pending',
+        'pre_entry_space_R: unknown',
+        'space_status: unknown',
+        'research_state: pattern_like',
+        'trade_state: not_authorized',
+        'gate_result: pending'
+    )
+    'research/visual_screen_candidate_grid_2024_2025_CN.md' = @(
+        'contract_scope: stage_1_fast_screen',
+        'directional_bias: changing',
+        'direction: no_valid_direction',
+        'data_status: historical',
+        'timeframes_seen: Daily',
+        'chart_scope: full',
+        'daily_context_window: unavailable',
+        'major_high_low_review: partial',
+        'ema20_50_200_review: unavailable',
+        'a_leg_quality: unclear',
+        'b_leg_class: unclear',
+        'event_context: unknown',
+        'event_bucket: event_unverified_or_pending',
+        'sector_state: unknown',
+        'market_state: unknown',
+        'permission: unknown',
+        'first_independent_obstacle: pending',
+        'pre_entry_space_R: unknown',
+        'space_status: unknown',
+        'research_state: pattern_like',
+        'trade_state: not_authorized',
+        'gate_result: pending'
     )
 }
 foreach ($entry in $canonicalChecks.GetEnumerator()) {
@@ -2767,6 +2907,12 @@ foreach ($file in $selectionMarkdownFiles) {
     $content = Get-Utf8Text -Path $file.FullName
     if ($content -notmatch '(?i)frozen_pre_outcome') {
         Add-ValidationError "selection record missing frozen_pre_outcome status: $relativePath"
+    }
+    if ($content -notmatch '(?im)^\s*contract_scope:\s*historical_context_only\s*$') {
+        Add-ValidationError "selection record missing historical_context_only scope: $relativePath"
+    }
+    if ($content -notmatch '(?im)^\s*timeframes_seen:\s*Daily\s*$') {
+        Add-ValidationError "selection record is not explicitly Daily-only: $relativePath"
     }
     if ($content -match $selectionPostOutcomeFieldPattern) {
         Add-ValidationError "post-outcome field leaked into selection record: $relativePath"

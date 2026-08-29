@@ -1,6 +1,8 @@
 # H/L 大样本人工合同冻结记录（2026-08-27）
 
 状态：`research_only / frozen_pre_outcome / descriptive_only / not-validated`
+contract_scope: historical_context_only
+timeframes_seen: Daily
 
 ## 目的
 

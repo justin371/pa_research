@@ -80,6 +80,21 @@ class CandidateVisualConsistencyTests(unittest.TestCase):
                 )
                 self.assertTrue(all(row["contract_frozen"] == "yes" for row in rows))
 
+    def test_all_selection_records_declare_historical_daily_scope(self):
+        for filename in (
+            "hl_large_selection_2026-08-27_CN.md",
+            "hl_next_selection_2026-08-27_CN.md",
+            "hl_next2_selection_2026-08-27_CN.md",
+            "hl_next3_selection_2026-08-27_CN.md",
+            "hl_next4_selection_2026-08-27_CN.md",
+            "hl_next5_selection_2026-08-27_CN.md",
+        ):
+            content = (BACKTEST_ROOT / filename).read_text(encoding="utf-8")
+            with self.subTest(selection=filename):
+                self.assertIn("contract_scope: historical_context_only", content)
+                self.assertIn("timeframes_seen: Daily", content)
+                self.assertIn("frozen_pre_outcome", content)
+
     def test_frozen_contracts_keep_required_pre_entry_axes(self):
         base_required_fields = (
             "direction",
@@ -222,6 +237,109 @@ class CandidateVisualConsistencyTests(unittest.TestCase):
                     or "不能从文字、回放结果或后验走势补写" in content
                 )
 
+    def test_legacy_visual_candidate_entries_declare_scope_and_unknown_gates(self):
+        specifications = (
+            (
+                "crm_bearish_abc_l1_l2_visual_candidate_2025-03-10_2025-03-28.md",
+                "contract_scope: historical_context_only",
+                "directional_bias: bear",
+                "direction: short",
+                "timeframes_seen: Daily / 60m / 15m",
+                "daily_context_window: <2y",
+                "a_leg_quality: unclear",
+                "b_leg_class: unclear",
+                "event_context: unknown",
+                "event_bucket: event_unverified_or_pending",
+                "sector_state: aligned",
+                "market_state: aligned",
+                "permission: short_allowed",
+                "first_independent_obstacle: pending",
+                "pre_entry_space_R: unknown",
+                "space_status: unknown",
+            ),
+            (
+                "meta_bullish_h1_h2_visual_candidate_2024-09-11_2024-10-11.md",
+                "contract_scope: stage_1_fast_screen",
+                "directional_bias: bull",
+                "direction: long",
+                "timeframes_seen: Daily",
+                "daily_context_window: unavailable",
+                "a_leg_quality: unclear",
+                "b_leg_class: unclear",
+                "event_context: unknown",
+                "event_bucket: event_unverified_or_pending",
+                "sector_state: unknown",
+                "market_state: unknown",
+                "permission: unknown",
+                "first_independent_obstacle: pending",
+                "pre_entry_space_R: unknown",
+                "space_status: unknown",
+            ),
+            (
+                "msft_bearish_abc_l1_l2_visual_candidate_2025-10-28_2025-11-20.md",
+                "contract_scope: stage_1_fast_screen",
+                "directional_bias: bear",
+                "direction: short",
+                "timeframes_seen: Daily",
+                "daily_context_window: <2y",
+                "a_leg_quality: unclear",
+                "b_leg_class: unclear",
+                "event_context: unknown",
+                "event_bucket: event_unverified_or_pending",
+                "sector_state: unknown",
+                "market_state: unknown",
+                "permission: unknown",
+                "first_independent_obstacle: pending",
+                "pre_entry_space_R: unknown",
+                "space_status: unknown",
+            ),
+            (
+                "nvda_bullish_abc_h1_visual_candidate_2025-06-23_2025-07-03.md",
+                "contract_scope: stage_1_fast_screen",
+                "directional_bias: bull",
+                "direction: long",
+                "timeframes_seen: Daily",
+                "daily_context_window: <2y",
+                "a_leg_quality: unclear",
+                "b_leg_class: unclear",
+                "event_context: unknown",
+                "event_bucket: event_unverified_or_pending",
+                "sector_state: unknown",
+                "market_state: unknown",
+                "permission: unknown",
+                "first_independent_obstacle: pending",
+                "pre_entry_space_R: unknown",
+                "space_status: unknown",
+            ),
+            (
+                "visual_screen_candidate_grid_2024_2025_CN.md",
+                "contract_scope: stage_1_fast_screen",
+                "directional_bias: changing",
+                "direction: no_valid_direction",
+                "timeframes_seen: Daily",
+                "daily_context_window: unavailable",
+                "a_leg_quality: unclear",
+                "b_leg_class: unclear",
+                "event_context: unknown",
+                "event_bucket: event_unverified_or_pending",
+                "sector_state: unknown",
+                "market_state: unknown",
+                "permission: unknown",
+                "first_independent_obstacle: pending",
+                "pre_entry_space_R: unknown",
+                "space_status: unknown",
+            ),
+        )
+        for filename, *tokens in specifications:
+            content = (REPO_ROOT / "research" / filename).read_text(encoding="utf-8")
+            with self.subTest(candidate=filename):
+                for token in tokens + [
+                    "research_state: pattern_like",
+                    "trade_state: not_authorized",
+                    "gate_result: pending",
+                ]:
+                    self.assertIn(token, content)
+
     def test_klac_case_exposes_direction_and_canonical_status(self):
         content = (
             REPO_ROOT
@@ -259,6 +377,8 @@ class CandidateVisualConsistencyTests(unittest.TestCase):
         self.assertIn("valid_no_trade", report)
         self.assertIn("视觉候选目录缺少独立方向列", report)
         self.assertIn("50 条旧合同没有", report)
+        self.assertIn("日线候选输出链的周期和合同边界", report)
+        self.assertIn("Daily-first", report)
 
         research_readme = (REPO_ROOT / "research" / "README.md").read_text(encoding="utf-8")
         strategy_readme = (REPO_ROOT / "strategy" / "README.md").read_text(encoding="utf-8")

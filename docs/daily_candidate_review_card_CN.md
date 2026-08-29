@@ -51,7 +51,9 @@ deep_review_limit:
 ## 二、逐标的证据头
 
 ```text
+contract_scope: daily_candidate
 symbol:
+directional_bias: bull / bear / balanced / changing
 direction: long / short / no_valid_direction
 asset_type: common_stock / ETF / index / unknown
 review_date:
@@ -80,6 +82,7 @@ sector_reference:
 sector_state: aligned / mixed / counter / unknown
 market_reference:
 market_state: aligned / mixed / counter / unknown
+permission: long_allowed / short_allowed / both_allowed / no_direction / unknown
 ```
 
 缺失数据必须写 `unknown` 或 `pending`。不能把没有查到财报、成交额或板块证据写成 `none` 或 `pass`。
@@ -127,6 +130,8 @@ b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrol
 special_subtype: ordinary / deep_late_controlled_B / bull_flag / earnings_driven / event_driven / gap_reprice / none
 b_leg_location:
 lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
+market_context_id:
 setup_count_bar:
 internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 attempt_direction: bullish_attempts / bearish_attempts / unknown
@@ -139,9 +144,19 @@ count_basis:
 count_reset_reason:
 primary_pattern: ABC_CONT / BOP
 secondary_context:
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable
+breakout_boundary:
+acceptance_close:
+follow_through:
+retest_zone:
+role_reversal_held: yes / no / unclear / not_occurred
+key_breakout_or_structure_location:
 ```
 
 本卡是当前日线候选记录模板，顶层主标签只使用 `ABC_CONT` 或 `BOP`；H1/H2/L1/L2/H3/L3 放在 `internal_label`，其他结构关系放在 `secondary_context`。历史独立 H/L、三推或其他模式记录遵循统一输出合同的历史/兼容口径，不应反过来扩展当前日线选股主标签。
+
+本卡逐标的记录的 `contract_scope` 固定为 `daily_candidate`：`timeframes_seen` 只能填写 `Daily`。4H/1H/60m/15m 只能在该候选通过日线前置后，另立 `deep_review` 或独立低周期订单合同；它们不能补写日线缺失的左侧背景、方向、A/B、BOP/ABC 主标签或首障碍。`permission` 是市场/方向许可，不是交易授权；BOP 专用字段只在 `primary_pattern: BOP` 时填写，不能把 `bop_state` 当作触发或成交结果。
 
 强 A 只是优先级条件，不是入场信号。通常应看到约 3–4 根连续、实体较饱满、收盘靠方向极值、重叠较少的方向 K 线；缺口是加分项，不是必要条件，也不能让事件跳空替代普通 A 的证据。
 

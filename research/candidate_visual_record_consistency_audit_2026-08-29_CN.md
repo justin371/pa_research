@@ -1,6 +1,6 @@
 # PA Research 候选、视觉复核与交易日志边界一致性审计（2026-08-29）
 
-结论：本轮只审计 PA Research 内的日线候选/冻结前选择记录、视觉复核索引、统一输出字段、策略候选目录和历史交易日志入口，没有下载行情、调用 Futu/OpenD、运行正式回放或新增样本。先前四类记录边界问题已保持修正；本轮追加修正了视觉候选目录缺少独立方向列、少数状态别名不规范，以及两批旧合同把人工 A/B 描述与 canonical 结构化字段完整度混在一起的歧义。修正后，形态、入场前证据、交易状态和事后路径保持分轴；结论保持 `no-new-positive`，`validated win-rate: not-computable`。
+结论：本轮只审计 PA Research 内的日线候选/冻结前选择记录、视觉复核索引、统一输出字段、策略候选目录和历史交易日志入口，没有下载行情、调用 Futu/OpenD、运行正式回放或新增样本。先前四类记录边界问题已保持修正；本轮追加修正了视觉候选目录缺少独立方向列、少数状态别名不规范、两批旧合同把人工 A/B 描述与 canonical 结构化字段完整度混在一起的歧义，以及日线候选输出链缺少显式合同/周期/许可和 BOP 边界的问题。修正后，形态、入场前证据、交易状态和事后路径保持分轴；结论保持 `no-new-positive`，`validated win-rate: not-computable`。
 
 ## 一、范围和判定方法
 
@@ -91,14 +91,35 @@
 
 25 条 ABC/BOP intake 仍全部为 `contract_frozen=no`，方向和缺失字段有记录但不进入回放分母；不存在实际 `journal/`、交易日志或券商成交记录。
 
-## 六、结论
+## 六、日线候选输出链的周期和合同边界
+
+本轮进一步核对了 `docs/daily_candidate_review_card_CN.md`、`strategy/pattern_inventory_candidates.md`、六份历史选择记录和五份较早的视觉 candidate 入口：
+
+- 日线候选卡现显式要求 `contract_scope: daily_candidate`、`directional_bias`、`direction`、`permission`、`lineage_id`、`market_context_id` 以及 BOP 的边界/接受/回踩字段；该合同的 `timeframes_seen` 只能是 `Daily`。4H/1H/60m/15m 只能在日线闸门通过后进入独立 `deep_review` 或订单合同，不能补写日线缺失证据。
+- 六份 `hl_*_selection_2026-08-27_CN.md` 现明确为 `contract_scope: historical_context_only`、`timeframes_seen: Daily`。它们是历史选择/冻结前记录，不是当前 `daily_candidate`；CSV 内既有的字段覆盖缺口和市场/事件证据边界保持原样，不通过本轮回填或改写。
+- CRM、META、MSFT、NVDA 和候选网格五个较早入口现分别声明 `historical_context_only` 或 `stage_1_fast_screen`，并逐项标出方向、可见周期、图表完整度、两年 Daily 覆盖、事件/市场状态及 `research_state`/`trade_state`/`gate_result`。缺失项保留 `unknown`、`unavailable` 或 `pending`；这些记录不能因出现 H/L-like、低周期或后见之明而升级为授权。
+- 候选目录的流程已固定为 Daily-first：`stage_1_fast_screen`/观察行不等于 `daily_candidate`；只有通过日线前置并补齐字段后，才可建立独立深审/订单合同。`outcome` 仅属于独立 replay/result 的事后字段，不能反向改变候选状态。
+
+因此，本链条的可追溯路径是：
+
+```text
+Daily-first stage1 / historical inventory
+  -> 方向、事件/市场状态、两年 Daily、重要高低点、EMA20/50/200、A/B 和空间字段
+  -> 通过日线前置后才可提升为 daily_candidate
+  -> 可选的独立 4H/1H/60m/15m deep_review 或订单合同
+  -> 独立冻结合同
+  -> replay / trade-log 结果分开记录
+```
+
+## 七、结论
 
 修正后，PA Research 的记录链为：
 
 ```text
-视觉复核/候选目录
+Daily-first 视觉复核/候选目录
   -> pattern_like 或 observation_only / valid_no_trade
-  -> 补齐两年 Daily、重要高低点、EMA、A/B、lineage、触发、失效、首障碍和空间
+  -> 只有通过日线前置后，补齐两年 Daily、重要高低点、EMA、A/B、lineage、触发、失效、首障碍和空间
+  -> 低周期只进入独立 deep_review/订单合同
   -> 仅在独立冻结合同中出现精确订单字段
   -> 结果只进入独立 replay / trade-log 审计
 ```

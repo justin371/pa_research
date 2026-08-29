@@ -60,7 +60,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | A | `DOUBLE-TOP-BOTTOM-BOUNDARY` | 双顶/双底与 MTR、Final Flag 的视觉边界 | 两次有分离的测试首先是位置/形状；父级状态、接受/失败、第二次确认和空间决定归入区间边缘、Final Flag、MTR 或普通回调；详见[`Double top/bottom, MTR and Final Flag comparison`](../research/double_top_bottom_mtr_final_flag_comparison_CN.md) | 先记录 reversal-attempt；反向 stop 或结构回测 limit 需第二次确认；原方向接受则切 BOP | 先看颈线/最近磁铁和第一独立障碍，再看 MM；双顶/双底本身不提供目标 | 只数两个影线；区间中部；把 Final Flag 当 MTR；第一反向无跟随；原方向重新接受；首障碍太近 |
 | A | `HEAD-SHOULDERS-ROUNDED` | 头肩顶/底与圆顶/圆底的视觉边界 | 头肩先按复杂双顶/双底或 MTR 候选；圆形先按控制权转移警报；必须检查父级、颈线、接受/失败、第二次确认和空间；详见[`头肩顶/底与圆顶/圆底视觉边界框架`](../research/head_shoulders_rounded_top_bottom_visual_framework_CN.md) | 颈线反向 stop、已确认角色转换后的 limit-retest、强结构收盘或 observation-only 分支分开；目标先看首障碍，后看高度/MM | 先看主要极端/颈线外结构止损和第一独立支撑/阻力；头肩高度不是自动目标；圆弧中部不交易 | 肩部不对称就被否定；三个高低点就叫头肩；圆底中途抄底；区间中部；右肩只是普通回调；原方向 BOP 接受；首障碍太近 |
 | A | `TARGET-HIERARCHY-MM-MAGNET` | MM、AB=CD、区间高度、缺口/角色转换与第一障碍的目标层级 | 先冻结结构和测量锚点；第一独立障碍优先，接受后才看 MM；局部腿和父级腿可并存但不得事后移动；详见[`Measured Move、磁铁与目标层级视觉管理框架`](../research/measured_move_magnet_target_hierarchy_CN.md) | 入场前审计首障碍和 R/R；持仓到目标区按动能管理；障碍接受后重建后续目标合同；MM 不单独产生入场 | 近端前高/前低、区间边界、角色转换和通道边界优先于孤立数学投影；目标区可分批止盈 | 跳过首障碍直接看远端 MM；同一价簇重复计数；用后续低点美化首支撑；局部/父级锚点混淆；结构止损先失效仍记目标完成 |
-| A | `MULTITIMEFRAME-VISUAL-LAYERS` | Daily/4H/1H 背景与 15m 触发的层级分工 | 高周期决定父级状态、主要位置和结构止损；15m 默认只确认；低周期自成交易、开盘跳过、回测和重订价必须另立合同；详见[`Daily / 4H / 1H / 15m 分层框架`](../research/multitimeframe_visual_review_framework_CN.md) | 同一合同用低周期 stop/确认；独立低周期合同重新冻结入场、止损、首障碍和持有周期；冲突时观望或重建 | 高周期首障碍和结构止损优先；低周期窄止损不能美化日线 R/R；不同周期计数不相加 | 15m K 线倒推 Daily thesis；把 Daily H2 与 15m H2 相加；开盘跳过仍沿用旧价；低周期确认被当成新形态；低周期独立交易结果回写父级 |
+| A | `MULTITIMEFRAME-VISUAL-LAYERS` | **框架条目，不是 `daily_candidate`**；Daily/4H/1H 背景与 15m 触发的层级分工 | 高周期决定父级状态、主要位置和结构止损；15m 默认只确认；低周期自成交易、开盘跳过、回测和重订价必须另立合同；详见[`Daily / 4H / 1H / 15m 分层框架`](../research/multitimeframe_visual_review_framework_CN.md) | 同一合同用低周期 stop/确认；独立低周期合同重新冻结入场、止损、首障碍和持有周期；冲突时观望或重建 | 高周期首障碍和结构止损优先；低周期窄止损不能美化日线 R/R；不同周期计数不相加 | 15m K 线倒推 Daily thesis；把 Daily H2 与 15m H2 相加；开盘跳过仍沿用旧价；低周期确认被当成新形态；低周期独立交易结果回写父级 |
 | B | `LATE-TREND-ENTRY-FILTER` | 趋势后段的追价、受控回调、高潮风险、突破接受和后段无空间过滤；不是独立 K 线形态 | 先看趋势运行长度、主要磁铁、最后推进、回调/二次入场和第一障碍；详见[`趋势后段入场视觉框架`](../research/late_trend_entry_visual_framework_CN.md) | 等回调/H1-H2/L1-L2；低周期确认；突破接受后建立新合同；或记录 observation-only | 第一障碍、结构止损和交易类型优先；接近 MM 不自动追；后段空间不足直接 no-trade | 把强趋势 K 自动当成入场；用远端 MM 美化 R/R；用低周期窄止损覆盖高周期风险；事后把错过改写成原合同应该追 |
 | B | `FINAL-FLAG` | 趋势末端小回调/窄区间 | 持续趋势接近极端后压缩；最后一次突破可能失败并先形成小反转/区间，也可能被接受后延续 | 原方向突破接受走 BOP；反向方向等待失败后的 H1/H2 或 L1/L2-like 二次确认 | 先看旗形边界和最近磁铁，再看 MM；第一次反向不预设整条趋势反转；详细框架见[`Final Flag visual framework`](../research/final_flag_visual_framework_CN.md) | 趋势中段普通旗形；已变成宽区间；原方向强势接受；首障碍太近 |
 | B | `OPEN-REVERSAL` | 开盘第一方向失败后的反向机会 | 开盘前背景清楚；第一波到达磁铁/结构位后未被接受；反向形成 H1/L1，最好有 H2/L2 或同等第二次确认 | 反向信号 K 后 stop-confirmation、预先冻结的 limit-retest，或强收盘分支；开盘接受/缺口延续不归入本项 | 先看开盘区间、前日高低点和第一独立障碍，再看 MM；结构止损放在开盘极端/失效位外；详见[`Opening Reversal visual framework`](../research/opening_reversal_visual_framework_CN.md) | 第一方向仍有跟随；只是普通趋势 H/L 回调；区间中部无位置；事件窗口；首障碍太近；原订单被跳空改变 |
@@ -105,7 +105,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 
 ## 3A. 视觉发现候选目录
 
-这一节是视觉筛选目录，不是胜率表，也不是量化输入。先在完整图表上判断“像不像”，再决定哪些候选值得做精细 R/R 或低周期核验。详细案例只保存在各自的研究文件中，这里只保留入口和视觉问题，避免两个 Repo 或多个文件重复搬运同一套内容。第一轮与第二轮的边界见[`PA Pattern 视觉筛选协议`](../research/visual_pattern_triage_protocol_CN.md)。
+这一节是视觉筛选目录，不是胜率表，也不是量化输入。先在与记录合同相符的完整图表上判断“像不像”：如果目标是 `daily_candidate`，第一步只能看完成的 Daily；只有通过日线前置闸门后，才可在独立 `deep_review` 或低周期订单合同中补 4H/1H/60m/15m。详细案例只保存在各自的研究文件中，这里只保留入口和视觉问题，避免两个 Repo 或多个文件重复搬运同一套内容。第一轮与第二轮的边界见[`PA Pattern 视觉筛选协议`](../research/visual_pattern_triage_protocol_CN.md)。
 
 本表的“当前状态”是目录标签，不是统一输出合同中的单一 `research_state`。其中 `process-*`、`*-reached`、`opening-skip` 等词若出现，只能表示已经单独记录的路径/订单审计事实，不能被复制成入场前的 `research_positive_conditional`，也不能替代 `trade_state`、`gate_result`、`handoff_status` 或冻结合同。
 
@@ -211,11 +211,11 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 
 ### 视觉筛选的最小流程
 
-1. 先看完整 Daily/4H/60m 图表，不先找标签；标出左侧主要高低点、区间边缘和明显阻力/支撑。
-2. 再问它是否真的有方向性 A 腿，B 是否是回调而不是区间中部摆动，C 是否已经开始。
-3. 只要“看起来像”就先进入候选：粗略画出可能的信号 K、入场区域、结构止损和第一目标区；不要求一开始精确到固定阈值。
-4. 把候选分成“值得深入”“形态像但不值得交易”“明显不是这个 pattern”三类。
-5. 只对第一类候选补 15m 触发、事件过滤、实际 R/R 和失败状态；第二类本身也保留为过滤样本。
+1. 对 `daily_candidate` 先看完成的 Daily 图表，不先找标签；标出两年左侧主要高低点、区间边缘和明显阻力/支撑。`stage_1_fast_screen` 或 `historical_context_only` 可以记录其它周期，但必须按各自合同声明范围，不能把它们冒充日线候选。
+2. 在 Daily 层面先问它是否真的有方向性 A 腿，B 是否是回调而不是区间中部摆动，C 是否已经开始；低周期不能替代这些判断。
+3. 只要“看起来像”只能先进入研究 inventory 的 `stage_1_fast_screen`/观察行，不等于 `daily_candidate`；只有通过日线硬闸门并补齐日线字段后，才可提升为日线候选。
+4. 把研究记录分成“值得深入”“形态像但不值得交易”“明显不是这个 pattern”三类，并保留其 `contract_scope`、方向和缺失证据。
+5. 只对已经通过日线前置、且确有必要深入的第一类记录补 4H/1H/60m/15m 触发、事件过滤、实际 R/R 和失败状态；低周期结果必须留在独立合同，不能改写父级日线记录。第二类本身仍保留为过滤样本。
 
 ## 4. 用户确认的长期形态主线
 
@@ -254,7 +254,7 @@ EMA、AB=CD 和 measured move 都只能作为背景、位置、空间或目标�
 ## 5. 每个案例统一记录的字段
 
 ```text
-contract_scope: deep_review / historical_context_only
+contract_scope: stage_1_fast_screen / deep_review / daily_candidate / historical_context_only
 symbol
 timeframes_seen
 data_source
@@ -283,8 +283,10 @@ event_context / sector_state / market_state / permission / gate_result
 research_state              # pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
 trade_state                 # not_authorized / conditional / valid_no_trade / observation_only / pending
 thesis_state / handoff_status
-outcome                     # continuation / reversal / failure / no_trade / pending
+outcome                     # 仅独立 replay/result 的事后字段；候选记录保持 pending，不用于授权
 ```
+
+这张模板可以服务 `stage_1_fast_screen`、`deep_review` 和历史记录，但不能把它们合并成一个 `daily_candidate`。`daily_candidate` 必须先完成 Daily-only 的前置审查；若后续使用低周期，低周期记录属于独立深审/订单合同。`research_state`、`trade_state`、`gate_result` 和 `outcome` 分别属于研究状态、交易状态、闸门状态和事后结果；`outcome` 只能从独立 replay/result 记录引用，不能反向授予候选或交易资格。
 
 ## 6. 研究边界与下一步
 

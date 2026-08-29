@@ -2,6 +2,33 @@
 
 状态：`pattern_like / bearish-ABC-candidate / L1-low-cycle-confirmed / L2-count-pending / non-gap-trigger / pending`
 
+```text
+contract_scope: historical_context_only
+directional_bias: bear
+direction: short
+data_status: historical
+timeframes_seen: Daily / 60m / 15m
+chart_scope: partial
+daily_context_window: <2y
+major_high_low_review: partial
+ema20_50_200_review: unavailable
+a_leg_quality: unclear
+b_leg_class: unclear
+event_context: unknown
+event_bucket: event_unverified_or_pending
+sector_state: aligned
+market_state: aligned
+permission: short_allowed
+first_independent_obstacle: pending
+pre_entry_space_R: unknown
+space_status: unknown
+research_state: pattern_like
+trade_state: not_authorized
+gate_result: pending
+```
+
+这里的 `direction`、`permission` 只记录历史研究方向及当时可见的市场/板块许可，不是交易授权；记录包含低周期核对，但未通过当前 `daily_candidate` 的 Daily-only 前置合同。两年左侧、事件规范化、结构止损和首障碍证据仍不完整，不能把后续低周期或结果倒灌成日线候选。
+
 ## 1. 图表证据
 
 - 标的：`US.CRM`

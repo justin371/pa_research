@@ -1,6 +1,8 @@
 # H/L 下一批（三）人工候选边界审计（2026-08-27）
 
 状态：`research_only / visual_audit_only / frozen_pre_outcome / no-new-positive`
+contract_scope: historical_context_only
+timeframes_seen: Daily
 
 ## 结论
 

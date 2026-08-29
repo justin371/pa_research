@@ -3,6 +3,33 @@
 日期：2026-08-23  
 状态：`visual-screen / pattern-triage / no-deep-audit`
 
+```text
+contract_scope: stage_1_fast_screen
+directional_bias: changing
+direction: no_valid_direction
+data_status: historical
+timeframes_seen: Daily
+chart_scope: full
+daily_context_window: unavailable
+major_high_low_review: partial
+ema20_50_200_review: unavailable
+a_leg_quality: unclear
+b_leg_class: unclear
+event_context: unknown
+event_bucket: event_unverified_or_pending
+sector_state: unknown
+market_state: unknown
+permission: unknown
+first_independent_obstacle: pending
+pre_entry_space_R: unknown
+space_status: unknown
+research_state: pattern_like
+trade_state: not_authorized
+gate_result: pending
+```
+
+这是批次级的历史视觉快筛，不是逐标的 `daily_candidate`。虽然批次使用完整日线窗口，但没有为每个标的冻结决策日左侧两年、方向、事件/市场状态和订单几何；批次级 `direction: no_valid_direction` 不能替代逐标的方向字段。
+
 ## 目的与数据边界
 
 本轮只用完整日线做第一阶段视觉快筛，目的不是扫描胜率，也不是寻找必须交易的正例。数据来自 Futu OpenD 的历史 QFQ 日线，窗口覆盖 `2024-01-02`–`2025-12-29`；数据是收盘后历史数据，不是实时行情。本轮没有使用低周期、财报公告核验或精确 R/R，也没有下单。
@@ -40,4 +67,3 @@
 - [`ABC 研究状态与工作边界 v0.3`](abc_research_status_v0_3_CN.md)
 - [`PA Pattern 视觉筛选协议`](visual_pattern_triage_protocol_CN.md)
 - [`ABC 覆盖审计`](abc_pattern_coverage_audit_CN.md)
-

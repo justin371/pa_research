@@ -1,6 +1,8 @@
 # H/L 下一批（四）人工合同冻结记录（2026-08-27）
 
 状态：`research_only / frozen_pre_outcome / descriptive_only / not-validated / no-new-positive`
+contract_scope: historical_context_only
+timeframes_seen: Daily
 
 ## 结论边界
 

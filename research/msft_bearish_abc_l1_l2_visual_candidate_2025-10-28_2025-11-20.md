@@ -2,6 +2,33 @@
 
 状态：`pattern_like / bearish-ABC-candidate / L1-L2-like / gap-trigger-boundary / pending`
 
+```text
+contract_scope: stage_1_fast_screen
+directional_bias: bear
+direction: short
+data_status: historical
+timeframes_seen: Daily
+chart_scope: partial
+daily_context_window: <2y
+major_high_low_review: partial
+ema20_50_200_review: unavailable
+a_leg_quality: unclear
+b_leg_class: unclear
+event_context: unknown
+event_bucket: event_unverified_or_pending
+sector_state: unknown
+market_state: unknown
+permission: unknown
+first_independent_obstacle: pending
+pre_entry_space_R: unknown
+space_status: unknown
+research_state: pattern_like
+trade_state: not_authorized
+gate_result: pending
+```
+
+这是第一阶段历史视觉记录，不是 `daily_candidate`：Daily 左侧窗口不足两年，事件、市场/板块、首障碍和订单几何仍待核验；`direction` 只表示观察方向，不能把后见之明或低周期补查变成授权。
+
 ## 1. 图表证据
 
 - 标的：`US.MSFT`
@@ -58,4 +85,3 @@
 3. 先冻结入场前左侧主要支撑，再讨论结构止损和首障碍；
 4. 判断它是趋势恢复、区间顶部失败，还是高位反转候选；
 5. 只有这些问题清楚后，才讨论 MM 或粗略 R/R。
-

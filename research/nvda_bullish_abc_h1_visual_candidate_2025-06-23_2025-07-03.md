@@ -2,6 +2,33 @@
 
 状态：`pattern_like / bullish-ABC-candidate / H1-like / gap-trigger-reprice / pending`
 
+```text
+contract_scope: stage_1_fast_screen
+directional_bias: bull
+direction: long
+data_status: historical
+timeframes_seen: Daily
+chart_scope: partial
+daily_context_window: <2y
+major_high_low_review: partial
+ema20_50_200_review: partial
+a_leg_quality: unclear
+b_leg_class: unclear
+event_context: unknown
+event_bucket: event_unverified_or_pending
+sector_state: unknown
+market_state: unknown
+permission: unknown
+first_independent_obstacle: pending
+pre_entry_space_R: unknown
+space_status: unknown
+research_state: pattern_like
+trade_state: not_authorized
+gate_result: pending
+```
+
+这是第一阶段历史视觉记录，不是 `daily_candidate`：可见窗口不足两年，EMA 只形成部分背景，事件、市场/板块、首障碍和订单几何仍待核验；`direction` 只表示形态观察方向，不是交易授权。
+
 ## 1. 图表证据
 
 - 标的：`US.NVDA`

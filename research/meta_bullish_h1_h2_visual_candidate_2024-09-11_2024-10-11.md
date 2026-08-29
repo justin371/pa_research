@@ -8,6 +8,33 @@
 - 观察窗口：`2024-09-11`–`2024-10-11`；
 - 当前标签：`pattern_like / bullish-H1-H2-like / nested-count-unclear / first-obstacle-crowded / observation-only`。
 
+```text
+contract_scope: stage_1_fast_screen
+directional_bias: bull
+direction: long
+data_status: historical
+timeframes_seen: Daily
+chart_scope: partial
+daily_context_window: unavailable
+major_high_low_review: partial
+ema20_50_200_review: partial
+a_leg_quality: unclear
+b_leg_class: unclear
+event_context: unknown
+event_bucket: event_unverified_or_pending
+sector_state: unknown
+market_state: unknown
+permission: unknown
+first_independent_obstacle: pending
+pre_entry_space_R: unknown
+space_status: unknown
+research_state: pattern_like
+trade_state: not_authorized
+gate_result: pending
+```
+
+这是第一阶段历史视觉记录，不是 `daily_candidate`：左侧两年、事件、市场/板块和订单几何未形成完整证据合同；`direction` 是形态观察方向，`permission` 保留为 `unknown`，不得从形态标签推导授权。
+
 ## 完整背景与视觉判断
 
 `2024-08` 的大幅回撤后，价格重新收复 EMA20/EMA50，并在 `2024-09-11` 附近重新获得买方控制。随后到 `2024-09-20`，价格从约 `492` 推进到约 `561`，方向性和跟随较清楚，可以先标为 `strong-looking-A`。
@@ -38,4 +65,3 @@
 2. 多次浅回踩不自动等于 H2/H3，必须说明是同一回调 lineage 还是嵌套的小级别结构；
 3. 形态“像”与“值得交易”分开记录：本例形态值得保留，但第一阻力拥挤，当前更适合 `observation-only`；
 4. 如果后续价格接受在 `593` 上方，应该另开突破接受/BOP 分支，不能回头把原来的 H1/H2 观察改写成已成交的延续交易。
-
