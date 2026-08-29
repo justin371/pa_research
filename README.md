@@ -24,6 +24,7 @@ PA Research 是一个只读、视觉优先的 Price Action 研究仓库。它记
 - 回放器只接受已经由人工完整看图并在结果发生前冻结的合同；当前已有案例尚未形成经过验证的胜率证据。
 - Codex Trading 只作为明确标注的只读历史参考；PA Research 不复制其规则，不修改其仓库。
 - 当前结果审计保持 `no-new-positive`、`validated win-rate: not-computable`；形态候选不是胜率或下单授权。
+- 聚合矩阵、Strategy inventory 与历史案例入口的逐案合同边界见[`Pattern 案例矩阵、策略入口与历史别名合同审计`](research/backtesting/pattern_case_matrix_strategy_entry_contract_audit_2026-08-29_CN.md)。
 
 统一边界：`v0.x` 规则/合同与回放引擎 `0.3.9` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；`no-new-positive` 和 `validated win-rate: not-computable` 保持不变，`60%` 仅是待检验目标；不创建量化扫描器，不连接 Execution Agent。
 

@@ -21,6 +21,21 @@ gate_result: observation_only
 handoff_status: research_only
 ```
 
+## 聚合比较表的合同边界
+
+上面的 `contract_scope` 和 `direction` 是本比较文件的历史展示范围，不是把三个案例压成一条合同；各行的 pattern、计数、父级状态、订单与空间可能不同，必须回到对应案例文件逐行读取：
+
+```text
+matrix_scope: aggregate_display_only
+row_contract_source: linked_case_file
+row_contract_scope: per_row
+row_contract_fields: contract_scope; evidence_header; parent_state; direction; primary_pattern; internal_label; state_transition; order_branch; actual_fill_or_open_skip; structural_stop; structural_invalidation; first_independent_obstacle; pre_entry_space_R; space_status; rough_R_R; research_state; trade_state; gate_result
+row_result_boundary: independent_replay_or_result_only
+historical_alias_policy: display_only_until_mapped
+```
+
+表中的 `direction`、`H1/H2`、`ABC` 和结果路径是比较视图的显示字段；它们不能覆盖链接案例自己的 canonical 字段。后续到达阻力、支撑或目标的描述只保留为路径审计，不得回写成事前证据或合并成胜率样本。
+
 ## 1. 三案例总表
 
 | 案例 | direction | A 腿 | B 腿 | H/L 计数 | 主要位置 | 日线直接交易几何 | 低周期/短线路径 | 研究标签 |

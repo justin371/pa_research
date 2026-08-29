@@ -21,6 +21,7 @@ daily_ema50_slope: unknown
 h_l_ema_slope_gate: pending
 event_context: unknown
 event_bucket: unknown
+parent_state: unclear
 directional_bias: changing
 direction: no_valid_direction
 primary_pattern: other
@@ -35,11 +36,16 @@ permission: no_direction
 gate_result: observation_only
 order_branch: observation_only
 actual_fill_or_open_skip: not_applicable
+structural_stop: pending
 structural_invalidation: pending
 first_independent_obstacle: unknown
 rough_space_to_first_obstacle_R: unknown
+pre_entry_space_R: unknown
+space_status: unknown
+rough_R_R: unknown
 research_state: pattern_like
 trade_state: not_authorized
+thesis_state: pending
 handoff_status: research_only
 ```
 

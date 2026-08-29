@@ -16,6 +16,7 @@
 - [`META 多重优势区域`](meta_multiple_edge.md)：位置汇聚背景，不是独立触发器；
 - [`概率原则学习参考`](probability_principles_pages_1_7.md)：外部启发式，只作学习材料，不进入胜率或回测基准；
 - [`TSLA/META 历史复盘`](reviews/2026-06-25-tsla-meta-example.md)：历史案例，不是实盘授权。
+- [`核心八个 Pattern 案例矩阵`](../research/core_pattern_case_matrix_CN.md) 与 [`ABC 决策矩阵`](../research/abc_decision_matrix_CN.md)：聚合导航视图，逐案 canonical 合同以链接案例为准。
 
 ### 当前审计追踪的历史视觉候选
 
@@ -44,6 +45,7 @@
 - [`视觉历史报告与 canonical authority schema 对齐审计`](../research/backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md)：核对六个活动视觉框架、历史报告、配对复核记录与 canonical 字段/状态轴，区分当前模板修复和历史事实别名。
 - [`remaining visual frameworks 合同边界审计`](../research/backtesting/remaining_visual_framework_contract_audit_2026-08-29_CN.md)：补齐其余视觉框架、订单分支协议和 pattern-specific 案例入口的 canonical 字段与历史别名边界；不新增样本或结果。
 - [`Pattern README 与基础视觉框架 canonical 输出覆盖审计`](../research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md)：核对 16 个 pattern README、8 个基础层、活动视觉复核卡和局部模板的 canonical 字段/枚举覆盖与索引入口。
+- [`Pattern 案例矩阵、策略入口与历史别名合同审计`](../research/backtesting/pattern_case_matrix_strategy_entry_contract_audit_2026-08-29_CN.md)：区分聚合展示行、逐案合同、事前空间/结果路径和历史显示别名；不新增样本或结果。
 - [`requiredFiles 与研究报告索引覆盖审计`](../research/backtesting/required_report_index_coverage_audit_2026-08-29_CN.md)：核对 validator requiredFiles 中研究报告与 canonical 索引的映射，不新增样本或结果。
 - [`统计结论、正例表述与授权边界一致性审计`](../research/backtesting/conclusion_boundary_consistency_audit_2026-08-29_CN.md)：统一统计状态别名、60% 待检验目标与研究/交接边界，不新增样本或结果。
 - [`视觉识别能力与图表 provenance 边界审计`](../research/backtesting/visual_capability_boundary_audit_2026-08-29_CN.md)：限定人工大体识别的研究用途，核对两年 Daily、重要高低点和 EMA 前置证据，不新增样本或结果。

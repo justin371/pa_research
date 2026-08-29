@@ -15,6 +15,21 @@
 
 案例的结论只依据入场决策时可见的结构。后续达到 MM、反转或盈利，只能作为路径审计，不能回写成原始入场证据。
 
+## 聚合矩阵的合同边界
+
+这张表是八个 pattern 的导航和缺口管理视图，不是八个完整案例合同，也不是一个把不同 pattern 合并后的统计 cohort。矩阵自身使用以下显示元数据；每一行的 canonical 值仍以所链接的案例文件为准：
+
+```text
+matrix_scope: aggregate_display_only
+row_contract_source: linked_case_file
+row_contract_scope: per_row
+row_contract_fields: contract_scope; evidence_header; parent_state; direction; primary_pattern; internal_label; state_transition; order_branch; actual_fill_or_open_skip; structural_stop; structural_invalidation; first_independent_obstacle; pre_entry_space_R; space_status; rough_R_R; research_state; trade_state; gate_result
+row_result_boundary: independent_replay_or_result_only
+historical_alias_policy: display_only_until_mapped
+```
+
+`条件性候选`、`边界 / no-trade` 和 `反例或当前缺口` 是展示列，不是可直接复制到新候选的状态值。目录名、H/L/三推等文字以及案例中保留的历史别名，都必须经过链接案例的 `primary_pattern`、`internal_label`、`parent_state` 和 `state_transition` 重新解释；缺失字段保持 `pending`/`unknown`，不因矩阵出现而补齐。后续路径或结果只作 `post_outcome_path_note` 级别的审计信息，不进入事前筛选或胜率分母。
+
 ## 八个 pattern 矩阵
 
 | Pattern | 条件性候选 | 边界 / no-trade | 反例或当前缺口 |

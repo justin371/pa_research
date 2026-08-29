@@ -194,7 +194,7 @@ class RequiredReportIndexCoverageTests(unittest.TestCase):
         for token in (
             "85 个必需文件",
             "58 个是",
-            "71 个是报告文件",
+            "72 个是报告文件",
             "没有孤立报告",
             "no-new-positive",
             "validated win-rate: not-computable",

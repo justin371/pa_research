@@ -50,6 +50,8 @@ Round4、Round5 与 TSLA 资产的 canonical provenance、两年 Daily/重要高
 
 其余视觉框架、订单分支协议和 pattern-specific 案例入口的字段补齐见[`remaining visual frameworks 合同边界审计`](remaining_visual_framework_contract_audit_2026-08-29_CN.md)：本轮只修复文档合同、validator 与回归边界，不新增样本或结果。
 
+聚合案例矩阵、Strategy inventory、历史比较表与 META 复盘的逐案合同边界见[`Pattern 案例矩阵、策略入口与历史别名合同审计`](pattern_case_matrix_strategy_entry_contract_audit_2026-08-29_CN.md)；它只修复展示/合同边界和缺失的 pending/unknown 字段，不新增样本或结果。
+
 BOP 多日回踩的独立准入清单见[`BOP 合同准入审计`](bop_contract_intake_audit_2026-08-28_CN.md)及[`bop_contract_intake_2026-08-28.csv`](bop_contract_intake_2026-08-28.csv)。该 CSV 只记录现有人工案例的接受、回测和边界状态，全部为 `contract_frozen=no`，不是回放输入。两类 intake 合计 25 行，按底层案例键归并为 22 个案例，其中 3 个案例同时出现在统一和 BOP 专项视图中；详细 schema、方向和引用核对见[`ABC/BOP intake schema 一致性审计`](abc_bop_intake_schema_consistency_audit_2026-08-29_CN.md)。
 
 ## 运行

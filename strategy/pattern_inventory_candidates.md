@@ -113,6 +113,28 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 
 当前各 pattern 家族的覆盖程度和真正缺失的视觉对照见 [`PA Pattern 覆盖审计`](../research/abc_pattern_coverage_audit_CN.md)。这份审计用于防止重复堆叠相似案例，不代表任何胜率或量化结论。
 
+### Inventory 行的合同边界
+
+本节是视觉导航 inventory，不是逐案合同、候选 CSV 或胜率 cohort。为了让“方向”和“当前状态”不被误读为授权字段，inventory 自身只声明以下显示元数据；canonical 值必须回到代表性入口文件逐行读取：
+
+```text
+inventory_scope: visual_navigation_only
+row_contract_source: linked_case_file
+row_contract_scope: per_row
+row_contract_fields: contract_scope; evidence_header; parent_state; direction; primary_pattern; internal_label; state_transition; order_branch; actual_fill_or_open_skip; structural_stop; structural_invalidation; first_independent_obstacle; pre_entry_space_R; space_status; rough_R_R; research_state; trade_state; gate_result
+row_result_boundary: independent_replay_or_result_only
+historical_alias_policy: display_only_until_mapped
+```
+
+| inventory 列 | 允许的显示语义 | 不能替代的 canonical 字段 |
+| --- | --- | --- |
+| `direction` | 该视觉入口当前值得研究的方向提示 | 代表性案例的 `direction`、`permission` 或交易授权 |
+| `当前状态` | 目录标签、路径注释或缺口提示 | `research_state`、`trade_state`、`gate_result`、`handoff_status` |
+| 候选 ID / 描述中的 pattern 词 | 历史显示别名或检索提示 | `primary_pattern`、`internal_label`、`parent_state`、`state_transition` |
+| `代表性入口` | 指向案例或框架的来源链接 | `contract_scope`、证据头、订单/空间和结果字段 |
+
+若代表性入口只是框架、比较矩阵或缺少完整案例合同，该行保持导航/观察用途；后续 `process-*`、`*-reached`、`opening-skip` 等词仍只是已记录的路径或订单事实，不进入事前状态，也不构成独立结果样本。
+
 ### 方向字段（索引层）
 
 本表新增独立的 `direction` 列。`long`、`short` 只表示该视觉入口当前可研究的方向，不表示交易授权、成交或胜率；`no_valid_direction` 表示该行是混合标的、框架/比较主题、状态转换，或当时没有冻结单一方向。单标的即使被 `valid_no_trade` 否决，也仍可保留其研究方向；混合筛选和框架行不能从标题里的 `BULL`/`BEAR` 猜成单一标的方向。完整候选卡和冻结合同仍必须逐行写 canonical `direction`，不能只依赖候选 ID 或中文描述。

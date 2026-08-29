@@ -219,6 +219,8 @@ Round4、Round5 与 TSLA 视觉资产的 provenance、两年 Daily、重要高�
 
 其余视觉框架、订单分支协议和 pattern-specific 案例入口的合同边界见[`remaining visual frameworks 合同边界审计`](../research/backtesting/remaining_visual_framework_contract_audit_2026-08-29_CN.md)：补齐证据头、`parent_state`、方向/主次标签、状态转换、订单/空间字段和历史别名边界，不新增样本或结果。
 
+聚合 Pattern 案例矩阵、Strategy inventory 与历史案例入口的逐案合同边界见[`Pattern 案例矩阵、策略入口与历史别名合同审计`](../research/backtesting/pattern_case_matrix_strategy_entry_contract_audit_2026-08-29_CN.md)：矩阵字段只作导航，历史显示别名不覆盖 canonical 主次标签、状态、订单或空间。
+
 优先 Pattern 的代表性视觉候选与正/反例矩阵见[`优先 Pattern 代表性视觉候选矩阵`](../research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)：每个案例只保留一个主标签，次标签、状态切换、订单合同和首障碍单独记录。
 
 BOP 真实多日回踩的专项审计见[`BOP 真实多日回踩候选审计`](../research/bop_multiday_pullback_candidate_audit_2026-08-24_CN.md)：当前区分了状态切换、同日回测、缺口重订和真正缺失的多日回踩正例。

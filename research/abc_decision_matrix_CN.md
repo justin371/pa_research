@@ -8,6 +8,21 @@
 
 所有案例都遵守同一条边界：用完整图表寻找样本，但每个入场判断只使用当时已经可见的背景、位置、信号、订单、结构止损和第一障碍。后来出现的 C 腿、MM 到位和盈利不能反推入场质量。
 
+## 聚合矩阵的合同边界
+
+本文件是跨案例的展示矩阵，不是逐案合同。为避免把合并单元格里的自然语言误读成冻结字段，矩阵自身只声明以下元数据；每个案例的 canonical 值必须回到其链接案例文件逐行读取：
+
+```text
+matrix_scope: aggregate_display_only
+row_contract_source: linked_case_file
+row_contract_scope: per_row
+row_contract_fields: contract_scope; evidence_header; parent_state; direction; primary_pattern; internal_label; state_transition; order_branch; actual_fill_or_open_skip; structural_stop; structural_invalidation; first_independent_obstacle; pre_entry_space_R; space_status; rough_R_R; research_state; trade_state; gate_result
+row_result_boundary: independent_replay_or_result_only
+historical_alias_policy: display_only_until_mapped
+```
+
+`方向与计数`、`订单与结构风险` 等列是阅读提示，不替代逐案的 `direction`、`primary_pattern`、`internal_label`、`state_transition` 或订单/空间字段。若某一行没有可定位的案例合同，或者把后续路径写在展示单元格里，该行只能作为历史导航/路径注释，不能进入候选、冻结合同或胜率分母。后续到达支撑、阻力、MM 或盈利的文字只属于 `post_outcome_path_note` 语义，不得反写入场前证据。
+
 ## 统一字段
 
 本矩阵使用[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。每行的方向必须单独归一为 `long`、`short` 或 `no_valid_direction`；“多头/空头”文字不能被省略。

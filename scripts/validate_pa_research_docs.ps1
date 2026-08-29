@@ -1801,6 +1801,96 @@ foreach ($relativePath in $currentPatternStatusCanonicalPaths) {
     }
 }
 
+$aggregateMatrixContractPaths = @(
+    @{ RelativePath = 'research/abc_decision_matrix_CN.md'; ScopeToken = 'matrix_scope: aggregate_display_only' },
+    @{ RelativePath = 'research/core_pattern_case_matrix_CN.md'; ScopeToken = 'matrix_scope: aggregate_display_only' },
+    @{ RelativePath = 'research/tsla_abc_h1_h2_comparison_matrix.md'; ScopeToken = 'matrix_scope: aggregate_display_only' },
+    @{ RelativePath = 'research/tsla_bearish_abc_comparison_matrix.md'; ScopeToken = 'matrix_scope: aggregate_display_only' },
+    @{ RelativePath = 'strategy/pattern_inventory_candidates.md'; ScopeToken = 'inventory_scope: visual_navigation_only' }
+)
+$aggregateMatrixContractTokens = @(
+    'row_contract_source: linked_case_file',
+    'row_contract_scope: per_row',
+    'row_contract_fields: contract_scope; evidence_header; parent_state; direction; primary_pattern; internal_label; state_transition; order_branch; actual_fill_or_open_skip; structural_stop; structural_invalidation; first_independent_obstacle; pre_entry_space_R; space_status; rough_R_R; research_state; trade_state; gate_result',
+    'row_result_boundary: independent_replay_or_result_only',
+    'historical_alias_policy: display_only_until_mapped'
+)
+foreach ($entry in $aggregateMatrixContractPaths) {
+    $relativePath = [string]$entry.RelativePath
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    if (-not $content.Contains([string]$entry.ScopeToken)) {
+        Add-ValidationError "aggregate matrix scope token is missing: $relativePath"
+    }
+    foreach ($token in $aggregateMatrixContractTokens) {
+        if (-not $content.Contains($token)) {
+            Add-ValidationError "aggregate matrix contract token '$token' is missing: $relativePath"
+        }
+    }
+}
+
+$historicalMetaReviewRelativePath = 'strategy/reviews/2026-06-25-tsla-meta-example.md'
+$historicalMetaReviewPath = Join-Path -Path $repoRoot -ChildPath ($historicalMetaReviewRelativePath -replace '/', '\')
+if (Test-Path -LiteralPath $historicalMetaReviewPath -PathType Leaf) {
+    $historicalMetaReviewContent = Get-Utf8Text -Path $historicalMetaReviewPath
+    foreach ($token in @(
+        'contract_scope: historical_context_only',
+        'data_source: historical chart note',
+        'data_status: incomplete',
+        'as_of_time: unknown',
+        'timeframes_seen: Daily / unknown lower timeframe',
+        'chart_scope: partial',
+        'daily_context_window: unavailable',
+        'major_high_low_review: unavailable',
+        'ema20_50_200_review: unavailable',
+        'parent_state: unclear',
+        'direction: no_valid_direction',
+        'primary_pattern: other',
+        'internal_label: pending',
+        'state_transition: none',
+        'order_branch: observation_only',
+        'actual_fill_or_open_skip: not_applicable',
+        'structural_stop: pending',
+        'structural_invalidation: pending',
+        'first_independent_obstacle: unknown',
+        'pre_entry_space_R: unknown',
+        'space_status: unknown',
+        'rough_R_R: unknown',
+        'research_state: pattern_like',
+        'trade_state: not_authorized',
+        'thesis_state: pending',
+        'gate_result: observation_only',
+        'handoff_status: research_only'
+    )) {
+        if (-not $historicalMetaReviewContent.Contains($token)) {
+            Add-ValidationError "historical META review canonical token '$token' is missing"
+        }
+    }
+    if ($historicalMetaReviewContent -match '(?m)^\s*outcome\s*:') {
+        Add-ValidationError 'historical META review must not add an outcome field without an independent replay/result record'
+    }
+}
+
+$patternCaseMatrixAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/pattern_case_matrix_strategy_entry_contract_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $patternCaseMatrixAuditPath -PathType Leaf) {
+    $patternCaseMatrixAuditContent = Get-Utf8Text -Path $patternCaseMatrixAuditPath
+    foreach ($token in @(
+        'matrix_scope: aggregate_display_only',
+        'inventory_scope: visual_navigation_only',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        '不修改 Codex Trading',
+        '不创建量化扫描器',
+        '不连接 Execution Agent'
+    )) {
+        if (-not $patternCaseMatrixAuditContent.Contains($token)) {
+            Add-ValidationError "missing pattern case matrix contract audit token '$token'"
+        }
+    }
+}
+
 $dailyCandidateReviewCardPath = Join-Path -Path $repoRoot -ChildPath 'docs/daily_candidate_review_card_CN.md'
 if (Test-Path -LiteralPath $dailyCandidateReviewCardPath -PathType Leaf) {
     $dailyCandidateReviewCardContent = Get-Utf8Text -Path $dailyCandidateReviewCardPath
