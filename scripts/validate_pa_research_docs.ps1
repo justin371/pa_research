@@ -336,6 +336,27 @@ $externalVisualManifestAbsolutePath = [IO.Path]::GetFullPath(
 if ($canonicalResearchIndexLinkedPaths.Contains($externalVisualManifestAbsolutePath) -eq $false) {
     Add-ValidationError "external visual artifact manifest is not referenced by a canonical index: $externalVisualManifestRelativePath"
 }
+$backtestingMachineArtifactPaths = @(
+    Get-ChildItem -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'research/backtesting') -File |
+        Where-Object { $_.Extension -in @('.csv', '.json') }
+)
+foreach ($artifactFile in $backtestingMachineArtifactPaths) {
+    if (-not $canonicalResearchIndexLinkedPaths.Contains($artifactFile.FullName)) {
+        $relativePath = $artifactFile.FullName.Substring($repoRoot.Length + 1).Replace('\', '/')
+        Add-ValidationError "backtesting machine artifact is not referenced by a canonical index: $relativePath"
+    }
+}
+$backtestingExecutableEntryPaths = @(
+    [IO.Path]::GetFullPath((Join-Path -Path $repoRoot -ChildPath 'scripts/pa_research_backtest.py'))
+    [IO.Path]::GetFullPath((Join-Path -Path $repoRoot -ChildPath 'pa_research_backtest/engine.py'))
+    [IO.Path]::GetFullPath((Join-Path -Path $repoRoot -ChildPath 'scripts/validate_pa_research_artifact.py'))
+)
+foreach ($entryPath in $backtestingExecutableEntryPaths) {
+    if (-not $canonicalResearchIndexLinkedPaths.Contains($entryPath)) {
+        $relativePath = $entryPath.Substring($repoRoot.Length + 1).Replace('\', '/')
+        Add-ValidationError "backtesting executable entry is not referenced by a canonical index: $relativePath"
+    }
+}
 
 $coreBoundaryIndexPaths = @(
     'README.md',

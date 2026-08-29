@@ -104,6 +104,22 @@ def backtesting_report_paths() -> list[str]:
     )
 
 
+def backtesting_machine_artifact_paths() -> list[str]:
+    return sorted(
+        f"research/backtesting/{path.name}"
+        for path in BACKTEST_ROOT.iterdir()
+        if path.is_file() and path.suffix.lower() in {".csv", ".json"}
+    )
+
+
+def backtesting_executable_entry_paths() -> list[str]:
+    return [
+        "scripts/pa_research_backtest.py",
+        "pa_research_backtest/engine.py",
+        "scripts/validate_pa_research_artifact.py",
+    ]
+
+
 class RequiredReportIndexCoverageTests(unittest.TestCase):
     def test_validator_declares_required_report_index_guard(self):
         text = read(VALIDATOR_PATH)
@@ -116,6 +132,16 @@ class RequiredReportIndexCoverageTests(unittest.TestCase):
         )
         self.assertIn(
             "research root report is not referenced by another Markdown file",
+            text,
+        )
+        self.assertIn("$backtestingMachineArtifactPaths", text)
+        self.assertIn(
+            "backtesting machine artifact is not referenced by a canonical index",
+            text,
+        )
+        self.assertIn("$backtestingExecutableEntryPaths", text)
+        self.assertIn(
+            "backtesting executable entry is not referenced by a canonical index",
             text,
         )
 
@@ -137,6 +163,21 @@ class RequiredReportIndexCoverageTests(unittest.TestCase):
             if path not in indexed_paths
         ]
         self.assertEqual(missing, [])
+
+    def test_all_backtesting_machine_artifacts_and_entries_are_in_a_canonical_index(self):
+        indexed_paths = canonical_index_linked_paths()
+        missing_artifacts = [
+            path
+            for path in backtesting_machine_artifact_paths()
+            if path not in indexed_paths
+        ]
+        missing_entries = [
+            path
+            for path in backtesting_executable_entry_paths()
+            if path not in indexed_paths
+        ]
+        self.assertEqual(missing_artifacts, [])
+        self.assertEqual(missing_entries, [])
 
     def test_all_top_level_research_reports_are_reachable_from_another_markdown_file(self):
         missing = sorted(

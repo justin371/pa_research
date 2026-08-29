@@ -8,6 +8,8 @@
 
 统一边界：`v0.x` 规则/合同与研究引擎 `0.3.9` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；不创建量化扫描器，不连接 Execution Agent。
 
+研究实现与校验入口（仅限 PA Research）见：[`回放 CLI`](../../scripts/pa_research_backtest.py)、[`回放 engine`](../../pa_research_backtest/engine.py) 和 [`artifact validator`](../../scripts/validate_pa_research_artifact.py)。这些入口只处理冻结合同、历史价格输入和研究 artifact，不连接账户、券商或 Execution Agent。
+
 当前 PA Research checkout 不包含券商或账户的真实交易日志；研究合同、历史回放结果和运行 metadata 都不能代替真实交易日志。
 
 当前人工冻结合同的方向、H/L 标签、事件、空间和 lineage 覆盖见[`人工冻结合同覆盖审计`](contract_coverage_audit_2026-08-28_CN.md)。研究记录与当前回放输入的字段边界见[`合同权威与字段一致性审计`](contract_authority_consistency_audit_2026-08-29_CN.md)；现有 CSV inventory 与资格隔离见[`合同 CSV inventory 与资格边界审计`](contract_csv_inventory_audit_2026-08-29_CN.md)；validator 与 engine 的合同 parity 见[`文档 validator 与 engine 合同 parity 审计`](validator_engine_contract_parity_audit_2026-08-29_CN.md)；报告、索引与 inventory 的当前一致性见[`报告、索引与 inventory 一致性审计`](report_index_inventory_consistency_audit_2026-08-29_CN.md)；各批次报告数字、方向/标签、事件/空间和 lineage 的逐批重算见[`批次报告数字与分层一致性审计`](batch_report_numeric_consistency_audit_2026-08-29_CN.md)。这些审计只检查合同记录/边界完整性，不代表胜率验证。
@@ -51,6 +53,8 @@ BOP 多日回踩的独立准入清单见[`BOP 合同准入审计`](bop_contract_
 ## 运行
 
 在仓库根目录创建临时虚拟环境或使用已准备好的 Python 环境，安装固定依赖：
+
+示例输入文件：[`prices.example.csv`](prices.example.csv) 与 [`contracts.example.csv`](contracts.example.csv)。它们只用于最小 round-trip 示例，不计入研究统计分母。
 
 ```powershell
 py -3 -m pip install -r .\requirements-backtesting.txt

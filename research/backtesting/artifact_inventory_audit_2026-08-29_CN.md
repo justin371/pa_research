@@ -33,6 +33,12 @@
 
 `abc_bop_contract_intake_2026-08-28.csv`、`bop_contract_intake_2026-08-28.csv` 等候选/intake 文件同样不是 `results.csv`，不具备结果阶段的成交、horizon、`realized_R` 和 artifact provenance，不得被重命名或推断成回放结果。对应的 `*_replay_*.md` 是人工研究报告，不替代三件套文件。
 
+## 机器输入与实现入口可发现性复核（2026-08-29）
+
+当前 `research/backtesting/` 顶层有 18 个 CSV 和 1 个 JSON 机器产物入口：7 个冻结合同 CSV、1 个回放示例合同 CSV、2 个 intake CSV、8 个价格 CSV（含示例价格文件），以及 1 个外部视觉 artifact manifest JSON。19 个文件均由 canonical index 的真实本地 Markdown 链接承载；示例 `prices.example.csv` 与 `contracts.example.csv` 也已在回放 README 中直接链接，避免只能从代码块或历史审计正文猜路径。
+
+回放 CLI、`pa_research_backtest/engine.py` 和只读 artifact validator 也由回放 README 直接链接。它们的职责是研究合同、历史价格和 provenance 校验，不是量化扫描器、券商连接器或 Execution Agent。validator 会拒绝新增后失去 canonical 入口的 backtesting CSV/JSON 或实现入口，但不会把输入文件变成回放结果，也不会改变任何历史样本或 engine 有效语义。
+
 ## 三、历史边界与后续规则
 
 此前审计曾记录 13 份旧 `run_metadata.json` 的历史 provenance 不完整状态；这些文件不在当前 checkout 中，本轮不虚构路径、不重新解释数字，也不把它们当作当前 artifact。即使未来发现旧文件，也必须由 validator 返回 `historical_incomplete`，不能与当前 engine `0.3.9` 输出拼接。
