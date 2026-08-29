@@ -55,9 +55,11 @@ opening-skip、未成交、`observation_only`、pending 和 ambiguous intrabar �
 | L1 | 0 | 0 | 0 | 0 / 0 | 不可计算 | 未形成样本 |
 | L2 | 0 | 0 | 0 | 0 / 0 | 不可计算 | 未形成样本 |
 | `space_R >= 1.00` | 2 | 2 | 2 | 0 / 2 | 0.00% | -1.5090R | not-validated |
-| strict `space_R >= 1.50` | 2 | 2 | 2 | 0 / 2 | 0.00% | -1.5090R | not-validated |
+| 事前空间 `>=1.50R` 敏感性子集 | 2 | 2 | 2 | 0 / 2 | 0.00% | -1.5090R | 附加敏感性分层；not-validated |
 | META present | 2 | 2 | 2 | 0 / 2 | 0.00% | -1.5090R | not-validated |
 | META absent | 0 | 0 | 0 | 0 / 0 | 不可计算 | 未形成样本 |
+
+表中的 `>=1.50R` 只是本批对已冻结数值做的附加敏感性切片，不是当前 canonical `strict_ge_1R` 的替代阈值；两条合同的 CSV `space_status` 均为 `strict_ge_1R`。
 
 按 lineage 分层：`CBOE-2025-05-reset-h1` 为 1 负、`ROST-2026-01-post-earnings-reset-h1` 为 1 负。每个 lineage 只有一个样本，不能据此区分标的效应、市场状态或独立性。
 

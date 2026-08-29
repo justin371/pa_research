@@ -164,6 +164,7 @@ $requiredFiles = @(
     'research/backtesting/cross_pattern_statistics_isolation_audit_2026-08-29_CN.md',
     'research/backtesting/event_space_eligibility_audit_2026-08-29_CN.md',
     'research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md',
+    'research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/replay_outcome_denominator_audit_2026-08-29_CN.md',
     'research/backtesting/replay_lineage_independence_audit_2026-08-29_CN.md',
     'research/backtesting/replay_provenance_reproducibility_audit_2026-08-29_CN.md',
@@ -762,6 +763,21 @@ if (Test-Path -LiteralPath $eventSpaceLineageAuditPath -PathType Leaf) {
     )) {
         if (-not $eventSpaceLineageAuditContent.Contains($token)) {
             Add-ValidationError "missing event/space/lineage-consistency-audit token '$token'"
+        }
+    }
+}
+
+$hlReportSpaceVersionAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $hlReportSpaceVersionAuditPath -PathType Leaf) {
+    $hlReportSpaceVersionAuditContent = Get-Utf8Text -Path $hlReportSpaceVersionAuditPath
+    foreach ($token in @(
+        'ENGINE_VERSION = 0.3.9', 'pre_entry_space_R', 'space_status', 'strict_ge_1R',
+        'borderline_ge_1R', 'unknown_contract_space', '历史几何', '1.40R', '1.50R',
+        '60%', 'no-new-positive', 'validated win-rate: not-computable',
+        'PA Research only', 'no Codex Trading', 'no quantitative scanner', 'no Execution Agent'
+    )) {
+        if (-not $hlReportSpaceVersionAuditContent.Contains($token)) {
+            Add-ValidationError "missing H/L report space/version/conclusion-audit token '$token'"
         }
     }
 }

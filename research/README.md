@@ -45,6 +45,7 @@
 - [`视觉资产与事前证据边界审计（2026-08-29）`](backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md)：核对 11 个视觉资产目录、105 张 PNG、冻结合同截止图、两年 Daily/EMA/重要高低点字段、结果隔离和外部 artifact 边界；不新增样本，不把人工抽查升级为胜率证据；
 - [`外部视觉 artifact provenance 审计（2026-08-29）`](backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md)：固定 `hl_next4/hl_next5` 的外部 PNG 数量、哈希和合同映射，明确 ROST 2026-01-07 缺少决策日图、后一天图不能替代；不复制外部缓存或改写历史结果；
 - [`回放版本与结论表述一致性审计（2026-08-29）`](backtesting/version_conclusion_consistency_audit_2026-08-29_CN.md)：统一当前 engine `0.3.9`、历史版本与 `no-new-positive`/`validated win-rate: not-computable` 的语境，保留历史点估计但不升级为验证统计；
+- [`H/L 报告空间、版本与结论表述一致性审计（2026-08-29）`](backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md)：区分旧合同历史几何与当前显式 `space_status`，将 1.40R/1.50R 标为敏感性分层，并统一 H/L 报告的版本、60% 目标和 `no-new-positive` 边界；不新增样本或结果；
 - [`ABC/BOP 合同准入审计（2026-08-28）`](backtesting/abc_bop_contract_intake_audit_2026-08-28_CN.md)：把现有 ABC/BOP 视觉案例分成条件准入和边界案例；intake 清单不进入回放分母；
 - [`ABC 候选合同冻结复核（2026-08-28）`](backtesting/abc_bop_candidate_freeze_review_2026-08-28_CN.md)：逐字段复核 NFLX/TSM 是否具备冻结条件；两者仍未冻结，不增加回放分母；
 - [`多头 ABC/H1/H2 候选合同审计（2026-08-28）`](backtesting/abc_bullish_candidate_contract_audit_2026-08-28_CN.md)：逐字段复核 V、NVDA、KLAC、CRWD；当前没有可冻结的新多头合同，不增加回放分母；
