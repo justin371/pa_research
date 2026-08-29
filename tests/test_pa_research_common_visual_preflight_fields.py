@@ -142,6 +142,9 @@ class CommonVisualPreflightFieldTests(unittest.TestCase):
                 self.assertTrue("重要高点" in content or "主要高点" in content)
                 self.assertTrue("重要低点" in content or "主要低点" in content)
                 self.assertIn("EMA20/50/200", content)
+                self.assertIn(
+                    "direction: long / short / no_valid_direction", content
+                )
                 self.assertIn("pending", content)
                 self.assertTrue(
                     "第一独立障碍" in content

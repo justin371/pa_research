@@ -1232,6 +1232,7 @@ foreach ($relativePath in $patternCaseReadmeRelativePaths) {
         'timeframes_seen',
         '至少两年的 Daily 左侧背景',
         'EMA20/50/200',
+        'direction: long / short / no_valid_direction',
         'pending',
         '状态边界：关键图表、事件、触发或空间证据尚不完整时使用',
         '形态、方向和入场几何已可复核但已知硬闸门否决交易时使用',
@@ -1265,6 +1266,28 @@ foreach ($relativePath in $patternCaseReadmeRelativePaths) {
     if ($relativePath -eq 'patterns/05_failed_breakout_climax/README.md' -and
         $content -match '(?m)^final_state:') {
         Add-ValidationError 'pattern 05 retains ambiguous final_state field; use breakout_climax_state plus canonical state axes'
+    }
+}
+
+$currentPatternStatusCanonicalPaths = @(
+    'research/abc_decision_matrix_CN.md',
+    'research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md',
+    'research/order_branch_visual_protocol_CN.md',
+    'research/largecap_visual_screen_2024_CN.md'
+)
+foreach ($relativePath in $currentPatternStatusCanonicalPaths) {
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    foreach ($legacyStatusPattern in @(
+        '(?<![\w-])research_positive_candidate(?![\w-])',
+        'research_positive conditional',
+        '(?<![\w-])valid(?:-| )no-trade(?![\w-])'
+    )) {
+        if ($content -match $legacyStatusPattern) {
+            Add-ValidationError "legacy status alias in current pattern entry: $relativePath"
+            break
+        }
     }
 }
 

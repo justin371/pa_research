@@ -65,13 +65,17 @@ state_transition: breakout_acceptance
 2. 统一输出合同、日线规则、patterns 索引和 16 个入口现在都明确 `daily_candidate` 的 `ABC_CONT/BOP` 白名单，以及 H3/L3 与 `range_edge_three_push` 的关系边界。
 3. 16 个 pattern README 都明确：边界被接受后要写 `primary_pattern: BOP` 与 `state_transition: breakout_acceptance`，原 pattern/反向 thesis 和旧订单合同失效并重新冻结几何。
 4. 视觉识别冒烟报告中的自由文本 `primary_pattern:` 会被误读为统一合同字段，已改为 `visual_pattern_label:`，并声明只有进入完整研究记录后才按统一合同收敛。
+5. 16 个 pattern README 现在都在入口处明确写出 `direction: long / short / no_valid_direction`；三推目录另行声明 `attempt_direction` 不能替代 canonical `direction`。
+6. adopted 的 ABC 决策矩阵、优先候选矩阵、订单分支协议和大盘筛选记录已把当前状态统一为 `research_positive_conditional`/`valid_no_trade`；历史别名仍只留在明确的别名说明中。
 
 ## 4. 验证与结论
 
 - 16 个 pattern 入口均存在，并包含统一映射和 BOP 状态迁移边界；
+- 16 个 pattern 入口均显式声明 canonical `direction` 枚举；
 - 日线候选卡与日线规则保持 `primary_pattern: ABC_CONT / BOP`；
 - `H1/H2/L1/L2` 不再作为视觉卡的 pattern family 主标签，`H3/L3` 与 `range_edge_three_push` 保持独立字段；
 - 冒烟报告不再把自由文本视觉名称伪装成统一 `primary_pattern`；
+- 当前决策/订单入口不再把正向条件或有效不交易写成旧别名；
 - 本轮没有新增样本、成交或统计分母，`validated win-rate: not-computable`，结论保持 `no-new-positive`。
 
 范围声明：`PA Research only; no Codex Trading; no quantitative scanner; no Execution Agent`。本轮只修复文档映射和回归守卫，不改变回放 engine 的有效语义。

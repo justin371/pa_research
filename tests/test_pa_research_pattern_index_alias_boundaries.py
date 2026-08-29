@@ -130,6 +130,28 @@ class PatternIndexAliasBoundaryTests(unittest.TestCase):
         ):
             self.assertIn(token, report, token)
 
+    def test_current_decision_entries_use_canonical_status_aliases(self):
+        current_paths = (
+            REPO_ROOT / "research" / "abc_decision_matrix_CN.md",
+            REPO_ROOT / "research" / "priority_pattern_visual_candidate_matrix_2026-08-24_CN.md",
+            REPO_ROOT / "research" / "order_branch_visual_protocol_CN.md",
+            REPO_ROOT / "research" / "largecap_visual_screen_2024_CN.md",
+        )
+        for path in current_paths:
+            content = text(path)
+            with self.subTest(path=path.as_posix()):
+                self.assertNotIn("research_positive_candidate", content)
+                self.assertNotIn("research_positive conditional", content)
+                self.assertIsNone(
+                    re.search(r"(?<![\w-])valid(?:-| )no-trade(?![\w-])", content)
+                )
+
+        protocol = text(REPO_ROOT / "research" / "order_branch_visual_protocol_CN.md")
+        self.assertIn("research_positive_conditional", protocol)
+        validator = text(REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1")
+        self.assertIn("$currentPatternStatusCanonicalPaths", validator)
+        self.assertIn("legacy status alias in current pattern entry", validator)
+
 
 if __name__ == "__main__":
     unittest.main()

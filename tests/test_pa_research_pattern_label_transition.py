@@ -86,6 +86,9 @@ class PatternLabelTransitionTests(unittest.TestCase):
         for directory in PATTERN_DIRS:
             content = read(PATTERNS_ROOT / directory / "README.md")
             self.assertIn("统一合同映射：", content, directory)
+            self.assertIn(
+                "direction: long / short / no_valid_direction", content, directory
+            )
             self.assertIn("BOP 状态迁移：若事前可见边界被日线强收盘越过", content, directory)
             self.assertIn("state_transition: breakout_acceptance", content, directory)
             self.assertIn("旧订单合同失效", content, directory)
