@@ -10,10 +10,10 @@
 
 ## 事实核对
 
-- validator 的 `$requiredFiles` 当前包含 83 个必需文件；排除 README 后，其中 56 个是 `research/` 或 `research/backtesting/` 直接子目录下的研究报告；
-- 当前 `research/backtesting/` 有 69 个 Markdown 文件，其中 68 个是报告文件，另 1 个是本 section README；
-- 56 个 required research report paths 全部至少出现在一个 canonical 索引中；68 个 backtesting 报告文件也全部至少出现在一个 canonical 索引中，没有孤立报告；
-- `research/README.md` 是研究报告的综合入口，`research/backtesting/README.md` 是回放/合同/版本边界的重点入口，不要求把全部历史审计报告逐条重复到每一个 section README；因此个别报告只在综合入口和相关专题入口出现，不属于遗漏；
+- validator 的 `$requiredFiles` 当前包含 85 个必需文件；排除 README 后，其中 58 个是 `research/` 或 `research/backtesting/` 直接子目录下的研究报告；
+- 当前 `research/backtesting/` 有 71 个 Markdown 文件，其中 70 个是报告文件，另 1 个是本 section README；
+- 58 个 required research report paths 全部通过 canonical 索引中的真实本地 Markdown 链接覆盖；70 个 backtesting 报告文件也全部通过真实本地链接覆盖，没有孤立报告；
+- `research/README.md` 是研究报告的综合重点入口，覆盖 requiredFiles 中的研究报告和本 section 的重点历史报告；`research/backtesting/README.md` 是回放/合同/版本边界的重点入口，不要求把全部历史审计报告逐条重复到每一个 section README；因此个别报告只在综合重点入口和相关专题入口出现，不属于遗漏；
 - 已将本报告加入 `docs/README.md`、`research/README.md`、`research/backtesting/README.md` 和 `strategy/README.md`，并把覆盖规则加入文档 validator，后续新增 required research report 若未进入任一 canonical 索引会直接失败。
 
 ## 重复与断链边界
@@ -25,3 +25,11 @@
 - 本轮没有发现研究报告孤立、canonical 索引断链或 requiredFiles 漏列的事实问题；新增的是自动覆盖守卫和回归测试；
 - 文档、索引与覆盖检查不产生行情、成交、回放结果或胜率分母；结论保持 `no-new-positive`，`validated win-rate: not-computable`；
 - 本报告只属于 `PA Research only`，不修改 Codex Trading，不创建量化扫描器，不连接 Futu/OpenD，不连接 Execution Agent。
+
+## 追加当前计数与真实链接复核（2026-08-29）
+
+后续文档审计发现，本报告最初记录的 `83 / 56 / 69 / 68` 是前一时点快照；随着两个后续报告进入当前 checkout，实际基线已变为 `85` 个 requiredFiles、`58` 个 required research reports、`71` 个 backtesting Markdown 文件和 `70` 个 backtesting reports。上述事实计数已更新，研究结论没有变化。
+
+同时，原覆盖守卫以报告文件名是否出现在索引文本中作为判断条件，存在“正文提到文件名但没有 Markdown 链接”的误判可能。现已改为解析 canonical 索引中的本地 Markdown 链接、按索引所在目录解析目标并与仓库内规范化路径比较；required research reports 与 tracked historical visual candidates 均使用该真实链接集合。回归测试同步采用同一语义。
+
+当前复核仍确认没有孤立报告或 canonical 索引断链；本次只修正索引覆盖校验和事实快照，不增加样本、CSV、回放结果或 engine 有效语义。结论保持 `no-new-positive`、`validated win-rate: not-computable`；本文件仍只属于 `PA Research only`，不修改 Codex Trading，不创建量化扫描器，不连接 Execution Agent。

@@ -143,6 +143,57 @@ function Test-PathInsideRepo {
     }
 }
 
+function Get-LocalMarkdownLinkResolvedPaths {
+    param(
+        [Parameter(Mandatory)][string]$SourcePath,
+        [Parameter(Mandatory)][string]$Content
+    )
+
+    $resolvedPaths = [System.Collections.Generic.List[string]]::new()
+    foreach ($match in [regex]::Matches(
+        $Content,
+        '(?<!\!)\[[^\]]*\]\(([^)\r\n]+)\)|!\[[^\]]*\]\(([^)\r\n]+)\)'
+    )) {
+        $target = if ($match.Groups[1].Success) { $match.Groups[1].Value } else { $match.Groups[2].Value }
+        $target = $target.Trim()
+        if ($target.StartsWith('<') -and $target.EndsWith('>')) {
+            $target = $target.Substring(1, $target.Length - 2)
+        }
+        if ([string]::IsNullOrWhiteSpace($target) -or $target.StartsWith('#')) {
+            continue
+        }
+        if ($target -match '^(?i)(?:[a-z][a-z0-9+.-]*:|//)') {
+            continue
+        }
+        $fragmentIndex = $target.IndexOf('#')
+        if ($fragmentIndex -ge 0) {
+            $target = $target.Substring(0, $fragmentIndex)
+        }
+        $queryIndex = $target.IndexOf('?')
+        if ($queryIndex -ge 0) {
+            $target = $target.Substring(0, $queryIndex)
+        }
+        $target = $target.Trim()
+        if ([string]::IsNullOrWhiteSpace($target) -or [IO.Path]::IsPathRooted($target)) {
+            continue
+        }
+
+        try {
+            $sourceDirectory = Split-Path -Parent $SourcePath
+            $normalizedTarget = $target -replace '/', [IO.Path]::DirectorySeparatorChar
+            $resolved = [IO.Path]::GetFullPath((Join-Path -Path $sourceDirectory -ChildPath $normalizedTarget))
+        } catch {
+            continue
+        }
+        $rootWithSeparator = $repoRoot.TrimEnd('\') + '\'
+        if ($resolved.Equals($repoRoot, [StringComparison]::OrdinalIgnoreCase) -or
+            $resolved.StartsWith($rootWithSeparator, [StringComparison]::OrdinalIgnoreCase)) {
+            [void]$resolvedPaths.Add($resolved)
+        }
+    }
+    return $resolvedPaths.ToArray()
+}
+
 $requiredFiles = @(
     'README.md',
     'docs/README.md',
@@ -246,10 +297,16 @@ $canonicalResearchIndexRelativePaths = @(
     'foundations/README.md',
     'strategy/README.md'
 )
-$canonicalResearchIndexContents = foreach ($indexRelativePath in $canonicalResearchIndexRelativePaths) {
+$canonicalResearchIndexLinkedPaths = [System.Collections.Generic.HashSet[string]]::new(
+    [StringComparer]::OrdinalIgnoreCase
+)
+foreach ($indexRelativePath in $canonicalResearchIndexRelativePaths) {
     $indexAbsolutePath = Join-Path -Path $repoRoot -ChildPath ($indexRelativePath -replace '/', '\')
     if (Test-Path -LiteralPath $indexAbsolutePath -PathType Leaf) {
-        Get-Utf8Text -Path $indexAbsolutePath
+        $indexContent = Get-Utf8Text -Path $indexAbsolutePath
+        foreach ($resolvedPath in @(Get-LocalMarkdownLinkResolvedPaths -SourcePath $indexAbsolutePath -Content $indexContent)) {
+            [void]$canonicalResearchIndexLinkedPaths.Add($resolvedPath)
+        }
     }
 }
 $requiredResearchReportPaths = @($requiredFiles | Where-Object {
@@ -257,9 +314,8 @@ $requiredResearchReportPaths = @($requiredFiles | Where-Object {
     $_ -notmatch '/README\.md$'
 })
 foreach ($relativePath in $requiredResearchReportPaths) {
-    $fileName = [IO.Path]::GetFileName($relativePath)
-    $indexMatches = @($canonicalResearchIndexContents | Where-Object { $_.Contains($fileName) })
-    if ($indexMatches.Count -eq 0) {
+    $expectedPath = [IO.Path]::GetFullPath((Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')))
+    if (-not $canonicalResearchIndexLinkedPaths.Contains($expectedPath)) {
         Add-ValidationError "required research report is not referenced by a canonical index: $relativePath"
     }
 }
@@ -300,9 +356,8 @@ $trackedHistoricalVisualCandidatePaths = @(
     'research/visual_screen_candidate_grid_2024_2025_CN.md'
 )
 foreach ($relativePath in $trackedHistoricalVisualCandidatePaths) {
-    $fileName = [IO.Path]::GetFileName($relativePath)
-    $indexMatches = @($canonicalResearchIndexContents | Where-Object { $_.Contains($fileName) })
-    if ($indexMatches.Count -eq 0) {
+    $expectedPath = [IO.Path]::GetFullPath((Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')))
+    if (-not $canonicalResearchIndexLinkedPaths.Contains($expectedPath)) {
         Add-ValidationError "tracked historical visual candidate is not referenced by a canonical index: $relativePath"
     }
 }

@@ -80,6 +80,7 @@
 - [`BOP 合同准入审计（2026-08-28）`](backtesting/bop_contract_intake_audit_2026-08-28_CN.md)：逐案隔离接受、同日回测、缺口重订和相邻 H/L/ABC 案例；当前没有日线级多日 BOP 正向候选；
 - [`PA 图表视觉识别冒烟验收`](visual_recognition_smoke_test_2026-08-24_CN.md)：图表识别能力、两年背景和当前 acceptance-pending 状态。
 - [`三推/H3-L3 视觉证据缺口审计`](three_push_h3_l3_visual_evidence_gap_audit_2026-08-24_CN.md)：区分衰竭、扩张/高潮、区间重复和通道延续，并保留 KLAC 条件候选与 L3 `no-new-positive` 边界。
+- [`Round4 历史图表视觉练习`](visual_recognition_round4_historical_practice_2026-08-24_CN.md)：历史图表练习、H/L/ABC 复核和 Daily 左侧不足两年的证据边界。
 - [`Round5 两年 Daily 左侧背景视觉练习`](visual_recognition_round5_two_year_daily_2026-08-24_CN.md)：4 个标的、8 个历史截断案例的两年背景、重要高低点、EMA 和 H/L/三推边界。
 - [`历史视觉证据与 canonical 边界审计`](backtesting/visual_evidence_canonical_boundary_audit_2026-08-29_CN.md)：统一三推/H-L 历史显示标签、两年背景证据头、方向、订单/空间和统计隔离。
 - [`视觉识别冒烟、快筛协议与 Round2/Round3 资产 canonical 边界审计`](backtesting/visual_recognition_canonical_boundary_audit_2026-08-29_CN.md)：核对冒烟/快筛字段映射、两年 Daily/重要高低点/EMA provenance、Round2/Round3 局部资产和 `no-new-positive` 边界；不新增样本或结果。
