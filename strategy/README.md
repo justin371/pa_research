@@ -29,6 +29,7 @@
 - [`H/L EMA 闸门、回调位置与报告分母一致性审计`](../research/backtesting/hl_ema_gate_report_consistency_audit_2026-08-29_CN.md)：核对 EMA 方向、回调位置、eligible/observation/pending 与报告分母，并固定 validator 的反向 gate/未知斜率边界。
 - [`H/L 回调位置文本语义与方向边界审计`](../research/backtesting/hl_pullback_location_semantics_audit_2026-08-29_CN.md)：固定自由文本位置、support/role-reversal、事件位置与 canonical 方向/EMA gate 的阅读边界。
 - [`H/L META 字段与授权边界审计`](../research/backtesting/hl_meta_boundary_audit_2026-08-29_CN.md)：核对 META 状态、组件、空间和授权边界，并固定 `pending` 不属于 `meta_confluence` 枚举。
+- [`H/L 视觉前置证据与冻结资格审计`](../research/backtesting/hl_visual_preflight_contract_audit_2026-08-29_CN.md)：核对两年 Daily、重要高低点、EMA20/50/200 和决策日图像 provenance，不把字段冻结误当成完整视觉证据或验证通过。
 - [`H/L 报告空间、版本与结论表述一致性审计`](../research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md)：核对 H/L selection/replay 的历史几何、显式空间状态、自定义敏感性阈值、engine 版本和结论边界；不新增样本或结果。
 
 Codex Trading 的链接或历史材料只作为用户指定的只读参考；本目录不导入其规则、代码、实现状态或执行能力。

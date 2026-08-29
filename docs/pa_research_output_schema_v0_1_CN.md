@@ -81,6 +81,8 @@ gate_result: pass / conditional / observation_only / valid_no_trade / pending
 
 当 `contract_scope: daily_candidate` 时，`timeframes_seen` 必须只写 `Daily`；4H/1H/15m 只能放在候选入选后的 `deep_review` 或另立的订单合同中，不能倒灌成日线选股证据。若低周期已经改变研究问题，必须新建独立合同并重新记录范围、状态和入场几何。
 
+`contract_frozen: yes` 是字段和订单几何的冻结状态，不是视觉 artifact provenance 或交易授权。决策日图、两年左侧、重要高低点或 EMA20/50/200 证据缺失时，必须在视觉/报告边界保留 `pending`、`observation_only` 或 provenance gap；后续日期图不能补写成入场前证据，也不能把历史回放记录升级为可交易或已验证样本。
+
 每日批次记录还应使用[`每日候选批次与图表审查卡`](daily_candidate_review_card_CN.md)补充以下证据。它们是候选池和视觉审查字段，不会把回放合同变成扫描器输入：
 
 ```text

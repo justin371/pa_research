@@ -14,6 +14,8 @@ ABC/BOP 的视觉案例准入清单见[`ABC/BOP 合同准入审计`](abc_bop_con
 
 H/L META 状态、组件与空间/授权边界见[`H/L META 字段与授权边界审计`](hl_meta_boundary_audit_2026-08-29_CN.md)。
 
+H/L 视觉前置字段、资产映射与决策日 provenance 边界见[`H/L 视觉前置证据与冻结资格审计`](hl_visual_preflight_contract_audit_2026-08-29_CN.md)。
+
 BOP 多日回踩的独立准入清单见[`BOP 合同准入审计`](bop_contract_intake_audit_2026-08-28_CN.md)及[`bop_contract_intake_2026-08-28.csv`](bop_contract_intake_2026-08-28.csv)。该 CSV 只记录现有人工案例的接受、回测和边界状态，全部为 `contract_frozen=no`，不是回放输入。两类 intake 合计 25 行，按底层案例键归并为 22 个案例，其中 3 个案例同时出现在统一和 BOP 专项视图中；详细 schema、方向和引用核对见[`ABC/BOP intake schema 一致性审计`](abc_bop_intake_schema_consistency_audit_2026-08-29_CN.md)。
 
 ## 运行
@@ -88,6 +90,8 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 分隔的独立来源必须同时存在。META 只用于记录和结果分层，不能代替触发、空间或结构止损。
 
 `meta_confluence` 的冻结合同枚举只有 `present`、`absent`、`unknown`；`pending` 只能出现在整体审查、触发或 gate 状态，不能写进该字段。若 META 证据不足，用 `unknown`，不能用 META 推导 `pre_entry_space_R`、`space_status`、成交资格或结果。
+
+`contract_frozen=yes` 只证明冻结 CSV 的字段和几何已闭合，不证明仓库或外部 artifact 仍有可独立复核的决策日无标签图。若视觉资产缺失、只有 partial 或只有 post-decision 图，保留 provenance gap，历史回放只能是 descriptive research record；不能把它升级为新的可交易候选或 validated sample。
 
 `h_l_pullback_location` 是自由文本的位置说明，不是 gate、空间或方向枚举。`rising`/`falling`、`support`/`resistance` 和 `role_reversal` 只提供人工上下文；空头的 `support` 必须结合前期/破位角色转换或事件位置阅读，不能把当前未破支撑当成空头资格。位置文字不能覆盖 `direction`、EMA20/50 斜率、`h_l_ema_slope_gate` 或 `space_status`，也不能把其中的历史 `controlled_B`/`deep_late_controlled_B` 词当成独立 `b_leg_class`/`b_leg_location`。
 

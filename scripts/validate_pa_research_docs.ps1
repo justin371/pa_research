@@ -849,6 +849,22 @@ if (Test-Path -LiteralPath $hlMetaBoundaryAuditPath -PathType Leaf) {
     }
 }
 
+$hlVisualPreflightContractAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_visual_preflight_contract_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $hlVisualPreflightContractAuditPath -PathType Leaf) {
+    $hlVisualPreflightContractAuditContent = Get-Utf8Text -Path $hlVisualPreflightContractAuditPath
+    foreach ($token in @(
+        'daily_context_window', 'major_high_low_review', 'ema20_50_200_review', 'label_source',
+        'contract_frozen', 'human_chart_review', '>=2y', 'complete', 'ROST',
+        'post-decision', 'provenance gap', 'descriptive research record', 'not-validated',
+        '60', 'no-new-positive', 'validated win-rate: not-computable', 'PA Research only',
+        'no Codex Trading', 'no quantitative scanner', 'no Execution Agent'
+    )) {
+        if (-not $hlVisualPreflightContractAuditContent.Contains($token)) {
+            Add-ValidationError "missing H/L visual-preflight-contract-audit token '$token'"
+        }
+    }
+}
+
 $legacyNextContractPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_next_contracts_2026-08-27.csv'
 $legacyNextReadmePath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/README.md'
 $legacyNextSelectionPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_next_selection_2026-08-27_CN.md'

@@ -46,6 +46,8 @@ left_context_review: complete / partial / unavailable
 
 `meta_confluence` 的字段值只写 `present / absent / unknown`；`pending` 属于整体视觉复核或触发状态，不是 META 枚举。若无法确认是否存在 META，写 `unknown` 并在 `left_context_review`、`gate_result` 或其他状态字段说明待补证据；不能用 META 代替方向、EMA 闸门、触发、结构止损或空间。
 
+`contract_frozen: yes` 只表示字段合同已经冻结，不代表 checkout 或外部 artifact 一定保留了可独立复核的决策日图。若两年左侧、重要高低点、EMA20/50/200 或决策日无标签图像缺失/只能看到 post-decision 资产，应保留 provenance gap 和 `research_only`/`pending` 边界；不得把该记录称为完整视觉证据、可交易候选或已验证样本。
+
 ## Canonical 输出合同
 
 每次完整图表复核都要把四件事分开：

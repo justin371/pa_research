@@ -88,6 +88,8 @@ H/L 回调位置自由文本与方向、EMA gate、support/role-reversal 和历�
 
 H/L META 状态、组件与空间/授权边界见[`H/L META 字段与授权边界审计`](../research/backtesting/hl_meta_boundary_audit_2026-08-29_CN.md)。
 
+H/L 两年背景、重要高低点、EMA20/50/200 和图像 provenance 边界见[`H/L 视觉前置证据与冻结资格审计`](../research/backtesting/hl_visual_preflight_contract_audit_2026-08-29_CN.md)。
+
 选择报告、候选卡和视觉记录只保存入场前证据；成交、退出、胜负、胜率和 `realized_R` 只能出现在独立 replay/result 记录中。结果不能反向改写 pattern、方向、lineage、触发、结构止损、首障碍或空间字段。逐文件复核见[`选择记录与回放结果证据边界审计`](../research/backtesting/pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md)；事件/空间/独立性字段的派生与引用复核见[`事件、空间与独立性字段引用一致性审计`](../research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md)；H/L raw `event_context` 与 canonical `event_bucket` 的显示分层见[`H/L event bucket 标签一致性审计`](../research/backtesting/event_bucket_label_consistency_audit_2026-08-29_CN.md)；`special_subtype` 与事件轴的范围边界见[`H/L special subtype 与事件轴一致性审计`](../research/backtesting/special_subtype_event_axis_consistency_audit_2026-08-29_CN.md)；H/L EMA 闸门、回调位置和报告分母复核见[`H/L EMA 闸门、回调位置与报告分母一致性审计`](../research/backtesting/hl_ema_gate_report_consistency_audit_2026-08-29_CN.md)；H/L 报告的历史几何、显式空间状态和敏感性阈值复核见[`H/L 报告空间、版本与结论表述一致性审计`](../research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md)。
 
 ### Pattern-specific shorthand 与 canonical 几何
