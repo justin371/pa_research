@@ -114,7 +114,7 @@
 ```text
 contract_scope: historical_context_only
 primary_pattern: other
-parent_state: open_trend / mature_range / channel / transition
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 triangle_status: candidate / range_inside_range / expanding_boundary / not_frozen
 direction: long / short / no_valid_direction
 upper_lower_boundary: source and confidence

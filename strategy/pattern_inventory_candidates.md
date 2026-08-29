@@ -253,6 +253,8 @@ EMA、AB=CD 和 measured move 都只能作为背景、位置、空间或目标�
 
 ## 5. 每个案例统一记录的字段
 
+本模板的 `primary_pattern` 是统一主合同字段，`internal_label` 只记录 H1/H2/L1/L2/H3/L3；当 `contract_scope: daily_candidate` 时，`primary_pattern` 只能写 `ABC_CONT` 或 `BOP`，不能把目录名、H/L 计数或独立主题名称写成日线主标签。
+
 ```text
 contract_scope: stage_1_fast_screen / deep_review / daily_candidate / historical_context_only
 symbol
@@ -262,13 +264,14 @@ data_status: historical / delayed / live_confirmed / incomplete
 as_of_time
 chart_scope: full / partial / unavailable
 daily_context_window: >=2y / <2y / unavailable
-parent_state              # trend / range / transition / climax
-direction                  # long / short / no_valid_direction
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 A_leg_origin / A_leg_end
 B_correction_start / B_correction_end
 B_leg_count
 abc_mode                   # continuation / reversal / complex / unknown
-H_or_L_attempt             # H1 / H2 / H3 / L1 / L2 / L3
 location_and_left_structure
 signal_bar / confirmation_bar
 order_branch               # stop_confirmation / limit_retest / market_close / stop_limit / observation_only

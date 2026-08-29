@@ -67,13 +67,14 @@
 | `final_status` | `research_state` + `trade_state` + `gate_result` + `handoff_status` | 不再用一个字段压缩四种不同状态 |
 | `h3_l3_state`、`push_state` | `third_push_state` | 三推压力状态与 `first_reverse`、`second_confirmation` 分轴 |
 
-### 3.1 五个视觉框架的具体处理
+### 3.1 五个原有视觉框架的具体处理
 
 - 市场状态审计卡补齐 `contract_scope`、证据头、方向、lineage、订单、空间和四条状态轴；`range_upper/lower/midpoint` 等仍作为该审计的状态专用补充。
 - Inside Bar/两根反转框架保留 `mother_bar`、`pattern_type`、`location` 和 `directional_bias`，但统一使用 `primary_pattern`、`internal_label`、`order_branch` 和三条状态轴。
 - Triangle 框架保留 `triangle_status`、边界、测试次数和 `breakout_state`，并将首障碍、空间和结果状态改成 canonical 字段。
 - Late Trend 框架把后段过滤字段作为补充，将信号、触发、订单、首障碍、空间和状态轴统一到当前合同；后段过滤不是第四个 pattern。
 - Multi-timeframe 框架把父级 pattern、父级首障碍和实际成交的旧写法映射到 `primary_pattern`、`parent_first_independent_obstacle` 和 `actual_fill_or_open_skip`；低周期仍不能创造高周期空间。
+- 后续复核将 `research/channel_visual_framework_CN.md` 作为第六个活动视觉框架纳入同一集合；`channel_type`/`channel_status` 仍是通道专用补充轴，不能替代 `parent_state`、`primary_pattern`、`internal_label` 或 `direction`。
 
 ## 4. 明确保留而不误判为当前漂移的字段
 
@@ -114,7 +115,7 @@ validator 仍是只读文档/链接/合同边界校验器，不是行情工具�
 后续逐项检查活动模板和迁移审计合同，发现并修复了同一字段名的两类漂移：
 
 - `docs/visual_pa_review_card_CN.md` 和 `research/visual_pattern_triage_protocol_CN.md` 原先在父级状态位置使用 `market_state`，现改为 `parent_state`；`market_state` 只保留给板块/大盘方向一致性 `aligned / mixed / counter / unknown`。
-- 日线选股模板、`patterns/05_failed_breakout_climax/README.md`、三个基础层模板、市场状态审计卡以及五个活动视觉框架全部使用 `parent_state: open_trend / trading_range / range_edge / transition / climax / unclear`。
+- 日线选股模板、`patterns/05_failed_breakout_climax/README.md`、三个基础层模板、市场状态审计卡以及六个活动视觉框架全部使用 `parent_state: open_trend / trading_range / range_edge / transition / climax / unclear`。
 - `research/cross_pattern_visual_priority_audit_2026-08-24_CN.md` 与 `research/abc_hl_stratified_outcome_audit_2026-08-24_CN.md` 的统一模板已去除 `mature_range`、`accepted_breakout` 和 `event-or-gap` 混合枚举；边界接受改由 `parent_state: open_trend` + `state_transition: breakout_acceptance` 表示，事件/缺口另写 `event_context`/`event_bucket`。
 
 真正历史性的视觉证据/边界报告仍可保留原始显示词，但不能被活动模板或 canonical 字段复用。validator 现在要求上述活动路径出现 canonical `parent_state`，并拒绝旧的 `market_state`/`parent_state` 混合枚举；本轮没有新增样本或结果，`no-new-positive` 与 `validated win-rate: not-computable` 保持。
@@ -131,3 +132,15 @@ validator 仍是只读文档/链接/合同边界校验器，不是行情工具�
 - 不把人工视觉审计升级为自动图形识别、已验证胜率或交易授权。
 
 因此本轮的可接受结果仍是：字段和入口一致性得到修复，但没有新的可比正样本，`no-new-positive` 保持，`validated win-rate: not-computable` 保持。
+
+## 7. 追加活动 label 映射与快筛入口复核（2026-08-29）
+
+原报告保留“23 个活动文档”的首轮修复计数；本节记录其后的 PA Research-only follow-up，不把两轮计数混为新的样本或结果。复核发现并修复了活动入口的以下问题：
+
+- 快速视觉初筛现在使用 `pattern_candidate`，不再把未闭合的候选观察写入 canonical `primary_pattern`；完整记录仍必须在 `primary_pattern`、`internal_label`、`direction` 三轴上分别落值。
+- 跨 Pattern 矩阵、策略 inventory、H1/H2、Multi-timeframe、Late Trend、事件/市场闸门、订单/风险和 Opening Reversal 模板已统一 canonical 主标签、内部 H/L 标签和方向枚举；`daily_candidate` 的主标签白名单仍严格为 `ABC_CONT`/`BOP`。
+- `H_or_L_attempt`、合并式 `pattern_and_attempt`、`decision_timestamp`、`decision_time`、`parent_state_and_location` 和 `actual_or_assumed_fill` 不再作为新记录入口；分别使用 `internal_label`、`as_of_time`、`parent_state` + `parent_location` 和 `actual_fill_or_open_skip`。
+- Channel 框架已作为第六个活动视觉框架纳入 validator 与回归测试；通道字段只补充通道形态和状态，不改变统一 pattern、方向、订单、空间和状态轴。
+- 当前复核卡中的 `parent_state` 已统一为 `open_trend / trading_range / range_edge / transition / climax / unclear`。日期明确的历史案例自由文本和历史显示别名保持原样，避免把历史事实重写成当前模板。
+
+本 follow-up 只更新 PA Research 文档、索引说明、validator 和回归守卫，不查行情、不看新图、不运行回放、不新增样本，不修改 Codex Trading、CSV、结果 artifact 或 engine；`no-new-positive` 与 `validated win-rate: not-computable` 保持。

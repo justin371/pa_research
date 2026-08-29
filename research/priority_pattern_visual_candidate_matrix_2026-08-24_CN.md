@@ -18,13 +18,14 @@ PA Research 已经分别审计了 H1/L1、H2/L2、ABC、BOP、MTR/三推和交�
 
 ## 2. 统一字段与主标签规则
 
-每个案例只允许一个 `primary_pattern`：日线母级结构使用 `ABC_CONT`、`BOP`、`RFB`、`MTR`、`H3_L3` 或必要时 `other`。H1/H2/L1/L2/H3/L3 只写入 `internal_label` 或关系描述；接受/失败等状态写入 `state_transition`，不能把内部计数或状态别名塞进主标签。这样可以避免同一组 K 线被 H2、ABC、三推、双顶和 MTR 重复计分。
+每个案例只允许一个 `primary_pattern`：深审/历史矩阵可以使用 `ABC_CONT`、`BOP`、`RFB`、`MTR`、`H3_L3` 或必要时 `other`；若案例进入 `daily_candidate`，主标签收窄为 `ABC_CONT` 或 `BOP`。H1/H2/L1/L2/H3/L3 只写入 `internal_label` 或关系描述；接受/失败等状态写入 `state_transition`，不能把内部计数或状态别名塞进主标签。这样可以避免同一组 K 线被 H2、ABC、三推、双顶和 MTR 重复计分。
 
 ```text
-primary_pattern
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
 secondary_context
-direction
-parent_state
+direction: long / short / no_valid_direction
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 state_transition
 A/B pressure
 signal_or_confirmation
@@ -118,7 +119,8 @@ handoff_status
 primary_pattern: ABC_CONT
 internal_label: H2
 secondary_context: H2_within_ABC / support_ema_cluster
-parent_state: open bull trend, not range-middle
+parent_state: open_trend
+parent_state_note: open bull trend; not range-middle
 state_transition: none
 A/B: strong A; deep but late-controlled B
 signal: setup/count bar and confirmation/trigger separated

@@ -32,6 +32,36 @@ ACTIVE_FRAMEWORKS = (
     REPO_ROOT / "research" / "triangle_expanding_range_visual_framework_CN.md",
     REPO_ROOT / "research" / "late_trend_entry_visual_framework_CN.md",
     REPO_ROOT / "research" / "multitimeframe_visual_review_framework_CN.md",
+    REPO_ROOT / "research" / "channel_visual_framework_CN.md",
+)
+
+CANONICAL_MAPPING_TEMPLATES = (
+    REPO_ROOT / "research" / "cross_pattern_visual_priority_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "priority_pattern_visual_candidate_matrix_2026-08-24_CN.md",
+    REPO_ROOT / "strategy" / "pattern_inventory_candidates.md",
+    REPO_ROOT / "research" / "channel_visual_framework_CN.md",
+    REPO_ROOT / "research" / "channel_visual_boundary_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "channel_visual_evidence_gap_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "h1_l1_first_entry_visual_boundary_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "h2_l2_second_entry_visual_boundary_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "multitimeframe_visual_evidence_gap_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "late_trend_entry_visual_evidence_gap_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "event_sector_market_gate_visual_evidence_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "order_risk_contract_visual_evidence_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "opening_reversal_visual_framework_CN.md",
+)
+
+CURRENT_PARENT_STATE_TEMPLATES = CANONICAL_MAPPING_TEMPLATES + (
+    REPO_ROOT / "research" / "double_top_bottom_visual_boundary_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "double_top_bottom_visual_evidence_gap_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "failed_breakout_climax_visual_evidence_gap_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "head_shoulders_rounded_visual_boundary_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "head_shoulders_rounded_visual_evidence_gap_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "inside_bar_two_bar_reversal_visual_boundary_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "inside_bar_two_bar_reversal_visual_evidence_gap_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "support_resistance_visual_evidence_gap_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "triangle_expanding_range_visual_boundary_audit_2026-08-24_CN.md",
+    REPO_ROOT / "research" / "triangle_expanding_range_visual_evidence_gap_audit_2026-08-24_CN.md",
 )
 
 MIGRATED_DOCUMENTS = (
@@ -87,6 +117,54 @@ class VisualAuthoritySchemaAlignmentTests(unittest.TestCase):
             self.assertFalse(has_active_field(content, field), field)
         self.assertIn(CANONICAL_PARENT_STATE, content)
         self.assertNotRegex(content, LEGACY_PARENT_STATE_LINE)
+
+    def test_fast_screen_uses_visual_candidate_not_primary_pattern(self):
+        content = read(VISUAL_CARD)
+        fast_screen = re.search(
+            r"(?s)## 快速视觉初筛：先判断像不像(?P<section>.*?)## 快筛停止条件",
+            content,
+        )
+        self.assertIsNotNone(fast_screen)
+        section = fast_screen.group("section")
+        self.assertIn(
+            "pattern_candidate: ABC-CONT / H1-H2-H3 / L1-L2-L3 / range-edge / MTR / other",
+            section,
+        )
+        self.assertIsNone(re.search(r"(?m)^\s*primary_pattern\s*:", section))
+
+    def test_current_mapping_templates_keep_primary_internal_and_direction_separate(self):
+        primary_pattern = re.compile(
+            r"(?m)^\s*primary_pattern:\s*"
+            r"(?:ABC_CONT|BOP|H1_L1|H2_L2|H3_L3|RFB|MTR|other)\b"
+        )
+        for path in CANONICAL_MAPPING_TEMPLATES:
+            content = read(path)
+            with self.subTest(path=path.relative_to(REPO_ROOT).as_posix()):
+                self.assertRegex(content, primary_pattern)
+                self.assertIn("direction: long / short / no_valid_direction", content)
+                self.assertIn(
+                    "internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending",
+                    content,
+                )
+                for legacy_field in (
+                    r"(?m)^\s*primary_pattern:\s*$",
+                    r"(?m)^\s*internal_label:\s*$",
+                    r"(?m)^\s*H_or_L_attempt(?:_and_signal_K)?\s*:",
+                    r"(?m)^\s*parent_state_and_location\s*:",
+                    r"(?m)^\s*parent_actual_or_assumed_fill\s*:",
+                    r"(?m)^\s*actual_or_assumed_fill\s*:",
+                    r"(?m)^\s*pattern_and_attempt\s*:",
+                    r"(?m)^\s*decision_timestamp\s*:",
+                    r"(?m)^\s*decision_time\s*:",
+                ):
+                    self.assertIsNone(re.search(legacy_field, content), legacy_field)
+
+    def test_current_review_cards_use_canonical_parent_state(self):
+        for path in CURRENT_PARENT_STATE_TEMPLATES:
+            content = read(path)
+            with self.subTest(path=path.relative_to(REPO_ROOT).as_posix()):
+                self.assertIn(CANONICAL_PARENT_STATE, content)
+                self.assertNotRegex(content, LEGACY_PARENT_STATE_LINE)
 
     def test_visual_frameworks_have_evidence_and_separate_state_axes(self):
         common_tokens = (

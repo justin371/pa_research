@@ -24,6 +24,7 @@
 
 - `primary_pattern`：当前最能解释父级市场状态和交易合同的一个 pattern；
 - `secondary_context`：辅助解释，例如 `H2_within_ABC`、`three_push_evidence_for_MTR`、`range_edge_with_double_bottom`；
+- 若 `contract_scope: daily_candidate`，`primary_pattern` 只允许 `ABC_CONT` 或 `BOP`；H1/H2/L1/L2/H3/L3 只能写入 `internal_label`，不能把内部计数或独立主题名称写回日线主标签；
 - `state_transition`：BOP、失败突破、区间过渡或 MTR 候选；它描述市场从一个状态转到另一个状态，不应与旧状态同时作为当前合同；
 - `trade_state`：无论形状多漂亮，空间、事件、成交或止损不成立时，输出 `valid_no_trade`。
 
@@ -146,8 +147,11 @@ VCP 的连续波动收缩、pivot、相对强度和市场环境属于独立 Mine
 ## 6. 统一输出模板
 
 ```text
+contract_scope: deep_review / daily_candidate / historical_context_only
 parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
-primary_pattern: one canonical label
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+direction: long / short / no_valid_direction
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 secondary_context: zero_or_more relationship labels
 location_and_left_structure
 A_pressure / B_pressure / lineage

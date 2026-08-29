@@ -78,7 +78,7 @@ handoff_status: research_only / not_ready / ready_for_system
 A 腿：强方向 / 普通方向 / 不清楚
 B 腿：受控 / 深但后段受控 / 反向压力强 / 区间化 / 不清楚
 位置：主要支撑阻力、区间边缘、EMA、缺口、通道或中部
-primary_pattern:
+pattern_candidate: ABC-CONT / H1-H2-H3 / L1-L2-L3 / range-edge / MTR / other
 secondary_context:
 state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
 第一阶段结论：值得深入 / 形态像但先观望 / 不是这个 pattern

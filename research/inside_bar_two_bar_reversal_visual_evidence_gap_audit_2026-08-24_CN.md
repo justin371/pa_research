@@ -75,7 +75,7 @@
 ## 4. 最小视觉复核卡
 
 ```text
-parent_state: trend / channel / range / transition
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 mother_bar: frozen / approximate / missing
 pattern_type: strict_inside / ii / ioi / two_bar_reversal / signal_sequence / not_confirmed
 location: major_sr / range_edge / ema_or_gap / middle / unknown

@@ -75,7 +75,7 @@
 ## 4. 最小视觉复核卡
 
 ```text
-parent_state: open_trend / mature_range / channel / transition
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 shape_status: head_shoulder_like / candidate / rounded_transition / not_frozen
 left_shoulder / head / right_shoulder: levels and separation
 neckline: source / slope / accepted_or_not

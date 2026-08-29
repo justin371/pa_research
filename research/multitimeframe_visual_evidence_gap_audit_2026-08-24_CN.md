@@ -69,7 +69,6 @@ QCOM、VRT 和 MAR 说明低周期越精细，越容易把入场放在首障碍�
 
 ```text
 contract_scope: deep_review / historical_context_only
-decision_timestamp:
 data_source:
 data_status: historical / delayed / live_confirmed / incomplete
 as_of_time:
@@ -80,12 +79,16 @@ daily_context_window: >=2y / <2y / unavailable
 major_high_low_review: complete / partial / unavailable
 ema20_50_200_review: complete / partial / unavailable
 parent_timeframe:
-parent_state_and_location:
-primary_pattern:
-internal_label:
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+parent_location:
+direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
 parent_signal_bar:
 parent_order_branch:
-parent_actual_or_assumed_fill:
+parent_actual_fill_or_open_skip:
 parent_structural_stop:
 parent_first_independent_obstacle:
 parent_pre_entry_space_R:
@@ -93,7 +96,7 @@ parent_space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / border
 lower_timeframe:
 lower_role: confirmation / independent-trade / reprice / observation
 lower_signal_and_trigger:
-lower_actual_fill:
+lower_actual_fill_or_open_skip:
 lower_stop_and_first_obstacle_if_independent:
 gap_or_opening_skip:
 event_context:

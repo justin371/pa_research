@@ -43,7 +43,7 @@ contract_scope: historical_context_only
 primary_pattern: RFB / MTR / other
 direction: long / short / no_valid_direction
 preexisting_boundary:
-parent_state: open_trend / mature_range / channel / transition
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 break_or_climax_attempt:
 close_acceptance: accepted / rejected / unclear
 reentry_to_original_side:

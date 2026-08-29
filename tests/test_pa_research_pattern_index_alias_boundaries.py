@@ -65,6 +65,15 @@ class PatternIndexAliasBoundaryTests(unittest.TestCase):
     def test_secondary_indexes_and_audit_cover_all_directory_names(self):
         inventory = text(STRATEGY_INVENTORY)
         report = text(AUDIT_PATH)
+        self.assertIn(
+            "primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other",
+            inventory,
+        )
+        self.assertIn(
+            "internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending",
+            inventory,
+        )
+        self.assertNotIn("H_or_L_attempt", inventory)
         for directory in ALL_DIRS:
             self.assertIn(f"../patterns/{directory}/README.md", inventory, directory)
             self.assertIn(f"../patterns/{directory}/README.md", report, directory)
@@ -79,6 +88,10 @@ class PatternIndexAliasBoundaryTests(unittest.TestCase):
         )
         self.assertIn("primary_pattern: ABC_CONT", matrix)
         self.assertIn("internal_label: H2", matrix)
+        self.assertIn(
+            "parent_state: open_trend\nparent_state_note: open bull trend; not range-middle",
+            matrix,
+        )
         self.assertEqual(matrix.count("| 案例 | 主标签 |"), 1)
         self.assertNotIn("primary_pattern: H2", matrix)
         self.assertIsNone(

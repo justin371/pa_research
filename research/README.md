@@ -24,7 +24,7 @@
 - [`Pattern 案例入口与状态一致性审计（2026-08-29）`](pattern_case_entry_status_audit_2026-08-29_CN.md)：核对 16 个目录的案例链接、条件/边界/no-trade 文案和 `valid_no_trade`/`no-new-positive` 状态；不新增样本或结果；
 - [`共同视觉前置字段一致性审计（2026-08-29）`](common_visual_preflight_field_consistency_audit_2026-08-29_CN.md)：统一两年 Daily 左侧、重要高低点、EMA、A/B 质量、位置/空间、方向和 `data_status` 的 canonical 字段；不新增样本或结果；
 - [`Pattern 状态轴、字段与枚举一致性审计（2026-08-29）`](pattern_state_axis_field_enum_audit_2026-08-29_CN.md)：核对 16 个目录、统一输出合同和视觉复核卡的字段命名、状态轴与 pattern-specific 边界；不新增样本或结果；
-- [`Pattern README 与基础视觉框架 canonical 输出覆盖审计（2026-08-29）`](backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md)：核对 16 个 pattern README、8 个基础层、局部模板的 canonical 字段/枚举与索引入口；不新增样本或结果；
+- [`Pattern README 与基础视觉框架 canonical 输出覆盖审计（2026-08-29）`](backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md)：核对 16 个 pattern README、8 个基础层、活动视觉复核卡与局部模板的 canonical 字段/枚举和索引入口；不新增样本或结果；
 - [`requiredFiles 与研究报告索引覆盖审计（2026-08-29）`](backtesting/required_report_index_coverage_audit_2026-08-29_CN.md)：核对 validator requiredFiles 中研究报告与 canonical 索引的映射，确认没有孤立报告；不新增样本或结果；
 - [`统计结论、正例表述与授权边界一致性审计（2026-08-29）`](backtesting/conclusion_boundary_consistency_audit_2026-08-29_CN.md)：统一 `validated win-rate: not-computable`、`no-new-positive`、60% 待检验目标与研究/交接边界，清理旧状态别名；不新增样本或结果；
 - [`视觉识别能力与图表 provenance 边界审计（2026-08-29）`](backtesting/visual_capability_boundary_audit_2026-08-29_CN.md)：把人工大体识别、两年 Daily/重要高低点/EMA 前置证据与准确率、自动扫描、交易授权分开；不新增样本或结果；
@@ -86,7 +86,7 @@
 - [`视觉识别冒烟、快筛协议与 Round2/Round3 资产 canonical 边界审计`](backtesting/visual_recognition_canonical_boundary_audit_2026-08-29_CN.md)：核对冒烟/快筛字段映射、两年 Daily/重要高低点/EMA provenance、Round2/Round3 局部资产和 `no-new-positive` 边界；不新增样本或结果。
 - [`Round4、Round5 与 TSLA 视觉资产 canonical 边界审计`](backtesting/visual_asset_canonical_boundary_audit_2026-08-29_CN.md)：补齐短窗口 Round4、两年 Daily Round5 与 TSLA 多周期资产的 canonical provenance、重要高低点/EMA、多周期职责和状态边界；不新增样本或结果。
 - [`全部视觉资产 README canonical provenance 覆盖审计`](backtesting/visual_asset_provenance_coverage_audit_2026-08-29_CN.md)：覆盖 11 个视觉资产目录、105 张 PNG 的 README provenance、配对职责、历史别名和索引边界；不新增样本或结果。
-- [`视觉历史报告与 canonical authority schema 对齐审计`](backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md)：核对视觉框架、历史报告、配对复核记录与 canonical 字段/状态轴，区分当前模板修复和历史事实别名；不新增样本或结果。
+- [`视觉历史报告与 canonical authority schema 对齐审计`](backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md)：核对六个活动视觉框架、历史报告、配对复核记录与 canonical 字段/状态轴，区分当前模板修复和历史事实别名；不新增样本或结果。
 
 ## 冻结合同回放
 

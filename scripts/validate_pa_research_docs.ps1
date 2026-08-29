@@ -1354,6 +1354,11 @@ $canonicalChecks = @{
         'data_status: historical / delayed / live_confirmed / incomplete',
         'chart_scope: full / partial / unavailable',
         'daily_context_window: >=2y / <2y / unavailable',
+        'parent_state: open_trend / trading_range / range_edge / transition / climax / unclear',
+        'direction: long / short / no_valid_direction',
+        'primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other',
+        'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
+        '当 `contract_scope: daily_candidate` 时，`primary_pattern` 只能写 `ABC_CONT` 或 `BOP`',
         '| 视觉候选 ID | direction | 先看什么 | 代表性入口 | 当前状态 |',
         '完整候选卡和冻结合同仍必须逐行写 canonical `direction`',
         'validated evidence（若形成）',
@@ -1508,6 +1513,28 @@ $canonicalParentStatePaths = @(
     'research/triangle_expanding_range_visual_framework_CN.md',
     'research/late_trend_entry_visual_framework_CN.md',
     'research/multitimeframe_visual_review_framework_CN.md',
+    'research/channel_visual_framework_CN.md',
+    'research/channel_visual_boundary_audit_2026-08-24_CN.md',
+    'research/channel_visual_evidence_gap_audit_2026-08-24_CN.md',
+    'research/double_top_bottom_visual_boundary_audit_2026-08-24_CN.md',
+    'research/double_top_bottom_visual_evidence_gap_audit_2026-08-24_CN.md',
+    'research/failed_breakout_climax_visual_evidence_gap_audit_2026-08-24_CN.md',
+    'research/head_shoulders_rounded_visual_boundary_audit_2026-08-24_CN.md',
+    'research/head_shoulders_rounded_visual_evidence_gap_audit_2026-08-24_CN.md',
+    'research/inside_bar_two_bar_reversal_visual_boundary_audit_2026-08-24_CN.md',
+    'research/inside_bar_two_bar_reversal_visual_evidence_gap_audit_2026-08-24_CN.md',
+    'research/support_resistance_visual_evidence_gap_audit_2026-08-24_CN.md',
+    'research/triangle_expanding_range_visual_boundary_audit_2026-08-24_CN.md',
+    'research/triangle_expanding_range_visual_evidence_gap_audit_2026-08-24_CN.md',
+    'research/h1_l1_first_entry_visual_boundary_audit_2026-08-24_CN.md',
+    'research/h2_l2_second_entry_visual_boundary_audit_2026-08-24_CN.md',
+    'research/late_trend_entry_visual_evidence_gap_audit_2026-08-24_CN.md',
+    'research/multitimeframe_visual_evidence_gap_audit_2026-08-24_CN.md',
+    'research/event_sector_market_gate_visual_evidence_audit_2026-08-24_CN.md',
+    'research/order_risk_contract_visual_evidence_audit_2026-08-24_CN.md',
+    'research/opening_reversal_visual_framework_CN.md',
+    'research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md',
+    'strategy/pattern_inventory_candidates.md',
     'research/cross_pattern_visual_priority_audit_2026-08-24_CN.md',
     'research/abc_hl_stratified_outcome_audit_2026-08-24_CN.md'
 )
@@ -1520,6 +1547,52 @@ foreach ($relativePath in $canonicalParentStatePaths) {
     }
     if ($content -match '(?m)^\s*(?:parent_state|market_state):\s+(?:trend|range|channel|mature_range|climax_or_exhaustion|accepted_breakout|event-or-gap)\s*(?:/.*)?$') {
         Add-ValidationError "non-canonical parent_state enum remains in active template: $relativePath"
+    }
+}
+
+$canonicalLabelMappingTemplateRelativePaths = @(
+    'research/cross_pattern_visual_priority_audit_2026-08-24_CN.md',
+    'research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md',
+    'strategy/pattern_inventory_candidates.md',
+    'research/channel_visual_framework_CN.md',
+    'research/channel_visual_boundary_audit_2026-08-24_CN.md',
+    'research/channel_visual_evidence_gap_audit_2026-08-24_CN.md',
+    'research/h1_l1_first_entry_visual_boundary_audit_2026-08-24_CN.md',
+    'research/h2_l2_second_entry_visual_boundary_audit_2026-08-24_CN.md',
+    'research/multitimeframe_visual_evidence_gap_audit_2026-08-24_CN.md',
+    'research/late_trend_entry_visual_evidence_gap_audit_2026-08-24_CN.md',
+    'research/event_sector_market_gate_visual_evidence_audit_2026-08-24_CN.md',
+    'research/order_risk_contract_visual_evidence_audit_2026-08-24_CN.md',
+    'research/opening_reversal_visual_framework_CN.md'
+)
+$canonicalDirectionToken = 'direction: long / short / no_valid_direction'
+$canonicalInternalLabelToken = 'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending'
+foreach ($relativePath in $canonicalLabelMappingTemplateRelativePaths) {
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    if ($content -notmatch '(?m)^\s*primary_pattern:\s*(?:ABC_CONT|BOP|H1_L1|H2_L2|H3_L3|RFB|MTR|other)\b') {
+        Add-ValidationError "canonical primary_pattern value is missing: $relativePath"
+    }
+    foreach ($token in @($canonicalDirectionToken, $canonicalInternalLabelToken)) {
+        if (-not $content.Contains($token)) {
+            Add-ValidationError "canonical label token '$token' is missing: $relativePath"
+        }
+    }
+    foreach ($legacyFieldPattern in @(
+        '(?m)^\s*primary_pattern:\s*$',
+        '(?m)^\s*internal_label:\s*$',
+        '(?m)^\s*H_or_L_attempt(?:_and_signal_K)?\s*:',
+        '(?m)^\s*parent_state_and_location\s*:',
+        '(?m)^\s*parent_actual_or_assumed_fill\s*:',
+        '(?m)^\s*actual_or_assumed_fill\s*:',
+        '(?m)^\s*pattern_and_attempt\s*:',
+        '(?m)^\s*decision_timestamp\s*:',
+        '(?m)^\s*decision_time\s*:'
+    )) {
+        if ($content -match $legacyFieldPattern) {
+            Add-ValidationError "legacy canonical label field remains '$legacyFieldPattern': $relativePath"
+        }
     }
 }
 
@@ -1695,6 +1768,15 @@ if (Test-Path -LiteralPath $visualPaReviewCardPath -PathType Leaf) {
     foreach ($legacyToken in @('(?m)^\s*stop_zone:', '(?m)^\s*stop_price_or_area:', '(?m)^\s*space_to_first_obstacle:')) {
         if ($visualPaReviewCardContent -match $legacyToken) {
             Add-ValidationError "visual PA review card retains ambiguous geometry alias: $legacyToken"
+        }
+    }
+    if ($visualPaReviewCardContent -match '(?s)## 快速视觉初筛：先判断像不像(?<fastScreen>.*?)## 快筛停止条件') {
+        $fastScreenContent = $Matches['fastScreen']
+        if ($fastScreenContent -match '(?m)^\s*primary_pattern\s*:') {
+            Add-ValidationError 'visual PA fast-screen section must use pattern_candidate, not canonical primary_pattern'
+        }
+        if ($fastScreenContent -notmatch '(?m)^\s*pattern_candidate\s*:') {
+            Add-ValidationError 'visual PA fast-screen section is missing pattern_candidate'
         }
     }
 }
@@ -2511,7 +2593,8 @@ $visualAuthorityActiveTemplateRelativePaths = @(
     'research/inside_bar_two_bar_reversal_visual_framework_CN.md',
     'research/triangle_expanding_range_visual_framework_CN.md',
     'research/late_trend_entry_visual_framework_CN.md',
-    'research/multitimeframe_visual_review_framework_CN.md'
+    'research/multitimeframe_visual_review_framework_CN.md',
+    'research/channel_visual_framework_CN.md'
 )
 foreach ($relativePath in $visualAuthorityActiveTemplateRelativePaths) {
     $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')

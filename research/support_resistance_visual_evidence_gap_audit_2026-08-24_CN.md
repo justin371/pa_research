@@ -67,7 +67,7 @@
 ## 4. 最小视觉复核卡
 
 ```text
-parent_state: trend / range / channel / transition
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 level_type: major / intermediate / local / candidate
 zone_source: swing / range_edge / role_reversal / gap / EMA / channel / other
 left_side_tests_and_departure

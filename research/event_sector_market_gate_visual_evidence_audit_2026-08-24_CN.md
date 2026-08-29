@@ -65,18 +65,25 @@ LRCX、QCOM、JNJ 和 GOOGL 共同说明，开盘越过原 stop 后，旧合同�
 ## 统一记录字段
 
 ```text
-decision_timestamp:
-data_source / data_status / as_of_time:
+contract_scope: deep_review / daily_candidate / historical_context_only
+data_source:
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
 earnings_next_three_sessions:
 event_context:
 direction: long / short / no_valid_direction
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+parent_location:
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+attempt_direction: bullish_attempts / bearish_attempts / unknown
 sector_reference / sector_state:
 market_reference / market_state:
 permission:
-parent_state_and_location:
-pattern_and_attempt:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
-actual_or_assumed_fill:
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 structural_stop:
 first_independent_obstacle:
 rough_R_R:

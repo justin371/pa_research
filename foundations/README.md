@@ -29,4 +29,4 @@
 - `03`/`04`/`06`/`07`/`08` 的工作卡保留后段、多周期、订单、父级状态和 A/B 质量等补充语义，但活动模板使用 canonical 字段；
 - `05` 的 `permission` 与 `gate_result` 只表示前置闸门，不能代替方向、几何或交易状态。
 
-逐项覆盖、枚举和旧字段边界见[`Pattern README 与基础视觉框架 canonical 输出覆盖审计`](../research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md)。
+逐项覆盖、活动视觉复核卡、枚举和旧字段边界见[`Pattern README 与基础视觉框架 canonical 输出覆盖审计`](../research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md)。

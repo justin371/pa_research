@@ -31,11 +31,16 @@ H1/L1 是回调中的第一次有意义恢复，不是第一根顺方向 K，也
 
 ## 统一输出
 
+本卡用于 `deep_review`/`historical_context_only` 的 H1/L1 边界记录；若进入 `daily_candidate`，`primary_pattern` 必须收窄为 `ABC_CONT` 或 `BOP`，H1/L1 只能写入 `internal_label`。
+
 ```text
-parent_state:
+contract_scope: deep_review / historical_context_only
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 a_leg_quality: strong / ordinary / unclear / event_driven
 b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear
-internal_label: H1 / L1 / none / pending
 signal_bar: quality / mixed / poor / setup-only
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 first_independent_obstacle:

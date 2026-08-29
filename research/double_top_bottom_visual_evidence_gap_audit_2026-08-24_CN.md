@@ -80,7 +80,7 @@
 ## 4. 最小视觉复核卡
 
 ```text
-parent_state: open_trend / mature_range / channel / transition
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 test_type: double_top / double_bottom / near_equal / expanded / ambiguous
 first_test / second_test: levels and separation
 location: major_sr / range_edge / trend_extreme / middle / unknown

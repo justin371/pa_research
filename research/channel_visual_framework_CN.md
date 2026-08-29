@@ -105,19 +105,52 @@
 
 ## 7. 最小视觉复核卡
 
+本卡允许通道专用字段补充统一合同，但 `parent_state`、`direction`、`primary_pattern` 和 `internal_label` 必须使用 canonical 轴。`channel_type`、`channel_status`、边界和中线是通道专用观察，不会自动产生 H/L、BOP 或 MTR 主标签；若 `contract_scope: daily_candidate`，主标签仍只允许 `ABC_CONT` 或 `BOP`。
+
 ```text
-parent_state: tight_trend / broad_channel / range / transition
+contract_scope: deep_review / daily_candidate / historical_context_only
+symbol:
+data_source:
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+timeframes_seen: Daily / 4H / 1H / 15m / other
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+directional_bias: bull / bear / balanced / changing
+direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+secondary_context: channel / tight_channel / broad_channel / trendline_candidate / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
+channel_type: tight / broad / trendline_candidate / none / unclear
 channel_status: candidate / confirmed / broken / rejected
-direction_and_pressure
-pullback_depth_and_overlap
+direction_and_pressure:
+pullback_depth_and_overlap:
 upper_lower_boundary / midline
-H_or_L_attempt_and_signal_K
-order_branch_and_actual_fill
-structural_stop
-first_obstacle / measured_move
-rough_R_R
-state_switch_condition
-outcome_at_decision_time
+signal_bar:
+confirmation_bar:
+new_trigger:
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
+structural_stop:
+structural_invalidation:
+first_independent_obstacle:
+rough_space_to_first_obstacle_R:
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+state_switch_condition:
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
+outcome_at_decision_time:
 ```
 
 当前结论：紧通道的核心是尊重惯性，宽通道的核心是位置和双方交易，状态切换的核心是“重叠、回调深度、边界接受和跟随”。本轮没有把任何案例升级成固定胜率规则；干净的紧通道正向样本仍需后续遇到新证据时补充，不为填数量重复旧案例。

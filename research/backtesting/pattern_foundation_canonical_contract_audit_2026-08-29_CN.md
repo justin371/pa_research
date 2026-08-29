@@ -123,3 +123,15 @@ validator 和回归测试已覆盖上述三条边界及旧事件文案回归。�
 3. 日线选股模板、市场状态审计卡和 Late Trend/Inside Bar/Triangle/Multi-timeframe 活动视觉模板均补齐同一 `parent_state` 枚举。
 
 本轮同时修正了本报告此前的 `15 个 README` 计数笔误。validator 与回归测试现在会对这些活动路径要求 canonical `parent_state`，并拒绝旧的趋势/区间/通道混合枚举。历史证据报告中的旧词仍仅按日期明确的描述性别名读取，不作为新模板字段。
+
+## 追加活动视觉复核卡 canonical label 与 parent_state 复核（2026-08-29）
+
+在上一轮活动模板修复后，本轮继续只对 PA Research 的新记录入口做字段审计；不下载或查询行情、不看新图、不运行回放、不新增样本、不修改 CSV/历史结果/engine 有效语义。复核确认并修复了以下可复现的入口偏差：
+
+1. `docs/visual_pa_review_card_CN.md` 的快速视觉初筛原先把待确认的 pattern 空栏写成 `primary_pattern`；现在使用非 canonical 的 `pattern_candidate`，只有完成闭合记录后才映射到 `primary_pattern`。
+2. 跨 Pattern 优先矩阵、策略 inventory 及相关 H1/H2、Multi-timeframe、Late Trend、事件闸门、订单风险和 Opening Reversal 活动卡现在明确分开 `primary_pattern`、`internal_label` 和 `direction`；`daily_candidate` 仍只允许 `ABC_CONT`/`BOP`，H1/H2/L1/L2/H3/L3 只作为内部标签。
+3. 策略 inventory 和 Channel 局部卡不再用 `H_or_L_attempt` 这类合并字段；旧的 H/L attempt 与 signal K 语义映射为 `internal_label` + `signal_bar`。Channel 的 `channel_type`/`channel_status` 仍是补充观察轴，不冒充 `parent_state` 或 pattern 主标签。
+4. Channel 视觉框架已纳入活动视觉框架集合；其统一卡补齐证据头、两年 Daily/重要高低点/EMA 复核、canonical 结构/订单/空间/状态轴和 `handoff_status`。其余当前视觉复核卡的 `parent_state` 统一为 `open_trend / trading_range / range_edge / transition / climax / unclear`。
+5. `decision_timestamp`/`decision_time`、`parent_state_and_location`、`actual_or_assumed_fill` 等旧合并入口已分别收敛到 `as_of_time`、`parent_state` + `parent_location`、`actual_fill_or_open_skip`；历史案例中的自由文本和日期明确的旧字段不改写，只作为历史事实/显示语义读取。
+
+validator 与回归测试现对上述活动 mapping 模板、快筛字段、canonical `parent_state` 和索引边界提供守卫。修复只涉及 PA Research 的文档、索引、validator 和回归测试；`no-new-positive` 与 `validated win-rate: not-computable` 保持不变，不创建量化扫描器、不连接 Execution Agent。

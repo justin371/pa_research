@@ -64,22 +64,33 @@ KLAC、QCOM 和 VRT 说明即使订单语义正确、信号 K 清楚，首障碍
 ## 统一审计字段
 
 ```text
-decision_time:
+as_of_time:
 contract_scope: deep_review
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 direction: long / short / no_valid_direction
-pattern_state:
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+secondary_context:
+pattern_specific_state:
 signal_bar:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
-trigger_or_zone:
-actual_or_assumed_fill:
+new_trigger:
+order_price_or_zone:
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 original_order_status:
 structural_stop:
+structural_invalidation:
 first_independent_obstacle:
-rough_space_and_R_R:
+rough_space_to_first_obstacle_R:
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 gap_event_sector_adjustment:
 management_or_new_entry:
 what_cancels_contract:
-final_status:
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
 
 ## 当前结论

@@ -117,17 +117,25 @@
 以后只需记录以下字段，不再为每个案例写成 ABC 长篇：
 
 ```text
+contract_scope: deep_review / historical_context_only
 pre_open_context / market_state
 gap_or_open_position
 first_opening_pressure
 failure_or_acceptance
-H_or_L_attempt_and_signal_K
-order_branch
-structural_stop
-first_obstacle / measured_move
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+signal_bar:
+new_trigger:
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+structural_stop:
+first_independent_obstacle / measured_move
 rough_R_R
 event_and_sector_filter
 outcome_at_decision_time
 ```
+
+本卡中的 `pre_open_context`、开盘压力和事件字段是开盘专用补充；canonical `direction`、`primary_pattern` 和 `internal_label` 仍按统一合同填写，不能用 `market_state` 或旧的 H/L 合并字段代替。
 
 参考资料：[`PAHubCN Trading the Open`](../pahubcn_courses/05_advanced_trading_modules.md)、[`PAHubCN Foundations`](../pahubcn_courses/01_foundations.md)、[`PAHubCN Reversals and Probability`](../pahubcn_courses/03_reversals_patterns_probability.md)、[`交易区间边缘二次入场框架`](range_edge_second_entry_framework_CN.md)、[`MTR visual framework`](mtr_visual_framework_CN.md)、[`Final Flag visual framework`](final_flag_visual_framework_CN.md)。

@@ -33,13 +33,18 @@
 
 ## 统一输出
 
+本卡用于 `deep_review`/`historical_context_only` 的 H2/L2 边界记录；若进入 `daily_candidate`，`primary_pattern` 必须收窄为 `ABC_CONT` 或 `BOP`，H2/L2 只能写入 `internal_label`。
+
 ```text
-parent_state:
+contract_scope: deep_review / historical_context_only
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 lineage_status: same_lineage / reset / unclear / pending
 lineage_id:
 first_attempt: failed / no_follow_through / not_meaningful / accepted
 second_location:
-internal_label: H2 / L2 / none / pending
 signal_quality:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 structural_stop:

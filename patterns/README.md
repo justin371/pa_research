@@ -149,7 +149,7 @@ H/L selection/replay 的合同数、成交状态和严格分母计数见[`H/L se
 
 16 个目录的 canonical 状态轴、字段命名和 pattern-specific 模板边界见[`Pattern 状态轴、字段与枚举一致性审计`](../research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md)。
 
-16 个 pattern README 与 8 个基础视觉层的 canonical 输出继承、局部模板字段和枚举边界见[`Pattern README 与基础视觉框架 canonical 输出覆盖审计`](../research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md)。
+16 个 pattern README、8 个基础视觉层与活动视觉复核卡的 canonical 输出继承、局部模板字段和枚举边界见[`Pattern README 与基础视觉框架 canonical 输出覆盖审计`](../research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md)。
 
 订单语义和 R/R 的跨 pattern 规则见[`八个 Pattern 的订单合同与 R/R 审计`](../research/order_contract_cross_pattern_audit_CN.md)。
 
@@ -215,7 +215,7 @@ Round4、Round5 与 TSLA 视觉资产的 provenance、两年 Daily、重要高�
 
 全部 11 个视觉资产目录的 README provenance 和 105 张 PNG 的配对/统计边界见[`全部视觉资产 README canonical provenance 覆盖审计`](../research/backtesting/visual_asset_provenance_coverage_audit_2026-08-29_CN.md)：合同资产仍按逐行合同读取，窗口数量不等于样本数量。
 
-视觉历史报告、框架模板、配对复核记录与 canonical authority schema 的字段对齐见[`视觉历史报告与 canonical authority schema 对齐审计`](../research/backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md)：当前模板使用统一状态轴，历史案例别名只保留为事实/显示语义，不新增样本或结果。
+六个活动视觉框架、视觉历史报告、配对复核记录与 canonical authority schema 的字段对齐见[`视觉历史报告与 canonical authority schema 对齐审计`](../research/backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md)：当前模板使用统一状态轴，历史案例别名只保留为事实/显示语义，不新增样本或结果。
 
 优先 Pattern 的代表性视觉候选与正/反例矩阵见[`优先 Pattern 代表性视觉候选矩阵`](../research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)：每个案例只保留一个主标签，次标签、状态切换、订单合同和首障碍单独记录。
 

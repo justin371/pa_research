@@ -70,7 +70,6 @@ COIN 和 XOM 覆盖跳空、范围扩张、第三推变强和首支撑拥挤；N
 
 ```text
 contract_scope: historical_context_only
-decision_timestamp:
 as_of_time:
 timezone:
 session_state: historical_close / unknown
@@ -80,7 +79,12 @@ daily_context_window: >=2y / <2y / unavailable
 major_high_low_review: complete / partial / unavailable
 ema20_50_200_review: complete / partial / unavailable
 direction: long / short / no_valid_direction
-parent_state_and_trend_age:
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+trend_age_or_stage:
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
 last_visible_push:
 late_location_or_magnet:
 pullback_lineage_and_attempt_count:
@@ -100,6 +104,7 @@ management_action:
 research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
 trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
 gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
 
 ## 当前结论
