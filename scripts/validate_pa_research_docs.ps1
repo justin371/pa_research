@@ -834,6 +834,21 @@ if (Test-Path -LiteralPath $hlPullbackLocationSemanticsAuditPath -PathType Leaf)
     }
 }
 
+$hlMetaBoundaryAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_meta_boundary_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $hlMetaBoundaryAuditPath -PathType Leaf) {
+    $hlMetaBoundaryAuditContent = Get-Utf8Text -Path $hlMetaBoundaryAuditPath
+    foreach ($token in @(
+        'meta_confluence', 'present', 'absent', 'unknown', 'pending', 'meta_zone', 'meta_components',
+        'long_pass', 'short_pass', 'fail_flat_or_opposite', 'strict_ge_1R', 'space_status',
+        '60', 'no-new-positive', 'validated win-rate: not-computable', 'PA Research only',
+        'no Codex Trading', 'no quantitative scanner', 'no Execution Agent'
+    )) {
+        if (-not $hlMetaBoundaryAuditContent.Contains($token)) {
+            Add-ValidationError "missing H/L META-boundary-audit token '$token'"
+        }
+    }
+}
+
 $legacyNextContractPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_next_contracts_2026-08-27.csv'
 $legacyNextReadmePath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/README.md'
 $legacyNextSelectionPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_next_selection_2026-08-27_CN.md'

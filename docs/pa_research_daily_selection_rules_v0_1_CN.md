@@ -141,6 +141,8 @@ C 必须重新朝 A 腿方向推进，并在有意义的位置出现明确的日
 - 如果 EMA、前高/前低、支撑/阻力、角色转换、缺口边缘或其他独立结构在同一回调区域重合，应在图上标出 META 区域并记录组成来源。META 是质量增强和排序因素，不是自动触发器，也不能覆盖 EMA 斜率闸门、首障碍、事件或结构止损。
 - 同一价格簇中的多个标签只算一个 META 位置；不能把同一前高、EMA 和支撑重复计成多个独立优势。
 
+`meta_confluence` 只接受 `present / absent / unknown`；证据尚未完成时，整体审查可以是 `pending`，但不能把 `pending` 写进冻结的 META 字段。`meta_zone` 和至少两个独立的 `meta_components` 只在 `present` 时成立；触发、结构止损、首障碍和 `pre_entry_space_R`/`space_status` 仍是独立资格，META 不能替代它们。
+
 ## 4. ABC 内部计数
 
 - H1、H2 是同一 Daily 回调 lineage 内向上的第一次、第二次有意义尝试；L1、L2 对称。

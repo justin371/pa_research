@@ -45,6 +45,8 @@ first_independent_obstacle:
 
 同理，`h_l_pullback_location` 是自由文本的 H/L 位置说明，不是方向、EMA 闸门或首障碍空间字段。位置词只作上下文核对：多头/空头的方向资格由 `direction`、EMA20/50 斜率和 `h_l_ema_slope_gate` 决定；空头出现 `support` 时须明确前期/破位角色转换或事件背景，不能把未破支撑自动当成优势。
 
+META 的 canonical 字段只区分 `present / absent / unknown`；`pending` 保留给整体证据或状态尚未完成的情况，不是 `meta_confluence` 值。META 不能替代触发、结构止损、首障碍或独立空间判断。
+
 ### Entry geometry and state boundary
 
 所有 pattern 的入场几何都按同一顺序审查：`structural_invalidation` → `structural_stop` → 方向上最近的 `first_independent_obstacle` → `pre_entry_space_R`/`space_status` → `rough_R_R` 和目标层。不能用更远的 measured move、区间另一侧或后续结果跳过首障碍；区域文字、`pending` 或 `unknown` 也不能冒充冻结的数值合同。

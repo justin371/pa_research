@@ -175,6 +175,8 @@ main_uncertainty_or_exclusion:
 
 `META` 至少需要两个独立结构来源在同一价格区域汇聚，例如 EMA20、前期支撑和角色转换区；它只能增强合格候选的优先级，不能替代方向、触发、结构止损或第一障碍。
 
+本卡的 `meta_confluence` 只使用 `present / absent / unknown`。如果图表证据或区域仍未完成，整体候选状态可以写 `pending`，但不要把 `pending` 当成 META 值；`meta_zone`、`meta_components`、`pre_entry_space_R` 和 `space_status` 各自保留缺失或未知边界。
+
 本卡的 `new_trigger`、`order_price_or_zone`、`structural_stop`、`first_independent_obstacle`、`pre_entry_space_R` 和 `space_status` 与统一输出合同同名；`first_obstacle_zone`、`distance_to_first_obstacle` 和 `risk_per_share_or_unit` 是日线审查阶段的补充字段。研究阶段允许 `structural_stop` 或障碍只写区域，但冻结回放前必须收敛为数值合同。
 
 如果还没有可执行触发价，必须写 `pending`，不能用审查时的当前价格冒充历史入场价。若首障碍和几何已经可复核，但空间不足或只能通过缩窄结构止损制造 `1R`，记录 `valid_no_trade`；若关键图表、事件、触发或空间证据尚不完整，记录 `observation_only` 或 `pending`。两者都不建立订单，不能互换。

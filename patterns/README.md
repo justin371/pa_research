@@ -86,6 +86,8 @@ main_uncertainty_or_exclusion / failure_or_no_trade_reason
 
 H/L 回调位置自由文本与方向、EMA gate、support/role-reversal 和历史 B 词的语义边界见[`H/L 回调位置文本语义与方向边界审计`](../research/backtesting/hl_pullback_location_semantics_audit_2026-08-29_CN.md)。
 
+H/L META 状态、组件与空间/授权边界见[`H/L META 字段与授权边界审计`](../research/backtesting/hl_meta_boundary_audit_2026-08-29_CN.md)。
+
 选择报告、候选卡和视觉记录只保存入场前证据；成交、退出、胜负、胜率和 `realized_R` 只能出现在独立 replay/result 记录中。结果不能反向改写 pattern、方向、lineage、触发、结构止损、首障碍或空间字段。逐文件复核见[`选择记录与回放结果证据边界审计`](../research/backtesting/pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md)；事件/空间/独立性字段的派生与引用复核见[`事件、空间与独立性字段引用一致性审计`](../research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md)；H/L raw `event_context` 与 canonical `event_bucket` 的显示分层见[`H/L event bucket 标签一致性审计`](../research/backtesting/event_bucket_label_consistency_audit_2026-08-29_CN.md)；`special_subtype` 与事件轴的范围边界见[`H/L special subtype 与事件轴一致性审计`](../research/backtesting/special_subtype_event_axis_consistency_audit_2026-08-29_CN.md)；H/L EMA 闸门、回调位置和报告分母复核见[`H/L EMA 闸门、回调位置与报告分母一致性审计`](../research/backtesting/hl_ema_gate_report_consistency_audit_2026-08-29_CN.md)；H/L 报告的历史几何、显式空间状态和敏感性阈值复核见[`H/L 报告空间、版本与结论表述一致性审计`](../research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md)。
 
 ### Pattern-specific shorthand 与 canonical 几何
@@ -112,7 +114,7 @@ H/L 回调位置自由文本与方向、EMA gate、support/role-reversal 和历�
 
 - 这些目录是视觉研究和历史复核入口，不是量化扫描器，也不直接连接 Execution Agent。
 - `research/` 根目录中的案例正文暂不搬迁；由[`research/研究索引`](../research/README.md)负责导航，目录只负责 pattern 导航和研究合同。
-- Measured Move、AB=CD、EMA、缺口回补和 META 是位置、空间或汇合因素，不单独构成 pattern。
+- Measured Move、AB=CD、EMA 和缺口回补是位置/空间因素；META 是位置汇合框架；它们都不单独构成 pattern，META 也不替代独立空间闸门。
 - VCP、Final Flag、Opening Reversal、Channel、Inside Bar 与 Triangle 已建立独立研究目录，但都处于 `visual-research / provisional`，不计入核心八个。三推虽然可以成为 MTR 的证据，但在这里作为独立 pattern 单独实现。
 
 ## 共同规则

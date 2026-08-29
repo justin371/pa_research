@@ -44,6 +44,8 @@ left_context_review: complete / partial / unavailable
 
 若两年 Daily、EMA20/50/200 或重要高低点不可见，必须保留 `partial-context`/`pending`，不能用局部走势补写缺失的左侧证据，也不能把图表末端的新高新低当成唯一重要结构。
 
+`meta_confluence` 的字段值只写 `present / absent / unknown`；`pending` 属于整体视觉复核或触发状态，不是 META 枚举。若无法确认是否存在 META，写 `unknown` 并在 `left_context_review`、`gate_result` 或其他状态字段说明待补证据；不能用 META 代替方向、EMA 闸门、触发、结构止损或空间。
+
 ## Canonical 输出合同
 
 每次完整图表复核都要把四件事分开：

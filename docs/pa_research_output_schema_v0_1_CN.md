@@ -141,6 +141,8 @@ pattern_like_reason:
 
 对于 `internal_label: H1 / H2` 的多头候选，`h_l_ema_slope_gate` 必须为 `long_pass`（Daily EMA20、EMA50 均向上）；对于 `internal_label: L1 / L2` 的空头候选，必须为 `short_pass`（两条均向下）。走平、反向或资料不足时分别记录为 `fail_flat_or_opposite` 或 `pending`，不能写成普通高质量 H/L。`meta_confluence: present` 只表示多个独立来源在同一回调区域汇聚，不是自动触发器。
 
+`meta_confluence` 的 canonical 枚举只有 `present / absent / unknown`；冻结的 H/L 合同必须填写其中之一，不能写 `pending`。当 META 证据尚不足以判断时，用 `unknown` 保留该字段，同时可在整体 `gate_result`、`trade_state`、`trigger_status` 或其他审查状态中保留 `pending`。`meta_zone`、`meta_components`、触发、止损、首障碍和空间仍各自独立，不能因为 META 为 `present` 而自动补齐或授权。
+
 `special_subtype` 是结构或订单路径的补充研究注释，不能替代 `event_context` 或由 raw `event_context` 派生的 `event_bucket`。例如 `special_subtype: ordinary` 不等于 `event_bucket: ordinary_non_event`；`earnings_driven` 是 subtype 写法，而事件统计仍使用 canonical `event_driven`。`gap_reprice` 只描述重订价/订单路径，不自动决定事件 bucket。缺失 subtype 时保留未记录，不能从结果或其他字段回填。
 
 `lineage_id` 是样本依赖控制的规范标识：同一父级结构、同一 A/B 回调或同一局部尝试的替代标签必须使用同一个 ID；不能因为决策日或 H1/H2、L1/L2 标签不同就另造独立样本。大小写和首尾空格不构成不同 lineage。`lineage_id` 不会替研究者自动识别结构，缺失或共享时只能保留描述性结果。

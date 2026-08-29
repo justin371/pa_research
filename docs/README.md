@@ -16,6 +16,7 @@
 - [`H/L A/B 质量、位置与 EMA 字段一致性审计`](../research/backtesting/hl_leg_quality_location_axis_consistency_audit_2026-08-29_CN.md)
 - [`H/L EMA 闸门、回调位置与报告分母一致性审计`](../research/backtesting/hl_ema_gate_report_consistency_audit_2026-08-29_CN.md)
 - [`H/L 回调位置文本语义与方向边界审计`](../research/backtesting/hl_pullback_location_semantics_audit_2026-08-29_CN.md)
+- [`H/L META 字段与授权边界审计`](../research/backtesting/hl_meta_boundary_audit_2026-08-29_CN.md)
 - [`H/L 报告空间、版本与结论表述一致性审计`](../research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md)
 - [`PA Research → Codex Trading 研究交接规范`](research_to_system_handoff_CN.md)
 - [`冻结合同回放器（backtesting.py）`](../research/backtesting/README.md)

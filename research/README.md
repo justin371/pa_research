@@ -57,6 +57,7 @@
 - [`H/L A/B 质量、位置与 EMA 字段一致性审计（2026-08-29）`](backtesting/hl_leg_quality_location_axis_consistency_audit_2026-08-29_CN.md)：核对 A/B 质量、B 位置与 H/L EMA/回调位置字段的覆盖、历史别名和回放边界；不回填缺失字段、不新增样本或结果；
 - [`H/L EMA 闸门、回调位置与报告分母一致性审计（2026-08-29）`](backtesting/hl_ema_gate_report_consistency_audit_2026-08-29_CN.md)：核对 7 批 H/L 合同的 EMA 方向、位置字段、eligible/observation/pending 与报告分母；修复 validator 对反向 pass gate 和未知斜率 fail 的遗漏，不新增样本或结果；
 - [`H/L 回调位置文本语义与方向边界审计（2026-08-29）`](backtesting/hl_pullback_location_semantics_audit_2026-08-29_CN.md)：核对 60 条位置文本与多空/EMA gate 的方向语义，固定 support/role-reversal、事件位置和历史 B 词不能替代 canonical 字段的边界；不新增样本或结果；
+- [`H/L META 字段与授权边界审计（2026-08-29）`](backtesting/hl_meta_boundary_audit_2026-08-29_CN.md)：核对 60 条合同的 `present/absent/unknown/pending` 分层、组件数量、EMA gate 和空间独立性；修正 META 文档的空间边界，不新增样本或结果；
 - [`回放结果分母与 horizon 审计（2026-08-29）`](backtesting/replay_outcome_denominator_audit_2026-08-29_CN.md)：检查胜率旗标、完成 horizon、opening-skip、intrabar 歧义、首障碍过程字段和 `realized_R` 的结果隔离；旧产物的 time-exit 偏差不增加验证分母；
 - [`回放 lineage 与样本独立性审计（2026-08-29）`](backtesting/replay_lineage_independence_audit_2026-08-29_CN.md)：检查共享父级/局部结构、重复 artifact、共享市场状态和持仓区间重叠；重复结果不进入分母，当前独立性证据仍不足；
 - [`回放 provenance 与再现性审计（2026-08-29）`](backtesting/replay_provenance_reproducibility_audit_2026-08-29_CN.md)：核对历史报告与 artifact 数值、输入/结果指纹和旧运行冲突；当前仍不能把历史描述升级为验证胜率；

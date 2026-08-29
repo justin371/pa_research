@@ -21,9 +21,11 @@ A META may include:
 - Failed breakout
 - Strong reversal bar
 - Volume and price confirmation
-- Clear space to the first target
+- Clear space to the first target (a separate trade-geometry gate, not a META component)
 
 The more independent edges converge, the stronger the location may be.
+
+For PA Research contracts, `meta_components` should name independent pre-entry location or context sources. Entry triggers, structural stops, first-obstacle space (`pre_entry_space_R` / `space_status`), realized outcomes, and other post-entry evidence remain separate axes; they cannot be added merely to make `meta_confluence=present`.
 
 ## Core Principle
 
