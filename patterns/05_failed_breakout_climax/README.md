@@ -53,6 +53,7 @@ first_independent_obstacle:
 rough_R_R:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: reverse_stop / role_reversal_retest / gap_reprice / same_contract / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 original_direction_reaccepted:
 breakout_climax_state: continuation / small_reversal / range / mtr_candidate / pending
 ```

@@ -42,6 +42,7 @@ edge_failure_or_reentry:
 edge_attempt_2:
 order_branch: limit_retest / stop_confirmation / market_close / stop_limit / observation_only
 branch_role: role_reversal_retest / same_contract / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 structural_stop:
 first_independent_obstacle:
 target_path: midpoint / opposite_edge / independent_magnet

@@ -169,6 +169,7 @@ $requiredFiles = @(
     'research/backtesting/event_bucket_label_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/hl_lineage_market_context_independence_audit_2026-08-29_CN.md',
+    'research/backtesting/hl_order_gap_contract_audit_2026-08-29_CN.md',
     'research/backtesting/replay_outcome_denominator_audit_2026-08-29_CN.md',
     'research/backtesting/replay_lineage_independence_audit_2026-08-29_CN.md',
     'research/backtesting/replay_provenance_reproducibility_audit_2026-08-29_CN.md',
@@ -260,6 +261,7 @@ $canonicalChecks = @{
         'contract_space_bucket_mismatch_count',
         'bop_state:',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
+        'gap_policy: accept_open / skip / flag_only / not_applicable',
         'gate_result:',
         'contract_scope:'
     )
@@ -282,6 +284,7 @@ $canonicalChecks = @{
         'event_bucket:',
         'bop_state:',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
+        'gap_policy: accept_open / skip / flag_only / not_applicable',
         'gate_result:',
         'contract_scope:'
     )
@@ -307,6 +310,7 @@ $canonicalChecks = @{
         '当 `contract_scope: daily_candidate` 时，`timeframes_seen` 只能填写 `Daily`',
         '原 pattern/反向 thesis 与旧订单合同失效',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
+        'gap_policy: accept_open / skip / flag_only / not_applicable',
         'gate_result:',
         'contract_scope:',
         '硬闸门阻止新交易'
@@ -326,6 +330,7 @@ $canonicalChecks = @{
         'h_l_ema_slope_gate:',
         'new_trigger:',
         'order_price_or_zone:',
+        'gap_policy: accept_open / skip / flag_only / not_applicable',
         'structural_stop:',
         'first_independent_obstacle:',
         'pre_entry_space_R:',
@@ -877,6 +882,22 @@ if (Test-Path -LiteralPath $hlLineageMarketContextAuditPath -PathType Leaf) {
     )) {
         if (-not $hlLineageMarketContextAuditContent.Contains($token)) {
             Add-ValidationError "missing H/L lineage/market-context-independence-audit token '$token'"
+        }
+    }
+}
+
+$hlOrderGapContractAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_order_gap_contract_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $hlOrderGapContractAuditPath -PathType Leaf) {
+    $hlOrderGapContractAuditContent = Get-Utf8Text -Path $hlOrderGapContractAuditPath
+    foreach ($token in @(
+        'order_branch', 'gap_policy', 'entry_trigger', 'structural_stop', 'first_obstacle', 'target_price',
+        'stop_confirmation', 'skip', 'accept_open', 'opening-skip', 'no-fill', 'accepted-open',
+        '方向几何错误为 `0`', 'first_obstacle=target_price', 'max_hold_bars=10',
+        '60/60', '59 行', 'no-new-positive', 'validated win-rate: not-computable',
+        'PA Research only', 'no Codex Trading', 'no quantitative scanner', 'no Execution Agent'
+    )) {
+        if (-not $hlOrderGapContractAuditContent.Contains($token)) {
+            Add-ValidationError "missing H/L order-gap-contract-audit token '$token'"
         }
     }
 }

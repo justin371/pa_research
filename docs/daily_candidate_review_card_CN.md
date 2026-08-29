@@ -158,6 +158,7 @@ signal_bar:
 confirmation_bar:
 new_trigger:
 order_price_or_zone:
+gap_policy: accept_open / skip / flag_only / not_applicable
 trigger_status: not_triggered / pending / triggered / not_applicable
 structural_stop:
 structural_invalidation:

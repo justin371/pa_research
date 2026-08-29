@@ -180,6 +180,7 @@ confirmation_bar:
 new_trigger:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 order_price_or_zone:
 actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 structural_stop:
@@ -194,6 +195,8 @@ main_uncertainty_or_exclusion:
 ```
 
 `order_branch` 只表达基础订单合同；`branch_role` 记录反向 stop、角色转换回测、跳空重订等研究分支。历史文件中的 `stop`、`limit-retest`、`market-close`、`reverse-stop` 和 `limit-edge` 是别名，更新新记录时必须映射到上述字段，不能继续作为同一字段的混合枚举。
+
+`gap_policy` 是入场前冻结的缺口处理政策，不得根据事后结果倒填：`skip` 表示开盘越过原触发时记为 `opening-skip`；`accept_open` 表示只有实际开盘价重新通过方向、止损和空间检查后才可记录实际开盘成交；`flag_only` 允许保留实际开盘路径但必须保留缺口旗标，几何失效时不能假定成交；`not_applicable` 只用于 `market_close`。因此 `no-fill`、`opening-skip` 和 `unproven` 都不是 win/loss，也不能进入严格胜率分母。
 
 入场几何必须按固定顺序记录：先确定 `structural_invalidation` 与 `structural_stop`，再找入场方向上最近的 `first_independent_obstacle`，然后填写 `pre_entry_space_R`/`space_status`，最后才写 `rough_R_R`、`target_layers` 或 measured move。`rough_R_R` 不能跳过最近独立障碍；如果结构止损、首障碍或空间只能写区域、`pending` 或 `unknown`，就不能把它们伪装成冻结的数值合同。
 
@@ -315,6 +318,7 @@ confirmation_bar:
 new_trigger:
 order_branch:
 branch_role:
+gap_policy:
 actual_fill_or_open_skip:
 structural_stop:
 structural_invalidation:

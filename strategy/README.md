@@ -32,5 +32,6 @@
 - [`H/L 视觉前置证据与冻结资格审计`](../research/backtesting/hl_visual_preflight_contract_audit_2026-08-29_CN.md)：核对两年 Daily、重要高低点、EMA20/50/200 和决策日图像 provenance，不把字段冻结误当成完整视觉证据或验证通过。
 - [`H/L lineage、市场状态与独立性分母审计`](../research/backtesting/hl_lineage_market_context_independence_audit_2026-08-29_CN.md)：区分共享 lineage、不同 lineage、缺失 `market_context_id` 与逐行描述性结果，不把它们误读为独立胜率证据。
 - [`H/L 报告空间、版本与结论表述一致性审计`](../research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md)：核对 H/L selection/replay 的历史几何、显式空间状态、自定义敏感性阈值、engine 版本和结论边界；不新增样本或结果。
+- [`H/L 订单分支、缺口政策与结果状态边界审计`](../research/backtesting/hl_order_gap_contract_audit_2026-08-29_CN.md)：区分预冻结的 `gap_policy`、实际开盘路径、`no-fill`、`opening-skip`、`unproven` 与严格胜率分母；不新增样本或结果。
 
 Codex Trading 的链接或历史材料只作为用户指定的只读参考；本目录不导入其规则、代码、实现状态或执行能力。

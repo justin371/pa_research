@@ -120,6 +120,7 @@ same_contract_or_new_contract:
 signal_and_trigger:
 order_branch: stop_confirmation | limit_retest | market_close | observation_only
 branch_role: same_contract / role_reversal_retest / gap_reprice / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 actual_fill_assumption:
 parent_structural_stop:
 low_cycle_stop_if_independent:

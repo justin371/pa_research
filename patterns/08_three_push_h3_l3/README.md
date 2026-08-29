@@ -56,6 +56,7 @@ first_reverse: none / touch / structural-break
 second_confirmation: yes / no / pending
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 structural_stop:
 first_independent_obstacle:
 space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown

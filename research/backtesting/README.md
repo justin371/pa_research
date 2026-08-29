@@ -18,6 +18,8 @@ H/L 视觉前置字段、资产映射与决策日 provenance 边界见[`H/L 视�
 
 H/L lineage、共享父级、缺失市场状态和独立性分母边界见[`H/L lineage、市场状态与独立性分母审计`](hl_lineage_market_context_independence_audit_2026-08-29_CN.md)。当前 60 条 H/L 合同有 53 个规范化 lineage、7 个共享组（14 条依赖行），且 `market_context_id=0/60`；不同 lineage 不能自动解释为独立样本。
 
+H/L 订单分支、预冻结 `gap_policy`、opening-skip/accepted-open/no-fill 与严格结果分母边界见[`H/L 订单分支、缺口政策与结果状态边界审计`](hl_order_gap_contract_audit_2026-08-29_CN.md)。该审计只检查已有 60 条合同和历史报告，不新增行情、回放、样本或结果。
+
 BOP 多日回踩的独立准入清单见[`BOP 合同准入审计`](bop_contract_intake_audit_2026-08-28_CN.md)及[`bop_contract_intake_2026-08-28.csv`](bop_contract_intake_2026-08-28.csv)。该 CSV 只记录现有人工案例的接受、回测和边界状态，全部为 `contract_frozen=no`，不是回放输入。两类 intake 合计 25 行，按底层案例键归并为 22 个案例，其中 3 个案例同时出现在统一和 BOP 专项视图中；详细 schema、方向和引用核对见[`ABC/BOP intake schema 一致性审计`](abc_bop_intake_schema_consistency_audit_2026-08-29_CN.md)。
 
 ## 运行
@@ -106,6 +108,8 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 - `stop_confirmation`：在 `decision_date` 收盘后提交 stop；
 - `limit_retest`：在 `decision_date` 收盘后提交 limit；
 - `market_close`：在 `decision_date` 收盘成交；此分支的 `gap_policy` 必须为 `not_applicable`。
+
+非 `market_close` 合同必须在入场前冻结 `gap_policy`：`skip` 遇到开盘越过原触发/订单区时输出 `opening-skip`，不建立成交；`accept_open` 只有在实际开盘价通过方向、结构止损和空间重检查后才记录实际开盘成交；`flag_only` 可以记录实际开盘路径但必须保留缺口旗标，若几何失效则标为 `unproven`/需要重订。`no-fill` 表示没有出现合同规定的触发/回测机会，`unproven` 表示不能证明合同可成交；二者与 `opening-skip` 都不是 win/loss，也不进入严格完成成交数。`gap_policy` 不能根据回放结果事后改写。
 
 `label_source` 必须为 `human_chart_review`，并且必须有 `>=2y` Daily 背景、完整重要高低点审查和完整 EMA20/50/200 审查。`target_price`、结构止损、最大持有 K 线数必须在结果发生前冻结，否则不能进入胜率分母。
 

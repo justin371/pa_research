@@ -220,7 +220,7 @@ rough_space_to_first_obstacle:
 - 已知财报在未来三个交易 session 内，所有新仓候选原则上排除；不只排除 BOP。记录 `event_context: earnings`、`earnings_next_three_sessions: yes`、`gate_result: valid_no_trade` 和 `trade_state: valid_no_trade`。
 - 财报后的大涨或大跌可以研究，但必须标记为 `earnings-driven` 或 `event-driven`，与普通 ABC、普通 BOP 分开记录和统计。
 - 异常跳空、重定价、宏观冲击、监管消息、并购或产品发布若改变了原有结构，不能直接套用普通 ABC/BOP；应重新核对边界、成交、止损、首障碍和 R/R。
-- 开盘跳过原触发时，原合同记为未成交或未知，不能沿用原价；只有实际回到旧结构区才另立 limit-retest/reprice 合同。
+- 订单合同必须预先冻结 `gap_policy: accept_open / skip / flag_only / not_applicable`。开盘越过原触发时，`gap_policy=skip` 才将原合同记为 `opening-skip`；预先冻结的 `accept_open`/`flag_only` 只有在实际开盘价重新通过方向、止损和空间检查后，才可记录实际开盘路径，不能沿用原触发价。若路径需要重订，或实际几何未通过，记为 `unproven`/观望；回到旧结构区才另立 `limit_retest`/`reprice` 合同。
 - 事件日期或影响不清楚时，保留 `pending`，不能因为后续走势好看而删去事件字段。
 
 ## 7. 统一排除条件
@@ -314,6 +314,7 @@ signal_bar:
 confirmation_bar:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 document_status: draft / adopted / historical / research_only
 research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending

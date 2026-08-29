@@ -50,6 +50,7 @@ second_reverse_attempt:
 structure_acceptance:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: reverse_stop / role_reversal_retest / gap_reprice / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 structural_stop:
 first_independent_obstacle:
 rough_R_R:

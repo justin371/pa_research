@@ -86,14 +86,12 @@ Daily/4H：强 A + 受控 B + 阻力/回测位置 + L1/L2 候选
 
 ## 5. 开盘跳过、缺口和回测
 
-如果开盘已经越过原 stop：
+订单合同必须先冻结 `gap_policy: accept_open / skip / flag_only / not_applicable`。如果开盘已经越过原 stop：
 
-1. 标记 `opening-skip / original-not-filled-or-fill-unknown`；
-2. 记录实际可能成交价，不沿用理想触发；
-3. 重算止损、第一障碍和风险；
-4. 空间恶化就观望；
-5. 回到旧边界才另立 `limit-retest`；
-6. 缺口被接受并跟随时，另立 BOP/gap-and-go 合同。
+1. `gap_policy=skip` 时标记 `opening-skip / original-not-filled-or-fill-unknown`，原合同不成交；
+2. `gap_policy=accept_open` 或 `flag_only` 时，记录实际可能成交价，不沿用理想触发，并重新计算止损、第一障碍和风险；
+3. 只有实际开盘价通过方向、止损和空间复核，才可记录实际开盘路径；空间恶化或几何未通过就标为 `unproven`/观望；
+4. 回到旧边界才另立 `limit-retest`；缺口被接受并跟随时，另立 BOP/gap-and-go 合同。
 
 没有回到预先定义的结构区，就没有 limit-retest 成交。后来发生过的回测不能写回原来的 15m stop。
 

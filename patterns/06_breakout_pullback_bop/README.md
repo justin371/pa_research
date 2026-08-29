@@ -52,6 +52,7 @@ pullback_to_old_level: yes / no / not_yet
 role_reversal_accepted:
 order_branch: stop_confirmation / market_close / limit_retest / stop_limit / observation_only
 branch_role: same_contract / role_reversal_retest / gap_reprice / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 actual_fill_or_open_skip:
 structural_stop:
 first_independent_obstacle:

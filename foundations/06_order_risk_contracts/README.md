@@ -40,6 +40,7 @@ signal_bar:
 trigger_or_zone:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 actual_or_assumed_fill:
 original_order_status: pending / triggered / filled / opening-skip / not-filled / fill-unknown
 structural_stop_zone:
@@ -71,14 +72,14 @@ final_status:
 
 ## 5. 跳空、未成交和状态转换
 
-开盘跳过原 stop 时：
+订单必须先冻结 `gap_policy: accept_open / skip / flag_only / not_applicable`。开盘跳过原 stop 时：
 
-1. 原合同记为 `opening-skip / fill-unknown / not-filled`；
-2. 记录实际可能成交价；
-3. 重算结构止损、第一障碍和 R/R；
-4. 空间恶化就取消或观望；
-5. 回到已知结构区才另立 `limit-retest`；
-6. 缺口被接受并跟随时，另立 BOP/gap-and-go。
+1. `gap_policy=skip` 时，原合同记为 `opening-skip / fill-unknown / not-filled`，不建立成交；
+2. 预先冻结的 `accept_open`/`flag_only` 才允许评估实际可能成交价；必须重算结构止损、第一障碍和 R/R，并通过方向与空间复核；
+3. 空间恶化、几何未通过或需要新的价格合同，就取消/观望或标记 `unproven`；不能沿用理想触发价；
+4. 回到已知结构区才另立 `limit-retest`；缺口被接受并跟随时，另立 BOP/gap-and-go。
+
+`no-fill`、`opening-skip` 和 `unproven` 都不是 win/loss；只有实际成交且满足完整路径、horizon、provenance 和其他严格条件的记录才进入胜率分母。结果不能事后改变 `gap_policy`。
 
 没有回测就没有 limit 成交；后来的价格到达不能把未成交合同变成成交。若 stop-limit 穿过 trigger 后跳过 limit，结果仍可能是未成交。
 

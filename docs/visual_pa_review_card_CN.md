@@ -323,6 +323,7 @@ follow_through_expected: yes / mixed / no / unknown
 ```text
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 order_price_or_zone:
 why_this_order_branch:
 ```
@@ -333,6 +334,7 @@ why_this_order_branch:
 - 结构支撑/阻力上的回测可以作为独立的 limit/retest 分支研究；
 - 市价或收盘进场适用于强突破后的特殊情况，但要接受滑点和更宽止损；
 - 多头回调下沿的 limit、空头反弹上沿的 limit，必须说明它是在等回测，不能和突破 stop 分支混算；
+- `gap_policy` 必须在入场前冻结：`skip` 才会把开盘越过触发记为 `opening-skip`；预先冻结的 `accept_open`/`flag_only` 只有在实际开盘价通过重新检查后才能记录实际路径；`no-fill` 和 `unproven` 不是亏损；
 - 不要把“已经发生的后续大涨/大跌”当成当时必然应该挂单的理由。
 
 ## 8. 止损与失效

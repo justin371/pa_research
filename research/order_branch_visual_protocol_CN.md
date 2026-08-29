@@ -63,13 +63,13 @@ Stop-limit 不是普通 stop 的别名，而是另一份执行合同：
 
 ## 2. 跳空后的订单状态
 
-如果价格跳过原来的 stop 触发价：
+订单必须先冻结 `gap_policy: accept_open / skip / flag_only / not_applicable`。如果价格跳过原来的 stop 触发价：
 
-1. 记录原触发价和实际可能成交价；
-2. 立即重新计算结构止损、第一障碍和粗略 R/R；
-3. 如果实际成交使空间恶化，取消原计划或降级为观望；
-4. 只有价格重新回到事先标出的结构区，才可以建立新的 limit-retest 分支；
-5. 不得把新的成交价、后续低点或后来的 MM 目标倒灌回旧订单。
+1. `gap_policy=skip` 时，记录原触发价并标记 `opening-skip`；原订单不成交；
+2. 预先冻结的 `accept_open`/`flag_only` 才能评估实际可能成交价，并立即重新计算结构止损、第一障碍和粗略 R/R；
+3. 只有实际开盘价通过方向、结构止损和空间重检查，才可以记录实际开盘路径；空间恶化或几何未通过时取消、降级为观望或标记 `unproven`；
+4. 只有价格重新回到事先标出的结构区，才可以建立新的 `limit-retest` 分支；
+5. 不得把新的成交价、后续低点或后来的 MM 目标倒灌回旧订单，也不得把 `no-fill`/`opening-skip`/`unproven` 写成 win/loss。
 
 因此，“方向判断正确”和“原订单仍然值得执行”是两个问题。
 
@@ -80,6 +80,7 @@ research_state: pattern_like / research_candidate / research_positive_conditiona
 trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 decision_time:
 signal_bar:
 trigger_price_or_zone:
