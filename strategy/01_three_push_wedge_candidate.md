@@ -2,6 +2,8 @@
 
 > 状态：研究假设，尚未进入生产规则或程序化回测。
 
+本页只保存 PA Research 的视觉研究假设和案例分流，不是量化扫描器、交易授权或 Execution Agent 输入。当前没有冻结的三推/H3/L3 回放合同；结论仍为 `no-new-positive`，`validated win-rate: not-computable`。
+
 ## 研究目标
 
 把“连续三次向同一方向推进”与“真正的三推楔形反转结构”区分开，并进一步区分：
@@ -76,6 +78,8 @@
 - 若原方向以强实体突破第三推极值并获得跟随，候选反转失效。
 - 不使用固定百分比止损，也不把保本移动当作默认规则；仓位由结构止损距离决定。
 
+这里的“第一目标”不自动等于统一合同的 `first_independent_obstacle`：首障碍必须是入场前可见、独立且位于方向路径上的结构；EMA 可以作为背景或路径证据，但不能单独制造首障碍空间。第三推案例仍须另记 `structural_stop`、`pre_entry_space_R`、`space_status` 和实际订单分支，不能用后续目标或盈利补齐入场几何。
+
 ## 第一批代表性样本
 
 ### TSLA 日线：2026-05-19 至 2026-06-26
@@ -88,7 +92,7 @@
 
 第一段推进约 13.48，第二段到第三推约 11.55，第三推在 06-25/26 只是小幅延伸，符合“推进效率下降”的初步特征。该区域同时对应左侧支撑（需在图表上标注具体支撑带），属于 META 候选位置。
 
-价格在 06-26 收于约 379.71，06-29 之后确实出现强反弹；但不能只根据后续涨幅把它升级为可交易正例。按入场时可见的几何，`06-26` 约 `379.12` 上方的保守确认，结构止损在 `368.60` 下方，最近的 `385.20–387.80` 阻力区只提供约 `0.63R–0.83R`。因此更准确的标签是：**B 类三推/第三次测试短线反应候选；反向触发有跟随，但 Daily/波段新仓首障碍不足，valid no-trade**。它不能证明更大级别趋势永久反转。
+价格在 06-26 收于约 379.71，06-29 之后确实出现强反弹；但不能只根据后续涨幅把它升级为可交易正例。按入场时可见的几何，`06-26` 约 `379.12` 上方的保守确认，结构止损在 `368.60` 下方，最近的 `385.20–387.80` 阻力区只提供约 `0.63R–0.83R`。因此更准确的标签是：**B 类三推/第三次测试短线反应候选；反向触发有跟随，但 Daily/波段新仓首障碍不足，`valid_no_trade`**。它不能证明更大级别趋势永久反转。
 
 低周期可以提出更早的 `374.75` 上方触发研究分支，但不能用更窄止损或后续 `06-29` 的上涨制造当时不存在的空间；该分支仍先遇 `379.12` 和 `385.20`。
 
@@ -114,6 +118,33 @@
 ```
 
 其中前三项用于判断“形态是否存在”，反向触发用于判断是否出现反应，第一障碍和 R/R 才决定是否值得交易。即使有反向触发和跟随，如果首障碍太近，也必须保留为 `valid_no_trade`；没有反向触发时，最多只能叫潜在反应区。
+
+## 与统一输出合同的对应
+
+本页的 A/B/C 是解释性分流，不是新的状态枚举。新研究记录统一使用以下字段；字段值必须来自统一合同：
+
+```text
+lineage_status: same_lineage / reset / unclear / pending
+attempt_direction: bullish_attempts / bearish_attempts / unknown
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
+first_reverse: none / touch / structural_break
+second_confirmation: yes / no / pending
+range_edge_three_push: yes / no / pending
+range_edge_side: upper / lower / none / pending
+direction: long / short / no_valid_direction
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+first_independent_obstacle:
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+```
+
+- A 类只有在 `third_push_state=exhaustion_candidate` 且反向证据、订单、首障碍和空间都完成时，才可写 `research_state: research_positive_conditional`；它仍不是生产规则或已验证胜率。
+- B 类通常保留为 `pattern_like`、`observation_only` 或 `valid_no_trade`；若是成熟区间边缘，使用 `third_push_state: range_repeat_test` 并填写 `range_edge_side`，不把边缘方向旗标当作授权方向。
+- C 类通常写 `third_push_state: continuation_or_climax` 或 `channel_continuation`；它只表示压力分流，不自动生成反向 `direction`、订单或目标。
+- `attempt_direction` 是三次尝试的朝向，`direction` 是当前研究合同方向；触发、首障碍或合同未冻结时，`direction` 可以是 `no_valid_direction`。A/B/C 分流不建立统计分母，当前三推/H3/L3 仍保持 `no-new-positive`。
 
 ## 待验证
 

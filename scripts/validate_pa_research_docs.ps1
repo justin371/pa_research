@@ -188,6 +188,7 @@ $requiredFiles = @(
     'research/unified_output_state_axis_audit_2026-08-29_CN.md',
     'research/pattern_index_alias_boundary_audit_2026-08-29_CN.md',
     'research/backtesting/three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md',
+    'research/backtesting/three_push_strategy_case_contract_audit_2026-08-29_CN.md',
     'research/pattern_visual_preflight_audit_2026-08-29_CN.md',
     'research/pattern_case_entry_status_audit_2026-08-29_CN.md',
     'research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md',
@@ -373,6 +374,62 @@ $canonicalChecks = @{
         'trade_state:',
         'gate_result:',
         'handoff_status:'
+    )
+    'strategy/01_three_push_wedge_candidate.md' = @(
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'A/B/C 是解释性分流，不是新的状态枚举',
+        'lineage_status: same_lineage / reset / unclear / pending',
+        'attempt_direction: bullish_attempts / bearish_attempts / unknown',
+        'third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear',
+        'first_reverse: none / touch / structural_break',
+        'second_confirmation: yes / no / pending',
+        'range_edge_side: upper / lower / none / pending',
+        'direction: long / short / no_valid_direction',
+        'first_independent_obstacle:',
+        'space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown',
+        'research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending',
+        'trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending',
+        'gate_result: pass / conditional / observation_only / valid_no_trade / pending'
+    )
+    'research/h3_l3_research_gate_CN.md' = @(
+        '统一合同映射',
+        'lineage_status: same_lineage / reset / unclear / pending',
+        'attempt_direction: bullish_attempts / bearish_attempts / unknown',
+        'third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear',
+        'first_reverse: none / touch / structural_break',
+        'second_confirmation: yes / no / pending',
+        'range_edge_side: upper / lower / none / pending',
+        'direction: long / short / no_valid_direction',
+        'first_independent_obstacle:',
+        'research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending',
+        '历史案例中的连字符和自然语言标签只作为说明别名'
+    )
+    'research/h3_l3_visual_comparison_CN.md' = @(
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        '`lineage_status`',
+        '`third_push_state`',
+        '`first_reverse`',
+        '`second_confirmation`',
+        '`first_independent_obstacle`',
+        'research_positive_conditional',
+        '新记录必须使用 canonical 字段'
+    )
+    'research/three_push_pressure_state_framework_CN.md' = @(
+        'lineage_status: same_lineage / reset / unclear / pending',
+        'direction: long / short / no_valid_direction',
+        'state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate',
+        'gap_policy: accept_open / skip / flag_only / not_applicable',
+        'first_independent_obstacle: where and why',
+        'space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown',
+        'research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending',
+        'trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending',
+        'gate_result: pass / conditional / observation_only / valid_no_trade / pending'
+    )
+    'research/mtr_visual_framework_CN.md' = @(
+        'exhaustion_candidate`、`continuation_or_climax`、`range_repeat_test` 或 `channel_continuation`',
+        'research_positive_conditional'
     )
     'patterns/README.md' = @(
         'timeframes_seen / data_status / as_of_time / timezone / session_state / chart_scope',
@@ -1149,6 +1206,49 @@ if (Test-Path -LiteralPath $threePushContractBoundaryAuditPath -PathType Leaf) {
     )) {
         if (-not $threePushContractBoundaryAuditContent.Contains($token)) {
             Add-ValidationError "missing three-push contract-boundary audit token '$token'"
+        }
+    }
+}
+
+$threePushStrategyCaseAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/three_push_strategy_case_contract_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $threePushStrategyCaseAuditPath -PathType Leaf) {
+    $threePushStrategyCaseAuditContent = Get-Utf8Text -Path $threePushStrategyCaseAuditPath
+    foreach ($token in @(
+        'strategy/01_three_push_wedge_candidate.md',
+        '../h3_l3_research_gate_CN.md',
+        '../h3_l3_visual_comparison_CN.md',
+        '../three_push_pressure_state_framework_CN.md',
+        'A/B/C 是解释性分流，不是新的状态枚举',
+        'third_push_state=exhaustion_candidate',
+        'first_independent_obstacle',
+        'research_state=research_positive_conditional',
+        'H3/L3 冻结行数为 0',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
+    )) {
+        if (-not $threePushStrategyCaseAuditContent.Contains($token)) {
+            Add-ValidationError "missing three-push strategy/case audit token '$token'"
+        }
+    }
+}
+
+$threePushActiveLegacyChecks = @{
+    'research/h3_l3_visual_comparison_CN.md' = @('h3_l3_state:', 'reverse_trigger_present', 'short_reaction_candidate')
+    'research/three_push_pressure_state_framework_CN.md' = @('same_lineage:', 'first_obstacle:', 'rough_rr:', 'status: research_candidate / short_reaction / continuation / valid_no_trade')
+    'research/mtr_visual_framework_CN.md' = @('short_reaction_candidate')
+    'strategy/01_three_push_wedge_candidate.md' = @('research_positive_candidate')
+}
+foreach ($entry in $threePushActiveLegacyChecks.GetEnumerator()) {
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($entry.Key -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    foreach ($token in $entry.Value) {
+        if ($content.Contains($token)) {
+            Add-ValidationError "legacy three-push field or enum in active document '$token': $($entry.Key)"
         }
     }
 }

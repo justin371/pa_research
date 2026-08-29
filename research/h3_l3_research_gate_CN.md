@@ -10,6 +10,31 @@
 
 针对 L3 衰竭缺口的下一轮 Futu OpenD 定向筛选见 [`2024–2026 L3 定向候选筛选`](h3_l3_candidate_screen_futu_targeted_2024_2026_CN.md)。其中 BKNG、PM 最接近形态候选，但分别被首障碍空间和首障碍拥挤否决；AMD、GOOGL、NKE 则属于趋势延续、区间/事件边界，仍没有新增 L3 正向样本。
 
+## 统一合同映射
+
+本页的 A/A1/B/C 是研究解释层，不是新的状态枚举。逐案例记录仍必须使用统一输出合同：
+
+```text
+lineage_status: same_lineage / reset / unclear / pending
+attempt_direction: bullish_attempts / bearish_attempts / unknown
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
+first_reverse: none / touch / structural_break
+second_confirmation: yes / no / pending
+range_edge_three_push: yes / no / pending
+range_edge_side: upper / lower / none / pending
+direction: long / short / no_valid_direction
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+structural_stop:
+first_independent_obstacle:
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+```
+
+A 类通常对应 `third_push_state: exhaustion_candidate`，但只有反向证据、订单、首障碍和空间同时闭合时，才可写 `research_state: research_positive_conditional`；B 类通常是 `pattern_like`、`observation_only` 或 `valid_no_trade`；C 类通常是 `continuation_or_climax` 或 `channel_continuation`，不能因计数到三就反向。`range_edge_side` 只保存上沿/下沿位置假设，不能替代 `direction` 或交易授权；触发、空间或合同未冻结时使用 `direction: no_valid_direction`。历史案例中的连字符和自然语言标签只作为说明别名，新记录不能继续把它们当作字段枚举。
+
 ## 1. 先区分四种标签
 
 | 标签 | 含义 | 能否直接授权交易 |
@@ -164,7 +189,7 @@ Futu OpenD 的历史 QFQ 数据把第三个低点之后的反应补得更清楚�
 
 这条案例提供一个当前较有价值的正向研究分支：父级先有空头 A，随后 `2025-03-17`、`03-19`、`03-24` 三次向上测试，第三推接近 `74–75` 左侧阻力但没有接受；`2025-03-25`–`03-26` 跌破第三推后的局部结构，60m/15m 显示空头跟随。触发下方的 `66.6–65.1` 第一结构区约有 `1.4–1.9R` 的粗略研究空间，明显优于第一障碍紧贴触发价的 no-trade 案例。事后 `03-28` 到达第一检查区、`03-31` 到达第二支撑区，且没有触及主结构止损；这只证明过程目标兑现，不证明 H3 胜率。KLA FY2025 Q3 财报日期为 `2025-04-30`，不在 `03-26` 触发前三个交易日内；SOXX 同期走弱，板块方向与空头恢复一致。
 
-它仍不是已验证规则：父级 A 重叠较多，其他新闻风险未排除，精确 15m 成交和止损 buffer 也没有冻结。当前标为 `pattern_like / research_positive_candidate / earnings-filter-passed / sector-aligned / low-cycle-confirmed`，不能因为三推和后续盈利就自动推广。
+它仍不是已验证规则：父级 A 重叠较多，其他新闻风险未排除，精确 15m 成交和止损 buffer 也没有冻结。当前标为 `pattern_like / research_positive_conditional / earnings-filter-passed / sector-aligned / low-cycle-confirmed`，不能因为三推和后续盈利就自动推广。
 
 ### `COIN 2024-01-04`–`2024-01-09`：H3-like 但第三次测试扩张
 
@@ -176,7 +201,7 @@ Futu OpenD 的历史 QFQ 数据把第三个低点之后的反应补得更清楚�
 
 #### COIN 低周期过程审计
 
-`2024-01-09 09:45` 的 15m 反向信号 K 低点约 `153.29`，`10:15` 的低点约 `151.83` 穿过该触发，说明低周期 L1 分支并非从开盘跳过。以 H3 顶部 `161.38` 上方作结构止损、`2024-01-04` 低点约 `148.81` 作第一支撑，粗略空间只有约 `0.5R`；日线 `151.32` 下破分支约 `0.25R`。`2024-01-10` 开盘约 `149.21`、早盘低点约 `146.21`，先触及并穿过首支撑；而以 `151.32` 为原 L2 触发时，开盘已经在触发位下方，必须标成 opening-skip/reprice。该过程补充了“首支撑先到但形态仍不值得交易”的 C 类边界，不改变 valid no-trade 结论。
+`2024-01-09 09:45` 的 15m 反向信号 K 低点约 `153.29`，`10:15` 的低点约 `151.83` 穿过该触发，说明低周期 L1 分支并非从开盘跳过。以 H3 顶部 `161.38` 上方作结构止损、`2024-01-04` 低点约 `148.81` 作第一支撑，粗略空间只有约 `0.5R`；日线 `151.32` 下破分支约 `0.25R`。`2024-01-10` 开盘约 `149.21`、早盘低点约 `146.21`，先触及并穿过首支撑；而以 `151.32` 为原 L2 触发时，开盘已经在触发位下方，必须标成 opening-skip/reprice。该过程补充了“首支撑先到但形态仍不值得交易”的 C 类边界，不改变 `valid_no_trade` 结论。
 
 ### `NFLX 2024-08-20`–`2024-09-26`：高位三推顶部的首支撑/失效边界
 
@@ -217,7 +242,7 @@ Uber 官方投资者关系页面确认 Q2 2024 财报电话会在 `2024-08-06`�
 - 到第一障碍的 R/R；
 - 后续的 Working、Warning、Invalid。
 
-触发后才出现的低点/高点、MM 到位和盈利，不能作为第一障碍或入场理由。若第一障碍未能证明，标签只能是“形态观察”或“valid no-trade”。
+触发后才出现的低点/高点、MM 到位和盈利，不能作为第一障碍或入场理由。若第一障碍未能证明，标签只能是“形态观察”或 `valid_no_trade`。
 
 ## 6. 方向性证据缺口
 

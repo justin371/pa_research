@@ -150,16 +150,22 @@ parent_state: open_trend / trading_range / range_edge / transition / climax / un
 attempt_direction: bullish_attempts / bearish_attempts / unknown
 range_edge_three_push: yes / no / pending
 range_edge_side: upper / lower / none / pending
-same_lineage: yes / no / unclear
+lineage_status: same_lineage / reset / unclear / pending
 third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
 first_reverse: none / touch / structural_break
 second_confirmation: yes / no / pending
+direction: long / short / no_valid_direction
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
 order_branch: stop_confirmation / limit_retest / market_close / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 structural_stop: where and why
-first_obstacle: where and why
-rough_rr: wide / borderline / insufficient / not_frozen
-status: research_candidate / short_reaction / continuation / valid_no_trade
+first_independent_obstacle: where and why
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 
 当 `range_edge_three_push=yes` 时，`range_edge_side` 必须是 `upper` 或 `lower`；上沿只建立空头研究方向，下沿只建立多头研究方向，但触发、空间或合同未冻结时仍可写 `direction: no_valid_direction`。这份输出允许“看起来像三推”与“值得交易”同时得到不同结论，符合视觉研究目标；`third_push_state`、`first_reverse` 和 `second_confirmation` 不替代订单分支或闸门结果。

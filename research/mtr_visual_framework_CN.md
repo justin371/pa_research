@@ -82,7 +82,7 @@ MTR 不是普通回调的另一个名字。它要回答的是：
 | --- | --- | --- |
 | 趋势中的普通 A→B→C | `ordinary_pullback / ABC continuation` | 价格到达主要极端，原趋势恢复失败，并出现反向二次确认 |
 | 成熟区间上沿/下沿的二次测试 | `range_edge_reversal` | 只有区间边缘之外出现失败突破、重新进入并形成新的反向接受，才另开 MTR 分支 |
-| 三推或 H3/L3 | `exhaustion_candidate`、`short_reaction_candidate` 或 `continuation` | 三推减弱、位置重要、反向触发和风险几何同时成立；三推数量本身不够 |
+| 三推或 H3/L3 | `exhaustion_candidate`、`continuation_or_climax`、`range_repeat_test` 或 `channel_continuation` | 三推减弱、位置重要、反向触发和风险几何同时成立；三推数量本身不够 |
 | 趋势线第一次被刺破 | `transition / observation` | 破坏后有收盘接受、跟随或回测守住，且未立即回到趋势通道 |
 | 急跌后的第一根反弹 K | `reversal_attempt` | 后续 H1/H2-like 反向恢复和结构接受清楚，且不被近端阻力否决 |
 
@@ -113,7 +113,7 @@ MTR 与区间边缘可以重叠，但研究记录必须保留两个标签：`ran
 3. 更远的主要结构；
 4. 最后才看 AB=CD 或 measured move。
 
-第一障碍贴近、落在正常波动内，或不足以覆盖结构风险时，标记 `valid_no_trade`。有基本空间但不宽裕时，标记 `conditional/borderline`。只有空间合理时，才进入 `research_positive_candidate`。`1R/2R` 仅用于粗略沟通，不是固定胜率门槛。
+第一障碍贴近、落在正常波动内，或不足以覆盖结构风险时，标记 `valid_no_trade`。有基本空间但不宽裕时，标记 `conditional/borderline`。只有空间合理时，才进入 `research_positive_conditional`。`1R/2R` 仅用于粗略沟通，不是固定胜率门槛。
 
 ## 6. 无后见之明案例审计
 
@@ -180,4 +180,3 @@ MTR 与区间边缘可以重叠，但研究记录必须保留两个标签：`ran
 - 新案例能明确区分 MTR 与普通回调、区间边缘或三推延续。
 
 每个新案例只需要补：完整背景、反转尝试、第二次确认、订单、结构止损、第一障碍、粗略 R/R 和失效路径。达到一个多空各有条件候选、至少两个边界反例后，不再为了“完美案例”无限扩展。
-
