@@ -24,6 +24,8 @@ H/L selection/replay 每批合同数与状态计数见[`H/L selection/replay 状
 
 三推/H3-L3 与成熟区间边缘的字段、方向、订单状态和统计隔离见[`三推/H3-L3 与区间边缘合同边界审计`](three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md)。当前 7 份冻结 CSV 的 60 条合同没有 H3/L3 或区间边缘三推行；本审计不增加分母。
 
+历史视觉证据与 canonical 字段边界见[`历史视觉证据与 canonical 边界审计`](visual_evidence_canonical_boundary_audit_2026-08-29_CN.md)：核对 H/L lineage、Round5 两年 Daily、三推状态、订单/空间显示和 `no-new-positive`；不新增 CSV 或统计分母。
+
 BOP 多日回踩的独立准入清单见[`BOP 合同准入审计`](bop_contract_intake_audit_2026-08-28_CN.md)及[`bop_contract_intake_2026-08-28.csv`](bop_contract_intake_2026-08-28.csv)。该 CSV 只记录现有人工案例的接受、回测和边界状态，全部为 `contract_frozen=no`，不是回放输入。两类 intake 合计 25 行，按底层案例键归并为 22 个案例，其中 3 个案例同时出现在统一和 BOP 专项视图中；详细 schema、方向和引用核对见[`ABC/BOP intake schema 一致性审计`](abc_bop_intake_schema_consistency_audit_2026-08-29_CN.md)。
 
 ## 运行

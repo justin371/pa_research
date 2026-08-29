@@ -1,7 +1,39 @@
 # 三推 / H3-L3 视觉证据缺口审计（2026-08-24）
 
 日期：2026-08-24  
-状态：`visual-research / conditional / no-new-positive / not-statistical`
+状态：`visual-research / conditional / no-new-positive / validated win-rate: not-computable / not-statistical`
+
+本文件是跨案例的历史视觉审计，不是单一标的的完整订单合同。链接案例的日期、来源、周期和
+`data_status` 以各自记录为准；本文件不提供当前行情，也不把聚合表中的自然语言直接当作统一字段。
+案例进入深审时使用以下 canonical 轴：
+
+```text
+contract_scope: historical_context_only
+direction: long / short / no_valid_direction
+lineage_status: same_lineage / reset / unclear / pending
+attempt_direction: bullish_attempts / bearish_attempts / unknown
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
+first_reverse: none / touch / structural_break
+second_confirmation: yes / no / pending
+range_edge_three_push: yes / no / pending
+range_edge_side: upper / lower / none / pending
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+gap_policy: accept_open / skip / flag_only / not_applicable
+structural_stop:
+first_independent_obstacle:
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+```
+
+`research_positive_candidate`、`same-lineage`、`range-repeat`、`expansion-or-climax`、
+`first-obstacle-crowded` 和 `gap-reprice` 在本文件中仅保留为历史说明别名；新记录分别映射到
+`research_positive_conditional`、`same_lineage`/`pending`、`range_repeat_test`、
+`continuation_or_climax`、`space_status` 和 `branch_role: gap_reprice`。若没有独立触发、结构止损和
+首障碍空间，不能从这些别名推导交易授权或胜率分母。
 
 ## 1. 本轮核心问题
 
@@ -48,7 +80,7 @@
 
 | 案例 | 第三推状态 | 订单/首障碍 | 当前裁决 |
 | --- | --- | --- | --- |
-| [`KLAC 2025-03-17–03-26`](klac_h3_bear_flag_case_2025-03-12_2025-03-28.md) | 熊旗顶部第三次上探接近 `74–75` 阻力但没有接受；第三推后出现空头跟随 | `03-25` 低点下方 sell-stop；结构止损约 `74.50`；首支撑 `66.6–65.1`，约 `1.4R–1.9R`；SOXX 同向，财报过滤通过 | `research_positive_candidate / exhaustion_candidate`；当前最有价值的 H3 条件样本，但 A 重叠、单案例和其他新闻风险仍未冻结 |
+| [`KLAC 2025-03-17–03-26`](klac_h3_bear_flag_case_2025-03-12_2025-03-28.md) | 熊旗顶部第三次上探接近 `74–75` 阻力但没有接受；第三推后出现空头跟随 | `03-25` 低点下方 sell-stop；结构止损约 `74.50`；首支撑 `66.6–65.1`，约 `1.4R–1.9R`；SOXX 同向，财报过滤通过 | `research_state: research_positive_conditional / third_push_state: exhaustion_candidate / trade_state: not_authorized`；当前最有价值的 H3 条件样本，但 A 重叠、单案例和其他新闻风险仍未冻结 |
 | [`TSLA 2025-03-07–03-10`](tsla_l1_l2_l3_case_study_2025-02-19_2025-03-10.md) | 第三推加速并形成卖出高潮，属于 `continuation_or_climax` | `220–224` 支撑/MM 只能作目标层；第三推末端不能用后续止跌倒灌抄底 | `provisional L3 / continuation-risk`，不是楔形衰竭正例 |
 | [`TSLA 2026-05-19–06-26`](h3_l3_research_gate_CN.md) | 三次低点收窄并落在支撑区，属于短级别 `exhaustion_candidate` | `379.12` 确认、`368.60` 结构风险；首阻力 `385.20–387.80` 约 `0.63R–0.83R` | 可研究短线反应，日线/波段 `valid_no_trade`；不升级 MTR |
 | [`XOM 2024-07-18–08-02`](xom_bearish_h3_flag_expansion_boundary_2024-07-18_2024-08-02.md) | 第三次上探抬高并扩大，明显偏 `continuation_or_climax` | `08-02` 开盘跳过原 sell-stop；首支撑约 `105.20`，重订后约 `0.7R` | `gap-reprice / valid_no_trade`，不是衰竭三推 |
@@ -57,6 +89,11 @@
 | [`ASML 2025-05-19–06-13`](asml_h3_l3_range_transition_boundary_2025-05-19_2025-06-13.md) | 下沿重复测试、重叠增多，属于 `range_repeat_test` | 没有可冻结的第三次同级别推进、反向二次触发和 R/R | `not_h3_l3 / range-transition` |
 | [`NFLX 2024-08-05–09-26`](nflx_three_push_top_boundary_2024-08-05_2024-09-26.md) | 高位测试超过三次且重叠多；衰竭外观存在但计数不干净 | `67.10` 下方触发，首支撑 `66.54–65.98` 仅约 `0.1R–0.25R` | `three-push-top-like / valid_no_trade / later-invalidated` |
 | [`ANET 2024-05-16–06-10`](anet_h3_l3_case_study_2024-05-16_2024-06-10.md) | 第二推明显扩张，第三次才在支撑附近减速；不是“一推比一推弱” | 事件/跳空背景未闭环；支撑反应可研究但不能冻结普通 L3 反转 | `continuation-or-climax / support-reaction-boundary` |
+
+表中的 canonical 代表值为：KLAC `third_push_state: exhaustion_candidate`、ASML
+`third_push_state: range_repeat_test`；TSLA 2025-03 的第三推属于
+`third_push_state: continuation_or_climax`。其余案例若状态仍依赖后续分流，保持
+`third_push_state: unclear`，不能用历史别名替代判断。
 
 ## 5. KLAC：当前唯一可保留的 H3 条件正向分支
 
@@ -84,7 +121,8 @@
 - 事件过滤通过只解决财报闸门，不排除其他新闻风险；
 - 只有一个方向、一个主要案例，不能镜像成 L3 规则。
 
-因此当前标签保持 `research_positive_candidate / not-production / not-statistical`。
+因此当前状态轴保持 `research_state: research_positive_conditional / trade_state: not_authorized / gate_result: conditional`；
+它仍是 `not-production / not-statistical`，且 `validated win-rate: not-computable`。
 
 ## 6. L3：当前没有干净衰竭正例
 
@@ -136,7 +174,7 @@
 
 正式记录：
 
-> `H3/L3 / same-lineage / exhaustion / second-confirmation / first-obstacle-space-positive / process-complete`：**no-new-positive**。
+> `third_push_state: exhaustion_candidate / second_confirmation: pending / space_status: unknown / research_state: research_positive_conditional`：**no-new-positive**。
 
 这不是说三推或 H3/L3 没有价值，而是当前 PA Research 已经能可靠区分压力状态，尚未有足够双向、事件干净、空间宽裕的反转样本。下一次只在出现新方向、真实订单分支或新的状态边界时增加案例。
 

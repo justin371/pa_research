@@ -71,6 +71,9 @@
 - [`历史回放结果、交易日志与分母 provenance 审计（2026-08-29）`](backtesting/historical_replay_result_log_provenance_audit_2026-08-29_CN.md)：确认 13 组外部历史结果全部是 `historical_incomplete`，区分模拟 `results.csv`、冻结合同、运行 metadata 与实际交易日志，固定重复样本和当前胜率分母边界；不新增样本；
 - [`BOP 合同准入审计（2026-08-28）`](backtesting/bop_contract_intake_audit_2026-08-28_CN.md)：逐案隔离接受、同日回测、缺口重订和相邻 H/L/ABC 案例；当前没有日线级多日 BOP 正向候选；
 - [`PA 图表视觉识别冒烟验收`](visual_recognition_smoke_test_2026-08-24_CN.md)：图表识别能力、两年背景和当前 acceptance-pending 状态。
+- [`三推/H3-L3 视觉证据缺口审计`](three_push_h3_l3_visual_evidence_gap_audit_2026-08-24_CN.md)：区分衰竭、扩张/高潮、区间重复和通道延续，并保留 KLAC 条件候选与 L3 `no-new-positive` 边界。
+- [`Round5 两年 Daily 左侧背景视觉练习`](visual_recognition_round5_two_year_daily_2026-08-24_CN.md)：4 个标的、8 个历史截断案例的两年背景、重要高低点、EMA 和 H/L/三推边界。
+- [`历史视觉证据与 canonical 边界审计`](backtesting/visual_evidence_canonical_boundary_audit_2026-08-29_CN.md)：统一三推/H-L 历史显示标签、两年背景证据头、方向、订单/空间和统计隔离。
 
 ## 冻结合同回放
 

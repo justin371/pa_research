@@ -201,6 +201,8 @@ Round4 历史图表视觉练习见[`Round4 历史图表视觉练习与 H/L/ABC �
 
 Round5 两年 Daily 左侧背景练习见[`Round5 两年 Daily 左侧背景与 ABC/H-L/三推视觉练习`](../research/visual_recognition_round5_two_year_daily_2026-08-24_CN.md)及其[`无标签图表资产`](../research/assets/visual_recognition/2026-08-24/round5_two_year_daily/README.md)；本轮 4 个标的、8 个 targeted 案例完成两年背景字段，但严格计数和可比正样本仍为 `0`。
 
+历史视觉证据与 canonical 字段边界的统一审计见[`历史视觉证据与 canonical 边界审计`](../research/backtesting/visual_evidence_canonical_boundary_audit_2026-08-29_CN.md)：provisional lineage 映射为 `pending`，区间重复使用 `range_repeat_test`，视觉首障碍不自动成为冻结空间。
+
 优先 Pattern 的代表性视觉候选与正/反例矩阵见[`优先 Pattern 代表性视觉候选矩阵`](../research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)：每个案例只保留一个主标签，次标签、状态切换、订单合同和首障碍单独记录。
 
 BOP 真实多日回踩的专项审计见[`BOP 真实多日回踩候选审计`](../research/bop_multiday_pullback_candidate_audit_2026-08-24_CN.md)：当前区分了状态切换、同日回测、缺口重订和真正缺失的多日回踩正例。
