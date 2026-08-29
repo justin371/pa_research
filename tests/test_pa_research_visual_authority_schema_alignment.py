@@ -118,8 +118,8 @@ class VisualAuthoritySchemaAlignmentTests(unittest.TestCase):
     def test_visual_card_separates_display_aliases_from_canonical_axes(self):
         content = read(VISUAL_CARD)
         for token in (
-            "primary_pattern: ABC_CONT | BOP | RFB | H3_L3 | MTR | other",
-            "pattern_family: ABC_CONT | BOP | RFB_SECOND | H3_L3 | MTR | other",
+            "primary_pattern: ABC_CONT | BOP | H1_L1 | H2_L2 | H3_L3 | RFB | MTR | other",
+            "pattern_family: ABC_CONT | BOP | H1_L1 | H2_L2 | RFB_SECOND | H3_L3 | MTR | other",
             "internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending",
             "lineage_status: same_lineage / reset / unclear / pending",
             "lineage_id:",
@@ -300,19 +300,28 @@ class VisualAuthoritySchemaAlignmentTests(unittest.TestCase):
                     self.assertIn(token, content, token)
 
     def test_order_protocol_has_no_merged_active_geometry_aliases(self):
-        content = read(REPO_ROOT / "research" / "order_branch_visual_protocol_CN.md")
-        for field in (
-            "decision_time",
-            "trigger_price_or_zone",
-            "actual_or_assumed_fill",
-            "structural_stop_zone",
-            "rough_space_to_obstacle",
-            "gap_or_event_state",
-        ):
-            self.assertFalse(has_active_field(content, field), field)
-        self.assertIn("as_of_time:", content)
-        self.assertIn("actual_fill_or_open_skip:", content)
-        self.assertIn("rough_space_to_first_obstacle_R:", content)
+        paths = (
+            REPO_ROOT / "research" / "order_branch_visual_protocol_CN.md",
+            REPO_ROOT / "research" / "order_contract_cross_pattern_audit_CN.md",
+        )
+        for path in paths:
+            content = read(path)
+            for field in (
+                "decision_time",
+                "trigger_price_or_zone",
+                "actual_or_assumed_fill",
+                "structural_stop_zone",
+                "rough_space_to_obstacle",
+                "gap_or_event_state",
+                "timeframe_and_parent_contract",
+                "trigger_or_zone",
+                "space_to_first_obstacle",
+                "final_status",
+            ):
+                self.assertFalse(has_active_field(content, field), f"{field}: {path}")
+            self.assertIn("as_of_time:", content)
+            self.assertIn("actual_fill_or_open_skip:", content)
+            self.assertIn("rough_space_to_first_obstacle_R:", content)
 
     def test_opening_and_matrix_examples_do_not_merge_contract_fields(self):
         opening = read(REPO_ROOT / "research" / "opening_reversal_visual_framework_CN.md")

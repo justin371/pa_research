@@ -73,7 +73,7 @@ liquidity_source:
 market_cap_gate: pass / fail / pending
 liquidity_gate: pass / fail / pending
 
-event_context: none / earnings / macro / gap / other / unknown
+event_context: raw pre-entry event note (examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed)
 event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
 event_source_as_of:
 earnings_next_three_sessions: yes / no / unknown
@@ -86,6 +86,9 @@ permission: long_allowed / short_allowed / both_allowed / no_direction / unknown
 ```
 
 缺失数据必须写 `unknown` 或 `pending`。不能把没有查到财报、成交额或板块证据写成 `none` 或 `pass`。
+
+`event_context` 保留原始事前事件说明，可带日期或复合限定；`event_bucket` 才是用于统计/分层的 canonical 枚举。
+`event_context: none` 不代表事件已经核验为普通非事件，未知或待定必须保留相应保守状态。
 
 ## 三、两年 Daily 左侧审查
 

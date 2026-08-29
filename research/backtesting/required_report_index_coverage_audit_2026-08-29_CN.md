@@ -10,9 +10,9 @@
 
 ## 事实核对
 
-- validator 的 `$requiredFiles` 当前包含 88 个必需文件；排除 README 后，其中 61 个是 `research/` 或 `research/backtesting/` 直接子目录下的研究报告；
-- 当前 `research/backtesting/` 有 76 个 Markdown 文件，其中 75 个是报告文件，另 1 个是本 section README；
-- 61 个 required research report paths 全部通过 canonical 索引中的真实本地 Markdown 链接覆盖；75 个 backtesting 报告文件也全部通过真实本地链接覆盖，没有孤立报告；
+- validator 的 `$requiredFiles` 当前包含 89 个必需文件；排除 README 后，其中 62 个是 `research/` 或 `research/backtesting/` 直接子目录下的研究报告；
+- 当前 `research/backtesting/` 有 77 个 Markdown 文件，其中 76 个是报告文件，另 1 个是本 section README；
+- 62 个 required research report paths 全部通过 canonical 索引中的真实本地 Markdown 链接覆盖；76 个 backtesting 报告文件也全部通过真实本地链接覆盖，没有孤立报告；
 - `research/README.md` 是研究报告的综合重点入口，覆盖 requiredFiles 中的研究报告和本 section 的重点历史报告；`research/backtesting/README.md` 是回放/合同/版本边界的重点入口，不要求把全部历史审计报告逐条重复到每一个 section README；因此个别报告只在综合重点入口和相关专题入口出现，不属于遗漏；
 - 已将本报告加入 `docs/README.md`、`research/README.md`、`research/backtesting/README.md`、`patterns/README.md`、`foundations/README.md` 和 `strategy/README.md`，并把覆盖规则加入文档 validator，后续新增 required research report 若未进入任一 canonical 索引会直接失败。
 
@@ -28,7 +28,7 @@
 
 ## 追加当前计数与真实链接复核（2026-08-29）
 
-后续文档审计发现，本报告最初记录的 `83 / 56 / 69 / 68` 是前一时点快照；随着后续报告进入当前 checkout，实际基线已变为 `88` 个 requiredFiles、`61` 个 required research reports、`76` 个 backtesting Markdown 文件和 `75` 个 backtesting reports。上述事实计数已更新，研究结论没有变化。
+后续文档审计发现，本报告最初记录的 `83 / 56 / 69 / 68` 是前一时点快照；随着后续报告进入当前 checkout，实际基线已变为 `89` 个 requiredFiles、`62` 个 required research reports、`77` 个 backtesting Markdown 文件和 `76` 个 backtesting reports。上述事实计数已更新，研究结论没有变化。
 
 同时，原覆盖守卫以报告文件名是否出现在索引文本中作为判断条件，存在“正文提到文件名但没有 Markdown 链接”的误判可能。现已改为解析 canonical 索引中的本地 Markdown 链接、按索引所在目录解析目标并与仓库内规范化路径比较；required research reports 与 tracked historical visual candidates 均使用该真实链接集合。回归测试同步采用同一语义。
 

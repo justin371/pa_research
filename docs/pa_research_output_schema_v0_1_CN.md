@@ -35,6 +35,22 @@ stage_1_fast_screen / deep_review / daily_candidate / historical_context_only
 - 回放输入中的 `entry_trigger`、`structural_stop`、`first_obstacle` 和 `target_price` 必须是有限数值价格；研究卡中的价格区域、`pending` 或 `unknown` 不能直接替代这些冻结数值。`market_close` 可以没有 `entry_trigger`，但仍必须满足该分支的其他合同要求。
 - 记录字段 `actual_fill_or_open_skip` 使用下划线状态，和回放结果字段 `fill_status` 的 `no-fill`、`opening-skip`、`unproven`、`not-traded` 不是同一字段，不能混写或互相推断。
 
+研究记录到当前回放器的字段映射只在冻结阶段显式发生，不能靠同名或相似文字自动推断：
+
+| 研究记录字段 | 冻结合同输入字段 | 回放结果字段 | 边界 |
+| --- | --- | --- | --- |
+| `new_trigger` | `entry_trigger` | `planned_entry_trigger` | 只有在触发价已经冻结为有限数值时映射；`market_close` 可留空 |
+| `first_independent_obstacle` | `first_obstacle` | `first_obstacle` | 先把区域/文字冻结为数值；`first_obstacle_hit` 是事后路径字段，不能反向覆盖它 |
+| `structural_stop` | `structural_stop` | `structural_stop` | 同名不代表可以使用结果阶段的改写 |
+| `pre_entry_space_R` / `space_status` | 同名可选输入字段 | 同名结果/摘要字段 | 只保留入场前冻结值；不能由 `space_to_first_obstacle_R` 或 `realized_R` 倒推 |
+| `actual_fill_or_open_skip` | 无直接输入映射 | `fill_status` | 研究注释不能伪造成交；`fill_status` 由回放路径产生，状态命名也不同 |
+
+`contract_scope`、`data_status`、`chart_scope`、`timeframes_seen`、`state_transition`、`bop_state`、
+`branch_role`、`special_subtype`、`a_leg_quality`、`b_leg_class` 和 `b_leg_location` 是上游研究/视觉字段，
+当前 engine 不把它们当作回放订单输入。回放 loader 只构造 `BacktestContract` 声明的字段，并忽略未知 CSV
+列；因此冻结 CSV 保留上游字段也不会让 engine 消费这些字段。validator 允许部分上游字段作为 provenance
+超集保留，但新合同仍必须以本节的显式投影和当前 engine 必需列为准。
+
 `actual_fill_or_open_skip` 只表示研究合同/历史回放的订单路径注释，不是券商或账户的实际成交日志。仅有入场前证据的候选/视觉记录不得写 `filled`；若统一模板保留此字段，应写 `not_applicable`。真实交易日志必须来自另立的独立来源，不能由该字段或回放结果冒充。
 
 ## 一、证据头与市场闸门
@@ -61,7 +77,7 @@ daily_ema20_slope: up / flat / down / unknown
 daily_ema50_slope: up / flat / down / unknown
 h_l_ema_slope_gate: long_pass / short_pass / fail_flat_or_opposite / pending / not_applicable
 
-event_context: none / earnings / macro / gap / other / unknown
+event_context: raw pre-entry event note (examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed)
 event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
 event_source_as_of:
 earnings_next_three_sessions: yes / no / unknown
@@ -74,6 +90,10 @@ gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 
 `as_of_time`、时区、session 和 `completed_bar_as_of` 必须能区分报告生成时间、查询窗口结束时间和实际可用的最新完整 K 线。历史数据不能写成实时数据。
+
+`event_context` 不是封闭枚举，而是事前原始事件记录；可以保留日期、来源、复合限定或审查状态。`event_bucket`
+才是用于报告分层的 canonical 派生枚举。`event_context: none` 只表示没有记录到事件说明，不自动证明已经完成事件核验；
+未知、待定和未核实状态必须由 `event_bucket` 保守承接，不能因后续结果被改写。
 
 `chart_scope` 描述整张图表的可见完整度；`daily_context_window` 单独描述 Daily 左侧是否覆盖至少两年。批次卡中的 `two_year_chart_coverage` 只表示该批次的汇总覆盖率，不能替代逐标的 `daily_context_window`。`a_leg_quality` 和 `b_leg_class` 是共同的 A/B 视觉质量字段；独立主题可以记录它们作为背景对照，但不能因此继承 ABC/H-L 计数。
 
@@ -169,7 +189,7 @@ pattern_like_reason:
 当 `primary_pattern: BOP` 时必须填写：
 
 ```text
-bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation
+bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable
 breakout_boundary:
 acceptance_close:
 follow_through:
@@ -178,6 +198,9 @@ role_reversal_held: yes / no / unclear / not_occurred
 ```
 
 `BOP` 是独立主合同。ABC、H1/H2 或三推只能放入 `secondary_context`，不能使用 `BOP_ABC` 作为主 pattern，也不能把 BOP 与 ABC/H-L 结果混算。没有回踩时只能写 `acceptance_watch` 或相应的 gap/event 分支，不能补写不存在的回踩。
+
+`bop_state: not_applicable` 只用于非 BOP 记录；`primary_pattern: BOP` 的记录必须使用前五种 BOP 状态之一，不能用
+`not_applicable` 规避突破、回踩或失效证据。
 
 当事前可见边界被日线强收盘越过、获得跟随并在回踩中守住而形成 `state_transition: breakout_acceptance` 时，原 pattern/反向 thesis 与其旧订单合同立即失效；必须以 `primary_pattern: BOP` 重建 `new_trigger`、`structural_stop`、`first_independent_obstacle` 和空间，不能沿用旧 entry/stop/target，也不能把旧合同结果并入 BOP。
 
@@ -215,7 +238,7 @@ main_uncertainty_or_exclusion:
 
 ```text
 fill_status: filled / no-fill / opening-skip / unproven / not-traded
-evidence_status: comparable / excluded / excluded_incomplete_horizon / excluded_ambiguous / observation_only
+evidence_status: comparable / excluded / excluded_incomplete_horizon / excluded_ambiguous / observation_only / not-a-trade
 pre_entry_provenance_status: complete / incomplete
 pre_entry_provenance_missing_fields:
 planned_entry_trigger:
@@ -233,6 +256,10 @@ exit_date:
 ```
 
 `first_obstacle_hit` 是路径过程字段，不是胜负标签；触及首障碍不能自动写成 `win`。若首障碍只出现在未解决的 stop/target 歧义路径上，应写 `unknown`。`realized_R` 只有在成交、路径完成、无未解决歧义且 `win_rate_eligible=yes` 时才可进入可比结果。`opening-skip`、`no-fill`、`observation_only`、`incomplete-horizon`、`ambiguous_intrabar` 和 `pending` 不进入胜率分母。`max_hold_bars` 表示实际交易 `entry_bar` 之后允许观察的完整 K 线数；非 `market_close` 的时间退出在观察窗口结束后的下一根 K 线开盘成交，因此 `bars_held` 这个 backtesting.py 的 entry/exit bar 索引距离可能比 `max_hold_bars` 多 1，不能把该执行索引差异误读成额外的自由持仓。`market_close` 按收盘时间索引计数；如果数据末尾没有可执行的时间退出价格，则必须标为 `incomplete-horizon`。
+
+`evidence_status: not-a-trade` 是 engine 对 no-fill、opening-skip 或 not-traded 等基础非交易路径的结果状态；
+它不同于研究者主动冻结的 `observation_only`，也不代表负面交易结果。当前 engine 的 `TRADE_RESULTS` 只包含已完成的
+`win / loss / scratch`；结果字段中的 `pending`、`not-applicable` 和上述非交易 evidence 状态仍必须留在胜率分母之外。
 
 `summary.json` 的 `completed_trade_count` 只统计同时满足 `pre_entry_provenance_status=complete`、`win_rate_eligible=yes`、`trade_result=win/loss/scratch`、`evidence_status=comparable`、`fill_status=filled`、非空 `path_result`、无歧义/未完成 horizon、非重复结果且有有限 `realized_R` 的行；如果结果行带有 H/L EMA gate，还必须由该事前 gate 推导出 `contract_eligibility=eligible`。缺失 `path_result` 的结果没有足够的路径审计证据，只能留在排除 bucket，不能进入胜率分母。`pre_entry_provenance_status=incomplete` 的行只能作为描述性结果，`pre_entry_provenance_missing_fields` 必须保留缺失项。`win_rate_eligible_count` 是结果旗标数量，不应在旗标与结果不一致时直接当作分母；`win_rate_eligibility_mismatch_count`、`contract_eligibility_mismatch_count`、`event_bucket_mismatch_count`、`contract_space_bucket_mismatch_count`、`win_rate_guard_exclusion_count` 和互斥的 `outcome_bucket_counts` 必须保留用于审计。`event_bucket` 与 `contract_space_bucket` 必须从原始事前字段重算，结果文件中的同名派生字段不能反向覆盖合同证据。`first_obstacle_hit`、`space_to_first_obstacle_R` 和 `realized_R` 是结果阶段字段，不得回填入 `space_status`、`pre_entry_space_R` 或任何 EMA gate。
 

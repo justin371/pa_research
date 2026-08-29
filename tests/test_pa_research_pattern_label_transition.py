@@ -75,7 +75,7 @@ class PatternLabelTransitionTests(unittest.TestCase):
             visual,
         )
         self.assertIn(
-            "pattern_family: ABC_CONT | BOP | RFB_SECOND | H3_L3 | MTR | other",
+            "pattern_family: ABC_CONT | BOP | H1_L1 | H2_L2 | RFB_SECOND | H3_L3 | MTR | other",
             visual,
         )
         self.assertIsNone(

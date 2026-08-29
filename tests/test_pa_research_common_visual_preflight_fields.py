@@ -62,7 +62,7 @@ class CommonVisualPreflightFieldTests(unittest.TestCase):
 
         for token in (
             "chart_scope:             # full / partial / unavailable",
-            "event_context:           # none / earnings / macro / gap / other / unknown",
+            "event_context:           # raw pre-entry event note; examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed",
             "a_leg_quality: strong / ordinary / unclear / event_driven",
             "b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear",
             "b_leg_location:",

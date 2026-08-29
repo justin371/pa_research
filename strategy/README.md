@@ -49,6 +49,7 @@
 - [`历史案例入口合同盘点审计`](../research/backtesting/historical_case_entry_inventory_contract_audit_2026-08-29_CN.md)：登记矩阵之外的 candidate/screen/case-study 入口及其 canonical、历史别名和结果边界；不新增样本或结果。
 - [`顶层 research 历史正向条件入口边界审计`](../research/backtesting/top_level_research_entry_boundary_audit_2026-08-30_CN.md)：登记 9 个条件性正向历史入口的 evidence/status、事前/事后和授权边界；不新增样本或结果。
 - [`PA Research canonical 入口交叉覆盖审计`](../research/backtesting/canonical_entry_cross_coverage_audit_2026-08-30_CN.md)：交叉核对报告、资产、Markdown 模板、requiredFiles、历史 inventory 与 validator/test 守卫。
+- [`schema / engine / validator 漂移审计`](../research/backtesting/schema_engine_validator_drift_audit_2026-08-30_CN.md)：核对研究字段、回放字段、枚举和版本声明，保留显式投影与隔离边界。
 - [`requiredFiles 与研究报告索引覆盖审计`](../research/backtesting/required_report_index_coverage_audit_2026-08-29_CN.md)：核对 validator requiredFiles 中研究报告与 canonical 索引的映射，不新增样本或结果。
 - [`统计结论、正例表述与授权边界一致性审计`](../research/backtesting/conclusion_boundary_consistency_audit_2026-08-29_CN.md)：统一统计状态别名、60% 待检验目标与研究/交接边界，不新增样本或结果。
 - [`视觉识别能力与图表 provenance 边界审计`](../research/backtesting/visual_capability_boundary_audit_2026-08-29_CN.md)：限定人工大体识别的研究用途，核对两年 Daily、重要高低点和 EMA 前置证据，不新增样本或结果。

@@ -85,7 +85,7 @@ query_period_end:
 completed_bar_as_of:
 timeframes_seen:
 earnings_next_three_sessions: yes / no / unknown
-event_context: none / earnings / macro / gap / other / unknown
+event_context: raw pre-entry event note (examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed)
 event_source_as_of:
 direction: long / short / no_valid_direction
 sector_reference / sector_state:
@@ -95,6 +95,9 @@ lower_timeframe / lower_role:
 permission: long_allowed / short_allowed / both_allowed / no_direction / unknown
 gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
+
+`event_context` 是原始事前事件说明，不是封闭枚举；日期、来源、复合限定和 `unknown` 都应原样保留。
+报告分层使用 `event_bucket`，不能把 `event_context: none` 直接当作已核验的 `ordinary_non_event`。
 
 ## 8. 证据入口与边界
 

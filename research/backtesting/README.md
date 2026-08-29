@@ -55,6 +55,8 @@ Round4、Round5 与 TSLA 资产的 canonical provenance、两年 Daily/重要高
 顶层 research 中 9 个条件性正向历史入口的 scope/status 与结果隔离见[`顶层 research 历史正向条件入口边界审计`](top_level_research_entry_boundary_audit_2026-08-30_CN.md)；不新增回放样本或胜率分母。
 canonical index、requiredFiles、backtesting 报告、活动模板、资产 manifest 与历史 inventory 的交叉覆盖见[`PA Research canonical 入口交叉覆盖审计`](canonical_entry_cross_coverage_audit_2026-08-30_CN.md)；不新增回放样本或胜率分母。
 
+schema、活动模板、validator 与 engine 的字段/枚举/版本漂移及研究字段投影见[`schema / engine / validator 漂移审计`](schema_engine_validator_drift_audit_2026-08-30_CN.md)；不修改 CSV/engine，不新增样本或结果。
+
 BOP 多日回踩的独立准入清单见[`BOP 合同准入审计`](bop_contract_intake_audit_2026-08-28_CN.md)及[`bop_contract_intake_2026-08-28.csv`](bop_contract_intake_2026-08-28.csv)。该 CSV 只记录现有人工案例的接受、回测和边界状态，全部为 `contract_frozen=no`，不是回放输入。两类 intake 合计 25 行，按底层案例键归并为 22 个案例，其中 3 个案例同时出现在统一和 BOP 专项视图中；详细 schema、方向和引用核对见[`ABC/BOP intake schema 一致性审计`](abc_bop_intake_schema_consistency_audit_2026-08-29_CN.md)。
 
 ## 运行
@@ -89,7 +91,13 @@ py -3 .\scripts\validate_pa_research_artifact.py .\research\backtesting\example-
 
 价格文件必须包含 `Date,Open,High,Low,Close`，可以包含 `Symbol,Volume`。多标的文件用 `Symbol` 分组；单标的文件必须在命令行传 `--symbol`。程序不会替代数据源、复权、公司行动或两年图表审查。
 
-`contract_scope`、`data_status`、`chart_scope` 和 `timeframes_seen` 属于上游视觉/研究记录的证据 provenance，不从价格 CSV 推断，也不会被回放器补写；输入 CSV 只保留冻结合同需要的 `daily_context_window` 及其余机器字段。`daily_context_window` 不是“CSV 有两年价格”这一事实的别名，必须来自逐标的人工看图记录；缺失时按合同不完整处理。
+`contract_scope`、`data_status`、`chart_scope` 和 `timeframes_seen` 属于上游视觉/研究记录的证据 provenance，不从价格 CSV 推断，也不会被回放器补写；输入 CSV 以冻结合同需要的 `daily_context_window` 及机器字段为核心，也可以按已登记边界保留上游 provenance 超集。`daily_context_window` 不是“CSV 有两年价格”这一事实的别名，必须来自逐标的人工看图记录；缺失时按合同不完整处理。
+
+研究记录到冻结回放输入的字段投影必须显式完成：`new_trigger` 先冻结为数值 `entry_trigger`，
+`first_independent_obstacle` 先冻结为数值 `first_obstacle`，`structural_stop` 保持同名；回放结果
+再把 `entry_trigger` 暴露为 `planned_entry_trigger`。`actual_fill_or_open_skip` 没有直接输入映射，
+不能伪造成 `fill_status`。`event_context` 是可带日期/复合限定的原始事前事件说明，`event_bucket`
+才是回放摘要使用的 canonical 派生枚举。
 
 合同文件的通用字段必须包含：
 

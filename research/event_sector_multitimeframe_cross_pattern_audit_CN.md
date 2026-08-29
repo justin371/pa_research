@@ -129,7 +129,7 @@ data_source:
 data_status: historical / delayed / live_confirmed / incomplete
 as_of_time:
 earnings_next_three_sessions: yes / no / unknown
-event_context: none / earnings / macro / gap / other / unknown
+event_context: raw pre-entry event note (examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed)
 sector_reference:
 sector_state: aligned / mixed / counter / unknown
 market_reference:

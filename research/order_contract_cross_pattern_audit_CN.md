@@ -3,6 +3,10 @@
 日期：2026-08-23  
 状态：`visual-research / order-contract-audit / not-production`
 
+本文件保留为 2026-08-23 的 PA Research 研究层历史交叉审计，不是当前回放器的输入模板。
+为避免旧字段继续被当作活动入口，下面的统一订单卡已经收敛到 canonical 字段；五种订单合同
+仍包含研究层的 `stop_limit` 与 `observation_only`，但当前 engine 只接受其中的三种可回放分支。
+
 ## 目的
 
 形态判断、订单是否成立、订单是否成交、成交后是否有空间，是四个不同问题。本文件把已有的[`订单分支视觉协议`](order_branch_visual_protocol_CN.md)映射到八个主动 pattern，防止用后续走势补写成交或用低周期窄止损美化高周期 R/R。
@@ -17,28 +21,53 @@
 | `stop_limit` | 需要触发确认但限制最差成交价 | 先触发，随后仍在 limit 范围成交 | 跳过 limit 仍算成交；成交未知时不能按普通 stop 计算结果 |
 | `observation_only` | 形态像但空间、事件、数据或结构不合格 | 没有交易合同 | 观望是失败；后续盈利不能改写当时不应交易 |
 
-开盘跳过原触发时，统一写 `original_order_status: opening_skip / fill_unknown / not_filled`，然后按实际可成交价重建或取消；不能保留旧入场价、旧止损和旧 R/R。
+开盘跳过原触发时，研究记录写 `actual_fill_or_open_skip: opening_skip / fill_unknown / no_fill`，
+结果记录另写 engine 的 `fill_status: opening-skip / unproven / no-fill`，然后按实际可成交价重建或取消；
+不能保留旧入场价、旧止损和旧 R/R。
 
 ## 统一订单卡
 
 ```text
+contract_scope: deep_review / historical_context_only
+as_of_time:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+timeframes_seen:
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+direction: long / short / no_valid_direction
 pattern_state:
-decision_time:
-timeframe_and_parent_contract:
 signal_bar:
-trigger_or_zone:
+confirmation_bar:
+new_trigger:
+order_price_or_zone:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
-actual_or_assumed_fill:
-original_order_status: pending / triggered / filled / opening_skip / not_filled / fill_unknown
-structural_stop_zone:
-stop_price_or_area:
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+gap_policy: accept_open / skip / flag_only / not_applicable
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
+structural_invalidation:
+structural_stop:
 first_independent_obstacle:
-space_to_first_obstacle: positive / borderline / blocked / unknown
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 rough_R_R:
-gap_event_sector_adjustment:
-what_cancels_contract:
-final_status: research_candidate / research_positive_conditional / valid_no_trade / failed_thesis / pending
+event_context: raw pre-entry event note (examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed)
+event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
+main_uncertainty_or_exclusion:
+research_state: pattern_like / research_candidate / research_positive_conditional / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
+
+历史材料中的 `decision_time`、`timeframe_and_parent_contract`、`trigger_or_zone`、
+`actual_or_assumed_fill`、`structural_stop_zone`、`space_to_first_obstacle` 和 `final_status`
+只作为旧字段引用时按以下关系阅读：分别对应 `as_of_time`、`timeframes_seen`/`contract_scope`、
+`new_trigger` + `order_price_or_zone`、`actual_fill_or_open_skip`、`structural_stop` +
+`structural_invalidation`、`rough_space_to_first_obstacle_R` 和 `research_state`/
+`trade_state`/`gate_result`。这些旧名称不再作为统一订单卡的活动字段，也不能被 loader 当作
+当前回放输入列。
 
 ## 八个 Pattern 的默认分支
 

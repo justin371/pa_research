@@ -232,9 +232,9 @@ class RequiredReportIndexCoverageTests(unittest.TestCase):
         self.assertIn(AUDIT_PATH.name, read(BACKTEST_ROOT / "README.md"))
         self.assertIn(AUDIT_PATH.name, read(REPO_ROOT / "strategy" / "README.md"))
         for token in (
-            "88 个必需文件",
-            "61 个是",
-            "75 个是报告文件",
+            "89 个必需文件",
+            "62 个是",
+            "76 个是报告文件",
             "没有孤立报告",
             "no-new-positive",
             "validated win-rate: not-computable",

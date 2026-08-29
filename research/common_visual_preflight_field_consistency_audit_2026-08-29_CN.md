@@ -64,7 +64,7 @@ first_independent_obstacle:
 
 ```text
 chart_scope: full / partial / unavailable
-event_context: none / earnings / macro / gap / other / unknown
+event_context: raw pre-entry event note (examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed)
 ```
 
 两年覆盖由 `daily_context_window` 表达，不能把 `full` 自动解释为已经看满两年。

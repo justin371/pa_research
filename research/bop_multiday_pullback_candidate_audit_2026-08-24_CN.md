@@ -44,14 +44,14 @@ candidate_class: bop_candidate / failed_breakout_boundary / range_edge_boundary 
 direction: long / short / no_valid_direction
 secondary_context: gap-and-go / former-double-top / H1-H2 / channel / triangle
 state_transition: none / breakout_acceptance / role_reversal / failed_breakout
-bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation
+bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable
 acceptance: close outside + follow-through + hold/retest evidence
 retest: intraday-only / single-session / multi-day / not-occurred
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / role_reversal_retest / gap_reprice / management
 lineage_status: same_lineage / reset / unclear / pending
 lineage_id:
-event_context: none / earnings / macro / gap / other / unknown
+event_context: raw pre-entry event note (examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed)
 event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
 range_edge_three_push: yes / no / pending / not_applicable
 internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending

@@ -132,13 +132,13 @@ rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
 pre_entry_space_R:
 space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 rough_R_R:
-bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation
+bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable
 breakout_boundary:
 acceptance_close:
 follow_through:
 retest_zone:
 role_reversal_held: yes / no / unclear / not_occurred
-event_context: none / earnings / macro / gap / other / unknown
+event_context: raw pre-entry event note (examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed)
 event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
 research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
 trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending

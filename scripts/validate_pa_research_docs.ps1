@@ -273,6 +273,7 @@ $requiredFiles = @(
     'research/backtesting/historical_case_entry_inventory_contract_audit_2026-08-29_CN.md',
     'research/backtesting/top_level_research_entry_boundary_audit_2026-08-30_CN.md',
     'research/backtesting/canonical_entry_cross_coverage_audit_2026-08-30_CN.md',
+    'research/backtesting/schema_engine_validator_drift_audit_2026-08-30_CN.md',
     'research/backtesting/required_report_index_coverage_audit_2026-08-29_CN.md',
     'research/backtesting/conclusion_boundary_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/visual_capability_boundary_audit_2026-08-29_CN.md',
@@ -715,6 +716,7 @@ $canonicalChecks = @{
         'first_reverse: none / touch / structural_break',
         'second_confirmation: yes / no / pending',
         'range_edge_side: upper / lower / none / pending',
+        'event_context: raw pre-entry event note (examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed)',
         'event_bucket:',
         'win_rate_eligible:',
         'pre_entry_provenance_status:',
@@ -734,7 +736,8 @@ $canonicalChecks = @{
         'contract_eligibility_mismatch_count',
         'event_bucket_mismatch_count',
         'contract_space_bucket_mismatch_count',
-        'bop_state:',
+        'bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable',
+        'evidence_status: comparable / excluded / excluded_incomplete_horizon / excluded_ambiguous / observation_only / not-a-trade',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'gap_policy: accept_open / skip / flag_only / not_applicable',
         'gate_result:',
@@ -761,8 +764,8 @@ $canonicalChecks = @{
         'foundations_readme_entries: 9',
         'patterns_readme_entries: 17',
         'strategy_markdown_entries: 7',
-        'backtesting_reports: 75',
-        'required_research_reports: 61',
+        'backtesting_reports: 76',
+        'required_research_reports: 62',
         'visual_asset_readmes: 11',
         'png_assets: 105',
         'backtesting_csv: 18',
@@ -785,6 +788,25 @@ $canonicalChecks = @{
         'no Codex Trading',
         'no quantitative scanner',
         'no Execution Agent'
+    )
+    'research/order_contract_cross_pattern_audit_CN.md' = @(
+        'contract_scope: deep_review / historical_context_only',
+        'primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other',
+        'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
+        'direction: long / short / no_valid_direction',
+        'new_trigger:',
+        'actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable',
+        'structural_invalidation:',
+        'structural_stop:',
+        'first_independent_obstacle:',
+        'rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown',
+        'space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown',
+        'event_context: raw pre-entry event note (examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed)',
+        'event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified',
+        'research_state: pattern_like / research_candidate / research_positive_conditional / valid_no_trade / failed_thesis / pending',
+        'trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending',
+        'handoff_status: research_only / not_ready / ready_for_system',
+        '这些旧名称不再作为统一订单卡的活动字段'
     )
     'research/backtesting/conclusion_boundary_consistency_audit_2026-08-29_CN.md' = @(
         'validated win-rate: not-computable',
@@ -840,7 +862,7 @@ $canonicalChecks = @{
     )
     'docs/visual_pa_review_card_CN.md' = @(
         'chart_scope:             # full / partial / unavailable',
-        'event_context:           # none / earnings / macro / gap / other / unknown',
+        'event_context:           # raw pre-entry event note; examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed',
         'a_leg_quality: strong / ordinary / unclear / event_driven',
         'b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear',
         'special_subtype: ordinary / deep_late_controlled_B / bull_flag / earnings_driven / event_driven / gap_reprice / none',
@@ -854,7 +876,8 @@ $canonicalChecks = @{
         'rough_R_R:',
         'direction: long / short / no_valid_direction',
         'parent_state: open_trend / trading_range / range_edge / transition / climax / unclear',
-        'pattern_family: ABC_CONT | BOP | RFB_SECOND | H3_L3 | MTR | other',
+        'primary_pattern: ABC_CONT | BOP | H1_L1 | H2_L2 | H3_L3 | RFB | MTR | other',
+        'pattern_family: ABC_CONT | BOP | H1_L1 | H2_L2 | RFB_SECOND | H3_L3 | MTR | other',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'attempt_direction: bullish_attempts / bearish_attempts / unknown',
         'third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear',
@@ -3483,8 +3506,8 @@ $visualPaReviewCardPath = Join-Path -Path $repoRoot -ChildPath 'docs/visual_pa_r
 if (Test-Path -LiteralPath $visualPaReviewCardPath -PathType Leaf) {
     $visualPaReviewCardContent = Get-Utf8Text -Path $visualPaReviewCardPath
     foreach ($token in @(
-        'primary_pattern: ABC_CONT | BOP | RFB | H3_L3 | MTR | other',
-        'pattern_family: ABC_CONT | BOP | RFB_SECOND | H3_L3 | MTR | other',
+        'primary_pattern: ABC_CONT | BOP | H1_L1 | H2_L2 | H3_L3 | RFB | MTR | other',
+        'pattern_family: ABC_CONT | BOP | H1_L1 | H2_L2 | RFB_SECOND | H3_L3 | MTR | other',
         'lineage_status: same_lineage / reset / unclear / pending',
         'lineage_id:',
         '历史显示值 `RFB_SECOND` 只映射到兼容主标签 `RFB`'
@@ -3496,6 +3519,50 @@ if (Test-Path -LiteralPath $visualPaReviewCardPath -PathType Leaf) {
     foreach ($legacyToken in @('(?m)^\s*attempt:', '(?m)^\s*same_lineage:')) {
         if ($visualPaReviewCardContent -match $legacyToken) {
             Add-ValidationError "visual PA review card retains active counting alias '$legacyToken'"
+        }
+    }
+}
+
+$rawEventContextTemplateToken = 'event_context: raw pre-entry event note (examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed)'
+$rawEventContextTemplateRelativePaths = @(
+    'docs/pa_research_output_schema_v0_1_CN.md',
+    'docs/daily_candidate_review_card_CN.md',
+    'foundations/05_event_sector_market_gate/README.md',
+    'research/bop_gap_acceptance_framework_CN.md',
+    'research/bop_multiday_pullback_candidate_audit_2026-08-24_CN.md',
+    'research/common_visual_preflight_field_consistency_audit_2026-08-29_CN.md',
+    'research/event_sector_multitimeframe_cross_pattern_audit_CN.md',
+    'research/failed_breakout_climax_visual_framework_CN.md',
+    'research/final_flag_visual_framework_CN.md',
+    'research/head_shoulders_rounded_top_bottom_visual_framework_CN.md',
+    'research/mtr_visual_framework_CN.md',
+    'research/order_branch_visual_protocol_CN.md',
+    'research/opening_reversal_visual_framework_CN.md',
+    'research/visual_pattern_triage_protocol_CN.md'
+)
+foreach ($relativePath in $rawEventContextTemplateRelativePaths) {
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    if (-not $content.Contains($rawEventContextTemplateToken)) {
+        Add-ValidationError "raw event_context declaration is missing: $relativePath"
+    }
+}
+
+$crossPatternOrderProtocolPath = Join-Path -Path $repoRoot -ChildPath 'research/order_contract_cross_pattern_audit_CN.md'
+if (Test-Path -LiteralPath $crossPatternOrderProtocolPath -PathType Leaf) {
+    $crossPatternOrderProtocolContent = Get-Utf8Text -Path $crossPatternOrderProtocolPath
+    foreach ($legacyToken in @(
+        '(?m)^\s*decision_time\s*:',
+        '(?m)^\s*timeframe_and_parent_contract\s*:',
+        '(?m)^\s*trigger_or_zone\s*:',
+        '(?m)^\s*actual_or_assumed_fill\s*:',
+        '(?m)^\s*structural_stop_zone\s*:',
+        '(?m)^\s*space_to_first_obstacle\s*:',
+        '(?m)^\s*final_status\s*:'
+    )) {
+        if ($crossPatternOrderProtocolContent -match $legacyToken) {
+            Add-ValidationError "cross-pattern order protocol retains active legacy field '$legacyToken'"
         }
     }
 }

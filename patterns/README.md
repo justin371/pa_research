@@ -223,6 +223,7 @@ Round4、Round5 与 TSLA 视觉资产的 provenance、两年 Daily、重要高�
 矩阵之外的历史案例入口合同见[`历史案例入口合同盘点审计`](../research/backtesting/historical_case_entry_inventory_contract_audit_2026-08-29_CN.md)：历史显示别名只作导航，不能替代逐案 evidence、状态、订单、空间或结果边界。
 顶层 research 条件性历史入口的状态和结果边界见[`顶层 research 历史正向条件入口边界审计`](../research/backtesting/top_level_research_entry_boundary_audit_2026-08-30_CN.md)：`research_positive_conditional` 不会自动变成 canonical 主标签或授权。
 报告、活动模板、视觉资产和历史 inventory 的 canonical 入口交叉覆盖见[`PA Research canonical 入口交叉覆盖审计`](../research/backtesting/canonical_entry_cross_coverage_audit_2026-08-30_CN.md)：资产 manifest 不等于逐图候选入口。
+- canonical schema、活动模板、validator 与 engine 的字段/枚举/版本边界见[`schema / engine / validator 漂移审计`](../research/backtesting/schema_engine_validator_drift_audit_2026-08-30_CN.md)：研究字段不能直接替代冻结回放输入。
 
 优先 Pattern 的代表性视觉候选与正/反例矩阵见[`优先 Pattern 代表性视觉候选矩阵`](../research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)：每个案例只保留一个主标签，次标签、状态切换、订单合同和首障碍单独记录。
 

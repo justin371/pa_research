@@ -216,7 +216,7 @@ rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
 pre_entry_space_R:
 space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 rough_R_R:
-event_context: none / earnings / macro / gap / other / unknown
+event_context: raw pre-entry event note (examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed)
 event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
 sector_reference:
 sector_state: aligned / mixed / counter / unknown

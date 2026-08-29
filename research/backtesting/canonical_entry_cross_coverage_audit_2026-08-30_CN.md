@@ -34,8 +34,8 @@ validator、回归测试、历史 inventory、视觉资产 README、机器输入
 | `foundations/**/README.md` | 9 | 9/9 由 canonical index 直接链接 |
 | `patterns/**/README.md` | 17 | 17/17 由 canonical index 直接链接 |
 | `strategy/**/*.md` | 7 | 7/7 由 canonical index 直接链接 |
-| `research/backtesting/` 非 README 报告 | 75 | 75/75 由 canonical index 直接链接；validator 与测试均动态检查 |
-| `$requiredFiles` 中的 research 报告 | 61 | 61/61 由 canonical index 直接链接；文件存在性和真实链接均检查 |
+| `research/backtesting/` 非 README 报告 | 76 | 76/76 由 canonical index 直接链接；validator 与测试均动态检查 |
+| `$requiredFiles` 中的 research 报告 | 62 | 62/62 由 canonical index 直接链接；文件存在性和真实链接均检查 |
 | 视觉资产 README | 11 | 11/11 由 canonical index 直接链接 |
 | 视觉 PNG 资产 | 105 | 不逐图伪造 index 链接；11 个资产 README 精确列出 105/105，回归测试核对 manifest |
 | backtesting CSV / JSON | 18 / 1 | 19/19 由 canonical index 直接链接；不等于结果或胜率分母 |
@@ -54,8 +54,8 @@ docs_markdown_entries: 7
 foundations_readme_entries: 9
 patterns_readme_entries: 17
 strategy_markdown_entries: 7
-backtesting_reports: 75
-required_research_reports: 61
+backtesting_reports: 76
+required_research_reports: 62
 visual_asset_readmes: 11
 png_assets: 105
 backtesting_csv: 18

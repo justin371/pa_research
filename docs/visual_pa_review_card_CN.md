@@ -135,7 +135,7 @@ h_l_pullback_location:
 meta_confluence:         # present / absent / unknown
 meta_zone:
 meta_components:
-event_context:           # none / earnings / macro / gap / other / unknown
+event_context:           # raw pre-entry event note; examples: none / earnings / macro / gap / other / unknown; dated/compound qualifiers allowed
 event_source_as_of:
 sector_context:
 sector_reference:
@@ -147,6 +147,9 @@ gate_result:              # pass / conditional / observation_only / valid_no_tra
 ```
 
 如果只有结构化历史数据，没有足够的完整图表上下文，结论必须标为候选或数据审计，不能写成已经完成的视觉判断。历史数据也不能描述成实时行情。
+
+`event_context` 是可带日期、来源和复合限定的原始事前事件记录，不是封闭枚举；`event_bucket` 才是报告分层的 canonical
+枚举。`none` 只表示没有事件说明，不等同于已经完成事件核验；未知或待定必须保留保守的 `event_bucket`。
 
 财报、板块与多周期的统一闸门见[`财报、板块与多周期前置过滤`](../research/event_sector_multitimeframe_cross_pattern_audit_CN.md)：财报前三个交易 session 不新开仓；板块和大盘只提供方向许可；日线选股先由 Daily 决定父级，候选入选后才可用 4H/60m 做深审、1H/15m 做确认或另立低周期合同。
 
@@ -276,15 +279,15 @@ range_edge_side: upper / lower / none / pending
 用最少的标签描述当前候选，允许并列：
 
 ```text
-primary_pattern: ABC_CONT | BOP | RFB | H3_L3 | MTR | other
-pattern_family: ABC_CONT | BOP | RFB_SECOND | H3_L3 | MTR | other
+primary_pattern: ABC_CONT | BOP | H1_L1 | H2_L2 | H3_L3 | RFB | MTR | other
+pattern_family: ABC_CONT | BOP | H1_L1 | H2_L2 | RFB_SECOND | H3_L3 | MTR | other
 internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 abc_mode: continuation / range-edge reaction / reversal candidate / complex / unknown
 pattern_like_reason:
 bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable
 ```
 
-`pattern_family` 是本卡的视觉速记/历史显示字段，不是统一合同的额外主标签；新记录必须同时使用 canonical `primary_pattern`。其中历史显示值 `RFB_SECOND` 只映射到兼容主标签 `RFB`，不能写成新的主标签。`H3_L3` 和 `MTR` 只服务于深审/历史兼容记录；若 `contract_scope: daily_candidate`，仍须把它们收敛到 `primary_pattern: ABC_CONT`/`BOP` 或保留为观察关系。H1/H2/L1/L2 只能放在 `internal_label`，`range_edge_three_push` 只是位置分支，不能替代 `primary_pattern` 或证明 H3/L3 已成立。
+`pattern_family` 是本卡的视觉速记/历史显示字段，不是统一合同的额外主标签；新记录必须同时使用 canonical `primary_pattern`。其中历史显示值 `RFB_SECOND` 只映射到兼容主标签 `RFB`，不能写成新的主标签。`H1_L1`、`H2_L2`、`H3_L3`、`RFB` 和 `MTR` 作为 `primary_pattern` 只适用于已闭合的深审/历史兼容记录；若 `contract_scope: daily_candidate`，仍须把它们收敛到 `primary_pattern: ABC_CONT`/`BOP` 或保留为观察关系。H1/H2/L1/L2 的具体尝试仍只能写在 `internal_label`，`range_edge_three_push` 只是位置分支，不能替代 `primary_pattern` 或证明 H3/L3 已成立。
 
 使用以下判断顺序：
 

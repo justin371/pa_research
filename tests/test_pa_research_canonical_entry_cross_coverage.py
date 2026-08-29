@@ -103,8 +103,8 @@ class CanonicalEntryCrossCoverageTests(unittest.TestCase):
             "foundations_readme_entries: 9",
             "patterns_readme_entries: 17",
             "strategy_markdown_entries: 7",
-            "backtesting_reports: 75",
-            "required_research_reports: 61",
+            "backtesting_reports: 76",
+            "required_research_reports: 62",
             "visual_asset_readmes: 11",
             "png_assets: 105",
             "backtesting_csv: 18",
@@ -138,7 +138,7 @@ class CanonicalEntryCrossCoverageTests(unittest.TestCase):
             [path for path in asset_readme_paths() if path not in indexed], []
         )
         self.assertEqual(len(section_entry_paths()), 40)
-        self.assertEqual(len(backtesting_report_paths()), 75)
+        self.assertEqual(len(backtesting_report_paths()), 76)
         self.assertEqual(len(asset_readme_paths()), 11)
 
     def test_visual_png_manifests_have_no_unlisted_assets(self):
