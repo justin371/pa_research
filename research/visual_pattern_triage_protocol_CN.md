@@ -42,7 +42,7 @@ timeframes_seen:
 data_status: historical / delayed / live_confirmed / incomplete
 chart_scope: full / partial / unavailable
 daily_context_window: >=2y / <2y / unavailable
-market_state: trend / trading_range / transition / climax / unclear
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 directional_bias: bull / bear / balanced / changing
 direction: long / short / no_valid_direction
 pattern_candidate: ABC-CONT / H1-H2-H3 / L1-L2-L3 / range-edge / MTR / other

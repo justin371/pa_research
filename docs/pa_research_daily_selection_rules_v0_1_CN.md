@@ -288,7 +288,7 @@ b_leg_location:
 meta_confluence: present / absent / unknown
 meta_zone:
 meta_components:
-parent_state:
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 direction: long / short / no_valid_direction
 primary_pattern: ABC_CONT / BOP
 secondary_context:

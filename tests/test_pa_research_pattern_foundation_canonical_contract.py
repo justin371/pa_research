@@ -44,6 +44,10 @@ FOUNDATION_DIRS = (
     "08_leg_pressure_signal_quality",
 )
 
+CANONICAL_PARENT_STATE = (
+    "parent_state: open_trend / trading_range / range_edge / transition / climax / unclear"
+)
+
 FOUNDATION_CANONICAL_TOKENS = {
     "03_late_trend_entry_filter": (
         "contract_scope: deep_review / daily_candidate / historical_context_only",
@@ -51,6 +55,7 @@ FOUNDATION_CANONICAL_TOKENS = {
         "daily_context_window: >=2y / <2y / unavailable",
         "major_high_low_review: complete / partial / unavailable",
         "ema20_50_200_review: complete / partial / unavailable",
+        CANONICAL_PARENT_STATE,
         "direction: long / short / no_valid_direction",
         "order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only",
         "actual_fill_or_open_skip:",
@@ -68,6 +73,7 @@ FOUNDATION_CANONICAL_TOKENS = {
         "daily_context_window: >=2y / <2y / unavailable",
         "major_high_low_review: complete / partial / unavailable",
         "ema20_50_200_review: complete / partial / unavailable",
+        CANONICAL_PARENT_STATE,
         "primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other",
         "signal_bar:",
         "new_trigger:",
@@ -128,6 +134,7 @@ FOUNDATION_CANONICAL_TOKENS = {
         "a_leg_quality: strong / ordinary / unclear / event_driven",
         "b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear",
         "b_leg_location:",
+        CANONICAL_PARENT_STATE,
         "signal_bar:",
         "confirmation_bar:",
         "new_trigger:",
@@ -240,6 +247,16 @@ class PatternFoundationCanonicalContractTests(unittest.TestCase):
         self.assertIsNone(re.search(r"(?m)^timeframe:", content))
         self.assertIsNone(re.search(r"(?m)^context_timeframes_seen:", content))
 
+    def test_failed_breakout_local_card_uses_canonical_parent_state(self):
+        content = read(PATTERNS_ROOT / "05_failed_breakout_climax" / "README.md")
+        self.assertIn(CANONICAL_PARENT_STATE, content)
+        self.assertIsNone(
+            re.search(
+                r"(?m)^parent_state:\s+(?:trend|range|channel|transition)\s*$",
+                content,
+            )
+        )
+
     def test_three_push_local_card_uses_the_complete_thesis_state_enum(self):
         content = read(PATTERNS_ROOT / "08_three_push_h3_l3" / "README.md")
         self.assertIn(
@@ -321,6 +338,8 @@ class PatternFoundationCanonicalContractTests(unittest.TestCase):
         ):
             self.assertIn(AUDIT_PATH.name, read(path), path.as_posix())
         for token in (
+            "追加 parent_state 枚举与活动模板复核",
+            "16 个 README",
             "no-new-positive",
             "validated win-rate: not-computable",
             "PA Research only",

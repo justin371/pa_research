@@ -72,7 +72,7 @@ chart_scope: full / partial / unavailable
 daily_context_window: >=2y / <2y / unavailable
 major_high_low_review: complete / partial / unavailable
 ema20_50_200_review: complete / partial / unavailable
-parent_state:
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 range_upper/lower/midpoint:
 left_major_levels:
 a_leg_quality: strong / ordinary / unclear / event_driven

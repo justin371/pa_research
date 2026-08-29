@@ -129,7 +129,7 @@ direction: long / short / no_valid_direction
 
 ```text
 parent_timeframe:
-parent_state:
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
 secondary_context:
 parent_location:

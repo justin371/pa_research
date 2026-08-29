@@ -24,7 +24,7 @@
 ```text
 contract_scope: historical_context_only / deep_review
 primary_pattern: ABC_CONT / RFB / H3_L3 / other / pending
-parent_state: open_trend / range_edge / transition / event-or-gap / unclear
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 directional_bias: bull / bear / balanced / changing
 direction: long / short / no_valid_direction
 internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
@@ -45,6 +45,8 @@ research_state: pattern_like / research_candidate / research_positive_conditiona
 trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
 gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
+
+`event-or-gap` 是旧的混合显示词，不是 `parent_state` 的 canonical 值；事件或缺口必须分别记录在 `event_context`/`event_bucket`，父级状态仍使用上面的统一枚举。
 
 不能把下列分支混成一个统计样本：
 

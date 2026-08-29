@@ -120,6 +120,10 @@ class VisualRecognitionCanonicalBoundaryTests(unittest.TestCase):
             "它不是扫描器，也不是胜率模型",
         ):
             self.assertIn(token, content, token)
+        self.assertNotRegex(
+            content,
+            r"(?m)^market_state:\s+trend\s+/\s+trading_range\s+/\s+transition\s+/\s+climax\s+/\s+unclear\s*$",
+        )
 
     def test_asset_readmes_declare_pairing_and_unlabeled_state(self):
         for path in ASSET_READMES:

@@ -524,6 +524,7 @@ $canonicalChecks = @{
         'why_it_meets_or_fails_the_rule:',
         'possible_entry_trigger:',
         'direction: long / short / no_valid_direction',
+        'parent_state: open_trend / trading_range / range_edge / transition / climax / unclear',
         '日线候选的 `primary_pattern` 白名单只有 `ABC_CONT` 和 `BOP`',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'range_edge_three_push` 只表示成熟区间边缘的第三推位置，不是 `H3_L3` 主标签',
@@ -554,6 +555,7 @@ $canonicalChecks = @{
         'space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown',
         'rough_R_R:',
         'direction: long / short / no_valid_direction',
+        'parent_state: open_trend / trading_range / range_edge / transition / climax / unclear',
         'pattern_family: ABC_CONT | BOP | RFB_SECOND | H3_L3 | MTR | other',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'attempt_direction: bullish_attempts / bearish_attempts / unknown',
@@ -1488,6 +1490,36 @@ foreach ($entry in $canonicalChecks.GetEnumerator()) {
         if (-not $content.Contains($token)) {
             Add-ValidationError "missing canonical token '$token': $($entry.Key)"
         }
+    }
+}
+
+$canonicalParentStateToken = 'parent_state: open_trend / trading_range / range_edge / transition / climax / unclear'
+$canonicalParentStatePaths = @(
+    'docs/pa_research_daily_selection_rules_v0_1_CN.md',
+    'docs/visual_pa_review_card_CN.md',
+    'research/visual_pattern_triage_protocol_CN.md',
+    'patterns/05_failed_breakout_climax/README.md',
+    'foundations/03_late_trend_entry_filter/README.md',
+    'foundations/04_multitimeframe_review/README.md',
+    'foundations/07_market_state_context/README.md',
+    'foundations/08_leg_pressure_signal_quality/README.md',
+    'research/market_state_context_visual_evidence_audit_2026-08-24_CN.md',
+    'research/inside_bar_two_bar_reversal_visual_framework_CN.md',
+    'research/triangle_expanding_range_visual_framework_CN.md',
+    'research/late_trend_entry_visual_framework_CN.md',
+    'research/multitimeframe_visual_review_framework_CN.md',
+    'research/cross_pattern_visual_priority_audit_2026-08-24_CN.md',
+    'research/abc_hl_stratified_outcome_audit_2026-08-24_CN.md'
+)
+foreach ($relativePath in $canonicalParentStatePaths) {
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    if (-not $content.Contains($canonicalParentStateToken)) {
+        Add-ValidationError "active canonical parent_state enum is missing: $relativePath"
+    }
+    if ($content -match '(?m)^\s*(?:parent_state|market_state):\s+(?:trend|range|channel|mature_range|climax_or_exhaustion|accepted_breakout|event-or-gap)\s*(?:/.*)?$') {
+        Add-ValidationError "non-canonical parent_state enum remains in active template: $relativePath"
     }
 }
 
@@ -2493,6 +2525,7 @@ foreach ($relativePath in $visualAuthorityActiveTemplateRelativePaths) {
         'daily_context_window:',
         'major_high_low_review:',
         'ema20_50_200_review:',
+        'parent_state: open_trend / trading_range / range_edge / transition / climax / unclear',
         'direction: long / short / no_valid_direction',
         'order_branch:',
         'research_state:',
@@ -2656,6 +2689,7 @@ $foundationCanonicalChecks = @{
         'daily_context_window: >=2y / <2y / unavailable',
         'major_high_low_review: complete / partial / unavailable',
         'ema20_50_200_review: complete / partial / unavailable',
+        'parent_state: open_trend / trading_range / range_edge / transition / climax / unclear',
         'direction: long / short / no_valid_direction',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'actual_fill_or_open_skip:',
@@ -2673,6 +2707,7 @@ $foundationCanonicalChecks = @{
         'daily_context_window: >=2y / <2y / unavailable',
         'major_high_low_review: complete / partial / unavailable',
         'ema20_50_200_review: complete / partial / unavailable',
+        'parent_state: open_trend / trading_range / range_edge / transition / climax / unclear',
         'primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other',
         'signal_bar:',
         'new_trigger:',
@@ -2735,6 +2770,7 @@ $foundationCanonicalChecks = @{
         'a_leg_quality: strong / ordinary / unclear / event_driven',
         'b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear',
         'b_leg_location:',
+        'parent_state: open_trend / trading_range / range_edge / transition / climax / unclear',
         'signal_bar:',
         'confirmation_bar:',
         'new_trigger:',

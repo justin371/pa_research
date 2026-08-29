@@ -44,7 +44,7 @@ BOP 状态迁移：若事前可见边界被日线强收盘越过、获得跟随�
 
 ```text
 preexisting_boundary:
-parent_state: trend / range / channel / transition
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 expansion_or_test:
 close_acceptance: accepted / rejected / unclear
 reentry_to_original_side:

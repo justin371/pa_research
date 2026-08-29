@@ -109,6 +109,16 @@
 
 validator 仍是只读文档/链接/合同边界校验器，不是行情工具、量化扫描器或执行层。
 
+## 5.1 继续复核 parent_state 与 market_state 语义（2026-08-29）
+
+后续逐项检查活动模板和迁移审计合同，发现并修复了同一字段名的两类漂移：
+
+- `docs/visual_pa_review_card_CN.md` 和 `research/visual_pattern_triage_protocol_CN.md` 原先在父级状态位置使用 `market_state`，现改为 `parent_state`；`market_state` 只保留给板块/大盘方向一致性 `aligned / mixed / counter / unknown`。
+- 日线选股模板、`patterns/05_failed_breakout_climax/README.md`、三个基础层模板、市场状态审计卡以及五个活动视觉框架全部使用 `parent_state: open_trend / trading_range / range_edge / transition / climax / unclear`。
+- `research/cross_pattern_visual_priority_audit_2026-08-24_CN.md` 与 `research/abc_hl_stratified_outcome_audit_2026-08-24_CN.md` 的统一模板已去除 `mature_range`、`accepted_breakout` 和 `event-or-gap` 混合枚举；边界接受改由 `parent_state: open_trend` + `state_transition: breakout_acceptance` 表示，事件/缺口另写 `event_context`/`event_bucket`。
+
+真正历史性的视觉证据/边界报告仍可保留原始显示词，但不能被活动模板或 canonical 字段复用。validator 现在要求上述活动路径出现 canonical `parent_state`，并拒绝旧的 `market_state`/`parent_state` 混合枚举；本轮没有新增样本或结果，`no-new-positive` 与 `validated win-rate: not-computable` 保持。
+
 ## 6. 最终边界
 
 本轮修复只影响 PA Research 的文档、索引、validator/回归覆盖和新记录填写语义：

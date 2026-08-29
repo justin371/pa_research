@@ -155,7 +155,7 @@ gate_result:              # pass / conditional / observation_only / valid_no_tra
 先用一句话描述市场状态：
 
 ```text
-market_state: trend / trading_range / transition / climax / unclear
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 directional_bias: bull / bear / balanced / changing
 left_context:
 ```

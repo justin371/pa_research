@@ -171,7 +171,7 @@ daily_context_window: >=2y / <2y / unavailable
 major_high_low_review: complete / partial / unavailable
 ema20_50_200_review: complete / partial / unavailable
 parent_timeframe: Daily / 4H-like / 1H
-parent_state: trend / range / transition / climax
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 primary_pattern: ABC_CONT / BOP / RFB / MTR / other
 secondary_context: parent_pattern_display / multi_timeframe_review
 direction: long / short / no_valid_direction

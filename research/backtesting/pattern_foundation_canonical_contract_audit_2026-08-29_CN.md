@@ -61,7 +61,7 @@ handoff_status: research_only / not_ready / ready_for_system
 | independent | [`15_double_top_bottom`](../../patterns/15_double_top_bottom/README.md) | 两次分离测试的独立主题；不自动升级 MTR |
 | independent | [`16_head_shoulders_rounded`](../../patterns/16_head_shoulders_rounded/README.md) | 复杂结构主题；颈线、确认和空间不足时不授权 |
 
-结论：15 个 README 采用“统一合同 + pattern-specific 差异字段”的继承模式，没有证据要求重复复制整套 22 个字段；`08_three_push_h3_l3` 原先有自己的局部合同，已改成 canonical 证据头和状态轴，并保留三推特有字段。没有把独立主题强行纳入 ABC/H-L/三推统计。
+结论：16 个 README 采用“统一合同 + pattern-specific 差异字段”的继承模式，没有证据要求重复复制整套 22 个字段；`08_three_push_h3_l3` 原先有自己的局部合同，已改成 canonical 证据头和状态轴，并保留三推特有字段。没有把独立主题强行纳入 ABC/H-L/三推统计。
 
 ## 8 个基础视觉层覆盖
 
@@ -113,3 +113,13 @@ handoff_status: research_only / not_ready / ready_for_system
 3. `foundations/03_late_trend_entry_filter/README.md` 的兼容 `primary_pattern` 列表覆盖 `daily_candidate`，但原文没有提示按 `contract_scope` 收窄；现已明确日线候选只能使用 `ABC_CONT`/`BOP`，兼容值仅用于闭合深审/历史记录。
 
 validator 和回归测试已覆盖上述三条边界及旧事件文案回归。修复只涉及 PA Research 文档和守卫，不修改 16 个 pattern 的案例、CSV、样本、结果或 engine 有效语义；`no-new-positive` 与 `validated win-rate: not-computable` 保持不变，不创建量化扫描器、不连接 Execution Agent。
+
+## 追加 parent_state 枚举与活动模板复核（2026-08-29）
+
+继续对照统一输出合同、日线选股规则、视觉卡和活动基础层模板后，发现并修复以下可复现偏差：
+
+1. `patterns/05_failed_breakout_climax/README.md` 的局部卡使用 `trend / range / channel / transition`，已改为 canonical `open_trend / trading_range / range_edge / transition / climax / unclear`。
+2. `foundations/03_late_trend_entry_filter/README.md`、`foundations/04_multitimeframe_review/README.md` 和 `foundations/08_leg_pressure_signal_quality/README.md` 虽已声明 `parent_state`，但模板值为空；现补齐统一枚举，避免基础层重新发明父级状态。
+3. 日线选股模板、市场状态审计卡和 Late Trend/Inside Bar/Triangle/Multi-timeframe 活动视觉模板均补齐同一 `parent_state` 枚举。
+
+本轮同时修正了本报告此前的 `15 个 README` 计数笔误。validator 与回归测试现在会对这些活动路径要求 canonical `parent_state`，并拒绝旧的趋势/区间/通道混合枚举。历史证据报告中的旧词仍仅按日期明确的描述性别名读取，不作为新模板字段。

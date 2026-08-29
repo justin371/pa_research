@@ -35,7 +35,7 @@ EMA 触碰只是汇合项，不是形态本身；但高质量日线 H1/H2/L1/L2 
 下面的卡只记录腿与信号质量；它不是独立 pattern，也不替代完整案例的证据头、主标签、订单合同和状态轴。字段直接采用统一合同名称，质量层的补充描述另用 `pressure_asymmetry`、`B_shape` 等字段承载。
 
 ```text
-parent_state:
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 leg_direction:
 a_leg_quality: strong / ordinary / unclear / event_driven
 pressure_asymmetry: favorable / mixed / unfavorable

@@ -1,4 +1,7 @@
 import re
+import shutil
+import subprocess
+import tempfile
 from pathlib import Path
 import unittest
 
@@ -11,6 +14,17 @@ AUDIT = (
     / "visual_authority_schema_alignment_audit_2026-08-29_CN.md"
 )
 VISUAL_CARD = REPO_ROOT / "docs" / "visual_pa_review_card_CN.md"
+DAILY_RULES = REPO_ROOT / "docs" / "pa_research_daily_selection_rules_v0_1_CN.md"
+VALIDATOR_PATH = REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1"
+
+CANONICAL_PARENT_STATE = (
+    "parent_state: open_trend / trading_range / range_edge / transition / climax / unclear"
+)
+LEGACY_PARENT_STATE_LINE = re.compile(
+    r"(?m)^\s*(?:parent_state|market_state):\s+"
+    r"(?:trend|range|channel|mature_range|climax_or_exhaustion|accepted_breakout|event-or-gap)"
+    r"\s*(?:/.*)?$"
+)
 
 ACTIVE_FRAMEWORKS = (
     REPO_ROOT / "research" / "market_state_context_visual_evidence_audit_2026-08-24_CN.md",
@@ -71,6 +85,8 @@ class VisualAuthoritySchemaAlignmentTests(unittest.TestCase):
 
         for field in ("attempt", "same_lineage"):
             self.assertFalse(has_active_field(content, field), field)
+        self.assertIn(CANONICAL_PARENT_STATE, content)
+        self.assertNotRegex(content, LEGACY_PARENT_STATE_LINE)
 
     def test_visual_frameworks_have_evidence_and_separate_state_axes(self):
         common_tokens = (
@@ -81,6 +97,7 @@ class VisualAuthoritySchemaAlignmentTests(unittest.TestCase):
             "daily_context_window:",
             "major_high_low_review:",
             "ema20_50_200_review:",
+            CANONICAL_PARENT_STATE,
             "direction: long / short / no_valid_direction",
             "order_branch:",
             "research_state:",
@@ -111,6 +128,58 @@ class VisualAuthoritySchemaAlignmentTests(unittest.TestCase):
                 self.assertIn(first_obstacle_field, content)
                 for field in stale_fields:
                     self.assertFalse(has_active_field(content, field), field)
+
+    def test_daily_rules_and_migrated_templates_use_canonical_parent_state(self):
+        self.assertIn(CANONICAL_PARENT_STATE, read(DAILY_RULES))
+        for path in (
+            REPO_ROOT
+            / "research"
+            / "cross_pattern_visual_priority_audit_2026-08-24_CN.md",
+            REPO_ROOT / "research" / "abc_hl_stratified_outcome_audit_2026-08-24_CN.md",
+        ):
+            content = read(path)
+            with self.subTest(path=path.relative_to(REPO_ROOT).as_posix()):
+                self.assertIn(CANONICAL_PARENT_STATE, content)
+                self.assertNotRegex(content, LEGACY_PARENT_STATE_LINE)
+
+    def test_validator_rejects_legacy_parent_state_enum_in_active_template(self):
+        with tempfile.TemporaryDirectory(prefix="pa-parent-state-validator-") as temp_dir:
+            fixture_root = Path(temp_dir) / "repo"
+            shutil.copytree(
+                REPO_ROOT,
+                fixture_root,
+                ignore=shutil.ignore_patterns(
+                    ".git", ".codex", ".venv", "node_modules", "__pycache__"
+                ),
+            )
+            target = (
+                fixture_root
+                / "research"
+                / "inside_bar_two_bar_reversal_visual_framework_CN.md"
+            )
+            target.write_text(
+                read(target) + "\nparent_state: trend / range / channel / transition\n",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    "powershell.exe",
+                    "-NoProfile",
+                    "-ExecutionPolicy",
+                    "Bypass",
+                    "-File",
+                    str(fixture_root / "scripts" / VALIDATOR_PATH.name),
+                    "-RepoRoot",
+                    str(fixture_root),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("non-canonical parent_state enum remains", result.stdout)
 
     def test_migrated_audits_keep_canonical_geometry_and_state_axes(self):
         for path in MIGRATED_DOCUMENTS:

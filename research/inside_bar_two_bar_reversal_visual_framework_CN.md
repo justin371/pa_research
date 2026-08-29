@@ -181,7 +181,7 @@ chart_scope: full / partial / unavailable
 daily_context_window: >=2y / <2y / unavailable
 major_high_low_review: complete / partial / unavailable
 ema20_50_200_review: complete / partial / unavailable
-parent_state: trend / range / channel / transition
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 mother_bar: frozen / approximate / missing
 pattern_type: strict_inside / ii / ioi / two_bar_reversal / signal_sequence / not_confirmed
 location: major_sr / range_edge / ema_or_gap / middle / unknown

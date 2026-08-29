@@ -36,12 +36,14 @@
 | 父级状态 | 优先逻辑 | 降级逻辑 |
 | --- | --- | --- |
 | `open_trend` | A/B、ABC、H1/H2、L1/L2、通道/旗形 | 反向形状先记 reversal attempt |
-| `mature_range` | 上沿/下沿、二次入场、失败突破 | 区间中部只观察 |
+| `trading_range` | 上沿/下沿、二次入场、失败突破 | 区间中部只观察 |
 | `transition` | 先观察压力是否真正转移 | 不强行计 ABC、MTR 或头肩 |
-| `climax_or_exhaustion` | 小反转/平衡/Final Flag 候选 | 不凭一根反向 K 做主要反转 |
-| `accepted_breakout` | BOP/新趋势/旧边界回测 | 旧区间或旧 MTR thesis 失效 |
+| `climax` | 小反转/平衡/Final Flag 候选 | 不凭一根反向 K 做主要反转 |
+| `open_trend`（边界已接受） | BOP/新趋势/旧边界回测 | 旧区间或旧 MTR thesis 失效 |
 
 若父级是成熟区间，区间边缘优先级高于区间内部趋势计数；若边界外已经接受，BOP 优先于原来的双顶、三推或 MTR 叙事。
+
+表中的“边界已接受”不是新的 `parent_state` 值；当前合同用 `parent_state: open_trend` 配合 `state_transition: breakout_acceptance` 表示。早期材料中的 `mature_range`、`climax_or_exhaustion` 和 `accepted_breakout` 只按历史显示语义读取，不能写入新的统一模板。
 
 ### 第二步：再看主要位置
 
@@ -144,7 +146,7 @@ VCP 的连续波动收缩、pivot、相对强度和市场环境属于独立 Mine
 ## 6. 统一输出模板
 
 ```text
-parent_state: open_trend / mature_range / range_edge / transition / climax / accepted_breakout
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 primary_pattern: one canonical label
 secondary_context: zero_or_more relationship labels
 location_and_left_structure

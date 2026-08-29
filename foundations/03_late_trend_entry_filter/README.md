@@ -124,7 +124,7 @@ chart_scope: full / partial / unavailable
 daily_context_window: >=2y / <2y / unavailable
 major_high_low_review: complete / partial / unavailable
 ema20_50_200_review: complete / partial / unavailable
-parent_state:
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 direction: long / short / no_valid_direction
 primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
 secondary_context:

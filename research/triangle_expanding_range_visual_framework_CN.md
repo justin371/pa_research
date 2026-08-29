@@ -163,7 +163,7 @@ chart_scope: full / partial / unavailable
 daily_context_window: >=2y / <2y / unavailable
 major_high_low_review: complete / partial / unavailable
 ema20_50_200_review: complete / partial / unavailable
-parent_state: open_trend / mature_range / channel / transition
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 triangle_status: candidate / range_inside_range / expanding_boundary / not_frozen
 upper_boundary / lower_boundary: source and confidence
 tests: enough / insufficient / ambiguous
