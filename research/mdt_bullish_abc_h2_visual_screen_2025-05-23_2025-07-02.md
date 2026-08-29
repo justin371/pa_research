@@ -3,6 +3,42 @@
 日期窗口：`2025-05-23`–`2025-07-02`  
 状态：`visual-screen / pattern-like / transition-boundary / not-low-cycle-audited / not-quantitative`
 
+## Canonical historical-entry boundary（2026-08-29）
+
+```text
+contract_scope: historical_context_only
+data_source: Futu OpenD historical QFQ Daily
+data_status: historical
+as_of_time: 2025-07-02 historical decision cutoff; original query timestamp unavailable
+timezone: unavailable_in_original_log
+session_state: historical_close
+timeframes_seen: Daily
+chart_scope: partial
+daily_context_window: <2y
+major_high_low_review: partial
+ema20_50_200_review: partial
+parent_state: transition
+direction: long
+lineage_status: pending
+state_transition: range_transition
+order_branch: observation_only
+actual_fill_or_open_skip: not_applicable
+structural_stop: pending
+structural_invalidation: pending
+first_independent_obstacle: visual 2025-06-16 high near 85.27; not frozen
+pre_entry_space_R: unknown
+space_status: unknown
+rough_R_R: unknown
+research_state: observation_only
+trade_state: observation_only
+gate_result: observation_only
+handoff_status: research_only
+```
+
+本块只声明历史快筛的证据范围。`ABC`、`H2-like`、普通 A 和过渡背景仍是历史显示语义，
+没有在快筛阶段激活 `primary_pattern`、`internal_label` 或订单合同；后续走势不能补写缺失的
+低周期、事件、止损或空间证据。
+
 ## 数据与范围
 
 使用 Futu OpenD 的收盘后历史日线 QFQ 数据，并把左侧窗口延伸到 `2025-04-15`；不是实时行情。本轮只做完整图表视觉判断，没有打开 60m/15m，也没有查财报或计算精确 R/R。
@@ -45,4 +81,3 @@
 - `06-27` 或 `06-30` 的 H2 计数在 60m/15m 上是否有清楚触发？
 - 以 B 低点下方作结构止损时，第一阻力是否达到基本空间？
 - 财报和 MDT/XLV 的背景是否改变这次过渡型判断？
-

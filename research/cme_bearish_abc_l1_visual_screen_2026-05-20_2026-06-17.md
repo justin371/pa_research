@@ -3,6 +3,42 @@
 日期窗口：`2026-05-20`–`2026-06-17`  
 状态：`visual-screen / pattern-like-boundary / not-low-cycle-audited / not-quantitative`
 
+## Canonical historical-entry boundary（2026-08-29）
+
+```text
+contract_scope: historical_context_only
+data_source: Futu OpenD historical QFQ Daily
+data_status: historical
+as_of_time: 2026-06-17 historical decision cutoff; original query timestamp unavailable
+timezone: unavailable_in_original_log
+session_state: historical_close
+timeframes_seen: Daily
+chart_scope: partial
+daily_context_window: <2y
+major_high_low_review: partial
+ema20_50_200_review: unavailable
+parent_state: transition
+direction: short
+lineage_status: pending
+state_transition: range_transition
+order_branch: observation_only
+actual_fill_or_open_skip: not_applicable
+structural_stop: pending
+structural_invalidation: pending
+first_independent_obstacle: visual support cluster near 249.98–243.30; not frozen
+pre_entry_space_R: unknown
+space_status: unknown
+rough_R_R: unknown
+research_state: observation_only
+trade_state: observation_only
+gate_result: observation_only
+handoff_status: research_only
+```
+
+本块把它固定为历史快筛入口；原文的 `ABC`、`L1-like`、`transition / range-to-bear` 等仍是
+显示/研究语义，未激活 `primary_pattern` 或 `internal_label`。没有低周期订单、精确止损或
+可比结果，不能因为价格后来继续下跌而补写交易合同。
+
 ## 这次只做什么
 
 这是按轻量视觉模式做的第一轮记录。使用 Futu OpenD 的历史日线 QFQ 数据和完整窗口图；不是实时行情，也没有在这一轮补 15m、60m、事件网页或精确 R/R。目的只是判断它是否值得进入第二轮。

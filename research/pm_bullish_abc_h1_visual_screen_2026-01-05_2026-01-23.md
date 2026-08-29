@@ -4,6 +4,42 @@
 数据：Futu OpenD 收盘后历史 QFQ 日线；不是实时行情，也没有下单。  
 状态：`pattern_like / ordinary-open-trend-candidate / bullish-H1-H2-like / low-cycle-branch-audited / first-obstacle-blocked / valid_no_trade / event-context-pending`
 
+## Canonical historical-entry boundary（2026-08-29）
+
+```text
+contract_scope: historical_context_only
+data_source: Futu OpenD historical QFQ Daily plus historical 60m/15m review
+data_status: historical
+as_of_time: 2026-01-23 historical decision cutoff; original query timestamp unavailable
+timezone: unavailable_in_original_log
+session_state: historical_close
+timeframes_seen: Daily / 60m / 15m
+chart_scope: partial
+daily_context_window: <2y
+major_high_low_review: partial
+ema20_50_200_review: partial
+parent_state: open_trend
+direction: long
+lineage_status: pending
+state_transition: none
+order_branch: observation_only
+actual_fill_or_open_skip: fill_unknown
+structural_stop: pending
+structural_invalidation: pending
+first_independent_obstacle: visual 2026-01-16 high near 171.32; blocks the mother-structure entry
+pre_entry_space_R: unknown
+space_status: blocked
+rough_R_R: unknown
+research_state: valid_no_trade
+trade_state: valid_no_trade
+gate_result: valid_no_trade
+handoff_status: research_only
+```
+
+本块把 PM 的“形态可研究、首阻力否决”固定为历史不交易入口。原文的 `H1/H2-like` 仍是
+显示/计数候选，不自动写成 `primary_pattern` 或 `internal_label`；两份低周期订单路径也
+保持研究分支，不能当作 broker/account 成交日志或新的回放样本。
+
 ## 这张图为什么值得先看
 
 这是一张新的、尚未在 PA Research 中深入审计的图。从日线外形看，没有明显的跳空先制造 A 腿，也没有明显落在宽交易区间中部；财报和重大事件还没有独立核对。第一眼可以画出：

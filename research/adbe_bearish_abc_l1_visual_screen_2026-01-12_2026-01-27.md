@@ -5,6 +5,42 @@
 事件核对：Adobe 官方财报日期为 2025-12-10 与 2026-03-12，均不在 2026-01-27 前后三个交易日内。
 状态：`research_positive_conditional / transition-to-open-bear / strong-looking-A / controlled-B / bearish-L1-like / no-gap-trigger / sector-aligned / market-countertrend / first-support-space-positive / earnings-filter-passed`
 
+## Canonical historical-entry boundary（2026-08-29）
+
+```text
+contract_scope: historical_context_only
+data_source: Futu OpenD historical QFQ Daily plus historical 60m/15m review
+data_status: historical
+as_of_time: 2026-01-27 historical decision cutoff; original query timestamp unavailable
+timezone: unavailable_in_original_log
+session_state: historical_close
+timeframes_seen: Daily / 60m / 15m
+chart_scope: partial
+daily_context_window: <2y
+major_high_low_review: partial
+ema20_50_200_review: partial
+parent_state: transition
+direction: short
+lineage_status: pending
+state_transition: range_transition
+order_branch: observation_only
+actual_fill_or_open_skip: fill_unknown
+structural_stop: pending
+structural_invalidation: pending
+first_independent_obstacle: visual 2026-01-20/21 low cluster near 288.33; not frozen
+pre_entry_space_R: unknown
+space_status: unknown
+rough_R_R: unknown
+research_state: research_positive_conditional
+trade_state: not_authorized
+gate_result: conditional
+handoff_status: research_only
+```
+
+本块只补历史 provenance 和状态边界，不把原文的 `ABC continuation`、`L1-like` 或
+`strong-looking-A` 自动升级为 `primary_pattern`、`internal_label` 或冻结合同。原文的
+低周期顺序仍是研究叙述；没有 broker/account 成交日志，也没有把后续路径写回事前证据。
+
 ## 为什么值得进入候选队列
 
 这是一张跨行业、尚未在 PA Research 中深入审计的空头图。完整日线从 `2025-12-15` 看起，先看到高位停顿，随后在 `2026-01-12`–`2026-01-20` 出现连续的方向性下行；`2026-01-21`–`2026-01-26` 反弹但没有回到空头 A 的起点；`2026-01-27` 再次向下，外形上接近普通开放趋势中的 L1-like。
