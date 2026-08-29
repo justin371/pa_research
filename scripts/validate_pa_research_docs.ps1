@@ -163,6 +163,7 @@ $requiredFiles = @(
     'research/backtesting/abc_bullish_candidate_contract_audit_2026-08-28_CN.md',
     'research/backtesting/cross_pattern_statistics_isolation_audit_2026-08-29_CN.md',
     'research/backtesting/event_space_eligibility_audit_2026-08-29_CN.md',
+    'research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/replay_outcome_denominator_audit_2026-08-29_CN.md',
     'research/backtesting/replay_lineage_independence_audit_2026-08-29_CN.md',
     'research/backtesting/replay_provenance_reproducibility_audit_2026-08-29_CN.md',
@@ -746,6 +747,47 @@ if (Test-Path -LiteralPath $eventSpaceAuditPath -PathType Leaf) {
     foreach ($token in @('event_bucket', 'ordinary_non_event', 'event_unverified_or_pending', 'space_status', 'unknown_contract_space', 'strict_ge_1R', 'no-new-positive')) {
         if (-not $eventSpaceAuditContent.Contains($token)) {
             Add-ValidationError "missing event/space eligibility-audit token '$token'"
+        }
+    }
+}
+
+$eventSpaceLineageAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $eventSpaceLineageAuditPath -PathType Leaf) {
+    $eventSpaceLineageAuditContent = Get-Utf8Text -Path $eventSpaceLineageAuditPath
+    foreach ($token in @(
+        'event_context', 'event_bucket', 'ordinary_non_event', 'event_unverified_or_pending',
+        'space_status', 'pre_entry_space_R', 'unknown_contract_space', 'strict_ge_1R',
+        'lineage_id', 'market_context_id', 'no-new-positive', 'validated win-rate: not-computable',
+        'PA Research only', 'no Codex Trading', 'no quantitative scanner', 'no Execution Agent'
+    )) {
+        if (-not $eventSpaceLineageAuditContent.Contains($token)) {
+            Add-ValidationError "missing event/space/lineage-consistency-audit token '$token'"
+        }
+    }
+}
+
+$legacyNextContractPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_next_contracts_2026-08-27.csv'
+$legacyNextReadmePath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/README.md'
+$legacyNextSelectionPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_next_selection_2026-08-27_CN.md'
+$legacyNextReplayPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_next_replay_2026-08-27_CN.md'
+if ((Test-Path -LiteralPath $legacyNextContractPath -PathType Leaf) -and
+    (Test-Path -LiteralPath $legacyNextReadmePath -PathType Leaf) -and
+    (Test-Path -LiteralPath $legacyNextSelectionPath -PathType Leaf) -and
+    (Test-Path -LiteralPath $legacyNextReplayPath -PathType Leaf)) {
+    $legacyNextHeader = (Get-Content -LiteralPath $legacyNextContractPath -TotalCount 1) -split ','
+    $legacyNextReadmeContent = Get-Utf8Text -Path $legacyNextReadmePath
+    $legacyNextSelectionContent = Get-Utf8Text -Path $legacyNextSelectionPath
+    $legacyNextReplayContent = Get-Utf8Text -Path $legacyNextReplayPath
+    $legacyNextHasExplicitSpace = ($legacyNextHeader -contains 'pre_entry_space_R') -and ($legacyNextHeader -contains 'space_status')
+    if (-not $legacyNextHasExplicitSpace) {
+        if ($legacyNextReadmeContent -match '全部通过事前\s+`>=1R`\s+空间字段') {
+            Add-ValidationError 'hl_next legacy geometry must not be described as explicit pre-entry space fields'
+        }
+        if ($legacyNextSelectionContent -notmatch 'unknown_contract_space') {
+            Add-ValidationError 'hl_next selection must disclose unknown_contract_space when explicit space fields are absent'
+        }
+        if ($legacyNextReplayContent -notmatch '非当前显式 strict-space') {
+            Add-ValidationError 'hl_next replay must qualify historical geometry as non-explicit strict-space'
         }
     }
 }

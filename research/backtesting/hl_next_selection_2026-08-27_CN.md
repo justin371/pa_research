@@ -23,9 +23,9 @@
 
 ## 冻结合同
 
-空间按多头 `(first_obstacle - entry_trigger) / (entry_trigger - structural_stop)`、空头 `(entry_trigger - first_obstacle) / (structural_stop - entry_trigger)` 计算；`>=1R` 是进入本批严格空间门槛的最低线。
+空间按多头 `(first_obstacle - entry_trigger) / (entry_trigger - structural_stop)`、空头 `(entry_trigger - first_obstacle) / (structural_stop - entry_trigger)` 计算。按冻结时合同中的触发、止损和第一障碍得到的历史几何均为 `>=1R`，但本批旧 CSV 没有显式 `pre_entry_space_R/space_status`；因此这些数值不是当前 engine 可审计的 strict-space 字段，当前 `contract_space_bucket` 仍须保留为 `unknown_contract_space`。
 
-| 合同 | 方向 / 标签 | 决策日 | 触发 | 止损 | 第一障碍 | 冻结前空间 | A/B 与位置判断 |
+| 合同 | 方向 / 标签 | 决策日 | 触发 | 止损 | 第一障碍 | 冻结时历史几何空间（未写入显式 CSV 字段） | A/B 与位置判断 |
 | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
 | ZS 2021-07-19 | long / H1 | 2021-07-19 | 223.56 | 217.30 | 236.46 | 2.06R | 强上涨腿；回调回到向上的 EMA20/前期支撑；B 后段有较大阴线，记为可交易但非完美小 B |
 | DDOG 2021-07-19 | long / H1 | 2021-07-19 | 105.29 | 101.00 | 109.90 | 1.07R | 上涨背景；回调靠近向上的 EMA20 和前期支撑；首障碍仅略超过 1R |
@@ -33,13 +33,13 @@
 | ZS 2023-09-19 | long / H1 | 2023-09-19 | 156.05 | 152.50 | 167.50 | 3.23R | 上涨腿和 EMA 闸门通过；回调回到 EMA20/前期支撑；9 月 5 日财报落在 A 腿内，单列 event-driven |
 | DDOG 2023-03-07 | short / L1 | 2023-03-07 | 74.36 | 78.50 | 63.50 | 2.62R | 下跌背景；回调受控并回到向下的 EMA20/EMA50/前期阻力；2 月 16 日财报后的 aftershock，单列 event-driven |
 
-方向分布：`long=4`、`short=1`；标签分布为 `H1=4`、`L1=1`。
+方向分布：`long=4`、`short=1`；标签分布为 `H1=4`、`L1=1`。以上 `R` 只代表冻结时由合同价格字段算出的历史几何，不能由回放结果反向补写成 `pre_entry_space_R` 或 `space_status`。
 
 所有合同统一使用 `stop_confirmation`、`max_hold_bars=10`、`gap_policy=skip`。开盘跳过旧触发位时不追价补成交；这是本批历史研究合同，不是生产持仓规则。
 
 ## 分组和独立性
 
-普通非事件组：ZS 2021-07-19、DDOG 2021-07-19、DDOG 2023-07-24。事件驱动组：ZS 2023-09-19、DDOG 2023-03-07。每条合同有独立的 `lineage_id`；同一行情段没有用 H1/H2 或 L1/L2 重复计数。事件组不与普通组混合解释。
+普通非事件组：ZS 2021-07-19、DDOG 2021-07-19、DDOG 2023-07-24。事件驱动组：ZS 2023-09-19、DDOG 2023-03-07。每条合同都有非空且在本批不重复的 `lineage_id`；这只说明人工记录使用了不同 ID，不证明跨市场状态或结果 artifact 独立，因为本批没有 `market_context_id`。同一行情段没有用 H1/H2 或 L1/L2 重复计数。事件组不与普通组混合解释。
 
 ## 事件证据
 

@@ -80,7 +80,7 @@ research_state / trade_state / thesis_state / handoff_status
 main_uncertainty_or_exclusion / failure_or_no_trade_reason
 ```
 
-选择报告、候选卡和视觉记录只保存入场前证据；成交、退出、胜负、胜率和 `realized_R` 只能出现在独立 replay/result 记录中。结果不能反向改写 pattern、方向、lineage、触发、结构止损、首障碍或空间字段。逐文件复核见[`选择记录与回放结果证据边界审计`](../research/backtesting/pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md)。
+选择报告、候选卡和视觉记录只保存入场前证据；成交、退出、胜负、胜率和 `realized_R` 只能出现在独立 replay/result 记录中。结果不能反向改写 pattern、方向、lineage、触发、结构止损、首障碍或空间字段。逐文件复核见[`选择记录与回放结果证据边界审计`](../research/backtesting/pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md)；事件/空间/独立性字段的派生与引用复核见[`事件、空间与独立性字段引用一致性审计`](../research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md)。
 
 ### Pattern-specific shorthand 与 canonical 几何
 

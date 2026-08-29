@@ -50,6 +50,7 @@
 - [`多头 ABC/H1/H2 候选合同审计（2026-08-28）`](backtesting/abc_bullish_candidate_contract_audit_2026-08-28_CN.md)：逐字段复核 V、NVDA、KLAC、CRWD；当前没有可冻结的新多头合同，不增加回放分母；
 - [`跨 Pattern 统计隔离审计（2026-08-29）`](backtesting/cross_pattern_statistics_isolation_audit_2026-08-29_CN.md)：检查 ABC/BOP、H/L、三推的标签、订单分支和 lineage 依赖；当前没有冻结 ABC/BOP 或 H3/L3 合同，保持 `no-new-positive`；
 - [`事件与首障碍空间资格审计（2026-08-29）`](backtesting/event_space_eligibility_audit_2026-08-29_CN.md)：隔离事件未核实、财报邻近、空间边界和旧合同未知空间，避免把它们读成普通非事件证据；
+- [`事件、空间与独立性字段引用一致性审计（2026-08-29）`](backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md)：核对 `event_context/event_bucket`、`space_status/pre_entry_space_R`、`lineage_id/market_context_id` 的来源、派生和跨文件表述；修正 `hl_next` 历史几何不等于显式 strict-space 的文案，不新增样本或结果；
 - [`回放结果分母与 horizon 审计（2026-08-29）`](backtesting/replay_outcome_denominator_audit_2026-08-29_CN.md)：检查胜率旗标、完成 horizon、opening-skip、intrabar 歧义、首障碍过程字段和 `realized_R` 的结果隔离；旧产物的 time-exit 偏差不增加验证分母；
 - [`回放 lineage 与样本独立性审计（2026-08-29）`](backtesting/replay_lineage_independence_audit_2026-08-29_CN.md)：检查共享父级/局部结构、重复 artifact、共享市场状态和持仓区间重叠；重复结果不进入分母，当前独立性证据仍不足；
 - [`回放 provenance 与再现性审计（2026-08-29）`](backtesting/replay_provenance_reproducibility_audit_2026-08-29_CN.md)：核对历史报告与 artifact 数值、输入/结果指纹和旧运行冲突；当前仍不能把历史描述升级为验证胜率；

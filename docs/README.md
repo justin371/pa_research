@@ -10,6 +10,7 @@
 - [`Pattern 主标签映射与 BOP 状态迁移审计`](../research/pattern_label_transition_audit_2026-08-29_CN.md)
 - [`证据范围与数据状态一致性审计`](../research/evidence_scope_status_boundary_audit_2026-08-29_CN.md)
 - [`选择记录与回放结果证据边界审计`](../research/backtesting/pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md)
+- [`事件、空间与独立性字段引用一致性审计`](../research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md)
 - [`PA Research → Codex Trading 研究交接规范`](research_to_system_handoff_CN.md)
 - [`冻结合同回放器（backtesting.py）`](../research/backtesting/README.md)
 

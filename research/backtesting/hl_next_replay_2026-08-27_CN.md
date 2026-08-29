@@ -47,7 +47,7 @@
 
 ## 闸门检查
 
-- 严格首障碍空间：`5/5` 条合同的事前 `space_R >= 1.00`；空间通过不等于会成交，也不等于已验证有利可交易性。
+- 冻结时历史几何空间审计（非当前显式 strict-space）：`5/5` 条合同的 `space_R >= 1.00`；旧 CSV 缺少 `pre_entry_space_R/space_status`，因此当前 `contract_space_bucket` 仍是 `unknown_contract_space`。历史几何为正不等于会成交，也不等于已验证有利可交易性。
 - EMA 方向：4 条多头 H1 均为 Daily EMA20/EMA50 `up/up`、`long_pass`；1 条空头 L1 为 `down/down`、`short_pass`。
 - 两年背景、重要高低点、EMA20/50/200 和支撑阻力审查：5/5 完整记录。
 - 事件隔离：普通组 3 条、事件组 2 条；事件组没有混入普通非事件统计。
