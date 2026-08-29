@@ -77,6 +77,8 @@ gate_result: pass / conditional / observation_only / valid_no_trade / pending
 
 `a_leg_quality`、`b_leg_class` 和 `b_leg_location` 是分开的 canonical 字段：质量/类别不能塞进位置字段。历史 H/L 合同可能缺少这些可选上游字段，或保留旧写法 `strong_A`/`ordinary_A`（分别对应 `strong`/`ordinary`）和 `controlled_B`/`deep_late_controlled_B`（分别对应 `controlled`/`deep_but_late_controlled`）；这些只可作为明确登记的历史别名读取，不能静默当作当前 canonical 值，也不能由 `h_l_pullback_location` 或结果回填。`h_l_pullback_location` 只保留 H/L 回调位置及其历史说明，不能替代 A/B 字段。
 
+`h_l_pullback_location` 是自由文本位置证据，不是方向、EMA gate 或空间枚举。`rising_EMA20`、`falling_EMA20`、`prior_support`、`prior_resistance`、`role_reversal` 和事件位置等词只描述观察到的地点；若空头文本提到 `support`，应明确它是前期/破位后的角色转换还是事件位置，不能把未破的当前支撑误读为空头优势。位置文字不能覆盖 `direction`、`daily_ema20_slope`、`daily_ema50_slope` 或 `h_l_ema_slope_gate`，也不能替代 `pre_entry_space_R`/`space_status`。
+
 当 `contract_scope: daily_candidate` 时，`timeframes_seen` 必须只写 `Daily`；4H/1H/15m 只能放在候选入选后的 `deep_review` 或另立的订单合同中，不能倒灌成日线选股证据。若低周期已经改变研究问题，必须新建独立合同并重新记录范围、状态和入场几何。
 
 每日批次记录还应使用[`每日候选批次与图表审查卡`](daily_candidate_review_card_CN.md)补充以下证据。它们是候选池和视觉审查字段，不会把回放合同变成扫描器输入：

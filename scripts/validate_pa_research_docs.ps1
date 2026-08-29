@@ -819,6 +819,21 @@ if (Test-Path -LiteralPath $hlEmaGateReportAuditPath -PathType Leaf) {
     }
 }
 
+$hlPullbackLocationSemanticsAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_pullback_location_semantics_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $hlPullbackLocationSemanticsAuditPath -PathType Leaf) {
+    $hlPullbackLocationSemanticsAuditContent = Get-Utf8Text -Path $hlPullbackLocationSemanticsAuditPath
+    foreach ($token in @(
+        'h_l_pullback_location', 'rising_EMA20', 'falling_EMA20', 'support', 'resistance',
+        'role_reversal', 'controlled_B', 'deep_late_controlled_B', 'long_pass', 'short_pass',
+        '60', 'no-new-positive', 'validated win-rate: not-computable', 'PA Research only',
+        'no Codex Trading', 'no quantitative scanner', 'no Execution Agent'
+    )) {
+        if (-not $hlPullbackLocationSemanticsAuditContent.Contains($token)) {
+            Add-ValidationError "missing H/L pullback-location-semantics-audit token '$token'"
+        }
+    }
+}
+
 $legacyNextContractPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_next_contracts_2026-08-27.csv'
 $legacyNextReadmePath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/README.md'
 $legacyNextSelectionPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_next_selection_2026-08-27_CN.md'

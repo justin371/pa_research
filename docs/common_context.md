@@ -43,6 +43,8 @@ first_independent_obstacle:
 
 `a_leg_quality`、`b_leg_class`、`b_leg_location` 分别记录 A 质量、B 类别和 B 所在位置。历史合同中的 `strong_A`/`ordinary_A`、`controlled_B`/`deep_late_controlled_B` 只能按已登记的历史别名理解，不能写回 canonical 字段或把位置文本当作 B 类别；缺字段就保留缺失，不从后续结果推断。
 
+同理，`h_l_pullback_location` 是自由文本的 H/L 位置说明，不是方向、EMA 闸门或首障碍空间字段。位置词只作上下文核对：多头/空头的方向资格由 `direction`、EMA20/50 斜率和 `h_l_ema_slope_gate` 决定；空头出现 `support` 时须明确前期/破位角色转换或事件背景，不能把未破支撑自动当成优势。
+
 ### Entry geometry and state boundary
 
 所有 pattern 的入场几何都按同一顺序审查：`structural_invalidation` → `structural_stop` → 方向上最近的 `first_independent_obstacle` → `pre_entry_space_R`/`space_status` → `rough_R_R` 和目标层。不能用更远的 measured move、区间另一侧或后续结果跳过首障碍；区域文字、`pending` 或 `unknown` 也不能冒充冻结的数值合同。

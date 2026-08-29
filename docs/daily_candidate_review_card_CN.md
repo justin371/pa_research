@@ -145,6 +145,8 @@ B 段要单独判断反向压力是否收缩。大实体反向推进、越过关
 
 对 H1/H2/L1/L2，Daily EMA20 和 EMA50 的方向闸门与回调位置必须同时记录。均线走平、反向或不可见时，最多保留 `pattern_like / observation_only`；EMA 触碰本身不构成入场。
 
+`h_l_pullback_location` 是人读的自由文本位置证据，不是受限枚举，也不能单独授予方向、EMA gate、首障碍空间或交易资格。`support`/`resistance` 必须结合 `prior`、`broken`、`role_reversal` 或事件上下文理解；空头文本出现 `support` 时尤其不能默认是未破支撑上的优势。若位置文本含历史 `controlled_B`/`deep_late_controlled_B`，仍不能代替独立的 `b_leg_class` 或 `b_leg_location`。
+
 ## 五、META 与空间：先写几何，再写结论
 
 ```text

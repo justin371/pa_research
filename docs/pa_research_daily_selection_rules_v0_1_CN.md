@@ -327,6 +327,8 @@ main_uncertainty_or_exclusion:
 
 `a_leg_quality`、`b_leg_class`、`b_leg_location` 分别记录 A 质量、B 类别和 B 位置，必须保持字段分离。当前 canonical 值分别为 `strong / ordinary / unclear / event_driven`、`controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear` 和自由文本位置。历史合同中的 `strong_A`、`ordinary_A`、`controlled_B`、`deep_late_controlled_B` 只作为已登记别名解释，不是当前规则新增枚举；缺失字段不能从 `h_l_pullback_location`、EMA 闸门或结果回填。
 
+`h_l_pullback_location` 只描述 H/L 回调所在的 EMA、前期支撑/阻力、角色转换或事件位置，是自由文本证据，不是方向、EMA 闸门或空间资格。位置文本中的 `rising`/`falling` 与 `support`/`resistance` 不能覆盖 canonical 方向和 gate；空头出现 `support` 时必须结合前期/破位角色转换或事件上下文阅读，不能把当前未破支撑自动读成优势。位置文本中的历史 `controlled_B`/`deep_late_controlled_B` 也不能补齐独立 `b_leg_class` 或 `b_leg_location`。
+
 ## 9. 统计边界
 
 这份规则只定义选股和分层，不宣称胜率。后续结果必须至少分开统计：

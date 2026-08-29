@@ -218,6 +218,8 @@ b_leg_location:
 
 `a_leg_quality`、`b_leg_class`、`b_leg_location` 是三个不同的观察轴。当前 canonical 值见统一输出合同；`strong_A`/`ordinary_A` 和 `controlled_B`/`deep_late_controlled_B` 只允许作为已登记的历史别名说明，不是新的枚举。历史 H/L 资料缺少独立字段时保持缺失，不能把 `h_l_pullback_location` 或结果倒推成 A/B 质量或 B 位置。
 
+`h_l_pullback_location` 保持自由文本，只记录回调所在的 EMA、前期支撑/阻力、角色转换或事件位置。它不能覆盖 `direction`、EMA20/50 斜率、`h_l_ema_slope_gate` 或空间字段；空头提到 `support` 时，必须辨别前期/破位后的角色转换与事件位置，不能把当前未破支撑直接当成空头有利位置。位置文本内的历史 B 词也不改变独立 A/B 字段的缺失状态。
+
 ## 4. H/L 计数：只数有意义的尝试
 
 第二阶段统一使用[`H/L lineage 与三推状态视觉边界复核`](../research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md)的账本：先写主周期、父级、A/B 锚点、第一次失败/不足和 `lineage_status`，再写 H1/H2/L1/L2 或 H3/L3。若左侧两年背景、重要高低点或支撑阻力没有完成复核，计数只能保留为 `pending`/`pattern_like`。
