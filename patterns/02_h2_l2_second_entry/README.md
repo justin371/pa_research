@@ -14,6 +14,10 @@
 
 状态边界：关键图表、事件、触发或空间证据尚不完整时使用 `pending`/`observation_only`；形态、方向和入场几何已可复核但已知硬闸门否决交易时使用 `valid_no_trade`。两者都不建立订单，不能互换。
 
+统一合同映射：本目录的 H2/L2 是 pattern-specific 内部尝试；若 `contract_scope: daily_candidate`，`primary_pattern` 仍只写 `ABC_CONT` 或 `BOP`，H1/L1/H2/L2/H3/L3 写入 `internal_label`，其他关系写入 `secondary_context`，`range_edge_three_push` 仅作位置分支。深审/历史记录可使用兼容主标签，但不能把目录名扩展成日线选股主标签。
+
+BOP 状态迁移：若事前可见边界被日线强收盘越过、获得跟随并在回踩中守住，统一合同改写为 `primary_pattern: BOP`、`state_transition: breakout_acceptance`；本目录的原 pattern/反向 thesis 与旧订单合同失效，必须重建 `new_trigger`、`structural_stop`、`first_independent_obstacle` 和空间，不能沿用旧 entry/stop/target 或把旧结果并入 BOP。
+
 进入 H2/L2 计数前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），标出主要高点、主要低点、支撑阻力和 EMA20/50/200。然后使用[`H/L lineage 与三推状态视觉边界复核`](../../research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md)先登记母腿、A/B、第一次失败/不足和 `lineage_status`；左侧背景或第一次失败不可见时只能写 `H2/L2-like` 或 `pending`。
 
 ## 视觉定义

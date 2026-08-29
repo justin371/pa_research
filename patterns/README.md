@@ -94,6 +94,12 @@ main_uncertainty_or_exclusion / failure_or_no_trade_reason
 
 几何顺序固定为：结构失效/止损 → 首障碍 → 入场前空间 → 粗略 R/R → 目标层。`observation_only` 用于关键证据仍不完整或只保留形态观察；`valid_no_trade` 用于形态、方向和几何已可复核但已知硬闸门否决交易。两者都不建立订单，不能互换。
 
+### 日线主标签白名单与状态迁移
+
+`contract_scope: daily_candidate` 时，`primary_pattern` 只允许 `ABC_CONT` 或 `BOP`。H1/H2/L1/L2 只能写入 `internal_label`，H3/L3 在日线候选中也只能写入 `internal_label`，其他关系写入 `secondary_context`；`range_edge_three_push` 只是区间边缘位置分支，不是主标签，也不等同于 `H3_L3`。`H1_L1`、`H2_L2`、`H3_L3`、`RFB`、`MTR`、`other` 以及独立主题名称只用于深审/历史兼容记录，不能扩展日线选股主标签。
+
+若事前可见边界被日线强收盘越过、获得跟随并在回踩中守住，统一合同改写为 `primary_pattern: BOP`、`state_transition: breakout_acceptance`；原 pattern/反向 thesis 与旧订单合同失效，必须重建 `new_trigger`、`structural_stop`、`first_independent_obstacle` 和空间，不能沿用旧 entry/stop/target 或把旧结果并入 BOP。
+
 ## 范围边界
 
 - 这些目录是视觉研究和历史复核入口，不是量化扫描器，也不直接连接 Execution Agent。
@@ -122,6 +128,8 @@ main_uncertainty_or_exclusion / failure_or_no_trade_reason
 16 个目录的 canonical 状态轴、字段命名和 pattern-specific 模板边界见[`Pattern 状态轴、字段与枚举一致性审计`](../research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md)。
 
 订单语义和 R/R 的跨 pattern 规则见[`八个 Pattern 的订单合同与 R/R 审计`](../research/order_contract_cross_pattern_audit_CN.md)。
+
+16 个目录的日线主标签白名单、H/L 内部标签、三推/区间边缘分隔和 BOP 旧合同失效边界见[`Pattern 主标签映射与 BOP 状态迁移审计`](../research/pattern_label_transition_audit_2026-08-29_CN.md)。
 
 MTR 与三推/H3-L3 的边界复核见[`MTR 与三推/H3-L3 视觉边界复核`](../research/mtr_three_push_visual_boundary_audit_2026-08-24_CN.md)：三推是压力观察入口；成熟区间边缘的第三推可以先成为独立反转候选，MTR 仍需要控制权改变和反向二次确认。
 

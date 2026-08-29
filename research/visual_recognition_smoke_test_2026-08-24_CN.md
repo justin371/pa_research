@@ -17,7 +17,7 @@
 
 ```text
 contract_scope: stage_1_fast_screen
-primary_pattern:
+visual_pattern_label:
 secondary_context:
 state_transition:
 market_state:
@@ -29,17 +29,19 @@ uncertainty_or_invalidation:
 recognition_result:
 ```
 
+`visual_pattern_label` 是本冒烟记录的自由文本展示标签，不是统一合同的 `primary_pattern` 字段；若图像进入完整研究记录，必须按统一合同和 `contract_scope` 收敛主标签、内部标签和状态转换。
+
 `recognition_result` 只允许：`pattern_candidate`、`boundary_candidate`、`observation_only`、`not_enough_image_evidence`。只有在未标注、周期和价格轴清晰、父级与局部结构均可复核的图像集上重复通过，才可以从 `smoke-test` 升级为 `acceptance`。
 
 ## 本轮图像结果
 
 | 样本 | 图上直接可见事实 | 视觉识别 | 仍不能从图上确认的内容 | 结果 |
 | --- | --- | --- | --- | --- |
-| [TSLA wedge 图](https://www.tradingview.com/symbols/NASDAQ-TSLA/ideas/?sort=recent) | K 线在两条向外分离的白色边界之间反复摆动；上边界上斜、下边界下斜；当前价格仍在边界内部 | `primary_pattern: expanding-triangle / broadening-range candidate`；有多次摆动，但不能仅凭这张图冻结为三推 H3/L3 | 图片本身缺少清晰的完整标题、周期和左侧父级；不能确认是收敛楔形，也不能确认三次尝试属于同一 lineage | `boundary_candidate` |
-| [Breakout–Pullback 图](https://ftv.com.vn/price-action-la-gi) | 价格跌破水平支撑；随后向上回测旧支撑附近；回测后再次向下推进 | `primary_pattern: bearish BOP-like`；`state_transition: BOP candidate`；旧支撑转为潜在阻力的视觉关系清楚 | 事件、周期、完整父级、接受条件和真实订单合同不可见；来源文字标注不能替代图上证据 | `pattern_candidate` |
-| [IOI / BO PB 图](https://www.brookstradingcourse.com/support-forum/general-trading-discussion/question-ioi/) | 上涨腿突破水平位；突破后出现小实体和重叠；随后价格继续向上 | `primary_pattern: bullish breakout-pullback candidate`；可记为 `H2-like`，但不冻结 H2 计数 | 图中没有完整周期、标的、事件背景；作者的 `ioi, BO PB` 标注不能直接当作 PA 计数证据 | `pattern_candidate` |
-| [失败收复图](https://internationaltradinginstitute.com/blog/liquidity-grabs-institutional-trading-strategy/) | 水平线标出前低；价格下破后反弹，但没有重新站稳该水平，随后继续走弱 | `primary_pattern: failed-reclaim / failed-breakout boundary`；可作为 RFB/失败突破的视觉边界样本，但不强行命名为完整 RFB | 图中无法确认区间父级、周期、事件和触发合同；“流动性”解释不作为 PA 事实 | `boundary_candidate` |
-| [TSLA 三推标注图](https://www.tradingview.com/u/tickeron/) | 日线标题可见；三段摆动被画在两条边界之间，并标出 `#1/#2/#3`；后段向下离开 | `primary_pattern: three-push / wedge candidate`；`state_transition: possible range-transition or reversal candidate` | 这是折线图而非完整 OHLC 图，且三次计数已由作者标注；不能据此冻结 H3/L3、反转触发或交易合同 | `observation_only` |
+| [TSLA wedge 图](https://www.tradingview.com/symbols/NASDAQ-TSLA/ideas/?sort=recent) | K 线在两条向外分离的白色边界之间反复摆动；上边界上斜、下边界下斜；当前价格仍在边界内部 | `visual_pattern_label: expanding-triangle / broadening-range candidate`；有多次摆动，但不能仅凭这张图冻结为三推 H3/L3 | 图片本身缺少清晰的完整标题、周期和左侧父级；不能确认是收敛楔形，也不能确认三次尝试属于同一 lineage | `boundary_candidate` |
+| [Breakout–Pullback 图](https://ftv.com.vn/price-action-la-gi) | 价格跌破水平支撑；随后向上回测旧支撑附近；回测后再次向下推进 | `visual_pattern_label: bearish BOP-like`；`state_transition: BOP candidate`；旧支撑转为潜在阻力的视觉关系清楚 | 事件、周期、完整父级、接受条件和真实订单合同不可见；来源文字标注不能替代图上证据 | `pattern_candidate` |
+| [IOI / BO PB 图](https://www.brookstradingcourse.com/support-forum/general-trading-discussion/question-ioi/) | 上涨腿突破水平位；突破后出现小实体和重叠；随后价格继续向上 | `visual_pattern_label: bullish breakout-pullback candidate`；可记为 `H2-like`，但不冻结 H2 计数 | 图中没有完整周期、标的、事件背景；作者的 `ioi, BO PB` 标注不能直接当作 PA 计数证据 | `pattern_candidate` |
+| [失败收复图](https://internationaltradinginstitute.com/blog/liquidity-grabs-institutional-trading-strategy/) | 水平线标出前低；价格下破后反弹，但没有重新站稳该水平，随后继续走弱 | `visual_pattern_label: failed-reclaim / failed-breakout boundary`；可作为 RFB/失败突破的视觉边界样本，但不强行命名为完整 RFB | 图中无法确认区间父级、周期、事件和触发合同；“流动性”解释不作为 PA 事实 | `boundary_candidate` |
+| [TSLA 三推标注图](https://www.tradingview.com/u/tickeron/) | 日线标题可见；三段摆动被画在两条边界之间，并标出 `#1/#2/#3`；后段向下离开 | `visual_pattern_label: three-push / wedge candidate`；`state_transition: possible range-transition or reversal candidate` | 这是折线图而非完整 OHLC 图，且三次计数已由作者标注；不能据此冻结 H3/L3、反转触发或交易合同 | `observation_only` |
 
 ## 冒烟测试结论
 
@@ -90,10 +92,10 @@ chart_scope: full two-year Daily context plus nested recent intraday windows
 
 | 周期 | 直接可见事实 | 背景/位置 | 主识别与计数 | 视觉失效边界 | 结果 |
 | --- | --- | --- | --- | --- | --- |
-| Daily ~2Y | 2025-12 高点后经历宽幅回落；2026-07-29 在约 `297.38` 附近出现明显低点，随后恢复至 2026-08-21 收盘约 `362.86` | 当前收盘高于 EMA20 `342.10` 与 EMA50 `358.78`，但低于 EMA200 `382.90`；上方先看 `366–386`，再看 `405–413`、`430–453` 和 `485–499` 压力区 | `primary_pattern: MTR / recovery candidate`；`market_state: transition / broad-range recovery`；不能把这段恢复直接冻结成 Daily H2 | 回到最近恢复的约 `330–337` higher-low 区会削弱局部恢复；跌破 `297.38` 则破坏这次晚七月反转腿；不把 EMA 当止损 | `pattern_candidate` |
-| 4H-like | 由约 `410` 一路下行到约 `297`，随后形成较清楚的 higher-low / higher-high 恢复；8 月中旬后推进加速，8 月 20–21 再次上行 | 价格已离开 `297–310` 低位带和 `330–350` 恢复基座，正在接近 Daily 的 `366–386` 与 EMA200 背景 | `primary_pattern: bullish recovery continuation / ABC-H2-like candidate`；`secondary_context: late-July sell-climax reversal`；多层嵌套，H2 计数不冻结 | 失守最近 `330–350` 恢复结构会先破坏局部延续；回到 `297–310` 下方则回到原低位边界 | `pattern_candidate / count-pending` |
-| 1H | 8 月初低位后阶梯式上行；8-12 附近回压后重新推进，8-14 扩张，8-18/19 再次整理后越过约 `349–351`，8-20/21 推进至 `360–366` | 当前接近最近局部高点，且上方受 Daily `366–386` 位置约束；不是在开放空间中首次出现的低位 H1 | `primary_pattern: bullish ABC continuation / H2-like candidate`；`attempt_or_count: nested attempts, unclear`；不能把 1H 计数与 Daily 计数相加 | 接受跌回约 `337–342` 会破坏这段低周期恢复；低于约 `330` 则转回更宽的过渡/区间解释 | `pattern_candidate / count-pending` |
-| 15m | 8-19 后段从约 `340–342` 推进至 `349–351`；8-20 反复测试后，8-21 以强推进越过约 `349–351`，随后在 `360–366` 高位窄幅整理 | 旧的短线阻力可能转成支撑，但 8-21 的跳跃式强推进使订单合同和多日 retest 不能从这张图直接冻结 | `primary_pattern: bullish BOP-like / breakout-acceptance candidate`；`state_transition: BOP-like, not clean multi-day BOP`；H2/L2 不冻结 | 重新接受到 `348` 下方会削弱角色转换；回到 `342` 下方则 BOP-like 的短线接受边界失效；这些是视觉边界，不是订单止损 | `boundary_candidate / no-new-positive-for-clean-multiday-BOP` |
+| Daily ~2Y | 2025-12 高点后经历宽幅回落；2026-07-29 在约 `297.38` 附近出现明显低点，随后恢复至 2026-08-21 收盘约 `362.86` | 当前收盘高于 EMA20 `342.10` 与 EMA50 `358.78`，但低于 EMA200 `382.90`；上方先看 `366–386`，再看 `405–413`、`430–453` 和 `485–499` 压力区 | `visual_pattern_label: MTR / recovery candidate`；`market_state: transition / broad-range recovery`；不能把这段恢复直接冻结成 Daily H2 | 回到最近恢复的约 `330–337` higher-low 区会削弱局部恢复；跌破 `297.38` 则破坏这次晚七月反转腿；不把 EMA 当止损 | `pattern_candidate` |
+| 4H-like | 由约 `410` 一路下行到约 `297`，随后形成较清楚的 higher-low / higher-high 恢复；8 月中旬后推进加速，8 月 20–21 再次上行 | 价格已离开 `297–310` 低位带和 `330–350` 恢复基座，正在接近 Daily 的 `366–386` 与 EMA200 背景 | `visual_pattern_label: bullish recovery continuation / ABC-H2-like candidate`；`secondary_context: late-July sell-climax reversal`；多层嵌套，H2 计数不冻结 | 失守最近 `330–350` 恢复结构会先破坏局部延续；回到 `297–310` 下方则回到原低位边界 | `pattern_candidate / count-pending` |
+| 1H | 8 月初低位后阶梯式上行；8-12 附近回压后重新推进，8-14 扩张，8-18/19 再次整理后越过约 `349–351`，8-20/21 推进至 `360–366` | 当前接近最近局部高点，且上方受 Daily `366–386` 位置约束；不是在开放空间中首次出现的低位 H1 | `visual_pattern_label: bullish ABC continuation / H2-like candidate`；`attempt_or_count: nested attempts, unclear`；不能把 1H 计数与 Daily 计数相加 | 接受跌回约 `337–342` 会破坏这段低周期恢复；低于约 `330` 则转回更宽的过渡/区间解释 | `pattern_candidate / count-pending` |
+| 15m | 8-19 后段从约 `340–342` 推进至 `349–351`；8-20 反复测试后，8-21 以强推进越过约 `349–351`，随后在 `360–366` 高位窄幅整理 | 旧的短线阻力可能转成支撑，但 8-21 的跳跃式强推进使订单合同和多日 retest 不能从这张图直接冻结 | `visual_pattern_label: bullish BOP-like / breakout-acceptance candidate`；`state_transition: BOP-like, not clean multi-day BOP`；H2/L2 不冻结 | 重新接受到 `348` 下方会削弱角色转换；回到 `342` 下方则 BOP-like 的短线接受边界失效；这些是视觉边界，不是订单止损 | `boundary_candidate / no-new-positive-for-clean-multiday-BOP` |
 
 ### 两年重要高低点与位置复核
 
@@ -194,7 +196,7 @@ chart_scope: full two-year Daily context plus nested recent intraday windows
 
 ### 识别与边界
 
-`primary_pattern: bearish ABC / L1-L2-like candidate`；`parent_state: bullish-background-to-transition`；`A_quality: directional but late against the larger background`；`lineage: provisional`。较保守的读法是：6-24 后段是第一次有意义的空头恢复候选，6-25/26 是后续推进；不能因为连续下跌就自动把它升级为严格 L2。
+`visual_pattern_label: bearish ABC / L1-L2-like candidate`；`parent_state: bullish-background-to-transition`；`A_quality: directional but late against the larger background`；`lineage: provisional`。较保守的读法是：6-24 后段是第一次有意义的空头恢复候选，6-25/26 是后续推进；不能因为连续下跌就自动把它升级为严格 L2。
 
 视觉失效边界是重新接受 `392.63–400` 反弹/角色转换区；若价格在该区上方重新建立结构，当前空头恢复读法应废弃或重建。相反，`372–383` 一带是左侧和当前窗口都可见的支撑背景，不能用后续更低点把它事后抹掉。
 

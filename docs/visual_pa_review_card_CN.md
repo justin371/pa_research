@@ -60,7 +60,7 @@ gate_result: pass / conditional / observation_only / valid_no_trade / pending
 handoff_status: research_only / not_ready / ready_for_system
 ```
 
-主标签不是“最漂亮的名字”，而是当前最先值得研究的合同。已经接受的 BOP 优先于旧的双顶、三推或 MTR；成熟区间边缘优先于区间中部的 ABC/H2；VCP 保留独立体系标签，不和 Brooks H/L 计数合并。`secondary_context` 可以写 `H2_within_ABC`、`double_bottom_at_range_edge` 或 `three_push_evidence_for_MTR`，但不把它们加成多个独立优势。
+主标签不是“最漂亮的名字”，而是当前最先值得研究的合同。对于 `contract_scope: daily_candidate`，`primary_pattern` 只允许 `ABC_CONT` 或 `BOP`；H1/H2/L1/L2/H3/L3 只能写入 `internal_label`，其他关系写入 `secondary_context`。`deep_review`/`historical_context_only` 才能在合同已闭合时使用 `H1_L1`、`H2_L2`、`H3_L3`、`RFB`、`MTR` 或 `other` 等兼容值。已经接受的 BOP 优先于旧的双顶、三推或 MTR；成熟区间边缘优先于区间中部的 ABC/H2；VCP 保留独立体系标签，不和 Brooks H/L 计数合并。`secondary_context` 可以写 `H2_within_ABC`、`double_bottom_at_range_edge` 或 `three_push_evidence_for_MTR`，但不把它们加成多个独立优势。
 
 ## 快速视觉初筛：先判断像不像
 
@@ -262,11 +262,14 @@ range_edge_side: upper / lower / none / pending
 用最少的标签描述当前候选，允许并列：
 
 ```text
-pattern_family: TPB_H1_H2_H3 | L1_L2_L3 | ABC_CONT | RFB_SECOND | MTR | BOP | other
+pattern_family: ABC_CONT | BOP | RFB_SECOND | H3_L3 | MTR | other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 abc_mode: continuation / range-edge reaction / reversal candidate / complex / unknown
 pattern_like_reason:
 bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable
 ```
+
+`pattern_family` 是本卡的视觉速记字段，不是统一合同的额外主标签。`RFB_SECOND`、`H3_L3` 和 `MTR` 只服务于深审/历史兼容记录；若 `contract_scope: daily_candidate`，仍须把它们收敛到 `primary_pattern: ABC_CONT`/`BOP` 或保留为观察关系。H1/H2/L1/L2 只能放在 `internal_label`，`range_edge_three_push` 只是位置分支，不能替代 `primary_pattern` 或证明 H3/L3 已成立。
 
 使用以下判断顺序：
 
@@ -274,6 +277,8 @@ bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / 
 2. 区间边缘出现失败突破和二次尝试：优先看区间边缘反转/二次入场，不强行称趋势 H2/L2；
 3. 成熟趋势末端出现多次推进、动能减弱和反向触发：可记录反转候选；
 4. 突破交易单独开分支，不把突破接受和普通回调延续混在一起。
+
+若事前可见边界被日线强收盘越过、获得跟随并在回踩中守住，按 `primary_pattern: BOP`、`state_transition: breakout_acceptance` 重建新合同；原 pattern/反向 thesis 与旧订单合同失效，不能沿用旧 entry/stop/target 或把旧结果并入 BOP。
 
 ## 6. 信号 K 与触发
 
@@ -289,11 +294,14 @@ bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / 
 setup_bar:
 signal_bar:
 confirmation_bar:
+new_trigger:
 trigger_price:
 trigger_logic:
 signal_quality: strong / acceptable / weak / unclear
 follow_through_expected: yes / mixed / no / unknown
 ```
+
+本卡的 `trigger_price`/`trigger_logic` 是视觉填写便利字段；冻结到统一输出合同时，必须把可执行触发收敛到 canonical `new_trigger`，不能用审查时当前价代替。
 
 不要让后面一根漂亮的确认 K 线，反过来把前面一个很差的信号 K 线改写成优质信号。
 

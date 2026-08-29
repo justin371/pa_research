@@ -16,6 +16,10 @@
 
 状态边界：关键图表、事件、触发或空间证据尚不完整时使用 `pending`/`observation_only`；形态、方向和入场几何已可复核但已知硬闸门否决交易时使用 `valid_no_trade`。两者都不建立订单，不能互换。
 
+统一合同映射：本目录的三推/H3/L3 是压力状态研究语义；`contract_scope: daily_candidate` 时 `primary_pattern` 仍只写 `ABC_CONT` 或 `BOP`，H1/L1/H2/L2/H3/L3 只写入 `internal_label`，其他关系写入 `secondary_context`。`range_edge_three_push` 只是成熟区间边缘的独立位置分支，不是 `H3_L3` 主标签；深审/历史记录只有在同一 lineage、第三推状态和分流证据闭合时才可使用兼容 `H3_L3`。
+
+BOP 状态迁移：若事前可见边界被日线强收盘越过、获得跟随并在回踩中守住，统一合同改写为 `primary_pattern: BOP`、`state_transition: breakout_acceptance`；本目录的原 pattern/反向 thesis 与旧订单合同失效，必须重建 `new_trigger`、`structural_stop`、`first_independent_obstacle` 和空间，不能沿用旧 entry/stop/target 或把旧结果并入 BOP。
+
 开放趋势/通道路径的 A/B 背景分别记录为 `a_leg_quality` 与 `b_leg_class`；区间边缘路径允许普通 A，但仍必须记录边缘位置、反向拒绝和空间。
 
 三推或 H3/L3 命名前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录主要高点、主要低点、支撑阻力和 EMA20/50/200，再回到局部周期分隔三次推进。统一的母腿、lineage 和 reset 账本见[`H/L lineage 与三推状态视觉边界复核`](../../research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md)；两年背景或主周期分隔缺失时不得冻结三推/H3/L3。

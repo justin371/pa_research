@@ -68,6 +68,10 @@ ABC 内部优先使用“强 A → 受控 B → H1/L1 → 必要时 H2/L2”的�
 
 ABC、H1/H2、L1/L2、三推 H3/L3 和 BOP 的结果必须分层记录。`ABC + H2` 是母结构与内部尝试的关系，不是两个独立优势；突破接受后主标签必须切换为 BOP，不再按普通 ABC-H1/H2 统计。
 
+日线候选的 `primary_pattern` 白名单只有 `ABC_CONT` 和 `BOP`；H1/H2/L1/L2/H3/L3 只能记录在 `internal_label`，其余关系放入 `secondary_context`。`range_edge_three_push` 只表示成熟区间边缘的第三推位置，不是 `H3_L3` 主标签；若它尚未形成当前日线允许的 ABC/BOP 合同，只保留为研究分支或观察记录。
+
+若事前可见边界被日线强收盘越过、获得跟随并在回踩中守住，按 `state_transition: breakout_acceptance` 重建 `primary_pattern: BOP`；原 ABC/H-L/三推/反向合同和旧订单立即失效，不能沿用旧 entry、stop 或 target。
+
 ## 2. 共同硬闸门
 
 在进入 3–5 只每日候选前，必须完成以下检查：

@@ -226,7 +226,9 @@ $canonicalChecks = @{
         'b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear',
         'b_leg_location:',
         'direction: long / short / no_valid_direction',
+        'daily_candidate` 只允许 `ABC_CONT` 或 `BOP`',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
+        'range_edge_three_push` 只是区间边缘位置/分支旗标，不是 `primary_pattern`',
         'event_bucket:',
         'win_rate_eligible:',
         'pre_entry_provenance_status:',
@@ -263,7 +265,9 @@ $canonicalChecks = @{
         'why_it_meets_or_fails_the_rule:',
         'possible_entry_trigger:',
         'direction: long / short / no_valid_direction',
+        '日线候选的 `primary_pattern` 白名单只有 `ABC_CONT` 和 `BOP`',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
+        'range_edge_three_push` 只表示成熟区间边缘的第三推位置，不是 `H3_L3` 主标签',
         'event_bucket:',
         'bop_state:',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
@@ -284,7 +288,11 @@ $canonicalChecks = @{
         'space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown',
         'rough_R_R:',
         'direction: long / short / no_valid_direction',
+        'pattern_family: ABC_CONT | BOP | RFB_SECOND | H3_L3 | MTR | other',
+        'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate',
+        'pattern_family` 是本卡的视觉速记字段，不是统一合同的额外主标签',
+        '原 pattern/反向 thesis 与旧订单合同失效',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'gate_result:',
         'contract_scope:',
@@ -335,6 +343,11 @@ $canonicalChecks = @{
         'first_independent_obstacle / rough_space_to_first_obstacle_R / space_status / rough_R_R',
         'event_context / event_bucket / sector_state / market_state / permission / gate_result',
         'Pattern-specific shorthand',
+        '日线主标签白名单与状态迁移',
+        'contract_scope: daily_candidate',
+        'primary_pattern` 只允许 `ABC_CONT` 或 `BOP`',
+        'range_edge_three_push` 只是区间边缘位置分支',
+        '原 pattern/反向 thesis 与旧订单合同失效',
         '几何顺序固定为：结构失效/止损 → 首障碍 → 入场前空间 → 粗略 R/R → 目标层',
         'observation_only',
         'valid_no_trade'
@@ -458,6 +471,12 @@ foreach ($relativePath in $patternCaseReadmeRelativePaths) {
     }
     if ($content -notmatch '第一独立障碍|first_independent_obstacle|首障碍') {
         Add-ValidationError "pattern README missing first-obstacle preflight wording: $relativePath"
+    }
+    if ($content -notmatch '统一合同映射：') {
+        Add-ValidationError "pattern README missing canonical label mapping: $relativePath"
+    }
+    if ($content -notmatch 'BOP 状态迁移：若事前可见边界被日线强收盘越过') {
+        Add-ValidationError "pattern README missing BOP old-contract invalidation boundary: $relativePath"
     }
     if ($content -match '(?<![\w-])valid(?:-| )no-trade(?![\w-])') {
         Add-ValidationError "legacy valid-no-trade status alias in active pattern README: $relativePath"
@@ -803,6 +822,56 @@ if (Test-Path -LiteralPath $patternIndexAliasBoundaryAuditPath -PathType Leaf) {
         if (-not $patternIndexAliasBoundaryAuditContent.Contains($token)) {
             Add-ValidationError "missing pattern-index-alias-boundary-audit token '$token'"
         }
+    }
+}
+
+$patternLabelTransitionAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/pattern_label_transition_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $patternLabelTransitionAuditPath -PathType Leaf) {
+    $patternLabelTransitionAuditContent = Get-Utf8Text -Path $patternLabelTransitionAuditPath
+    foreach ($token in @(
+        '01_h1_l1_first_entry',
+        '02_h2_l2_second_entry',
+        '03_abc_continuation',
+        '04_range_edge_second_entry',
+        '05_failed_breakout_climax',
+        '06_breakout_pullback_bop',
+        '07_mtr_reversal',
+        '08_three_push_h3_l3',
+        '09_vcp_minervini',
+        '10_final_flag',
+        '11_opening_reversal',
+        '12_channel',
+        '13_inside_bar_two_bar_reversal',
+        '14_triangle_expanding_range',
+        '15_double_top_bottom',
+        '16_head_shoulders_rounded',
+        '日线候选的主标签白名单',
+        'H1/H2/L1/L2 只能写入 `internal_label`',
+        'range_edge_three_push',
+        'primary_pattern: BOP',
+        'state_transition: breakout_acceptance',
+        '原 pattern 或反向 thesis 与旧订单合同同时失效',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
+    )) {
+        if (-not $patternLabelTransitionAuditContent.Contains($token)) {
+            Add-ValidationError "missing pattern-label-transition-audit token '$token'"
+        }
+    }
+}
+
+$visualRecognitionSmokeTestPath = Join-Path -Path $repoRoot -ChildPath 'research/visual_recognition_smoke_test_2026-08-24_CN.md'
+if (Test-Path -LiteralPath $visualRecognitionSmokeTestPath -PathType Leaf) {
+    $visualRecognitionSmokeTestContent = Get-Utf8Text -Path $visualRecognitionSmokeTestPath
+    if ($visualRecognitionSmokeTestContent -notmatch 'visual_pattern_label:') {
+        Add-ValidationError 'visual recognition smoke test is missing visual_pattern_label'
+    }
+    if ($visualRecognitionSmokeTestContent -match '(?m)^primary_pattern:') {
+        Add-ValidationError 'visual recognition smoke test must not use free-text primary_pattern field'
     }
 }
 

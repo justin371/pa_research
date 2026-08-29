@@ -12,7 +12,8 @@ It is not the live trading system and does not place orders. PA Research may use
 
 完整图表的视觉判断是本项目最重要的能力和主要工作流。研究必须先回答“左侧发生了什么、当前处在趋势/区间/过渡的哪一部分、支撑阻力和压力如何组织”，再讨论 ABC、H/L 计数和订单。
 
-- 日线选股阶段只使用完成的 Daily K 线；4H/60m/15m 只在候选入选后的独立深审或订单合同中使用，不能改变日线候选主标签。能看到的范围、周期和数据完整性必须写清楚。
+- 日线选股阶段（`contract_scope: daily_candidate`）只使用完成的 Daily K 线；4H/60m/15m 只在候选入选后的独立深审或订单合同中使用，不能改变日线候选主标签。能看到的范围、周期和数据完整性必须写清楚。
+- 日线候选的 `primary_pattern` 只允许 `ABC_CONT` 或 `BOP`；H1/H2/L1/L2/H3/L3 只作 `internal_label`，其他结构关系放入 `secondary_context`。`range_edge_three_push` 是区间边缘位置分支，不是主标签；兼容的 `RFB`、`H3_L3`、`MTR`、`other` 只在深审/历史合同中使用。
 - 多周期复核遵循[`Daily / 4H / 1H / 15m 分层框架`](../research/multitimeframe_visual_review_framework_CN.md)：Daily/4H/1H 先决定背景、父级结构、主要位置和结构止损，15m 默认只做确认；若低周期自成交易，必须另立合同，不能用窄止损改写高周期 thesis。
 - Futu OpenD、历史 K 线和计算结果只用于测量、核对时间顺序、量价、R/R 和执行细节；它们不能替代完整图表的结构解释。
 - 扫描器、指标或单个 K 线标签不能单独证明 ABC、H1/H2/H3、L1/L2/L3 或“高胜率”。
@@ -105,6 +106,7 @@ For the current daily-selection phase, prioritize two separate primary families:
 - Inside a mature trading range, do not force ABC or H/L leg continuity onto every swing. Use the range's upper edge, lower edge, failed breakouts, tests, and second entries first. A third push at the upper/lower edge can be a `range_edge_three_push` candidate after rejection and a reverse trigger; a range-middle third push remains observation-only. A range-edge reaction that visually resembles H2/L2 is not automatically a trend H2/L2.
 - The dedicated range-edge working framework is [`交易区间边缘二次入场与失败突破`](../research/range_edge_second_entry_framework_CN.md). It separates edge reversal, failed-breakout re-entry, range swing/second-leg trap, and range-middle no-trade; it is still provisional and not a production rule.
 - Only after a clear directional breakout/acceptance and a subsequent pullback/retest should a new first leg and second leg be evaluated as a trend-continuation structure. The initial range-edge trade and the later post-breakout second leg must remain separate hypotheses.
+- When a visible boundary is accepted by a strong Daily close, follow-through, and a held retest, set `primary_pattern: BOP` and `state_transition: breakout_acceptance`; the prior pattern/thesis and order contract are invalid, and entry, stop, first obstacle, and space must be rebuilt.
 - Do not count every small intrabar high/low. A count should represent a meaningful attempt at a relevant location, followed by a signal and confirmation review.
 - Keep setup/count bars separate from confirmation/trigger bars. H1/H2/H3 or L1/L2/L3 identify the attempt sequence; they do not authorize an order by themselves.
 - The current study order is: larger background → A pressure → B pressure → major/minor support-resistance → H/L attempt count → signal K → trigger → stop/invalidation → first obstacle and measured-move space.

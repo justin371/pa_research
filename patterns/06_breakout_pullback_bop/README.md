@@ -14,6 +14,10 @@
 
 状态边界：关键图表、事件、触发或空间证据尚不完整时使用 `pending`/`observation_only`；形态、方向和入场几何已可复核但已知硬闸门否决交易时使用 `valid_no_trade`。两者都不建立订单，不能互换。
 
+统一合同映射：本目录的 BOP 是唯一突破回踩主合同；若 `contract_scope: daily_candidate`，`primary_pattern` 只写 `BOP` 或 `ABC_CONT`，H1/L1/H2/L2/H3/L3 只写入 `internal_label`，其他关系写入 `secondary_context`，`range_edge_three_push` 仅作位置分支。任何接受/回踩状态写入 `state_transition`、`bop_state` 和关系字段，不拼接成新的主标签。
+
+BOP 状态迁移：若事前可见边界被日线强收盘越过、获得跟随并在回踩中守住，统一合同改写为 `primary_pattern: BOP`、`state_transition: breakout_acceptance`；原 pattern/反向 thesis 与旧订单合同失效，必须重建 `new_trigger`、`structural_stop`、`first_independent_obstacle` 和空间，不能沿用旧 entry/stop/target 或把旧结果并入 BOP。
+
 突破前 A 的质量和回踩 B 的类别分别记录为 `a_leg_quality` 与 `b_leg_class`；它们只描述背景压力，不替代 BOP 的突破接受、回踩守住或 canonical 状态轴。
 
 进入 BOP 判断前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点、主要低点、支撑阻力、前高/前低、EMA20/50/200、当前父级状态和第一独立障碍。再核对突破前 A 的推动力与回踩 B 的受控程度；涉及 H/L 时，Daily EMA20/50 必须与方向一致。缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`，不能把局部突破或影线单独升级为 BOP。

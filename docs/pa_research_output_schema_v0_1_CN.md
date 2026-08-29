@@ -29,6 +29,7 @@ stage_1_fast_screen / deep_review / daily_candidate / historical_context_only
 本文件是 PA Research 的研究记录超集，统一视觉复核、日线候选和历史案例的字段；它不是当前 `backtesting.py` 输入 CSV 的逐项枚举。提交回放前，必须再按[`冻结合同回放器`](../research/backtesting/README.md)把研究记录收敛成可执行的冻结合同，不能把研究状态或区域文字直接当成订单合同。
 
 - 当前日线候选的顶层 `primary_pattern` 仍只有 `ABC_CONT` 和 `BOP`；H1/H2/L1/L2/H3/L3 通过 `internal_label` 及 `secondary_context` 记录。`H1_L1`、`H2_L2`、`H3_L3`、`RFB`、`MTR` 和 `other` 在统一记录及当前回放器中保留，是历史/兼容冻结合同的 pattern 值，不会扩展日线选股规则。
+- `primary_pattern` 的允许值必须结合 `contract_scope` 解读：`daily_candidate` 只允许 `ABC_CONT` 或 `BOP`；`deep_review`/`historical_context_only` 才能在对应合同已闭合时使用历史/兼容值。H1/H2/L1/L2 在日线候选中只能写入 `internal_label`，不能借由 `pattern_family`、`secondary_context` 或自由文本重新变成主标签。
 - 研究记录的 `direction` 可以是 `no_valid_direction`，但当前回放输入只接受 `long` 或 `short`。没有有效方向的记录只能保留为研究记录，不能送入回放。
 - 研究记录的 `order_branch` 可以记录 `stop_limit` 或 `observation_only`；当前 engine `0.3.9` 的回放输入只接受 `stop_confirmation`、`limit_retest` 和 `market_close`。`observation_only` 不建立交易合同，`stop_limit` 不能静默映射为普通 stop；两者目前不能直接传给当前回放器。
 - 回放输入中的 `entry_trigger`、`structural_stop`、`first_obstacle` 和 `target_price` 必须是有限数值价格；研究卡中的价格区域、`pending` 或 `unknown` 不能直接替代这些冻结数值。`market_close` 可以没有 `entry_trigger`，但仍必须满足该分支的其他合同要求。
@@ -139,6 +140,8 @@ pattern_like_reason:
 
 `primary_pattern: H3_L3` 时，`internal_label` 必须明确写成 `H3`（多头第三次尝试）或 `L3`（空头第三次尝试），不得使用含混的 `H3_L3`；还必须额外区分 `range_edge_three_push: yes`、`no` 或 `pending`。区间边缘三推允许 A 腿普通或偏弱，但必须记录上沿/下沿位置、反向确认和区间外接受分流；区间中部重复测试不能凭次数升级。
 
+`range_edge_three_push` 只是区间边缘位置/分支旗标，不是 `primary_pattern`，也不等同于 `H3_L3`。在 `daily_candidate` 中，三推只可作为 `internal_label: H3 / L3` 与 `secondary_context` 的研究关系，且仍受日线主标签白名单约束；只有深审或历史记录已闭合同一 lineage、第三推状态和反向/延续分流时，才可使用兼容 `primary_pattern: H3_L3`。
+
 ## 三、BOP 专用字段
 
 当 `primary_pattern: BOP` 时必须填写：
@@ -153,6 +156,8 @@ role_reversal_held: yes / no / unclear / not_occurred
 ```
 
 `BOP` 是独立主合同。ABC、H1/H2 或三推只能放入 `secondary_context`，不能使用 `BOP_ABC` 作为主 pattern，也不能把 BOP 与 ABC/H-L 结果混算。没有回踩时只能写 `acceptance_watch` 或相应的 gap/event 分支，不能补写不存在的回踩。
+
+当事前可见边界被日线强收盘越过、获得跟随并在回踩中守住而形成 `state_transition: breakout_acceptance` 时，原 pattern/反向 thesis 与其旧订单合同立即失效；必须以 `primary_pattern: BOP` 重建 `new_trigger`、`structural_stop`、`first_independent_obstacle` 和空间，不能沿用旧 entry/stop/target，也不能把旧合同结果并入 BOP。
 
 ## 四、订单与风险字段
 
