@@ -133,16 +133,26 @@ MM 是目标区域，不是把前方阻力抹掉的理由。若第一障碍不�
 ## 6. 当前可复用输出
 
 ```text
+contract_scope: historical_context_only
+primary_pattern: other
 parent_state: tight_trend / broad_channel / range / transition
 channel_status: candidate / confirmed / broken / rejected
-direction_and_pressure
+direction: long / short / no_valid_direction
+direction_and_pressure:
 upper_boundary / lower_boundary / midline
 boundary_test_count_and_expansion_or_contraction
 H_or_L_lineage_and_signal_K
-order_branch / actual_fill_or_open_skip
-structural_stop / first_obstacle / rough_R_R
-state_switch_condition
-final_state: continuation / edge-reaction / BOP / MTR-candidate / valid_no_trade
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
+structural_stop:
+first_independent_obstacle:
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 
 本轮结论：保留 TSLA 作为紧趋势延续候选，KLAC 作为宽通道边缘条件候选，XOM/UBER 作为扩张与首障碍否决，ASML 作为区间过渡反例。当前仍没有事件干净、两侧平行边界确认、首障碍宽裕且路径完整的成熟通道正例，因此 Channel 保持 `provisional`，不建立固定胜率规则。

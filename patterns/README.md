@@ -209,6 +209,8 @@ Round4、Round5 与 TSLA 视觉资产的 provenance、两年 Daily、重要高�
 
 全部 11 个视觉资产目录的 README provenance 和 105 张 PNG 的配对/统计边界见[`全部视觉资产 README canonical provenance 覆盖审计`](../research/backtesting/visual_asset_provenance_coverage_audit_2026-08-29_CN.md)：合同资产仍按逐行合同读取，窗口数量不等于样本数量。
 
+视觉历史报告、框架模板、配对复核记录与 canonical authority schema 的字段对齐见[`视觉历史报告与 canonical authority schema 对齐审计`](../research/backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md)：当前模板使用统一状态轴，历史案例别名只保留为事实/显示语义，不新增样本或结果。
+
 优先 Pattern 的代表性视觉候选与正/反例矩阵见[`优先 Pattern 代表性视觉候选矩阵`](../research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)：每个案例只保留一个主标签，次标签、状态切换、订单合同和首障碍单独记录。
 
 BOP 真实多日回踩的专项审计见[`BOP 真实多日回踩候选审计`](../research/bop_multiday_pullback_candidate_audit_2026-08-24_CN.md)：当前区分了状态切换、同日回测、缺口重订和真正缺失的多日回踩正例。

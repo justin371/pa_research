@@ -155,8 +155,12 @@ order_branch: stop_confirmation / limit_retest / market_close / observation_only
 actual_fill_or_open_skip
 structural_stop / invalidation
 first_independent_obstacle / rough_R_R / MM_after_obstacle
-event / sector / market_context
-final_state: research_candidate / research_positive_conditional / valid_no_trade / failed_thesis
+event_context / event_bucket / sector_reference / market_reference
+pre_entry_space_R / space_status
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 unresolved_conflict: one sentence
 ```
 

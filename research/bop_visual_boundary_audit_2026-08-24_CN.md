@@ -32,6 +32,9 @@
 ## 统一输出
 
 ```text
+contract_scope: deep_review / historical_context_only
+primary_pattern: BOP
+direction: long / short / no_valid_direction
 prior_boundary:
 prior_state:
 breakout_bar: wick_only / accepted_close / gap_acceptance / unclear
@@ -39,12 +42,16 @@ follow_through:
 pullback: none / real_retest / not_yet / reentered_old_range
 role_reversal:
 old_contract: preserved / invalidated / replaced
-new_order: stop / limit-retest / market-close / observe
-actual_fill_or_open_skip:
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 structural_stop:
-first_obstacle:
-rough_R_R:
-decision: candidate / conditional / valid_no_trade / failed_breakout
+first_independent_obstacle:
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 
 当前结论：BOP 的核心是状态切换和合同重建，不是追逐大 K。TSLA 2025-09 是接受样本，TSLA 2025-03 是回测样本；两者不能合并成“每次突破都会回踩”。目前仍无事件干净、父级清楚、角色转换明确、首障碍宽裕且路径完整的普通 BOP 正例，保持 provisional。

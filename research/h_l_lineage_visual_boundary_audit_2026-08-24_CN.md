@@ -58,7 +58,7 @@ chart_scope: full / partial / unavailable
 daily_context_window: >=2y / <2y / unavailable
 major_high_low_review: complete / partial / unavailable
 ema20_50_200_review: complete / partial / unavailable
-review_timeframe:                 # 只允许一个主计数周期
+count_timeframe:                  # 只允许一个主计数周期；timeframes_seen 记录全部可见周期
 direction: long / short / no_valid_direction
 parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 lineage_status: same_lineage / reset / unclear / pending

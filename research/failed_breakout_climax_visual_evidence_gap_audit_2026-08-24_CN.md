@@ -39,6 +39,9 @@
 每个候选只冻结以下字段，先于最终结果：
 
 ```text
+contract_scope: historical_context_only
+primary_pattern: RFB / MTR / other
+direction: long / short / no_valid_direction
 preexisting_boundary:
 parent_state: open_trend / mature_range / channel / transition
 break_or_climax_attempt:
@@ -52,8 +55,14 @@ actual_fill_or_reprice:
 structural_stop:
 first_independent_obstacle:
 rough_R_R:
-event_and_sector_filter:
-final_state:
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+event_context:
+event_bucket:
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
 
 如果父级已经是成熟区间，优先使用区间上沿/下沿和 second-leg trap 逻辑；不能把区间内部的反向运动强行改成开放趋势中的 MTR。若突破被强收盘接受，旧的失败突破或反转合同必须结束，改为 BOP 新合同。

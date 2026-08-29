@@ -68,25 +68,41 @@ QCOM、VRT 和 MAR 说明低周期越精细，越容易把入场放在首障碍�
 ## 统一记录字段
 
 ```text
+contract_scope: deep_review / historical_context_only
 decision_timestamp:
-data_source / data_status / as_of_time:
+data_source:
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: historical_close / unknown
+timeframes_seen:
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
 parent_timeframe:
 parent_state_and_location:
-parent_pattern_and_count:
+primary_pattern:
+internal_label:
 parent_signal_bar:
 parent_order_branch:
 parent_actual_or_assumed_fill:
 parent_structural_stop:
-parent_first_obstacle:
-parent_rough_R_R:
+parent_first_independent_obstacle:
+parent_pre_entry_space_R:
+parent_space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 lower_timeframe:
 lower_role: confirmation / independent-trade / reprice / observation
 lower_signal_and_trigger:
 lower_actual_fill:
 lower_stop_and_first_obstacle_if_independent:
 gap_or_opening_skip:
-sector_market_event_gate:
-final_state:
+event_context:
+event_bucket:
+sector_reference:
+market_reference:
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 failure_condition:
 ```
 

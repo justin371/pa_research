@@ -69,21 +69,37 @@ COIN 和 XOM 覆盖跳空、范围扩张、第三推变强和首支撑拥挤；N
 每个后段候选至少保留：
 
 ```text
+contract_scope: historical_context_only
 decision_timestamp:
+as_of_time:
+timezone:
+session_state: historical_close / unknown
+timeframes_seen:
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
+direction: long / short / no_valid_direction
 parent_state_and_trend_age:
 last_visible_push:
 late_location_or_magnet:
 pullback_lineage_and_attempt_count:
-signal_bar_and_trigger:
-order_branch:
-actual_fill_or_open_skip:
-parent_structural_stop:
-independent_low_cycle_stop_if_any:
-first_obstacle_and_cluster_sources:
-rough_R_R_to_first_obstacle:
-event_sector_multitimeframe_gate:
+signal_bar:
+new_trigger:
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
+structural_stop:
+first_independent_obstacle:
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+event_context:
+event_bucket:
+sector_reference:
+market_reference:
 management_action:
-final_state:
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 
 ## 当前结论

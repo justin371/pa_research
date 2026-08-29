@@ -5,9 +5,9 @@
 ## 统一 ABC 复核卡
 
 ```text
-parent_state → A_quality → B_lineage/pressure → location
-→ H1/H2 or L1/L2 C trigger → follow-through
-→ structural_stop → first_obstacle → MM/AB=CD → decision
+parent_state → a_leg_quality → lineage_status / b_leg_class / b_leg_location → location
+→ internal_label H1/H2 or L1/L2 → new_trigger → follow-through
+→ structural_stop → first_independent_obstacle → MM/AB=CD → research_state / trade_state / gate_result / handoff_status
 ```
 
 A、B、C 是决策时点的结构描述，不是事后把未来走势切成漂亮的三段。局部腿和父级腿同时存在时，保留 `local_anchor` 与 `parent_anchor`；区间中部的摆动不自动成为 ABC。

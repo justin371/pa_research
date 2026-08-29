@@ -25,6 +25,7 @@
 - [`视觉识别冒烟、快筛协议与 Round2/Round3 资产 canonical 边界审计`](../research/backtesting/visual_recognition_canonical_boundary_audit_2026-08-29_CN.md)：核对视觉冒烟/快筛的 canonical 映射、配对资产 provenance 和候选/授权边界。
 - [`Round4、Round5 与 TSLA 视觉资产 canonical 边界审计`](../research/backtesting/visual_asset_canonical_boundary_audit_2026-08-29_CN.md)：核对短窗口、两年 Daily 与 TSLA 多周期资产的 provenance、pattern 状态和 no-new-positive 边界。
 - [`全部视觉资产 README canonical provenance 覆盖审计`](../research/backtesting/visual_asset_provenance_coverage_audit_2026-08-29_CN.md)：核对 11 个视觉资产目录、105 张 PNG 的 provenance、配对职责、历史别名与统计隔离。
+- [`视觉历史报告与 canonical authority schema 对齐审计`](../research/backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md)：核对视觉框架、历史报告、配对复核记录与 canonical 字段/状态轴，区分当前模板修复和历史事实别名。
 - [`入场几何与不交易状态边界审计`](../research/entry_geometry_state_boundary_audit_2026-08-29_CN.md)：统一首障碍、结构止损、入场前空间、粗略 R/R 和不交易状态边界。
 - [`Pattern 主标签映射与 BOP 状态迁移审计`](../research/pattern_label_transition_audit_2026-08-29_CN.md)：核对日线主标签白名单、H/L 内部标签、三推/区间边缘分隔及 BOP 接受后的旧合同失效。
 - [`证据范围与数据状态一致性审计`](../research/evidence_scope_status_boundary_audit_2026-08-29_CN.md)：核对多周期证据范围、逐标的两年 Daily 覆盖、数据状态与历史 session 的字段边界。

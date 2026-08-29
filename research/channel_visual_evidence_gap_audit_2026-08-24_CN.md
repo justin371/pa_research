@@ -65,18 +65,31 @@
 ## 4. 最小视觉复核卡
 
 ```text
+contract_scope: historical_context_only
+primary_pattern: other
 parent_state: open_trend / tight_channel / broad_channel / range / transition
 channel_status: candidate / confirmed / broken / rejected
-direction_and_slope
+direction: long / short / no_valid_direction
+direction_and_slope:
 upper_lower_boundary_and_midline
 test_count_and_expansion_or_contraction
 pullback_depth_and_overlap
 H_or_L_or_breakout_signal
-order_branch / actual_fill / open_skip
-structural_stop / invalidation
-first_independent_obstacle / MM_after_obstacle
-rough_R_R / event / sector / market
-final_state: continuation / edge_candidate / BOP / range / MTR_candidate / valid_no_trade
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
+structural_stop:
+structural_invalidation:
+first_independent_obstacle:
+rough_R_R:
+event_context:
+event_bucket:
+sector_reference:
+market_reference:
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+channel_state: continuation / edge_candidate / range / not_frozen
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 
 ## 5. 当前缺口与停止条件

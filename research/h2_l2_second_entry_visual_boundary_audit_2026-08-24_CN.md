@@ -35,14 +35,19 @@
 
 ```text
 parent_state:
-same_lineage: yes / uncertain / no
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
 first_attempt: failed / no_follow_through / not_meaningful / accepted
 second_location:
+internal_label: H2 / L2 / none / pending
 signal_quality:
-order_contract: stop / limit-retest / close / low-cycle-separate / observe
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 structural_stop:
-first_obstacle:
-decision: candidate / conditional / valid_no_trade / rebuild
+first_independent_obstacle:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 fallback: continue / H3-L3 / MTR / range-edge / new-trend
 ```
 

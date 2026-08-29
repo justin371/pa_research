@@ -231,7 +231,7 @@ b_leg_location:
 在同一周期、同一回调背景下记录：
 
 ```text
-attempt: H1 / H2 / H3 / L1 / L2 / L3 / unclear
+historical_count_label: H1 / H2 / H3 / L1 / L2 / L3 / unclear
 count_basis:
 count_reset_reason:
 ```
@@ -252,7 +252,8 @@ count_reset_reason:
 如果当前尝试被标为 H3/L3，额外填写：
 
 ```text
-same_lineage: yes / no / unclear
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
 third_push_efficiency: weaker / similar / expanding / unclear
 third_push_follow_through: weakening / mixed / strengthening / unclear
 third_push_location:
@@ -275,6 +276,7 @@ range_edge_side: upper / lower / none / pending
 用最少的标签描述当前候选，允许并列：
 
 ```text
+primary_pattern: ABC_CONT | BOP | RFB | H3_L3 | MTR | other
 pattern_family: ABC_CONT | BOP | RFB_SECOND | H3_L3 | MTR | other
 internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 abc_mode: continuation / range-edge reaction / reversal candidate / complex / unknown
@@ -282,7 +284,7 @@ pattern_like_reason:
 bop_state: acceptance_watch / ordinary_pullback / failed_breakout / gap_event / bull_flag_continuation / not_applicable
 ```
 
-`pattern_family` 是本卡的视觉速记字段，不是统一合同的额外主标签。`RFB_SECOND`、`H3_L3` 和 `MTR` 只服务于深审/历史兼容记录；若 `contract_scope: daily_candidate`，仍须把它们收敛到 `primary_pattern: ABC_CONT`/`BOP` 或保留为观察关系。H1/H2/L1/L2 只能放在 `internal_label`，`range_edge_three_push` 只是位置分支，不能替代 `primary_pattern` 或证明 H3/L3 已成立。
+`pattern_family` 是本卡的视觉速记/历史显示字段，不是统一合同的额外主标签；新记录必须同时使用 canonical `primary_pattern`。其中历史显示值 `RFB_SECOND` 只映射到兼容主标签 `RFB`，不能写成新的主标签。`H3_L3` 和 `MTR` 只服务于深审/历史兼容记录；若 `contract_scope: daily_candidate`，仍须把它们收敛到 `primary_pattern: ABC_CONT`/`BOP` 或保留为观察关系。H1/H2/L1/L2 只能放在 `internal_label`，`range_edge_three_push` 只是位置分支，不能替代 `primary_pattern` 或证明 H3/L3 已成立。
 
 使用以下判断顺序：
 

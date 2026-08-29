@@ -217,6 +217,7 @@ $requiredFiles = @(
     'research/backtesting/visual_recognition_canonical_boundary_audit_2026-08-29_CN.md',
     'research/backtesting/visual_asset_canonical_boundary_audit_2026-08-29_CN.md',
     'research/backtesting/visual_asset_provenance_coverage_audit_2026-08-29_CN.md',
+    'research/backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_manifest_2026-08-29.json',
@@ -345,7 +346,7 @@ $canonicalChecks = @{
         'second_confirmation: yes / no / pending',
         'range_edge_side: upper / lower / none / pending',
         'state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate',
-        'pattern_family` 是本卡的视觉速记字段，不是统一合同的额外主标签',
+        '`pattern_family` 是本卡的视觉速记/历史显示字段，不是统一合同的额外主标签',
         '当 `contract_scope: daily_candidate` 时，`timeframes_seen` 只能填写 `Daily`',
         '原 pattern/反向 thesis 与旧订单合同失效',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
@@ -394,7 +395,7 @@ $canonicalChecks = @{
         'space_status:',
         'trade_state:',
         'gate_result:',
-        'handoff_status:'
+        'handoff_status: research_only / not_ready / ready_for_system'
     )
     'strategy/01_three_push_wedge_candidate.md' = @(
         'no-new-positive',
@@ -1947,6 +1948,103 @@ if (Test-Path -LiteralPath $commonVisualPreflightAuditPath -PathType Leaf) {
     )) {
         if (-not $commonVisualPreflightAuditContent.Contains($token)) {
             Add-ValidationError "missing common-visual-preflight audit token '$token'"
+        }
+    }
+}
+
+$visualAuthoritySchemaAlignmentAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $visualAuthoritySchemaAlignmentAuditPath -PathType Leaf) {
+    $visualAuthoritySchemaAlignmentAuditContent = Get-Utf8Text -Path $visualAuthoritySchemaAlignmentAuditPath
+    foreach ($token in @(
+        '23 个活动文档',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        '不修改 Codex Trading',
+        '不创建量化扫描器',
+        '不连接 Futu/OpenD',
+        '不连接 Execution Agent',
+        '不修改 CSV/历史结果/engine 有效语义'
+    )) {
+        if (-not $visualAuthoritySchemaAlignmentAuditContent.Contains($token)) {
+            Add-ValidationError "missing visual-authority-schema-alignment audit token '$token'"
+        }
+    }
+}
+
+$visualAuthorityActiveTemplateRelativePaths = @(
+    'research/market_state_context_visual_evidence_audit_2026-08-24_CN.md',
+    'research/inside_bar_two_bar_reversal_visual_framework_CN.md',
+    'research/triangle_expanding_range_visual_framework_CN.md',
+    'research/late_trend_entry_visual_framework_CN.md',
+    'research/multitimeframe_visual_review_framework_CN.md'
+)
+foreach ($relativePath in $visualAuthorityActiveTemplateRelativePaths) {
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    foreach ($token in @(
+        'contract_scope:',
+        'data_status:',
+        'as_of_time:',
+        'timeframes_seen:',
+        'daily_context_window:',
+        'major_high_low_review:',
+        'ema20_50_200_review:',
+        'direction: long / short / no_valid_direction',
+        'order_branch:',
+        'research_state:',
+        'trade_state:',
+        'gate_result:',
+        'handoff_status:'
+    )) {
+        if (-not $content.Contains($token)) {
+            Add-ValidationError "visual authority template missing canonical token '$token': $relativePath"
+        }
+    }
+    $requiredGeometryToken = if ($relativePath -eq 'research/multitimeframe_visual_review_framework_CN.md') {
+        'parent_first_independent_obstacle:'
+    } else {
+        'first_independent_obstacle:'
+    }
+    if (-not $content.Contains($requiredGeometryToken)) {
+        Add-ValidationError "visual authority template missing canonical obstacle '$requiredGeometryToken': $relativePath"
+    }
+    foreach ($legacyToken in @(
+        '(?m)^\s*final_state:',
+        '(?m)^\s*order_contract:',
+        '(?m)^\s*first_obstacle:',
+        '(?m)^\s*rough_rr:',
+        '(?m)^\s*three_push_state:',
+        '(?m)^\s*trigger_order:',
+        '(?m)^\s*actual_or_assumed_fill:',
+        '(?m)^\s*review_timeframe:',
+        '(?m)^\s*parent_pattern:',
+        '(?m)^\s*decision:',
+        '(?m)^\s*status:'
+    )) {
+        if ($content -match $legacyToken) {
+            Add-ValidationError "legacy visual authority template field remains '$legacyToken': $relativePath"
+        }
+    }
+}
+
+$visualPaReviewCardPath = Join-Path -Path $repoRoot -ChildPath 'docs/visual_pa_review_card_CN.md'
+if (Test-Path -LiteralPath $visualPaReviewCardPath -PathType Leaf) {
+    $visualPaReviewCardContent = Get-Utf8Text -Path $visualPaReviewCardPath
+    foreach ($token in @(
+        'primary_pattern: ABC_CONT | BOP | RFB | H3_L3 | MTR | other',
+        'pattern_family: ABC_CONT | BOP | RFB_SECOND | H3_L3 | MTR | other',
+        'lineage_status: same_lineage / reset / unclear / pending',
+        'lineage_id:',
+        '历史显示值 `RFB_SECOND` 只映射到兼容主标签 `RFB`'
+    )) {
+        if (-not $visualPaReviewCardContent.Contains($token)) {
+            Add-ValidationError "visual PA review card missing canonical authority token '$token'"
+        }
+    }
+    foreach ($legacyToken in @('(?m)^\s*attempt:', '(?m)^\s*same_lineage:')) {
+        if ($visualPaReviewCardContent -match $legacyToken) {
+            Add-ValidationError "visual PA review card retains active counting alias '$legacyToken'"
         }
     }
 }

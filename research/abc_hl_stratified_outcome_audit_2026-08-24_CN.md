@@ -23,17 +23,27 @@
 
 ```text
 contract_scope: historical_context_only / deep_review
-parent_pattern: ABC_CONT / not_abc / pending
+primary_pattern: ABC_CONT / RFB / H3_L3 / other / pending
 parent_state: open_trend / range_edge / transition / event-or-gap / unclear
 directional_bias: bull / bear / balanced / changing
 direction: long / short / no_valid_direction
-attempt: H1 / H2 / L1 / L2 / H3 / L3 / unclear
-lineage_group:
-review_timeframe:
-A_quality: strong-looking / directional / ordinary / unclear
-B_state: controlled / deep-late-controlled / uncontrolled / range-like / unclear
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
+timeframes_seen:
+a_leg_quality: strong / ordinary / unclear / event_driven
+b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear
+b_leg_location:
 order_branch: stop_confirmation / market_close / limit_retest / stop_limit / observation_only
 branch_role: same_contract / gap_reprice / lower_timeframe / management
+event_context:
+event_bucket:
+first_independent_obstacle:
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 
 不能把下列分支混成一个统计样本：
@@ -103,7 +113,7 @@ branch_role: same_contract / gap_reprice / lower_timeframe / management
 
 每个新样本必须在结果发生前冻结：
 
-1. 主周期、两年左侧背景、A/B、H/L 计数和 `lineage_group`；
+1. 主周期、两年左侧背景、A/B、H/L 计数和 `lineage_id`；
 2. signal bar、触发价、成交/未成交规则和订单合同；
 3. 结构失效位、第一独立障碍和预设目标/时间边界；
 4. 事件、板块/市场状态和是否为 gap-reprice；

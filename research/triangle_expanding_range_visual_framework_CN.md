@@ -153,6 +153,16 @@ PAHubCN 26A–26B 的核心描述是：三角形是“区间里面的区间”�
 ## 7. 当前视觉输出格式
 
 ```text
+contract_scope: deep_review / historical_context_only
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: historical_close / unknown
+timeframes_seen:
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
 parent_state: open_trend / mature_range / channel / transition
 triangle_status: candidate / range_inside_range / expanding_boundary / not_frozen
 upper_boundary / lower_boundary: source and confidence
@@ -160,13 +170,33 @@ tests: enough / insufficient / ambiguous
 location: upper_edge / lower_edge / middle / unknown
 breakout_state: not_confirmed / accepted / failed / gap_repriced
 second_entry: pending / present / not_applicable
+direction: long / short / no_valid_direction
+primary_pattern: BOP / RFB / MTR / other
+secondary_context: triangle / expanding_range / range_inside_range
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
 order_branch: stop_confirmation / limit_retest / market_close / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / management
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 structural_stop: where and why
-first_obstacle: where and why
-rough_rr: wide / borderline / insufficient / not_frozen
-status: continuation / failed_breakout / range_reaction / valid_no_trade
+structural_invalidation:
+first_independent_obstacle: where and why
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+rough_R_R: wide / borderline / insufficient / not_frozen
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
+
+`triangle_status`、`upper_boundary/lower_boundary`、`tests`、`location`、
+`breakout_state` 和 `second_entry` 是模式专用观察字段。它们不替代
+`primary_pattern`、`state_transition`、`direction` 或 canonical 状态轴；新记录
+不再使用旧的 `first_obstacle`、`rough_rr` 或混合 `status` 字段。
 
 ## 8. 当前结论与缺口
 

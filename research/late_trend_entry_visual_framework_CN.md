@@ -124,20 +124,50 @@
 ## 7. 最小复核卡
 
 ```text
+contract_scope: deep_review / historical_context_only
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: historical_close / unknown
+timeframes_seen:
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
 trend_age_and_parent_state:
 late_location_or_magnet:
 last_push: continuation / climax-risk / accepted-breakout / mixed
 pullback_available: yes / no
 same_contract_or_new_contract:
 signal_and_trigger:
+direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP / RFB / MTR / other
+secondary_context: late_trend_entry_filter
+signal_bar:
+confirmation_bar:
+new_trigger:
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 structural_stop:
-first_obstacle:
+structural_invalidation:
+first_independent_obstacle:
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 rough_R_R:
-order_branch: stop_confirmation / limit_retest / market_close / observation_only
-branch_role: same_contract / role_reversal_retest / gap_reprice / management
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 management: hold / partial / protect / exit / rebuild
 failure_condition:
 ```
+
+`trend_age_and_parent_state`、`late_location_or_magnet`、`last_push`、
+`pullback_available` 和 `same_contract_or_new_contract` 是后段过滤层的补充字段。
+它们不能替代 `primary_pattern`、`direction`、`signal_bar`、
+`first_independent_obstacle` 或三条状态轴；新记录不再使用旧的 `first_obstacle`。
 
 ## 8. 当前结论
 

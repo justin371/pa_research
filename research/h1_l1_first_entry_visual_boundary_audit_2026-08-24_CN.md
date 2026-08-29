@@ -33,14 +33,16 @@ H1/L1 是回调中的第一次有意义恢复，不是第一根顺方向 K，也
 
 ```text
 parent_state:
-A_quality: strong / ordinary / transition / climax / unclear
-B_quality: shallow_controlled / deep_late_controlled / expanding / unclear
-entry_attempt: H1-like / L1-like / noise / no-count
+a_leg_quality: strong / ordinary / unclear / event_driven
+b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear
+internal_label: H1 / L1 / none / pending
 signal_bar: quality / mixed / poor / setup-only
-order: stop / limit-retest / market-close / observation-only
-fallback: H2/L2 / rebuild / no-trade
-first_obstacle: clear / crowded / unknown
-decision: candidate / conditional / valid_no_trade
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+first_independent_obstacle:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 
 当前结论：H1/L1 最适合做早期趋势筛选，但不应追求“所有第一尝试都交易”。强 A + 受控 B + 位置 + 优质确认 K 只是候选入口；首障碍、结构止损、事件和实际成交仍可直接否决。研究保持 provisional，不产生胜率或生产规则。

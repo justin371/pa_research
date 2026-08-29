@@ -171,18 +171,50 @@ H1/H2/L1/L2 关注的是回调中的尝试次数；Inside Bar 关注的是 K 线
 以后看到 Inside Bar 或两根 K 线候选，只记录：
 
 ```text
+contract_scope: deep_review / historical_context_only
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: historical_close / unknown
+timeframes_seen:
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
 parent_state: trend / range / channel / transition
 mother_bar: frozen / approximate / missing
 pattern_type: strict_inside / ii / ioi / two_bar_reversal / signal_sequence / not_confirmed
 location: major_sr / range_edge / ema_or_gap / middle / unknown
 directional_bias: continuation / reversal_candidate / both_sides / none
+direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP / RFB / MTR / other
+secondary_context:
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
 signal_bar: which bar and why
-trigger_order: stop / limit_retest / market_close / observation_only
+confirmation_bar:
+new_trigger:
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 structural_stop: where and why
-first_obstacle: where and why
-rough_rr: wide / borderline / insufficient / not_frozen
-status: research_candidate / continuation / valid_no_trade / pending_ohlc
+structural_invalidation:
+first_independent_obstacle: where and why
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+rough_R_R: wide / borderline / insufficient / not_frozen
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
+
+`mother_bar`、`pattern_type`、`location` 和 `directional_bias` 是 Inside Bar/两根
+反转的模式专用观察字段。若它只是 H1/H2/L1/L2 的信号序列，主标签仍按
+`primary_pattern`/`internal_label` 记录；`trigger_order` 和 `status` 不再作为
+统一合同字段，分别映射到 `order_branch` 与三条状态轴。
 
 ## 9. 当前结论与缺口
 

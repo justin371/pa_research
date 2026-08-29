@@ -80,18 +80,33 @@
 ## 4. 最小视觉复核卡
 
 ```text
+contract_scope: historical_context_only
+primary_pattern: other
 parent_state: open_trend / mature_range / channel / transition
 triangle_status: candidate / range_inside_range / expanding_boundary / not_frozen
+direction: long / short / no_valid_direction
 upper_lower_boundary: source and confidence
 tests: enough / insufficient / ambiguous
 location: upper_edge / lower_edge / middle / unknown
 breakout_state: not_confirmed / accepted / failed / gap_repriced
 second_entry: pending / present / not_applicable
-order_branch / actual_fill / open_skip
-structural_stop / invalidation
-first_independent_obstacle / MM_after_obstacle
-rough_R_R / event / sector / market
-final_state: continuation / BOP / failed_breakout / range_reaction / valid_no_trade
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
+structural_stop:
+structural_invalidation:
+first_independent_obstacle:
+rough_R_R:
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+event_context:
+event_bucket:
+sector_reference:
+market_reference:
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+triangle_state: continuation / BOP / failed_breakout / range_reaction / not_frozen
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 
 ## 5. 当前缺口与停止条件

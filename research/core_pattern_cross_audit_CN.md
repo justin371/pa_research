@@ -35,16 +35,16 @@
 每张图先按以下顺序输出；如果前一步改变了父级状态，后面的旧合同立即失效：
 
 ```text
-1. parent_state / timeframe / market_context
+1. parent_state / timeframes_seen / market_state
 2. left_structure_and_location / major_support_resistance
 3. directional_leg_or_range_edge
-4. lineage_and_attempt_count
+4. lineage_status / lineage_id / internal_label
 5. signal_bar / trigger / follow_through
-6. order_branch / actual_fill / opening_skip
+6. order_branch / actual_fill_or_open_skip / gap_policy
 7. structural_stop / invalidation
-8. first_independent_obstacle / rough_R_R
+8. first_independent_obstacle / pre_entry_space_R / space_status / rough_R_R
 9. event_and_sector_context
-10. final_state / no_trade_reason / next_contract
+10. research_state / trade_state / gate_result / handoff_status / no_trade_reason / next_contract
 ```
 
 “先看什么”与“最后是否交易”必须分开：前四步决定它像哪个 pattern，后六步决定这个形态是否值得进入交易审计。

@@ -77,6 +77,7 @@
 - [`视觉识别冒烟、快筛协议与 Round2/Round3 资产 canonical 边界审计`](backtesting/visual_recognition_canonical_boundary_audit_2026-08-29_CN.md)：核对冒烟/快筛字段映射、两年 Daily/重要高低点/EMA provenance、Round2/Round3 局部资产和 `no-new-positive` 边界；不新增样本或结果。
 - [`Round4、Round5 与 TSLA 视觉资产 canonical 边界审计`](backtesting/visual_asset_canonical_boundary_audit_2026-08-29_CN.md)：补齐短窗口 Round4、两年 Daily Round5 与 TSLA 多周期资产的 canonical provenance、重要高低点/EMA、多周期职责和状态边界；不新增样本或结果。
 - [`全部视觉资产 README canonical provenance 覆盖审计`](backtesting/visual_asset_provenance_coverage_audit_2026-08-29_CN.md)：覆盖 11 个视觉资产目录、105 张 PNG 的 README provenance、配对职责、历史别名和索引边界；不新增样本或结果。
+- [`视觉历史报告与 canonical authority schema 对齐审计`](backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md)：核对视觉框架、历史报告、配对复核记录与 canonical 字段/状态轴，区分当前模板修复和历史事实别名；不新增样本或结果。
 
 ## 冻结合同回放
 

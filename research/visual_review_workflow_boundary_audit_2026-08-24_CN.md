@@ -34,16 +34,16 @@
 
 ## 2. 主/次标签验收规则
 
-| 观察到的内容 | 主标签 | 次标签 | 不能做的事 |
+| 观察到的内容 | canonical 主标签 | canonical 次标签/状态 | 不能做的事 |
 | --- | --- | --- | --- |
-| 成熟区间上沿二次测试 | `range_edge_second_entry` | `double_top`、`H2_like` | 不把区间中部后续摆动接回开放趋势 ABC |
-| 边界外强收盘、跟随、回测守住 | `BOP_acceptance` | `former_double_top`、`former_triangle` | 不继续使用旧反向合同 |
-| 强 A、受控 B、第一次恢复 | `H1/L1` 或 `ABC` | `signal_sequence` | 不因 EMA 触碰自动入场 |
-| 第一次尝试失败后同一回调第二次尝试 | `H2/L2` | `ABC` | 不把区间边缘第二次机会和开放趋势 H2 混写 |
-| 第三次压力测试 | `three_push/H3/L3` | `MTR_candidate` 或 `channel_continuation` | 不因次数到三自动做反向 |
-| 三次测试范围外扩 | `expanding_boundary` | `H3_like`、`climax_candidate` | 不改写成逐推衰竭 |
-| 头部/肩部和真实颈线 | `head_shoulders_candidate` | `double_top_bottom`、`MTR_candidate` | 不把三个点或圆弧当确认 |
-| 连续波动收缩、pivot 和相对强度 | `VCP` | `PA_context` | 不和 H2/三推/ABC 合并计数 |
+| 成熟区间上沿二次测试 | `RFB`（仅深审/历史兼容） | `range_edge_three_push` 或 `secondary_context`；未闭合时 `other` | 不把区间中部后续摆动接回开放趋势 ABC |
+| 边界外强收盘、跟随、回测守住 | `BOP` | `state_transition: breakout_acceptance`；旧形态放 `secondary_context` | 不继续使用旧反向合同 |
+| 强 A、受控 B、第一次恢复 | `ABC_CONT` | `internal_label: H1 / L1`；`secondary_context` 可记信号序列 | 不因 EMA 触碰自动入场 |
+| 第一次尝试失败后同一回调第二次尝试 | `ABC_CONT` | `internal_label: H2 / L2`；`lineage_status` 必须可审计 | 不把区间边缘第二次机会和开放趋势 H2 混写 |
+| 第三次压力测试 | `ABC_CONT`；闭合历史合同才可用 `H3_L3` | `internal_label: H3 / L3`、`third_push_state`、必要时 `MTR_candidate` 关系 | 不因次数到三自动做反向 |
+| 三次测试范围外扩 | `other` | `secondary_context: expanding_boundary`、`third_push_state: continuation_or_climax` | 不改写成逐推衰竭 |
+| 头部/肩部和真实颈线 | `other` | `secondary_context: head_shoulders_candidate / double_top_bottom` | 不把三个点或圆弧当确认 |
+| 连续波动收缩、pivot 和相对强度 | `other` | `secondary_context: VCP / PA_context` | 不和 H2/三推/ABC 合并计数 |
 
 ## 3. 多周期工作流
 
@@ -70,7 +70,7 @@ holding_horizon
 ### 4.1 TSLA `2025-09-08–09-12`
 
 快筛：阻力下双高/三推/Final Flag-like 压缩。  
-主标签：早期 `resistance_test`，突破后切换 `BOP_acceptance`。  
+主标签：早期 `primary_pattern: other`（`resistance_test`），突破后切换为 `primary_pattern: BOP` + `state_transition: breakout_acceptance`。
 次标签：`former_double_top`、`former_three_push`。  
 关键状态：`09-11` 强收盘、15m 跟随、回测守住。  
 输出：旧反向合同失效；后续交易必须用 BOP/回踩合同。不能把完整图表的后续上涨倒灌成 `09-08` 已经是买点。
@@ -78,7 +78,7 @@ holding_horizon
 ### 4.2 KLAC `2025-05-30–06-03`
 
 快筛：上涨背景、深但后段稳定 B、支撑和 EMA20 汇聚，H2-like。  
-主标签：`H2_within_ABC`。  
+主标签：`primary_pattern: ABC_CONT`；`internal_label: H2`。
 次标签：`support_retest`、`EMA_confluence`、可能的 `inside_like_pending_ohlc`。  
 深审：`06-03` 越过 `06-02` 高点的确认路径清楚，但结构止损约 `72`，第一阻力约 `79.03–79.79`，日线空间边界明显。  
 输出：`research_positive_conditional` 或 `valid_no_trade` 取决于所选周期合同；不能把低周期确认冒充日线宽 R/R。
@@ -86,7 +86,7 @@ holding_horizon
 ### 4.3 RBLX `2024-03-18–04-05`
 
 快筛：宽区间下沿双底/逆头肩/三角形/ABC-like 外观。  
-主标签：`range_edge_second_entry / failed_breakout`。  
+主标签：`primary_pattern: RFB`（历史兼容的区间边缘失败突破分支）。
 次标签：`double_bottom_like`、`triangle_like`。  
 深审：`04-04` 上冲后收弱，区间中部 `37.3–37.8` 成为首磁铁，开盘还跳过原 buy stop。  
 输出：`valid_no_trade`。不能为获得一个正例而选择最有利的标签。
@@ -94,14 +94,14 @@ holding_horizon
 ### 4.4 ASML `2025-05-19–06-13`
 
 快筛：两个低位测试、圆底/逆头肩/三推样和区间过渡同时出现。  
-主标签：`range_transition / range_inside_range`。  
+主标签：`primary_pattern: other`；`secondary_context: range_transition / range_inside_range`。
 次标签：`double_bottom_like`、`rounded_bottom_like`。  
 输出：`observation_only`，因为颈线、第三结构点和反向二次确认不完整。不能用 60m 小摆动制造 Daily MTR。
 
 ### 4.5 XOM/COIN `2024`
 
 快筛：多次高位测试、H3-like、宽通道/三角形-like。  
-主标签：`expanding_boundary / continuation_or_climax`。  
+主标签：`primary_pattern: other`；`secondary_context: expanding_boundary / continuation_or_climax`。
 次标签：`H3_like`、`channel_edge`。  
 深审：第三次范围扩张、跳空重订、首支撑拥挤。  
 输出：`valid_no_trade`；扩张不能倒灌成三推衰竭。
@@ -109,7 +109,7 @@ holding_horizon
 ### 4.6 VCP 独立体系
 
 快筛：连续波动收缩、pivot、相对强度、市场环境和成交量行为符合 Minervini/SEPA 研究入口。  
-主标签：`VCP`。  
+主标签：`primary_pattern: other`；`secondary_context: VCP`。
 次标签：`PA_context`，例如趋势、支撑阻力或 BOP。  
 输出：不把 VCP 收缩次数转换成 H2/三推计数；订单和目标按 VCP 自己的研究合同与共同风险层复核。
 
@@ -133,8 +133,8 @@ holding_horizon
 
 ```text
 full_context → primary_pattern → secondary_context
-→ state_transition → order_contract → first_obstacle
-→ trade_state → unresolved_question
+→ state_transition → order_branch → first_independent_obstacle
+→ space_status → research_state → trade_state → gate_result → handoff_status
 ```
 
 它能把“视觉识别”与“交易可行性”分开，也能保留模糊候选而不假装精确。当前仍是研究工具，不是自动下单规则、量化评分器或实时行情接口。

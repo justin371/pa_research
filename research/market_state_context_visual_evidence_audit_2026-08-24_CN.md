@@ -62,24 +62,53 @@ TSLA `2025-03` 的卖出高潮与 MM/左侧支撑重合，随后进入宽区间�
 ## 统一审计字段
 
 ```text
-decision_time:
-timeframe:
+contract_scope: historical_context_only
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: historical_close / unknown
+timeframes_seen:
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
 parent_state:
 range_upper/lower/midpoint:
 left_major_levels:
-directional_leg_quality:
+a_leg_quality: strong / ordinary / unclear / event_driven
+b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear
+b_leg_location:
 current_location:
 attempt_lineage:
 abc_or_hl_allowed:
 second_leg_trap_risk:
 breakout_acceptance:
-order_contract:
+direction: long / short / no_valid_direction
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 structural_stop:
-first_obstacle:
+structural_invalidation:
+first_independent_obstacle:
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 rough_R_R:
 state_reset_condition:
-final_status:
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
+
+`range_upper/lower/midpoint`、`left_major_levels`、`current_location`、
+`attempt_lineage`、`abc_or_hl_allowed`、`second_leg_trap_risk`、
+`breakout_acceptance` 和 `state_reset_condition` 是本审计的模式专用补充字段。
+它们不能替代 canonical 的 `parent_state`、`lineage_status`、`order_branch`、
+`first_independent_obstacle` 或三条状态轴；新记录不再使用旧的 `decision_time`、
+`timeframe`、`order_contract`、`first_obstacle` 或 `final_status` 字段。
 
 ## 当前结论
 

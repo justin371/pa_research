@@ -160,28 +160,57 @@ H1/H2 或 L1/L2 的计数必须属于同一个周期和同一个回调 lineage�
 ## 8. 最小多周期复核卡
 
 ```text
+contract_scope: deep_review / historical_context_only
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: historical_close / unknown
+timeframes_seen:
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
 parent_timeframe: Daily / 4H-like / 1H
 parent_state: trend / range / transition / climax
-parent_pattern: ABC / H1-H2 / L1-L2 / MTR / BOP / other
+primary_pattern: ABC_CONT / BOP / RFB / MTR / other
+secondary_context: parent_pattern_display / multi_timeframe_review
+direction: long / short / no_valid_direction
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
 parent_location: major support-resistance / range edge / middle / gap / channel
 parent_signal_bar:
 parent_structural_stop:
-parent_first_obstacle:
+parent_first_independent_obstacle:
+parent_pre_entry_space_R:
+parent_space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 parent_rough_R_R:
 
 lower_timeframe: 1H / 60m / 15m
 lower_role: confirmation / independent-trade / reprice / observation
 lower_signal_bar:
 lower_trigger_or_zone:
-actual_or_assumed_fill:
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
 gap_state: none / opening-skip / gap-accepted / retest / unknown
 lower_structural_stop_if_independent:
-lower_first_obstacle_if_independent:
+lower_first_independent_obstacle_if_independent:
 lower_rough_R_R_if_independent:
 
-decision: same-contract-confirmation / new-contract / no-trade
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 failure_condition:
 ```
+
+`parent_timeframe`、`parent_location`、`lower_timeframe`、`lower_role` 和
+`gap_state` 是多周期复核的补充字段。旧的 `parent_pattern`、
+`parent_first_obstacle`、`actual_or_assumed_fill` 和 `decision` 只作为历史显示
+语义，新的复核卡分别使用 `primary_pattern`、
+`parent_first_independent_obstacle`、`actual_fill_or_open_skip` 和三条状态轴。
 
 ## 9. 可迁移结论
 

@@ -32,13 +32,23 @@
 ## 统一输出
 
 ```text
-three_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
+contract_scope: historical_context_only
+primary_pattern: H3_L3 / MTR / other
+direction: long / short / no_valid_direction
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
 range_edge_three_push: yes / no / pending
 range_edge_side: upper / lower / none / pending
 mtr_state: not_started / reversal_attempt / candidate / confirmed_for_research / failed
 reverse_lineage: none / H1-like / H2-like / L1-like / L2-like
-first_obstacle: clear / crowded / unknown
-decision: research_candidate / conditional / valid_no_trade / observation_only
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
+internal_label: H3 / L3 / none / pending
+first_independent_obstacle:
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
 
 当前结论：H3 衰竭只有 KLAC 条件候选，L3 衰竭仍无过程完整正例；三推的主要价值是识别压力状态和避免误判，而不是直接授权反转。MTR 仍须等待反向二次确认、首障碍和路径审计。
