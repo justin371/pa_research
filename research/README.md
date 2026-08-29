@@ -53,6 +53,7 @@
 - [`事件与首障碍空间资格审计（2026-08-29）`](backtesting/event_space_eligibility_audit_2026-08-29_CN.md)：隔离事件未核实、财报邻近、空间边界和旧合同未知空间，避免把它们读成普通非事件证据；
 - [`事件、空间与独立性字段引用一致性审计（2026-08-29）`](backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md)：核对 `event_context/event_bucket`、`space_status/pre_entry_space_R`、`lineage_id/market_context_id` 的来源、派生和跨文件表述；修正 `hl_next` 历史几何不等于显式 strict-space 的文案，不新增样本或结果；
 - [`H/L event bucket 标签一致性审计（2026-08-29）`](backtesting/event_bucket_label_consistency_audit_2026-08-29_CN.md)：重算 60 条合同的 raw `event_context` 与 canonical `event_bucket`，统一 selection/replay 分层标签，确认 pending/unknown 未升级为普通非事件；不新增样本或结果；
+- [`H/L special subtype 与事件轴一致性审计（2026-08-29）`](backtesting/special_subtype_event_axis_consistency_audit_2026-08-29_CN.md)：区分上游 `special_subtype` 注释与 H/L 回放最小合同，确认 subtype 缺失不等于普通非事件，且不能替代 `event_context/event_bucket`；不新增样本或结果；
 - [`回放结果分母与 horizon 审计（2026-08-29）`](backtesting/replay_outcome_denominator_audit_2026-08-29_CN.md)：检查胜率旗标、完成 horizon、opening-skip、intrabar 歧义、首障碍过程字段和 `realized_R` 的结果隔离；旧产物的 time-exit 偏差不增加验证分母；
 - [`回放 lineage 与样本独立性审计（2026-08-29）`](backtesting/replay_lineage_independence_audit_2026-08-29_CN.md)：检查共享父级/局部结构、重复 artifact、共享市场状态和持仓区间重叠；重复结果不进入分母，当前独立性证据仍不足；
 - [`回放 provenance 与再现性审计（2026-08-29）`](backtesting/replay_provenance_reproducibility_audit_2026-08-29_CN.md)：核对历史报告与 artifact 数值、输入/结果指纹和旧运行冲突；当前仍不能把历史描述升级为验证胜率；

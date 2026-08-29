@@ -210,6 +210,7 @@ leg_scope: parent / local / both
 ```text
 a_leg_quality: strong / ordinary / unclear / event_driven
 b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear
+special_subtype: ordinary / deep_late_controlled_B / bull_flag / earnings_driven / event_driven / gap_reprice / none
 b_leg_count: 1 / 2 / 3+ / unclear
 pressure_asymmetry:
 b_leg_location:
@@ -456,6 +457,7 @@ handoff_status: research_only / not_ready / ready_for_system
 母腿与局部 A 腿：
 a_leg_quality: strong / ordinary / unclear / event_driven
 b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear
+special_subtype: ordinary / deep_late_controlled_B / bull_flag / earnings_driven / event_driven / gap_reprice / none
 B 回调位置：
 H/L 计数及依据：
 形态分类：

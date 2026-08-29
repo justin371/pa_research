@@ -124,6 +124,7 @@ local_A_origin:
 local_A_end:
 a_leg_quality: strong / ordinary / unclear / event_driven
 b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear
+special_subtype: ordinary / deep_late_controlled_B / bull_flag / earnings_driven / event_driven / gap_reprice / none
 b_leg_location:
 lineage_status: same_lineage / reset / unclear / pending
 setup_count_bar:
