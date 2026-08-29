@@ -33,3 +33,9 @@
 同时，原覆盖守卫以报告文件名是否出现在索引文本中作为判断条件，存在“正文提到文件名但没有 Markdown 链接”的误判可能。现已改为解析 canonical 索引中的本地 Markdown 链接、按索引所在目录解析目标并与仓库内规范化路径比较；required research reports 与 tracked historical visual candidates 均使用该真实链接集合。回归测试同步采用同一语义。
 
 当前复核仍确认没有孤立报告或 canonical 索引断链；本次只修正索引覆盖校验和事实快照，不增加样本、CSV、回放结果或 engine 有效语义。结论保持 `no-new-positive`、`validated win-rate: not-computable`；本文件仍只属于 `PA Research only`，不修改 Codex Trading，不创建量化扫描器，不连接 Execution Agent。
+
+## 顶层 research 报告可达性复核（2026-08-29）
+
+本次进一步盘点 `research/*.md`（不含 `research/README.md`）的完整入口图：当前 `research/` 顶层有 171 个历史研究报告，其中 54 个由 7 个 canonical index 直接承载，另外 117 个由专题报告、Pattern 或 Strategy 入口承载；171 个均至少被另一个 Markdown 文件实际链接，没有全局孤立报告。
+
+因此，canonical index 是精选重点入口，不要求把 171 个历史文件逐条重复到每一个 README；但“精选”不等于“无入口”。validator 现在会解析全部仓库内 Markdown 的真实本地链接，并拒绝新增后没有任何其他 Markdown 入口的顶层 research 报告；回归测试采用相同的非自引用可达性语义。该策略不把历史报告升级为当前规则、交易日志、回放样本或统计证据。

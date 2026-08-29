@@ -69,6 +69,33 @@ def canonical_index_linked_paths() -> set[str]:
     return set().union(*(linked_paths(path) for path in INDEX_PATHS))
 
 
+def research_root_report_paths() -> list[str]:
+    return sorted(
+        f"research/{path.name}"
+        for path in (REPO_ROOT / "research").glob("*.md")
+        if path.name != "README.md"
+    )
+
+
+def all_markdown_paths() -> list[Path]:
+    return sorted(
+        path
+        for path in REPO_ROOT.rglob("*.md")
+        if ".codex" not in path.relative_to(REPO_ROOT).parts
+    )
+
+
+def linked_research_root_report_paths() -> set[str]:
+    report_paths = set(research_root_report_paths())
+    linked: set[str] = set()
+    for source_path in all_markdown_paths():
+        source_relative = source_path.relative_to(REPO_ROOT).as_posix()
+        for target in linked_paths(source_path):
+            if target in report_paths and target != source_relative:
+                linked.add(target)
+    return linked
+
+
 def backtesting_report_paths() -> list[str]:
     return sorted(
         f"research/backtesting/{path.name}"
@@ -82,8 +109,13 @@ class RequiredReportIndexCoverageTests(unittest.TestCase):
         text = read(VALIDATOR_PATH)
         self.assertIn("$canonicalResearchIndexRelativePaths", text)
         self.assertIn("$requiredResearchReportPaths", text)
+        self.assertIn("$researchRootReportPaths", text)
         self.assertIn(
             "required research report is not referenced by a canonical index",
+            text,
+        )
+        self.assertIn(
+            "research root report is not referenced by another Markdown file",
             text,
         )
 
@@ -104,6 +136,12 @@ class RequiredReportIndexCoverageTests(unittest.TestCase):
             for path in report_paths
             if path not in indexed_paths
         ]
+        self.assertEqual(missing, [])
+
+    def test_all_top_level_research_reports_are_reachable_from_another_markdown_file(self):
+        missing = sorted(
+            set(research_root_report_paths()) - linked_research_root_report_paths()
+        )
         self.assertEqual(missing, [])
 
     def test_audit_is_indexed_and_preserves_scope(self):
@@ -143,6 +181,27 @@ class RequiredReportIndexCoverageTests(unittest.TestCase):
             f"当前 `research/backtesting/` 有 {len(backtesting_reports) + 1} 个 Markdown 文件，其中 {len(backtesting_reports)} 个是报告文件",
             report,
         )
+
+    def test_audit_research_root_inventory_matches_the_current_link_graph(self):
+        report = read(AUDIT_PATH)
+        root_reports = research_root_report_paths()
+        canonical_links = canonical_index_linked_paths()
+        canonical_count = sum(path in canonical_links for path in root_reports)
+        topical_count = len(root_reports) - canonical_count
+        linked_count = len(linked_research_root_report_paths())
+        self.assertIn(
+            f"当前 `research/` 顶层有 {len(root_reports)} 个历史研究报告",
+            report,
+        )
+        self.assertIn(
+            f"其中 {canonical_count} 个由 7 个 canonical index 直接承载",
+            report,
+        )
+        self.assertIn(
+            f"另外 {topical_count} 个由专题报告、Pattern 或 Strategy 入口承载",
+            report,
+        )
+        self.assertEqual(linked_count, len(root_reports))
 
 
 if __name__ == "__main__":

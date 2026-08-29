@@ -3174,6 +3174,37 @@ foreach ($file in $activeMarkdownFiles) {
     }
 }
 
+$researchRootReportPaths = @(
+    Get-ChildItem -LiteralPath (Join-Path $repoRoot 'research') -File -Filter '*.md' |
+        Where-Object { $_.Name -ne 'README.md' }
+)
+$researchRootReportPathSet = [System.Collections.Generic.HashSet[string]]::new(
+    [StringComparer]::OrdinalIgnoreCase
+)
+foreach ($reportFile in $researchRootReportPaths) {
+    [void]$researchRootReportPathSet.Add($reportFile.FullName)
+}
+$linkedResearchRootReportPaths = [System.Collections.Generic.HashSet[string]]::new(
+    [StringComparer]::OrdinalIgnoreCase
+)
+foreach ($markdownFile in $markdownFiles) {
+    $sourcePath = $markdownFile.FullName
+    foreach ($resolvedPath in @(Get-LocalMarkdownLinkResolvedPaths -SourcePath $sourcePath -Content (Get-Utf8Text -Path $sourcePath))) {
+        if ($resolvedPath.Equals($sourcePath, [StringComparison]::OrdinalIgnoreCase)) {
+            continue
+        }
+        if ($researchRootReportPathSet.Contains($resolvedPath)) {
+            [void]$linkedResearchRootReportPaths.Add($resolvedPath)
+        }
+    }
+}
+foreach ($reportFile in $researchRootReportPaths) {
+    if (-not $linkedResearchRootReportPaths.Contains($reportFile.FullName)) {
+        $relativePath = $reportFile.FullName.Substring($repoRoot.Length + 1).Replace('\', '/')
+        Add-ValidationError "research root report is not referenced by another Markdown file: $relativePath"
+    }
+}
+
 if ($errors.Count -gt 0) {
     Write-Output "PA Research document validation failed: $($errors.Count) error(s); checked $($markdownFiles.Count) Markdown files and inspected $checkedLinks link targets (external targets skipped)."
     $errors | ForEach-Object { Write-Output "- $_" }
