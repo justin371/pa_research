@@ -170,6 +170,7 @@ $requiredFiles = @(
     'research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/hl_lineage_market_context_independence_audit_2026-08-29_CN.md',
     'research/backtesting/hl_order_gap_contract_audit_2026-08-29_CN.md',
+    'research/backtesting/hl_report_state_count_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/replay_outcome_denominator_audit_2026-08-29_CN.md',
     'research/backtesting/replay_lineage_independence_audit_2026-08-29_CN.md',
     'research/backtesting/replay_provenance_reproducibility_audit_2026-08-29_CN.md',
@@ -412,7 +413,9 @@ $canonicalChecks = @{
         'contract_scope`、`data_status`、`chart_scope` 和 `timeframes_seen` 属于上游视觉/研究记录的证据 provenance',
         'daily_context_window` 不是“CSV 有两年价格”这一事实的别名',
         '`*_selection_*.md`、候选卡和视觉资产 README 属于入场前记录',
-        '结果不得反向改写入场前字段'
+        '结果不得反向改写入场前字段',
+        '`eligible`/EMA gate',
+        '`filled` 只表示历史订单路径有成交'
     )
     'strategy/pattern_inventory_candidates.md' = @(
         'timeframes_seen',
@@ -898,6 +901,22 @@ if (Test-Path -LiteralPath $hlOrderGapContractAuditPath -PathType Leaf) {
     )) {
         if (-not $hlOrderGapContractAuditContent.Contains($token)) {
             Add-ValidationError "missing H/L order-gap-contract-audit token '$token'"
+        }
+    }
+}
+
+$hlReportStateCountAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_report_state_count_consistency_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $hlReportStateCountAuditPath -PathType Leaf) {
+    $hlReportStateCountAuditContent = Get-Utf8Text -Path $hlReportStateCountAuditPath
+    foreach ($token in @(
+        '7 份有冻结合同', '60', 'eligible', 'filled', 'opening-skip', 'no-fill',
+        'observation_only', 'completed', '23 / 11', '34 filled + 20 opening-skip + 1 no-fill + 5 observation_only = 60',
+        'next3', '18 个候选、0 条冻结合同', 'next4', 'replay2', 'unproven',
+        'no-new-positive', 'validated win-rate: not-computable', 'PA Research only',
+        'no Codex Trading', 'no quantitative scanner', 'no Execution Agent'
+    )) {
+        if (-not $hlReportStateCountAuditContent.Contains($token)) {
+            Add-ValidationError "missing H/L report-state-count-audit token '$token'"
         }
     }
 }

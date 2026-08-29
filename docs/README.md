@@ -21,6 +21,7 @@
 - [`H/L lineage、市场状态与独立性分母审计`](../research/backtesting/hl_lineage_market_context_independence_audit_2026-08-29_CN.md)
 - [`H/L 报告空间、版本与结论表述一致性审计`](../research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md)
 - [`H/L 订单分支、缺口政策与结果状态边界审计`](../research/backtesting/hl_order_gap_contract_audit_2026-08-29_CN.md)
+- [`H/L selection/replay 状态计数一致性审计`](../research/backtesting/hl_report_state_count_consistency_audit_2026-08-29_CN.md)
 - [`PA Research → Codex Trading 研究交接规范`](research_to_system_handoff_CN.md)
 - [`冻结合同回放器（backtesting.py）`](../research/backtesting/README.md)
 

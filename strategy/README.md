@@ -33,5 +33,6 @@
 - [`H/L lineage、市场状态与独立性分母审计`](../research/backtesting/hl_lineage_market_context_independence_audit_2026-08-29_CN.md)：区分共享 lineage、不同 lineage、缺失 `market_context_id` 与逐行描述性结果，不把它们误读为独立胜率证据。
 - [`H/L 报告空间、版本与结论表述一致性审计`](../research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md)：核对 H/L selection/replay 的历史几何、显式空间状态、自定义敏感性阈值、engine 版本和结论边界；不新增样本或结果。
 - [`H/L 订单分支、缺口政策与结果状态边界审计`](../research/backtesting/hl_order_gap_contract_audit_2026-08-29_CN.md)：区分预冻结的 `gap_policy`、实际开盘路径、`no-fill`、`opening-skip`、`unproven` 与严格胜率分母；不新增样本或结果。
+- [`H/L selection/replay 状态计数一致性审计`](../research/backtesting/hl_report_state_count_consistency_audit_2026-08-29_CN.md)：核对每批合同数、成交/未成交/观望状态、完成结果和 artifact 选择，不把 `eligible`/`filled` 读成交易授权或验证统计。
 
 Codex Trading 的链接或历史材料只作为用户指定的只读参考；本目录不导入其规则、代码、实现状态或执行能力。

@@ -20,6 +20,8 @@ H/L lineage、共享父级、缺失市场状态和独立性分母边界见[`H/L 
 
 H/L 订单分支、预冻结 `gap_policy`、opening-skip/accepted-open/no-fill 与严格结果分母边界见[`H/L 订单分支、缺口政策与结果状态边界审计`](hl_order_gap_contract_audit_2026-08-29_CN.md)。该审计只检查已有 60 条合同和历史报告，不新增行情、回放、样本或结果。
 
+H/L selection/replay 每批合同数与状态计数见[`H/L selection/replay 状态计数一致性审计`](hl_report_state_count_consistency_audit_2026-08-29_CN.md)。该审计将 `eligible`/`filled` 与当前空间资格、严格胜率分母分开，并保留 `next3` 零合同控制批次和 `next4` 旧 artifact 冲突，不改写历史结果。
+
 BOP 多日回踩的独立准入清单见[`BOP 合同准入审计`](bop_contract_intake_audit_2026-08-28_CN.md)及[`bop_contract_intake_2026-08-28.csv`](bop_contract_intake_2026-08-28.csv)。该 CSV 只记录现有人工案例的接受、回测和边界状态，全部为 `contract_frozen=no`，不是回放输入。两类 intake 合计 25 行，按底层案例键归并为 22 个案例，其中 3 个案例同时出现在统一和 BOP 专项视图中；详细 schema、方向和引用核对见[`ABC/BOP intake schema 一致性审计`](abc_bop_intake_schema_consistency_audit_2026-08-29_CN.md)。
 
 ## 运行
@@ -116,6 +118,8 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 `pre_entry_space_R` 和 `space_status` 是建议冻结的首障碍空间证据；旧合同缺失时必须按 `unknown_contract_space` 处理，不能从回放后的价格路径倒推为 `strict_ge_1R`。回放摘要中的 `event_bucket` 是对原始 `event_context` 的保守分类：未核实、待定、未知和未分类状态不能升级为普通非事件。摘要会从原始事前字段重算 `event_bucket`、`contract_space_bucket`；结果文件中携带的派生副本只用于报告 mismatch，不能覆盖事前字段。`special_subtype` 是上游视觉/日线候选的辅助注释，不属于当前 H/L 最小回放合同，也不参与 `event_bucket` 派生；其缺失不能被当作 `ordinary` 或由结果回填。
 
 回放摘要的 `completed_trade_count` 不是简单的 `trade_result` 行数。它要求 `pre_entry_provenance_status=complete`、`win_rate_eligible=yes`、`trade_result` 为 `win/loss/scratch`、`fill_status=filled`、`evidence_status=comparable`、非空 `path_result`、没有 `ambiguous_intrabar` 或 `incomplete-horizon`，并且有有限的 `realized_R`；缺失 `path_result` 的结果没有足够路径审计证据，只能保留在排除 bucket。`win_rate_eligible_count` 只是旗标数量，二者不一致时以严格交集为分母并保留 mismatch/guard 计数。缺少合同、事件、非收盘分支的 `planned_entry_trigger` 或 H/L EMA 事前字段的结果行标为 `incomplete`，只保留描述性记录。`first_obstacle_hit` 只表示路径过程，不能把首障碍到达自动改写成胜利。
+
+报告中的 `eligible`/EMA gate 也只是该报告采用的回放层资格，不等同于当前高质量候选、显式 `space_status` 通过或交易授权；旧 CSV 缺少显式空间字段时尤其如此。`filled` 只表示历史订单路径有成交，不等同于胜利或严格胜率资格。第二批的 KLAC 就是已记录历史路径与当前 `valid_no_trade` 空间裁决并存的边界案例，必须分层显示，不能把 `eligible`、`filled` 和严格分母混成同一个数字。
 
 `lineage_id` 是冻结合同的必填依赖控制字段：共享同一父级行情、A/B 回调或局部尝试 lineage 的合同可以分别保留，但不能因为触发日期不同就当成独立统计样本。回放器会保留并分层该字段，并在共享 lineage 时撤回 independence-adjusted 胜率；它不替研究者决定哪些样本独立。
 
