@@ -21,27 +21,41 @@
 - Futu/OpenD 的出现位置是历史数据来源、可选数据来源或“未连接”的边界说明；回放 executable code 没有 Futu/OpenD、broker、网络、账户或订单导入；
 - `量化扫描器`、`scanner` 和 `Execution Agent` 的出现位置是能力排除、交接边界或 schema/validator 检查，不是已实现的模块或运行时依赖；
 - 文档校验继续拒绝不可移植的 Codex Trading checkout 路径，并确认根 README、docs README、research README 和回放 README 的索引可达；
-- 未发现把参考材料写成当前 production authority 的既有断言；但三份直接从 Strategy 索引进入的框架/参考页缺少自包含的状态、当前结论和执行隔离声明，已在本轮补齐；不修改现有历史案例引用，合法的历史来源和禁止性边界全部保留。
+- 未发现把参考材料写成当前 production authority 的既有断言；但三份直接从 Strategy 索引进入的框架/参考页以及基础层索引缺少自包含的状态、当前结论和执行隔离声明，已在本轮补齐；不修改现有历史案例引用，合法的历史来源和禁止性边界全部保留。
 
-## 三、独立 Strategy 页面自描述边界复核
+## 三、独立 Strategy 页面与基础层索引自描述边界复核
 
-以下页面此前依赖 strategy/README.md 才能看出其研究范围，单独打开时无法直接看到统一的状态、统计结论和生产/执行隔离：
+以下页面此前依赖上级索引才能看出其研究范围，单独打开时无法直接看到统一的状态、统计结论和生产/执行隔离：
 
 - strategy/00_trading_framework.md：研究流程框架；
 - strategy/meta_multiple_edge.md：位置汇聚框架，不是独立触发器；
 - strategy/probability_principles_pages_1_7.md：用户提供的外部教育性参考，source_version 仍为 not_provided，不进入 PA Research 胜率或回测基准。
+- foundations/README.md：8 个共用基础层入口。
 
-三页现在都明确 research_only / provisional / not_ready、no-new-positive、validated win-rate: not-computable 和不连接量化扫描器/Execution Agent；概率页另外保留 external_reference 与 evidence_status: external_heuristic_not_validated。这只是可发现性与边界修复，不是新规则、新样本或新统计结论。
+四个入口现在都明确 research_only / provisional / not_ready、当前回放引擎 0.3.9、no-new-positive、validated win-rate: not-computable 和不连接量化扫描器/Execution Agent；概率页另外保留 external_reference 与 evidence_status: external_heuristic_not_validated。这只是可发现性与边界修复，不是新规则、新样本或新统计结论。
 
-## 四、固化内容
+## 四、索引数量、版本与结论复核
+
+当前 checkout 与六个核心索引的数量/版本声明一致：
+
+- patterns/ 下有 16 个 pattern 目录，foundations/ 下有 8 个基础层目录；
+- research/assets/visual_recognition/ 下有 11 个资产 README 和 105 张 PNG；
+- research/ 顶层有 171 个历史研究报告，research/backtesting/ 有 70 个报告文件、18 个 CSV 和 1 个 JSON 机器产物；
+- 六个核心索引均指向当前 PA Research 规则/合同，并保留回放引擎 0.3.9、no-new-positive、validated win-rate: not-computable 和研究/生产执行隔离；
+- 文档 validator 已检查 305 个 Markdown 文件、2044 个 Markdown 链接；其中本地链接、动态 machine-artifact coverage 和核心边界检查全部通过。
+
+这些数量是当前 checkout 快照，不把历史批次的 37 条、24 个、12 只、13 份等报告内数字改写成当前总量；历史回放、视觉资产、冻结合同和真实交易日志仍按各自 provenance 分层。
+
+## 五、固化内容
 
 - 为三个独立 Strategy 页面补充统一的研究状态、当前结论和执行隔离声明，并由 validator/回归测试守护；
+- 将 foundations/README.md 纳入核心边界 validator/test，并补充同一组状态、结论和执行隔离声明；
 
 - 在 `tests/test_pa_research_scope_boundary.py` 增加 PA Research Markdown 的外部 `V1.x` 版本标记防回归检查；
 - 在 `research/README.md` 增加本审计入口；
 - 不修改任何市场数据、合同 CSV、回放结果、pattern 定义或 Codex Trading 文件。
 
-## 五、验证结果
+## 六、验证结果
 
 ```text
 external V1.x authority-marker scan: 0 matches

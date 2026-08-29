@@ -363,6 +363,7 @@ $coreBoundaryIndexPaths = @(
     'docs/README.md',
     'patterns/README.md',
     'research/README.md',
+    'foundations/README.md',
     'strategy/README.md',
     'research/backtesting/README.md'
 )
@@ -371,6 +372,7 @@ $coreBoundaryTokens = @(
     'no-new-positive',
     'validated win-rate: not-computable',
     '60%',
+    '0.3.9',
     '不是 Codex Trading 生产规则',
     '量化扫描器',
     'Execution Agent'

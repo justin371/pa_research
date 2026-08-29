@@ -1,5 +1,11 @@
 # PA Research Foundations 基础层索引
 
+文档状态：document_status=research_only / document_maturity=provisional / handoff_status=not_ready / not-quantitative
+
+范围：PA Research only。v0.x 规则/合同与回放引擎 0.3.9 都只属于研究层；基础层只提供共用的背景、位置、订单和风险语义，不是 Codex Trading 生产规则、量化扫描器、交易授权或 Execution Agent 输入；当前统计结论仍为 no-new-positive，validated win-rate: not-computable，60% 只是待检验目标。
+
+本索引的 authority 与隔离复核见[PA Research authority 与隔离边界审计](../research/authority_boundary_index_audit_2026-08-29_CN.md)。
+
 基础层是所有 pattern 共用的背景、位置、订单和风险语义，不是独立交易形态：
 
 - [`Support / Resistance`](01_support_resistance/README.md)
