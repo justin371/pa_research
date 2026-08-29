@@ -10,6 +10,8 @@ Channel 研究的是有方向的价格运行及其状态变化。它不是把任
 
 该入口的证据头还必须记录 `data_status: historical / delayed / live_confirmed / incomplete`、`as_of_time`、`chart_scope` 和 `timeframes_seen`；历史、延迟、实时已确认与不完整不能互换。
 
+状态边界：关键图表、事件、触发或空间证据尚不完整时使用 `pending`/`observation_only`；形态、方向和入场几何已可复核但已知硬闸门否决交易时使用 `valid_no_trade`。两者都不建立订单，不能互换。
+
 进入 Channel 判断前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点、主要低点、支撑阻力、前高/前低、EMA20/50/200、当前父级状态和第一独立障碍。强 A 与受控 B 用于判断通道的方向性和压力变化；通道边界仍按本目录独立定义。缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`，不能凭两点连线或局部通道升级为可交易候选。
 
 ## 最小定义
@@ -68,7 +70,7 @@ Channel 研究的是有方向的价格运行及其状态变化。它不是把任
 1. `stop-confirmation`：信号 K 外等确认，适合边缘反应、紧通道回调恢复或边界外接受；
 2. `limit-retest`：只有旧边界已经完成角色转换，且等待回测的价格和失效点事前冻结时使用；
 3. `market/close-confirmation`：通道外强收盘和跟随已经出现，但要接受更宽止损；
-4. `observation_only`：通道未确认、中部、扩张不清、开盘跳过或首障碍太近。
+4. `observation_only`：通道未确认、中部、扩张不清、开盘跳过但尚未重建合同，或首障碍/止损尚未确认。
 
 结构止损必须放在最近有意义回调、通道边界和最后一次测试极端外，而不是单根小 K 线里面。目标先看入场前已知的独立支撑/阻力或另一侧通道边界，再看 MM/AB=CD。即使方向后来正确，只要第一障碍不足约 1R，仍记为 `valid_no_trade`；完整波段约 2R 只是研究参考，不是固定胜率规则。
 

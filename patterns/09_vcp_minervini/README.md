@@ -10,6 +10,8 @@ VCP 是 Mark Minervini / SEPA 体系中的独立主题。它不是 Al Brooks 的
 
 该入口的证据头还必须记录 `data_status: historical / delayed / live_confirmed / incomplete`、`as_of_time`、`chart_scope` 和 `timeframes_seen`；历史、延迟、实时已确认与不完整不能互换。
 
+状态边界：关键图表、事件、触发或空间证据尚不完整时使用 `pending`/`observation_only`；形态、方向和入场几何已可复核但已知硬闸门否决交易时使用 `valid_no_trade`。两者都不建立订单，不能互换。
+
 进入 VCP 判断前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点、主要低点、支撑阻力、前高/前低、EMA20/50/200、当前父级状态和第一独立障碍。强 A 与受控 B 作为背景质量对照；VCP 的 T1/T2/T3、pivot 和收缩 lineage 仍按本目录独立定义，不强行添加 H/L 或 ABC 计数。缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`，不能凭局部收缩升级为可交易候选。
 
 ## 研究版核心定义

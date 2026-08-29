@@ -83,7 +83,7 @@ state_transition: none / breakout_acceptance / role_reversal / failed_breakout /
 
 ### 快筛停止条件
 
-出现以下任一项时，第一轮可以停止并输出 `observation_only` 或 `valid_no_trade`，不为填表继续下钻：
+出现以下任一项时，第一轮可以停止，不为填表继续下钻：证据尚不完整时输出 `observation_only` 或 `pending`；形态和几何已清楚但硬闸门已知失败时输出 `valid_no_trade`：
 
 - 父级明显是成熟区间中部，局部趋势形状没有位置优势；
 - A 腿、B 腿或 lineage 不清，且后续命名会依赖结果倒推；
@@ -322,8 +322,8 @@ why_this_order_branch:
 
 ```text
 structural_invalidation:
-stop_zone:
-stop_price_or_area:
+structural_stop:
+structural_stop_zone:
 normal_test_room:
 gap_or_event_adjustment:
 ```
@@ -340,7 +340,10 @@ first_obstacle_zone:
 obstacle_type: major_high / major_low / range_edge / gap / EMA / channel / other
 mm_or_abcd_target:
 target_zone:
-space_to_first_obstacle: clearly_positive / borderline / blocked / unknown
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+rough_R_R:
 ```
 
 第一道独立支撑/阻力优先于一个孤立的 measured move。MM、AB=CD、50% 回调和缺口可以提供目标或汇合优势，但不能覆盖近端主要障碍，也不能互相重复计数。若 MM 和前高落在同一价格簇，只算一个主要障碍。
@@ -349,24 +352,25 @@ space_to_first_obstacle: clearly_positive / borderline / blocked / unknown
 
 `1R`、`2R` 只作为粗略几何检查，不是精确评分：
 
-- 第一障碍不到约 `1R`：通常是 `valid_no_trade` 或只做观察；
+- 第一障碍和结构几何已能复核但不到约 `1R`：通常是 `valid_no_trade`；若首障碍、止损或触发仍无法确认，则是 `observation_only` 或 `pending`；
 - 第一障碍大致有空间：才值得继续检查触发和管理；
 - 完整波段目标通常希望有更充足空间，但不能为达到某个数字而事后改锚点。
 
-## 10. 结果状态
+## 10. 研究状态与不交易边界
 
-每个候选最后只选一个当前状态：
+本卡不再把所有结论压成一个 `final_state`。完整记录应分别填写统一合同的 `research_state`、`trade_state` 和 `gate_result`；下表只说明研究状态的含义：
 
 | 状态 | 含义 |
 | --- | --- |
 | `pattern_like` | 视觉上像，但还没有完成位置、触发或空间审计 |
-| `research_ready` | 背景、A/B、计数、触发、止损和第一障碍已基本可复核 |
-| `valid_no_trade` | 形态存在，但事件、第一障碍、计数不清或风险几何阻止交易 |
-| `research_positive` | 入场前证据和空间结构较好，可作为正向研究样本；不代表胜率 |
-| `invalidated` | 在当时可见证据下结构已经失效 |
+| `research_candidate` | 背景、A/B、计数、触发、止损和第一障碍已基本可复核 |
+| `research_positive_conditional` | 入场前证据和空间结构较好，可作为条件性正向研究样本；不代表胜率 |
+| `observation_only` | 形态值得保留，但关键证据尚不完整或不建立交易合同 |
+| `valid_no_trade` | 形态、方向和入场几何已可复核，但已知硬闸门阻止新交易 |
+| `failed_thesis` | 在当时可见证据下结构或方向假设已经失效 |
 | `pending` | 仍需另一周期、事件资料或图表上下文 |
 
-`research_positive` 只描述研究几何，不等于赢单、不等于经过统计验证，更不等于真实下单授权。
+`observation_only` 与 `valid_no_trade` 都不建立订单；前者不能替代一个已知硬闸门的明确否决，后者也不能掩盖证据缺失。`research_positive_conditional` 只描述研究几何，不等于赢单、不等于经过统计验证，更不等于真实下单授权。
 
 ## 11. 核心八个 pattern 的最小差异字段
 

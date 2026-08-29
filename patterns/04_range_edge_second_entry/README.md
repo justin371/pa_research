@@ -12,6 +12,8 @@
 
 该入口的证据头还必须记录 `data_status: historical / delayed / live_confirmed / incomplete`、`as_of_time`、`chart_scope` 和 `timeframes_seen`；历史、延迟、实时已确认与不完整不能互换。
 
+状态边界：关键图表、事件、触发或空间证据尚不完整时使用 `pending`/`observation_only`；形态、方向和入场几何已可复核但已知硬闸门否决交易时使用 `valid_no_trade`。两者都不建立订单，不能互换。
+
 进入区间边缘判断前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点、主要低点、支撑阻力、前高/前低、EMA20/50/200、当前父级状态和第一独立障碍。对包含 A/B 语义的案例核对强 A 与受控 B；若涉及 H1/H2/L1/L2，Daily EMA20/50 还必须与方向一致。缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`，不能凭区间局部外形升级为可交易候选。
 
 ## 视觉定义
@@ -57,7 +59,8 @@ second_leg_trap_risk:
 1. `limit-edge`：边缘区域已由左侧结构确认，预先等待正常测试；止损在边缘外，首目标先看中线。
 2. `stop-confirmation`：第一次反应不清楚，等第二次信号 K 外确认；成交后重新审计到中线/另一边缘的空间。
 3. `failed-breakout-reentry`：价格先越过边缘又收回区间；原突破、重返区间和后续二次入场是不同合同。
-4. `observation_only`：区间中部、第一目标太近、结构止损过宽、事件窗口或区间边界未确认。
+4. `observation_only`：区间中部、第一目标/首障碍尚未确认、结构止损或区间边界未冻结、事件窗口证据不完整。
+5. `valid_no_trade`：区间边缘、首障碍和结构几何已可复核，但第一目标空间不足或已知事件/合同闸门否决交易。
 
 只有区间外突破被收盘接受、出现跟随并且回测守住后，才可以重建新的趋势合同；不能把区间边缘止损与突破后止损合并。
 

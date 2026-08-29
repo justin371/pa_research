@@ -12,6 +12,8 @@
 
 该入口的证据头还必须记录 `data_status: historical / delayed / live_confirmed / incomplete`、`as_of_time`、`chart_scope` 和 `timeframes_seen`；历史、延迟、实时已确认与不完整不能互换。
 
+状态边界：关键图表、事件、触发或空间证据尚不完整时使用 `pending`/`observation_only`；形态、方向和入场几何已可复核但已知硬闸门否决交易时使用 `valid_no_trade`。两者都不建立订单，不能互换。
+
 突破前 A 的质量和回踩 B 的类别分别记录为 `a_leg_quality` 与 `b_leg_class`；它们只描述背景压力，不替代 BOP 的突破接受、回踩守住或 canonical 状态轴。
 
 进入 BOP 判断前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点、主要低点、支撑阻力、前高/前低、EMA20/50/200、当前父级状态和第一独立障碍。再核对突破前 A 的推动力与回踩 B 的受控程度；涉及 H/L 时，Daily EMA20/50 必须与方向一致。缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`，不能把局部突破或影线单独升级为 BOP。

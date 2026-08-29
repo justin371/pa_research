@@ -10,6 +10,8 @@
 
 该入口的证据头还必须记录 `data_status: historical / delayed / live_confirmed / incomplete`、`as_of_time`、`chart_scope` 和 `timeframes_seen`；历史、延迟、实时已确认与不完整不能互换。
 
+状态边界：关键图表、事件、触发或空间证据尚不完整时使用 `pending`/`observation_only`；形态、方向和入场几何已可复核但已知硬闸门否决交易时使用 `valid_no_trade`。两者都不建立订单，不能互换。
+
 进入 Double Top/Bottom 判断前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点、主要低点、支撑阻力、前高/前低、EMA20/50/200、当前父级状态和第一独立障碍。强 A 与受控 B 作为父级趋势和回调质量对照；双顶/双底的两次分离测试仍按本目录独立定义。缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`，不能凭两个相近极端升级为可交易反转。
 
 ## 最小定义
@@ -56,7 +58,7 @@ MTR 需要成熟趋势、重要位置、反向结构破坏、第二次确认、�
 - `stop-confirmation`：第二次测试形成信号 K 后，在反向一侧等待触发；记录原始触发与实际成交；
 - `limit-retest`：颈线、失败突破边界或支撑阻力转换已清楚后，单列回测合同；未回测前不假设成交；
 - `market/close-confirmation`：反向收盘很强、结构破坏且首障碍仍有空间时才研究；
-- `observation_only`：形状有但位置不清、父级是区间中部、首障碍不足、事件/跳空改变几何，或原方向已重新接受。
+- `observation_only`：形状有但位置或首障碍尚未确认、父级是区间中部、事件/跳空改变几何但新合同尚未重建，或原方向已重新接受。
 
 结构止损要放在第二次测试极端或母级主要高/低点外，不能压在反向 K 的小尾巴里。第一独立支撑/阻力先于颈线目标和 MM；首障碍不足约 1R 记为 `valid_no_trade`，约 2R 只是完整波段参考。
 

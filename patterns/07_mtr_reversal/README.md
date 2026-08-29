@@ -12,6 +12,8 @@
 
 该入口的证据头还必须记录 `data_status: historical / delayed / live_confirmed / incomplete`、`as_of_time`、`chart_scope` 和 `timeframes_seen`；历史、延迟、实时已确认与不完整不能互换。
 
+状态边界：关键图表、事件、触发或空间证据尚不完整时使用 `pending`/`observation_only`；形态、方向和入场几何已可复核但已知硬闸门否决交易时使用 `valid_no_trade`。两者都不建立订单，不能互换。
+
 原趋势 A 的质量和反向 B 的类别分别记录为 `a_leg_quality` 与 `b_leg_class`；它们只描述背景压力，不替代 MTR 的结构破坏、接受、第二次确认或 canonical 状态轴。
 
 进入 MTR 判断前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点、主要低点、支撑阻力、前高/前低、EMA20/50/200、当前父级状态和第一独立障碍。再核对原趋势 A 的推动力、反向 B 的受控程度和控制权变化；涉及 H/L 时，Daily EMA20/50 必须与方向一致。缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`，不能凭局部双顶、三推或一根大反向 K 升级为 MTR。
@@ -22,7 +24,7 @@
 - 出现双顶/双底、三推、失败突破、Final Flag 或趋势线/通道破坏中的一个或多个证据；
 - 第一次反向只是 reversal attempt；
 - 反向方向再次出现确认并接受关键结构；
-- 首障碍、结构止损和事件过滤允许交易；否则保留为 `observation_only`。
+- 首障碍、结构止损和事件过滤证据尚未齐全时保留为 `observation_only`；若三者已可复核但硬闸门否决交易，使用 `valid_no_trade`。
 
 ## 主要边界
 
@@ -59,7 +61,7 @@ thesis_state: working / failed / invalidated / replaced / pending
 4. 是否出现第二次反向确认或回测守住？
 5. 结构止损外到第一独立障碍是否仍有空间？
 
-若第 3、4 或 5 项答不清楚，保留 `reversal_attempt` 或 `valid_no_trade`，不要升级为 MTR。
+若第 3、4 或 5 项答不清楚，保留 `reversal_attempt`、`observation_only` 或 `pending`，不要升级为 MTR；若问题已明确且空间/事件/止损硬闸门失败，再记 `valid_no_trade`。
 
 ## 与三推和区间边缘的关系
 

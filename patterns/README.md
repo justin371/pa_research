@@ -80,6 +80,20 @@ research_state / trade_state / thesis_state / handoff_status
 main_uncertainty_or_exclusion / failure_or_no_trade_reason
 ```
 
+### Pattern-specific shorthand 与 canonical 几何
+
+各目录的最小视觉协议只补 pattern-specific 信息；其中的 `location`、`location_and_left_structure`、`major_location`、`prior_boundary`、`space`、`trigger`、`target_path` 和 `first_magnet` 等短字段是人读的差异字段，不是统一合同的新枚举。完整记录必须回填统一字段：
+
+| 差异字段或旧别名 | 统一合同字段 | 说明 |
+| --- | --- | --- |
+| `location` / `location_and_left_structure` / `major_location` | `left_structure_and_location`、`major_highs_lows`、`support_resistance_and_role_zones` | 记录左侧位置和角色区；BOP 的 `prior_boundary` 还要写 `key_breakout_or_structure_location` |
+| `space` / `target_path` | `first_independent_obstacle`、`rough_space_to_first_obstacle_R`、`pre_entry_space_R`、`space_status`、`rough_R_R` | 先审计最近独立障碍，再写粗略 R/R 和远端目标 |
+| `trigger` / `trigger_price_or_zone` | `new_trigger`、`order_price_or_zone` | 触发与订单价格/区域分开记录 |
+| `structural_stop_or_zone` / `stop_zone` | `structural_stop`、`structural_invalidation` | 研究阶段可写区域；冻结回放前才收敛为数值止损 |
+| `first_magnet` | `first_independent_obstacle` | 仅保留为历史别名，不能跳过最近独立障碍 |
+
+几何顺序固定为：结构失效/止损 → 首障碍 → 入场前空间 → 粗略 R/R → 目标层。`observation_only` 用于关键证据仍不完整或只保留形态观察；`valid_no_trade` 用于形态、方向和几何已可复核但已知硬闸门否决交易。两者都不建立订单，不能互换。
+
 ## 范围边界
 
 - 这些目录是视觉研究和历史复核入口，不是量化扫描器，也不直接连接 Execution Agent。

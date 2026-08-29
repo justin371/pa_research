@@ -12,6 +12,8 @@
 
 该入口的证据头还必须记录 `data_status: historical / delayed / live_confirmed / incomplete`、`as_of_time`、`chart_scope` 和 `timeframes_seen`；历史、延迟、实时已确认与不完整不能互换。
 
+状态边界：关键图表、事件、触发或空间证据尚不完整时使用 `pending`/`observation_only`；形态、方向和入场几何已可复核但已知硬闸门否决交易时使用 `valid_no_trade`。两者都不建立订单，不能互换。
+
 进入 ABC 判断前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点、主要低点、支撑阻力、前高/前低、EMA20/50/200、当前父级状态和第一独立障碍。再核对强 A 与受控 B；涉及 H1/H2/L1/L2 时，Daily EMA20/50 还必须与方向一致，走平、反向或不可见时不得冻结普通 H/L。缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`，不能凭局部形状升级为可交易候选。
 
 ## 视觉定义
@@ -71,7 +73,8 @@ ABC 的判断顺序是：
 - `low_cycle_confirmation`：低周期只确认高周期 ABC，不改变父级止损；
 - `limit_retest`：回测支撑/阻力的独立合同；
 - `reprice_after_gap`：开盘跳过旧触发后重新计算成交、止损、首障碍；
-- `observation_only`：形态像但首障碍拥挤、事件/板块冲突或市场状态不清。
+- `observation_only`：形态像但首障碍尚未确认、事件/板块证据不完整或市场状态不清。
+- `valid_no_trade`：首障碍和结构几何已经可复核，但空间不足或已知事件/合同闸门否决交易。
 
 不得把 C 腿后来的盈利、MM 到位或最终突破倒灌成 A/B/C 入场时已知的证据。
 

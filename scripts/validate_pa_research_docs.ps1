@@ -182,6 +182,7 @@ $requiredFiles = @(
     'research/pattern_case_entry_status_audit_2026-08-29_CN.md',
     'research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md',
     'research/common_visual_preflight_field_consistency_audit_2026-08-29_CN.md',
+    'research/entry_geometry_state_boundary_audit_2026-08-29_CN.md',
     'research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
@@ -275,11 +276,19 @@ $canonicalChecks = @{
         'a_leg_quality: strong / ordinary / unclear / event_driven',
         'b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear',
         'b_leg_location:',
+        'structural_stop:',
+        'structural_stop_zone:',
+        'first_independent_obstacle:',
+        'rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown',
+        'pre_entry_space_R:',
+        'space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown',
+        'rough_R_R:',
         'direction: long / short / no_valid_direction',
         'state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate',
         'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
         'gate_result:',
-        'contract_scope:'
+        'contract_scope:',
+        '硬闸门阻止新交易'
     )
     'docs/daily_candidate_review_card_CN.md' = @(
         'chart_scope: full / partial / unavailable',
@@ -293,9 +302,16 @@ $canonicalChecks = @{
         'daily_context_window: >=2y / <2y / unavailable',
         'major_high_low_review: complete / partial / unavailable',
         'h_l_ema_slope_gate:',
+        'new_trigger:',
+        'order_price_or_zone:',
+        'structural_stop:',
         'first_independent_obstacle:',
+        'pre_entry_space_R:',
+        'space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown',
+        'rough_R_R:',
         'research_state:',
-        'Execution Agent'
+        'Execution Agent',
+        '关键图表、事件、触发或空间证据尚不完整'
     )
     'patterns/08_three_push_h3_l3/README.md' = @(
         'attempt_direction: bullish_attempts / bearish_attempts',
@@ -317,7 +333,11 @@ $canonicalChecks = @{
         'signal_bar / confirmation_bar / new_trigger / follow_through',
         'structural_stop / structural_invalidation',
         'first_independent_obstacle / rough_space_to_first_obstacle_R / space_status / rough_R_R',
-        'event_context / event_bucket / sector_state / market_state / permission / gate_result'
+        'event_context / event_bucket / sector_state / market_state / permission / gate_result',
+        'Pattern-specific shorthand',
+        '几何顺序固定为：结构失效/止损 → 首障碍 → 入场前空间 → 粗略 R/R → 目标层',
+        'observation_only',
+        'valid_no_trade'
     )
     'patterns/07_mtr_reversal/README.md' = @(
         'mtr_state: reversal_attempt / mtr_candidate / mtr_confirmed_for_research / failed_mtr_thesis',
@@ -336,7 +356,11 @@ $canonicalChecks = @{
         'ema20_50_200_review: complete / partial / unavailable',
         'a_leg_quality: strong / ordinary / unclear / event_driven',
         'b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear',
-        'first_independent_obstacle:'
+        'first_independent_obstacle:',
+        '### Entry geometry and state boundary',
+        'structural_invalidation` → `structural_stop` →',
+        '`observation_only` 表示关键图表、事件、方向、触发或空间证据还不完整',
+        '`valid_no_trade` 表示形态、方向和入场几何已经足够复核'
     )
     'research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md' = @(
         'direction: long / short / no_valid_direction',
@@ -420,7 +444,10 @@ foreach ($relativePath in $patternCaseReadmeRelativePaths) {
         'timeframes_seen',
         '至少两年的 Daily 左侧背景',
         'EMA20/50/200',
-        'pending'
+        'pending',
+        '状态边界：关键图表、事件、触发或空间证据尚不完整时使用',
+        '形态、方向和入场几何已可复核但已知硬闸门否决交易时使用',
+        '两者都不建立订单，不能互换'
     )) {
         if (-not $content.Contains($token)) {
             Add-ValidationError "pattern README missing common visual preflight token '$token': $relativePath"
@@ -444,6 +471,26 @@ foreach ($relativePath in $patternCaseReadmeRelativePaths) {
     if ($relativePath -eq 'patterns/05_failed_breakout_climax/README.md' -and
         $content -match '(?m)^final_state:') {
         Add-ValidationError 'pattern 05 retains ambiguous final_state field; use breakout_climax_state plus canonical state axes'
+    }
+}
+
+$dailyCandidateReviewCardPath = Join-Path -Path $repoRoot -ChildPath 'docs/daily_candidate_review_card_CN.md'
+if (Test-Path -LiteralPath $dailyCandidateReviewCardPath -PathType Leaf) {
+    $dailyCandidateReviewCardContent = Get-Utf8Text -Path $dailyCandidateReviewCardPath
+    foreach ($legacyToken in @('(?m)^\s*trigger_price_or_zone:', '(?m)^\s*structural_stop_or_zone:')) {
+        if ($dailyCandidateReviewCardContent -match $legacyToken) {
+            Add-ValidationError "daily candidate review card retains non-canonical geometry alias: $legacyToken"
+        }
+    }
+}
+
+$visualPaReviewCardPath = Join-Path -Path $repoRoot -ChildPath 'docs/visual_pa_review_card_CN.md'
+if (Test-Path -LiteralPath $visualPaReviewCardPath -PathType Leaf) {
+    $visualPaReviewCardContent = Get-Utf8Text -Path $visualPaReviewCardPath
+    foreach ($legacyToken in @('(?m)^\s*stop_zone:', '(?m)^\s*stop_price_or_area:', '(?m)^\s*space_to_first_obstacle:')) {
+        if ($visualPaReviewCardContent -match $legacyToken) {
+            Add-ValidationError "visual PA review card retains ambiguous geometry alias: $legacyToken"
+        }
     }
 }
 
@@ -789,6 +836,27 @@ if (Test-Path -LiteralPath $commonVisualPreflightAuditPath -PathType Leaf) {
     )) {
         if (-not $commonVisualPreflightAuditContent.Contains($token)) {
             Add-ValidationError "missing common-visual-preflight audit token '$token'"
+        }
+    }
+}
+
+$entryGeometryStateBoundaryAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/entry_geometry_state_boundary_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $entryGeometryStateBoundaryAuditPath -PathType Leaf) {
+    $entryGeometryStateBoundaryAuditContent = Get-Utf8Text -Path $entryGeometryStateBoundaryAuditPath
+    foreach ($token in @(
+        '统一几何顺序',
+        'observation_only',
+        'valid_no_trade',
+        'first_independent_obstacle',
+        'rough_R_R',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
+    )) {
+        if (-not $entryGeometryStateBoundaryAuditContent.Contains($token)) {
+            Add-ValidationError "missing entry-geometry/state-boundary audit token '$token'"
         }
     }
 }

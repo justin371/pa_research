@@ -12,6 +12,8 @@
 
 该入口的证据头还必须记录 `data_status: historical / delayed / live_confirmed / incomplete`、`as_of_time`、`chart_scope` 和 `timeframes_seen`；历史、延迟、实时已确认与不完整不能互换。
 
+状态边界：关键图表、事件、触发或空间证据尚不完整时使用 `pending`/`observation_only`；形态、方向和入场几何已可复核但已知硬闸门否决交易时使用 `valid_no_trade`。两者都不建立订单，不能互换。
+
 进入 H2/L2 计数前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），标出主要高点、主要低点、支撑阻力和 EMA20/50/200。然后使用[`H/L lineage 与三推状态视觉边界复核`](../../research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md)先登记母腿、A/B、第一次失败/不足和 `lineage_status`；左侧背景或第一次失败不可见时只能写 `H2/L2-like` 或 `pending`。
 
 ## 视觉定义
@@ -54,7 +56,8 @@ H2/L2 的“第二次”是同一回调中的第二次有意义的方向尝试�
 - `branch_role: same_contract` + `order_branch: stop_confirmation`：高周期信号 K 后用 stop 确认；高周期结构止损保持不变。
 - `low_cycle_confirmation`：1H/15m 只改善时序；必须说明它确认的是同一 H2/L2 合同，还是新的短线合同。
 - `limit_retest`：回测支撑/阻力的限价分支单独记录，不能和原 stop 分支混算。
-- `observation_only`：第一障碍太近、跳空越过触发、事件窗口、结构止损过宽或 B 已失控时，保留形态但不交易。
+- `observation_only`：第一障碍尚未确认、跳空越过触发但新合同尚未重建、事件窗口证据不完整、结构止损或 B 类别尚未冻结时，保留形态但不建立合同。
+- `valid_no_trade`：首障碍和结构几何已经可复核，但空间不足、结构止损过宽或已知事件闸门阻止交易。
 
 低周期窄止损不能用来美化日线 R/R。若交易假设改变了止损、持仓周期或目标，就必须新建合同。
 

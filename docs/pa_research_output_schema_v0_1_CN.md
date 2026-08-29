@@ -177,6 +177,8 @@ main_uncertainty_or_exclusion:
 
 `order_branch` 只表达基础订单合同；`branch_role` 记录反向 stop、角色转换回测、跳空重订等研究分支。历史文件中的 `stop`、`limit-retest`、`market-close`、`reverse-stop` 和 `limit-edge` 是别名，更新新记录时必须映射到上述字段，不能继续作为同一字段的混合枚举。
 
+入场几何必须按固定顺序记录：先确定 `structural_invalidation` 与 `structural_stop`，再找入场方向上最近的 `first_independent_obstacle`，然后填写 `pre_entry_space_R`/`space_status`，最后才写 `rough_R_R`、`target_layers` 或 measured move。`rough_R_R` 不能跳过最近独立障碍；如果结构止损、首障碍或空间只能写区域、`pending` 或 `unknown`，就不能把它们伪装成冻结的数值合同。
+
 ### 回放结果和胜率分母
 
 冻结合同回放的结果字段至少应保留：
@@ -225,6 +227,12 @@ handoff_status: research_only / not_ready / ready_for_system
 ```
 
 这些字段不代表胜率或实盘授权。`research_positive_conditional` 仍是人工研究状态；`valid_no_trade` 不是亏损；`handoff_status: ready_for_system` 只有在研究交接规范的全部晋级闸门通过后才可使用。`adopted` 只表示文档被采纳，不表示规则已经验证或可执行。
+
+### `observation_only` 与 `valid_no_trade` 的边界
+
+- `observation_only`：图表、事件、方向、触发或空间证据仍不完整，或者只保留形态学习价值，尚未形成可复核的交易合同；不建立订单。若资料还可能补齐，可同时使用 `pending`。
+- `valid_no_trade`：形态、方向和入场几何已经足够复核，但已知硬闸门（例如首障碍过近、结构止损过宽、事件排除或成交合同不合格）明确否决新交易；它是有效的不交易决定，不是亏损结果。
+- 已知硬闸门失败不能用 `observation_only` 隐去；反过来，证据缺失也不能用 `valid_no_trade` 冒充已经完成的否决。`research_state`、`trade_state` 和 `gate_result` 仍须分轴填写，不能合并为一个最终状态。
 
 ## 六、最小输出模板
 

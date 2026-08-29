@@ -10,6 +10,8 @@
 
 该入口的证据头还必须记录 `data_status: historical / delayed / live_confirmed / incomplete`、`as_of_time`、`chart_scope` 和 `timeframes_seen`；历史、延迟、实时已确认与不完整不能互换。
 
+状态边界：关键图表、事件、触发或空间证据尚不完整时使用 `pending`/`observation_only`；形态、方向和入场几何已可复核但已知硬闸门否决交易时使用 `valid_no_trade`。两者都不建立订单，不能互换。
+
 进入 Inside Bar/两根反转判断前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点、主要低点、支撑阻力、前高/前低、EMA20/50/200、当前父级状态和第一独立障碍。强 A 与受控 B 作为背景对照；母 K、内包和两根反转仍按本目录的 OHLC 边界定义。缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`，不能凭局部小实体升级为可交易候选。
 
 ## 最小定义
@@ -61,7 +63,7 @@ Inside Bar 关注范围压缩；H1/H2、L1/L2 关注回调中的尝试次数；s
 - **Stop-confirmation**：多头放在母 K/信号 K 高点外，空头放在低点外；宽 K、跳空或接近首障碍时要重算。
 - **Limit-retest**：只在旧边界、母 K 边缘或角色转换区已经明确后研究；未回到区域前不假设成交。
 - **Market/close-confirmation**：只给强反向收盘、结构已经破坏且等待代价明显的分支；小内包突破不自动授权追入。
-- **observation_only**：母 K 未冻结、处于区间中部、首障碍贴近、事件/跳空改变原合同，或只能把止损压在母 K 内部才得到好看的 R/R。
+- **observation_only**：母 K 未冻结、处于区间中部、首障碍/结构止损尚未确认、事件/跳空改变原合同但尚未重建，或只能保留形态观察。
 
 结构止损要覆盖回调极端、母 K/反向测试极端和真正失效位置，不能只放在第二根 K 的小尾巴外。第一独立支撑/阻力不足约 1R 时记录为 `valid_no_trade`；约 2R 是完整波段参考，不是固定门槛。MM 只有在首障碍被接受穿越后才作为延伸目标。
 

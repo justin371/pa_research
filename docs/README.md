@@ -6,6 +6,7 @@
 - [`每日候选批次与图表审查卡`](daily_candidate_review_card_CN.md)
 - [`共同上下文`](common_context.md)
 - [`共同视觉前置字段一致性审计`](../research/common_visual_preflight_field_consistency_audit_2026-08-29_CN.md)
+- [`入场几何与不交易状态边界审计`](../research/entry_geometry_state_boundary_audit_2026-08-29_CN.md)
 - [`PA Research → Codex Trading 研究交接规范`](research_to_system_handoff_CN.md)
 - [`冻结合同回放器（backtesting.py）`](../research/backtesting/README.md)
 

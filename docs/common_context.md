@@ -40,6 +40,12 @@ first_independent_obstacle:
 
 `data_status`、时间戳和 `chart_scope` 描述证据是否可用，不能用局部图或后续走势补写缺失的两年背景。批次级 `two_year_chart_coverage` 只是覆盖摘要；逐标的仍必须填写 `daily_context_window` 和两个 review 完整度字段。独立主题可以把强 A/受控 B 作为背景对照，但不因此继承 ABC/H-L 计数。
 
+### Entry geometry and state boundary
+
+所有 pattern 的入场几何都按同一顺序审查：`structural_invalidation` → `structural_stop` → 方向上最近的 `first_independent_obstacle` → `pre_entry_space_R`/`space_status` → `rough_R_R` 和目标层。不能用更远的 measured move、区间另一侧或后续结果跳过首障碍；区域文字、`pending` 或 `unknown` 也不能冒充冻结的数值合同。
+
+`observation_only` 表示关键图表、事件、方向、触发或空间证据还不完整，或只保留形态学习价值，尚未建立交易合同；`valid_no_trade` 表示形态、方向和入场几何已经足够复核，但已知硬闸门明确否决新交易。两者都不建立订单，但不能互换：证据缺失用 `pending`/`observation_only`，已知空间、事件、止损或合同失败用 `valid_no_trade`。
+
 ## Research phases: visual discovery before quantification
 
 当前阶段不是量化建模，而是建立一个真正看得懂 Price Action 图表的研究助手。研究顺序分三层：
@@ -104,7 +110,7 @@ For the current daily-selection phase, prioritize two separate primary families:
 - The current study order is: larger background → A pressure → B pressure → major/minor support-resistance → H/L attempt count → signal K → trigger → stop/invalidation → first obstacle and measured-move space.
 - For a live review, the sequence is not “find the completed A/B/C first.” It is: recognize A pressure while it is developing, start scanning the B pullback immediately, then decide whether the next H/L attempt is tradable. A later retrospective label must not erase an earlier valid decision window.
 - Candidate priority follows A-leg quality: when the trend and A leg are strong—preferably around 3–4 consecutive, full-bodied directional Daily bars with clear follow-through, with a gap as an optional plus—the first valid H1/L1 signal K after a controlled pullback may be researched; when A is ordinary, overlapping, or ambiguous, H1/L1 is observation-only and preference shifts to H2/L2 after the first attempt fails or lacks follow-through. A mature-range edge is an explicit exception: ordinary A can still feed a range-edge three-push candidate, but only after edge rejection, trigger, structural stop and space review. This is a research priority, not a guaranteed probability rule.
-- A complete chart may be used to audit the case, but the entry decision must be reconstructed from the bars, levels, event information, and space available at that timestamp. Later C-leg strength, measured-move completion, final target, or profit cannot upgrade an earlier setup retroactively. If the setup was not clear at the decision time, record a valid no-trade or hypothesis.
+- A complete chart may be used to audit the case, but the entry decision must be reconstructed from the bars, levels, event information, and space available at that timestamp. Later C-leg strength, measured-move completion, final target, or profit cannot upgrade an earlier setup retroactively. If the setup was not clear at the decision time, record `observation_only` or `pending`; use `valid_no_trade` only when the setup and geometry were clear but a known gate rejected the trade.
 
 ### Strong bearish A-leg filter
 
