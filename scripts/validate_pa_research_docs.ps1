@@ -421,6 +421,10 @@ foreach ($file in $markdownFiles) {
         Add-ValidationError "active promoted research/authorization status is not allowed in PA Research Markdown: $relativePath"
     }
 
+    if ($content -match '(?i)(?<![\w-])research_positive\s*/\s*conditional(?![\w-])') {
+        Add-ValidationError "non-canonical research-positive conditional status alias: $relativePath"
+    }
+
     foreach ($match in [regex]::Matches($content, '(?<!\!)\[[^\]]*\]\(([^)\r\n]+)\)|!\[[^\]]*\]\(([^)\r\n]+)\)')) {
         $target = if ($match.Groups[1].Success) { $match.Groups[1].Value } else { $match.Groups[2].Value }
         $checkedLinks++

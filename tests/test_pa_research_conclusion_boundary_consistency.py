@@ -1,5 +1,8 @@
 """Regression checks for PA Research conclusion and authorization wording."""
 
+import shutil
+import subprocess
+import tempfile
 from pathlib import Path
 import re
 import unittest
@@ -8,6 +11,7 @@ import unittest
 REPO_ROOT = Path(__file__).resolve().parents[1]
 BACKTEST_ROOT = REPO_ROOT / "research" / "backtesting"
 VALIDATOR_PATH = REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1"
+KLAC_CASE_PATH = REPO_ROOT / "research" / "klac_h1_case_study_2025-10-14_2025-10-24.md"
 AUTHORITY_AUDIT_PATH = REPO_ROOT / "research" / "authority_boundary_index_audit_2026-08-29_CN.md"
 AUDIT_NAME = "conclusion_boundary_consistency_audit_2026-08-29_CN.md"
 CONTRACT_COVERAGE_NAME = "contract_coverage_audit_2026-08-28_CN.md"
@@ -51,6 +55,9 @@ LEGACY_STATUS_PATTERNS = (
     re.compile(r"(?m)^\s*validated_win_rate\s*:"),
     re.compile(r"(?m)^\s*win_rate\s*:\s*not-computable\s*$"),
 )
+UNQUALIFIED_RESEARCH_POSITIVE_PATTERN = re.compile(
+    r"(?i)(?<![\w-])research_positive\s*/\s*conditional(?![\w-])"
+)
 
 
 def markdown_paths() -> list[Path]:
@@ -73,6 +80,18 @@ class PaResearchConclusionBoundaryConsistencyTests(unittest.TestCase):
                 offenders.append(path.relative_to(REPO_ROOT).as_posix())
         self.assertEqual(offenders, [])
 
+    def test_research_positive_conditional_uses_one_canonical_status_name(self):
+        offenders = [
+            path.relative_to(REPO_ROOT).as_posix()
+            for path in markdown_paths()
+            if UNQUALIFIED_RESEARCH_POSITIVE_PATTERN.search(read(path))
+        ]
+        self.assertEqual(offenders, [])
+
+        klac = read(KLAC_CASE_PATH)
+        self.assertIn("`research_positive_conditional`", klac)
+        self.assertNotRegex(klac, UNQUALIFIED_RESEARCH_POSITIVE_PATTERN)
+
     def test_contract_coverage_uses_canonical_boundary(self):
         text = read(BACKTEST_ROOT / CONTRACT_COVERAGE_NAME)
         self.assertIn("validated win-rate: not-computable", text)
@@ -90,8 +109,47 @@ class PaResearchConclusionBoundaryConsistencyTests(unittest.TestCase):
         text = read(VALIDATOR_PATH)
         self.assertIn("$legacyConclusionStatusPatterns", text)
         self.assertIn("legacy non-canonical conclusion status", text)
+        self.assertIn("non-canonical research-positive conditional status alias", text)
         self.assertIn(CONTRACT_COVERAGE_NAME, text)
         self.assertIn(AUDIT_NAME, text)
+
+    def test_validator_rejects_unqualified_research_positive_conditional_alias(self):
+        with tempfile.TemporaryDirectory(prefix="pa-status-boundary-validator-") as temp_dir:
+            fixture_root = Path(temp_dir) / "repo"
+            shutil.copytree(
+                REPO_ROOT,
+                fixture_root,
+                ignore=shutil.ignore_patterns(
+                    ".git", ".codex", ".venv", "node_modules", "__pycache__"
+                ),
+            )
+            target = fixture_root / KLAC_CASE_PATH.relative_to(REPO_ROOT)
+            target.write_text(
+                read(target) + "\n历史别名测试：`research_positive / conditional`\n",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    "powershell.exe",
+                    "-NoProfile",
+                    "-ExecutionPolicy",
+                    "Bypass",
+                    "-File",
+                    str(fixture_root / "scripts" / VALIDATOR_PATH.name),
+                    "-RepoRoot",
+                    str(fixture_root),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(
+            "non-canonical research-positive conditional status alias",
+            result.stdout,
+        )
 
     def test_audit_records_target_and_authorization_boundaries(self):
         text = read(BACKTEST_ROOT / AUDIT_NAME)

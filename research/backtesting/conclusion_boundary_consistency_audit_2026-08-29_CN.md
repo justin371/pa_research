@@ -30,6 +30,7 @@
 
 - `research/backtesting/contract_coverage_audit_2026-08-28_CN.md` 的 `validated_win_rate:` 是唯一残留的下划线形式；已改为统一叙述 `validated win-rate: not-computable`。
 - 根 README、每日候选复核卡、ABC/H-L 历史结果审计和流程改进审计中的 `win_rate: not-computable` 已统一为同一 canonical 叙述。值仍然是 `not-computable`，没有新增、删除或重算任何结果。
+- `research/klac_h1_case_study_2025-10-14_2025-10-24.md` 的强趋势磁铁分支曾有一处未按 canonical 写法记录的条件正向状态文案；已统一为 `research_positive_conditional`。这只修正文案，不改变该案例的严格障碍分支、条件分支或任何历史结果。
 
 ### 2. 六个未重复写胜率状态的文件不是缺失
 
@@ -59,6 +60,7 @@
 - 统一 5 处活动状态文案，未触碰 CSV、历史数值、engine 或回放有效语义；
 - 将本审计加入 `research/`、`research/backtesting/`、`docs/` 和 `strategy/` 的入口索引；
 - validator 现在拒绝 Markdown 中重新出现活动行 `validated_win_rate:` 或 `win_rate: not-computable`，并要求本审计和人工合同覆盖审计保留 canonical 结论与 PA Research 隔离声明；
+- validator 现在也拒绝 Markdown 中重新出现未限定的斜杠式条件正向状态别名，避免历史案例把说明性文案误读为状态字段；显式的迁移说明仍可使用不同的旧别名，但必须放在明确的历史说明语境中；
 - 回归测试检查旧活动别名、合同覆盖报告、60%/研究状态边界和本审计索引，防止“描述性结果 → 已验证胜率/交易授权”的文案漂移。
 
 ## 五、结论
