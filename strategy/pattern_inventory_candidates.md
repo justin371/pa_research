@@ -101,7 +101,7 @@ H2/L2 往往比第一次尝试更值得优先研究，但这不是无条件的�
 | 15 | [`Double Top/Bottom 独立主题`](../patterns/15_double_top_bottom/README.md) | 独立主题 | 保留双顶/双底作为位置形状；根据父级和接受/失败再归入 RFB、MTR 或普通回调 |
 | 16 | [`Head & Shoulders / Rounded 独立主题`](../patterns/16_head_shoulders_rounded/README.md) | 独立主题 | 保留头肩/圆顶圆底的视觉边界；未满足颈线、确认和空间时不升级为 MTR |
 
-上述目录入口是索引，不是 16 个已验证策略。当前可报告的胜率仍以逐类、逐合同的 validated evidence 为准；本清单不新增样本，也不改变 engine 的有效枚举。
+上述目录入口是索引，不是 16 个已验证策略。当前可报告的胜率仍以逐类、逐合同的 validated evidence（若形成）为准；本仓库当前统一状态仍为 `validated win-rate: not-computable`。本清单不新增样本，也不改变 engine 的有效枚举。
 
 ## 3A. 视觉发现候选目录
 

@@ -112,6 +112,26 @@ class PaResearchConclusionBoundaryConsistencyTests(unittest.TestCase):
         self.assertIn("study_status", backtesting_readme)
         self.assertIn("统一统计结论", backtesting_readme)
 
+    def test_research_indexes_disclose_simulated_results_and_no_actual_logs(self):
+        transaction_log_boundary = (
+            "当前 PA Research checkout 不包含券商或账户的真实交易日志；研究合同、历史回放结果和运行 metadata 都不能代替真实交易日志。"
+        )
+        research_readme = read(REPO_ROOT / "research" / "README.md")
+        backtesting_readme = read(BACKTEST_ROOT / "README.md")
+        self.assertIn(transaction_log_boundary, research_readme)
+        self.assertIn(transaction_log_boundary, backtesting_readme)
+        self.assertIn("记录回放器的模拟成交状态、模拟退出状态", backtesting_readme)
+
+    def test_validated_wording_is_explicitly_conditional_in_core_references(self):
+        common_context = read(REPO_ROOT / "docs" / "common_context.md")
+        inventory = read(REPO_ROOT / "strategy" / "pattern_inventory_candidates.md")
+        self.assertIn(
+            "rule specifications that may be validated later; current validation remains not-computable.",
+            common_context,
+        )
+        self.assertIn("validated evidence（若形成）", inventory)
+        self.assertIn("validated win-rate: not-computable", inventory)
+
 
 if __name__ == "__main__":
     unittest.main()

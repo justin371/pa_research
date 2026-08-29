@@ -69,7 +69,7 @@ META 的 canonical 字段只区分 `present / absent / unknown`；`pending` 保�
 
 ## Repository boundaries
 
-- `PA Research`: research notes, source-aligned definitions, chart reviews, hypotheses, frozen-contract replay, and validated rule specifications.
+- `PA Research`: research notes, source-aligned definitions, chart reviews, hypotheses, frozen-contract replay, and rule specifications that may be validated later; current validation remains not-computable.
 - `Codex Trading`: separate programmatic research tools, Trading System implementation, and any future execution-related work; it is not modified by this replay harness.
 - The reference material in the existing Codex Trading knowledge base is read-only during research unless a rule has matured and transfer work is explicitly in scope.
 - The one-way research-to-system boundary, status vocabulary, handoff fields, and promotion gates are defined in [`docs/research_to_system_handoff_CN.md`](research_to_system_handoff_CN.md). Creating a research file does not mean that the rule is ready for Codex Trading.

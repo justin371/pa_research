@@ -77,3 +77,13 @@ trade_state: not_authorized
 本次版本/结论复核进一步把根 README、`docs/README.md`、`patterns/README.md`、`research/README.md`、`strategy/README.md` 和 `research/backtesting/README.md` 的共同摘要统一为：`v0.x` 规则/合同及研究引擎 `0.3.9` 只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；`no-new-positive` 与 `validated win-rate: not-computable` 保持不变，`60%` 仅为待检验目标；不创建量化扫描器，不连接 Execution Agent。
 
 回放 README 另将 `study_status`（`research_only / descriptive_only / not-validated`）与全局统计结论分开显示，避免把研究成熟度、统计状态和结果结论误读为同一枚举。该修复只改善入口可读性和防回归覆盖，不新增样本、结果或 engine 语义。
+
+### 核心索引与活动模板追加复核
+
+本轮继续检查 `docs/README.md`、`research/README.md`、`research/backtesting/README.md`、`strategy/README.md` 以及统一输出合同、日线候选卡、视觉复核卡和候选 inventory。发现并修正三处容易产生过度解读的文字边界：
+
+- `research/README.md` 与 `research/backtesting/README.md` 现在直接写明当前 checkout 不含券商/账户真实交易日志；研究合同、历史回放结果和运行 metadata 不能代替真实交易日志；
+- 回放 README 将 `results.csv` 的“成交/退出”明确改为回放器的模拟成交状态/模拟退出状态；
+- `strategy/pattern_inventory_candidates.md` 与 `docs/common_context.md` 将 `validated evidence/specifications` 明确限定为未来或条件性状态，并保留当前 `validated win-rate: not-computable`。
+
+统一输出合同、日线候选卡和视觉复核卡原有的事前/事后分界、canonical 状态轴和历史别名映射未发现残留问题，因此不作无证据改写。上述修复只涉及 PA Research 文档和防回归检查，不新增样本、成交、回放结果或 engine 语义；结论仍为 `no-new-positive`。

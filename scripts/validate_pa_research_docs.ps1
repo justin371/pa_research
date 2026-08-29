@@ -660,7 +660,8 @@ $canonicalChecks = @{
         '### Entry geometry and state boundary',
         'structural_invalidation` → `structural_stop` →',
         '`observation_only` 表示关键图表、事件、方向、触发或空间证据还不完整',
-        '`valid_no_trade` 表示形态、方向和入场几何已经足够复核'
+        '`valid_no_trade` 表示形态、方向和入场几何已经足够复核',
+        'rule specifications that may be validated later; current validation remains not-computable.'
     )
     'research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md' = @(
         'direction: long / short / no_valid_direction',
@@ -1186,7 +1187,9 @@ $canonicalChecks = @{
         '`*_selection_*.md`、候选卡和视觉资产 README 属于入场前记录',
         '结果不得反向改写入场前字段',
         '`eligible`/EMA gate',
-        '`filled` 只表示历史订单路径有成交'
+        '`filled` 只表示历史订单路径有成交',
+        '当前 PA Research checkout 不包含券商或账户的真实交易日志；研究合同、历史回放结果和运行 metadata 都不能代替真实交易日志。',
+        '记录回放器的模拟成交状态、模拟退出状态'
     )
     'strategy/pattern_inventory_candidates.md' = @(
         '如果目标是 `daily_candidate`，第一步只能看完成的 Daily',
@@ -1201,7 +1204,9 @@ $canonicalChecks = @{
         'chart_scope: full / partial / unavailable',
         'daily_context_window: >=2y / <2y / unavailable',
         '| 视觉候选 ID | direction | 先看什么 | 代表性入口 | 当前状态 |',
-        '完整候选卡和冻结合同仍必须逐行写 canonical `direction`'
+        '完整候选卡和冻结合同仍必须逐行写 canonical `direction`',
+        'validated evidence（若形成）',
+        'validated win-rate: not-computable'
     )
     'research/crm_bearish_abc_l1_l2_visual_candidate_2025-03-10_2025-03-28.md' = @(
         'contract_scope: historical_context_only',
@@ -2595,6 +2600,27 @@ foreach ($relativePath in $transactionBoundaryIndexPaths) {
     foreach ($token in @('研究合同', '历史回放', '真实交易日志', '独立来源')) {
         if (-not $content.Contains($token)) {
             Add-ValidationError "transaction-log boundary index missing '$token': $relativePath"
+        }
+    }
+}
+
+$coreTransactionLogBoundaryChecks = @{
+    'research/README.md' = @(
+        '当前 PA Research checkout 不包含券商或账户的真实交易日志；研究合同、历史回放结果和运行 metadata 都不能代替真实交易日志。'
+    )
+    'research/backtesting/README.md' = @(
+        '当前 PA Research checkout 不包含券商或账户的真实交易日志；研究合同、历史回放结果和运行 metadata 都不能代替真实交易日志。',
+        '记录回放器的模拟成交状态、模拟退出状态'
+    )
+}
+foreach ($entry in $coreTransactionLogBoundaryChecks.GetEnumerator()) {
+    $relativePath = $entry.Key
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    foreach ($token in $entry.Value) {
+        if (-not $content.Contains($token)) {
+            Add-ValidationError "core transaction-log boundary missing '$token': $relativePath"
         }
     }
 }

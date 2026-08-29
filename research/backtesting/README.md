@@ -8,6 +8,8 @@
 
 统一边界：`v0.x` 规则/合同与研究引擎 `0.3.9` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；不创建量化扫描器，不连接 Execution Agent。
 
+当前 PA Research checkout 不包含券商或账户的真实交易日志；研究合同、历史回放结果和运行 metadata 都不能代替真实交易日志。
+
 当前人工冻结合同的方向、H/L 标签、事件、空间和 lineage 覆盖见[`人工冻结合同覆盖审计`](contract_coverage_audit_2026-08-28_CN.md)。研究记录与当前回放输入的字段边界见[`合同权威与字段一致性审计`](contract_authority_consistency_audit_2026-08-29_CN.md)；现有 CSV inventory 与资格隔离见[`合同 CSV inventory 与资格边界审计`](contract_csv_inventory_audit_2026-08-29_CN.md)；validator 与 engine 的合同 parity 见[`文档 validator 与 engine 合同 parity 审计`](validator_engine_contract_parity_audit_2026-08-29_CN.md)；报告、索引与 inventory 的当前一致性见[`报告、索引与 inventory 一致性审计`](report_index_inventory_consistency_audit_2026-08-29_CN.md)；各批次报告数字、方向/标签、事件/空间和 lineage 的逐批重算见[`批次报告数字与分层一致性审计`](batch_report_numeric_consistency_audit_2026-08-29_CN.md)。这些审计只检查合同记录/边界完整性，不代表胜率验证。
 
 validator `requiredFiles` 中研究报告与 canonical 索引的覆盖关系见[`requiredFiles 与研究报告索引覆盖审计`](required_report_index_coverage_audit_2026-08-29_CN.md)；`research/README.md` 是研究报告的综合入口，本文档只保留回放、合同和版本边界的重点入口，不要求逐一重复所有历史审计报告。
@@ -68,7 +70,7 @@ py -3 .\scripts\validate_pa_research_artifact.py .\research\backtesting\example-
 
 程序写出：
 
-- `results.csv`：每个冻结合同一行，包含成交、退出、空间、`realized_R`、`win_rate_eligible`、`sample_id`、`lineage_id`、可选 `market_context_id` 和证据状态；
+- `results.csv`：每个冻结合同一行，记录回放器的模拟成交状态、模拟退出状态、空间、`realized_R`、`win_rate_eligible`、`sample_id`、`lineage_id`、可选 `market_context_id` 和证据状态；
 - `summary.json`：按 pattern、方向、订单分支、事件状态、`lineage_id`、EMA 斜率闸门和 META 的描述性分层，并显式报告重复结果、共享 lineage/市场状态、持仓区间重叠、事前 `pre_entry_provenance_status`、严格胜率分母、事前派生字段 mismatch 和互斥结果 bucket；
 - `run_metadata.json`：引擎/依赖/运行时版本、引擎源码 SHA-256、数据源、时间状态、成本、输入文件 SHA-256、结果集和实际 `results.csv` SHA-256，以及 `summary_provenance`（实际结果列名、事前 provenance 状态计数、完成分母和各类 mismatch 计数）和 PA Research 范围声明；`summary.json` 内嵌的 metadata 应与独立文件一致。
 
