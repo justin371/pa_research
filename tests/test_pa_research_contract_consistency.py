@@ -177,6 +177,8 @@ class PaResearchContractConsistencyTests(unittest.TestCase):
                 ("invalid internal label", lambda row: row.__setitem__("internal_label", "H9"), "invalid internal_label", None),
                 ("invalid gap policy", lambda row: row.__setitem__("gap_policy", "not_applicable"), "non-market-close branch cannot use gap_policy=not_applicable", None),
                 ("missing H/L location", lambda row: row.__setitem__("h_l_pullback_location", "NA"), "missing h_l_pullback_location", None),
+                ("opposite H/L EMA pass gate", lambda row: row.__setitem__("h_l_ema_slope_gate", "short_pass"), "H/L EMA pass gate does not match internal_label direction", None),
+                ("unknown EMA slope with failure gate", lambda row: (row.__setitem__("daily_ema20_slope", "unknown"), row.__setitem__("h_l_ema_slope_gate", "fail_flat_or_opposite")), "EMA fail gate cannot use unknown slope evidence", None),
                 ("invalid non-H/L EMA slope", lambda row: (row.__setitem__("internal_label", "none"), row.__setitem__("primary_pattern", "ABC_CONT"), row.__setitem__("daily_ema20_slope", "sideways")), "invalid daily_ema20_slope", None),
                 ("incomplete META", lambda row: (row.__setitem__("meta_confluence", "present"), row.__setitem__("meta_zone", ""), row.__setitem__("meta_components", "EMA20")), "meta_confluence=present requires meta_zone", None),
             )
@@ -231,6 +233,63 @@ class PaResearchContractConsistencyTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             for expected_message in expected_messages:
                 self.assertIn(expected_message, result.stdout)
+
+    def test_docs_validator_rejects_reverse_direction_ema_pass_gates(self):
+        validator = REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1"
+
+        with tempfile.TemporaryDirectory(prefix="pa-validator-ema-direction-") as temp_dir:
+            fixture_root = Path(temp_dir)
+            shutil.copytree(
+                REPO_ROOT,
+                fixture_root,
+                dirs_exist_ok=True,
+                ignore=shutil.ignore_patterns(".git", ".venv", "__pycache__", "*.pyc"),
+            )
+            contract_dir = fixture_root / "research" / "backtesting"
+            source_rows = []
+            for source_name, sample_id, lineage_id, wrong_gate in (
+                ("hl_next4_contracts_2026-08-27.csv", "parity-reverse-h1", "parity-reverse-h1", "short_pass"),
+                ("hl_next5_contracts_2026-08-27.csv", "parity-reverse-l1", "parity-reverse-l1", "long_pass"),
+            ):
+                source = contract_dir / source_name
+                with source.open(encoding="utf-8", newline="") as handle:
+                    row = dict(next(csv.DictReader(handle)))
+                row["sample_id"] = sample_id
+                row["lineage_id"] = lineage_id
+                row["h_l_ema_slope_gate"] = wrong_gate
+                source_rows.append(row)
+
+            fieldnames = sorted({field for row in source_rows for field in row})
+            target = contract_dir / "parity_reverse_ema_direction_contracts.csv"
+            with target.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows({field: row.get(field, "") for field in fieldnames} for row in source_rows)
+
+            with self.assertRaises(ContractValidationError):
+                load_contracts(target)
+
+            result = subprocess.run(
+                [
+                    "powershell.exe",
+                    "-NoProfile",
+                    "-ExecutionPolicy",
+                    "Bypass",
+                    "-File",
+                    str(validator),
+                    "-RepoRoot",
+                    str(fixture_root),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertGreaterEqual(
+            result.stdout.count("H/L EMA pass gate does not match internal_label direction"),
+            2,
+        )
 
     def test_daily_candidate_templates_keep_top_level_pattern_boundary(self):
         rules = (REPO_ROOT / "docs" / "pa_research_daily_selection_rules_v0_1_CN.md").read_text(

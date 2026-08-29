@@ -804,6 +804,21 @@ if (Test-Path -LiteralPath $hlReportSpaceVersionAuditPath -PathType Leaf) {
     }
 }
 
+$hlEmaGateReportAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_ema_gate_report_consistency_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $hlEmaGateReportAuditPath -PathType Leaf) {
+    $hlEmaGateReportAuditContent = Get-Utf8Text -Path $hlEmaGateReportAuditPath
+    foreach ($token in @(
+        'daily_ema20_slope', 'daily_ema50_slope', 'h_l_ema_slope_gate', 'h_l_pullback_location',
+        'long_pass', 'short_pass', 'fail_flat_or_opposite', 'pending', 'eligible', 'observation_only',
+        '60', 'no-new-positive', 'validated win-rate: not-computable', 'PA Research only',
+        'no Codex Trading', 'no quantitative scanner', 'no Execution Agent'
+    )) {
+        if (-not $hlEmaGateReportAuditContent.Contains($token)) {
+            Add-ValidationError "missing H/L EMA-gate/report-consistency-audit token '$token'"
+        }
+    }
+}
+
 $legacyNextContractPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_next_contracts_2026-08-27.csv'
 $legacyNextReadmePath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/README.md'
 $legacyNextSelectionPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/hl_next_selection_2026-08-27_CN.md'
@@ -1368,11 +1383,17 @@ foreach ($file in $frozenContractFiles) {
             }
             $expectedGate = if ($internalLabel -in @('H1', 'H2')) { 'long_pass' } else { 'short_pass' }
             $expectedSlope = if ($internalLabel -in @('H1', 'H2')) { 'up' } else { 'down' }
+            if ($emaGate -in @('long_pass', 'short_pass') -and $emaGate -ne $expectedGate) {
+                Add-ValidationError "H/L EMA pass gate does not match internal_label direction (requires $expectedGate): $($file.Name) / $sampleId"
+            }
             if ($emaGate -eq $expectedGate -and ($ema20Slope -ne $expectedSlope -or $ema50Slope -ne $expectedSlope)) {
                 Add-ValidationError "EMA pass gate does not match both EMA slopes: $($file.Name) / $sampleId"
             }
             if ($emaGate -eq 'fail_flat_or_opposite' -and $ema20Slope -eq $expectedSlope -and $ema50Slope -eq $expectedSlope) {
                 Add-ValidationError "EMA fail gate has two passing slopes: $($file.Name) / $sampleId"
+            }
+            if ($emaGate -eq 'fail_flat_or_opposite' -and ($ema20Slope -eq 'unknown' -or $ema50Slope -eq 'unknown')) {
+                Add-ValidationError "EMA fail gate cannot use unknown slope evidence; use pending: $($file.Name) / $sampleId"
             }
             if ($emaGate -eq 'pending' -and ($ema20Slope -ne 'unknown' -and $ema50Slope -ne 'unknown')) {
                 Add-ValidationError "EMA pending gate lacks unknown slope evidence: $($file.Name) / $sampleId"
