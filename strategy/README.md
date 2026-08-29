@@ -20,6 +20,7 @@
 - [`Pattern 状态轴、字段与枚举一致性审计`](../research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md)：核对统一状态轴、字段命名和 pattern-specific 模板边界。
 - [`三推/H3-L3 与区间边缘合同边界审计`](../research/backtesting/three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md)：统一三推压力状态、区间边缘方向和订单/统计隔离。
 - [`三推策略与历史案例合同一致性审计`](../research/backtesting/three_push_strategy_case_contract_audit_2026-08-29_CN.md)：统一 A/B/C 解释层、历史案例状态和订单/首障碍/空间边界。
+- [`H3/L3 历史候选筛选日志证据与统计边界审计`](../research/backtesting/h3_l3_candidate_screen_provenance_audit_2026-08-29_CN.md)：区分历史数据状态、事件来源覆盖、候选字段与 no-new-positive 结论。
 - [`入场几何与不交易状态边界审计`](../research/entry_geometry_state_boundary_audit_2026-08-29_CN.md)：统一首障碍、结构止损、入场前空间、粗略 R/R 和不交易状态边界。
 - [`Pattern 主标签映射与 BOP 状态迁移审计`](../research/pattern_label_transition_audit_2026-08-29_CN.md)：核对日线主标签白名单、H/L 内部标签、三推/区间边缘分隔及 BOP 接受后的旧合同失效。
 - [`证据范围与数据状态一致性审计`](../research/evidence_scope_status_boundary_audit_2026-08-29_CN.md)：核对多周期证据范围、逐标的两年 Daily 覆盖、数据状态与历史 session 的字段边界。

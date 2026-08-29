@@ -1,12 +1,55 @@
 # H3/L3 定向候选筛选：Futu OpenD 2024–2026
 
-> 状态：第一阶段视觉快筛记录，不是统计回测，也不是交易建议。
+> 状态：第一阶段视觉快筛记录；`historical / no-new-positive / validated win-rate: not-computable / not-quantitative`，不是统计回测，也不是交易建议。
 >
-> 数据：本机 Futu OpenD 收盘后 QFQ 日线；先用结构化数据定位窗口，再用完整日线图检查。精确的低周期成交与财报前信息不在本轮结论内。
+> 数据：本机 Futu OpenD 收盘后 QFQ 日线；原始日志没有保留查询时间和时区，因此 `data_status=historical`，不是 `live_confirmed`。先用结构化数据定位窗口，再用完整日线图检查。精确的低周期成交与财报前信息不在本轮结论内。
+
+## 证据头
+
+```text
+contract_scope: historical_context_only
+review_date: 2026-08-29
+data_source: Futu OpenD historical QFQ Daily
+data_status: historical
+as_of_time: unavailable_in_original_log
+timezone: unavailable_in_original_log
+session_state: historical_close_review
+chart_scope: partial
+timeframes_seen: Daily
+```
+
+## 统一字段阅读
+
+```text
+lineage_status: same_lineage / reset / unclear / pending
+attempt_direction: bullish_attempts / bearish_attempts / unknown
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
+first_reverse: none / touch / structural_break
+second_confirmation: yes / no / pending
+range_edge_three_push: yes / no / pending
+range_edge_side: upper / lower / none / pending
+direction: long / short / no_valid_direction
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+gap_policy: accept_open / skip / flag_only / not_applicable
+structural_stop:
+first_independent_obstacle:
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+```
+
+`pattern_like`、`count-ambiguous`、`range-transition`、`event-gap-boundary` 和 `first-obstacle-crowded` 是历史显示标签，不是新的字段枚举。它们必须分别通过 `lineage_status`、`third_push_state`、`event_bucket`、`first_independent_obstacle`、`space_status` 和 `trade_state/gate_result` 表达；触发、空间或合同未冻结时，`direction` 保持 `no_valid_direction`。
 
 ## 目的
 
-补充一个真正独立的 L3 衰竭样本；如果候选只是区间重复低点、事件重定价、趋势延续，或第一道独立阻力没有空间，就直接归档为边界，不把后续上涨倒灌成入场证据。
+补充一个真正独立的 L3 衰竭样本；如果候选只是区间重复低点、事件重定价、趋势延续，或第一道独立阻力没有空间，就直接归档为边界，不把后续上涨倒灌成入场证据。当前没有达到该条件的独立 L3 正向样本，因此本日志保持 `no-new-positive`，不建立统计分母。
 
 ## 快筛结果
 
@@ -48,6 +91,8 @@
 本轮筛选使用了候选触发后的历史走势来做事后审计，但候选是否可交易的判断只使用触发前可见的背景、位置、订单、结构止损和首障碍。下一轮只有在出现新的事件干净窗口或新的订单合同证据时才继续；不重复扫描本表样本。
 
 ## 事件来源
+
+事件链接只覆盖本日志中明确列出的部分财报核对；没有链接的标的不能因此自动标记为普通非事件，仍应保持 `event_unverified_or_pending` 或单独补核。所有链接都是历史事件来源，不改变本文件的历史数据状态。
 
 - [Booking Holdings 2026 Q2 earnings（2026-08-04）](https://ir.bookingholdings.com/news/news-details/2026/Booking-Holdings-to-Make-Second-Quarter-2026-Earnings-Press-Release-Available-on-Companys-Investor-Relations-Website-on-August-4/default.aspx)
 - [AMD 2024 Q3 earnings（2024-10-29）](https://ir.amd.com/financial-information/sec-filings/content/0000002488-24-000161/q32024991.htm)

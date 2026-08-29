@@ -189,6 +189,7 @@ $requiredFiles = @(
     'research/pattern_index_alias_boundary_audit_2026-08-29_CN.md',
     'research/backtesting/three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md',
     'research/backtesting/three_push_strategy_case_contract_audit_2026-08-29_CN.md',
+    'research/backtesting/h3_l3_candidate_screen_provenance_audit_2026-08-29_CN.md',
     'research/pattern_visual_preflight_audit_2026-08-29_CN.md',
     'research/pattern_case_entry_status_audit_2026-08-29_CN.md',
     'research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md',
@@ -430,6 +431,49 @@ $canonicalChecks = @{
     'research/mtr_visual_framework_CN.md' = @(
         'exhaustion_candidate`、`continuation_or_climax`、`range_repeat_test` 或 `channel_continuation`',
         'research_positive_conditional'
+    )
+    'research/h3_l3_candidate_screen_2025-08_2025-11_CN.md' = @(
+        'visual-screen / boundary-log / no-new-positive / validated win-rate: not-computable / not-quantitative',
+        'contract_scope: historical_context_only',
+        'data_status: historical',
+        'as_of_time: unavailable_in_original_log',
+        'timezone: unavailable_in_original_log',
+        'session_state: historical_close_review',
+        'chart_scope: partial',
+        'timeframes_seen: Daily',
+        'lineage_status: same_lineage / reset / unclear / pending',
+        'attempt_direction: bullish_attempts / bearish_attempts / unknown',
+        'third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear',
+        'event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified',
+        'direction: long / short / no_valid_direction',
+        'first_independent_obstacle:',
+        'space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown',
+        'research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending',
+        'trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending',
+        'gate_result: pass / conditional / observation_only / valid_no_trade / pending',
+        '本日志不产生胜率分母'
+    )
+    'research/h3_l3_candidate_screen_futu_targeted_2024_2026_CN.md' = @(
+        'historical / no-new-positive / validated win-rate: not-computable / not-quantitative',
+        'data_status: historical',
+        'contract_scope: historical_context_only',
+        'as_of_time: unavailable_in_original_log',
+        'timezone: unavailable_in_original_log',
+        'session_state: historical_close_review',
+        'chart_scope: partial',
+        'timeframes_seen: Daily',
+        'lineage_status: same_lineage / reset / unclear / pending',
+        'attempt_direction: bullish_attempts / bearish_attempts / unknown',
+        'third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear',
+        'event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified',
+        'direction: long / short / no_valid_direction',
+        'first_independent_obstacle:',
+        'space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown',
+        'research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending',
+        'trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending',
+        'gate_result: pass / conditional / observation_only / valid_no_trade / pending',
+        '不建立统计分母',
+        '事件链接只覆盖本日志中明确列出的部分财报核对'
     )
     'patterns/README.md' = @(
         'timeframes_seen / data_status / as_of_time / timezone / session_state / chart_scope',
@@ -1232,6 +1276,32 @@ if (Test-Path -LiteralPath $threePushStrategyCaseAuditPath -PathType Leaf) {
     )) {
         if (-not $threePushStrategyCaseAuditContent.Contains($token)) {
             Add-ValidationError "missing three-push strategy/case audit token '$token'"
+        }
+    }
+}
+
+$h3CandidateScreenProvenanceAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/h3_l3_candidate_screen_provenance_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $h3CandidateScreenProvenanceAuditPath -PathType Leaf) {
+    $h3CandidateScreenProvenanceAuditContent = Get-Utf8Text -Path $h3CandidateScreenProvenanceAuditPath
+    foreach ($token in @(
+        'h3_l3_candidate_screen_2025-08_2025-11_CN.md',
+        'h3_l3_candidate_screen_futu_targeted_2024_2026_CN.md',
+        'data_status: historical',
+        'as_of_time: unavailable_in_original_log',
+        'event_unverified_or_pending',
+        'third_push_state',
+        'opening-skip/gap-reprice',
+        '7 份 CSV、60 行',
+        'H3/L3 冻结行数为 0',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
+    )) {
+        if (-not $h3CandidateScreenProvenanceAuditContent.Contains($token)) {
+            Add-ValidationError "missing H3/L3 candidate-screen provenance audit token '$token'"
         }
     }
 }

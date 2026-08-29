@@ -1,12 +1,52 @@
 # H3/L3 独立候选筛选日志：2025-08 至 2025-11
 
-状态：`visual-screen / boundary-log / not-quantitative`
+状态：`visual-screen / boundary-log / no-new-positive / validated win-rate: not-computable / not-quantitative`
 
 ## 证据头
 
-- 数据：Futu OpenD 历史 QFQ Daily 图表，收盘后读取；本轮只做第一阶段视觉筛选，没有假装获得实时行情。
+- `contract_scope: historical_context_only`
+- `review_date: 2026-08-29`
+- `data_source: Futu OpenD historical QFQ Daily`
+- `data_status: historical`
+- `as_of_time: unavailable_in_original_log`
+- `timezone: unavailable_in_original_log`
+- `session_state: historical_close_review`
+- `chart_scope: partial`
+- `timeframes_seen: Daily`
+- 数据：Futu OpenD 历史 QFQ Daily 图表，收盘后读取；本轮只做第一阶段视觉筛选，没有假装获得实时行情。原始日志没有保留查询时间和时区，因此这些数据不是 `live_confirmed`，也不能写成当前行情。
 - 目的：在 KLAC H3 正向候选之外，寻找第二个同样具有清楚第三次尝试、反向触发和第一障碍空间的独立样本。
-- 结果：本轮暂未找到足以升级为 H3/L3 正向候选的图。以下样本保留为边界，原因是它们对“不要把趋势延续/宽区间误读为 H3”有学习价值。
+- 结果：本轮暂未找到足以升级为 H3/L3 正向候选的图。以下样本保留为边界，原因是它们对“不要把趋势延续/宽区间误读为 H3”有学习价值；本日志不产生胜率分母。
+
+### 统一字段阅读
+
+以下字段是本日志后续回填时的 canonical 轴；它们是字段合同，不代表每个候选已经冻结：
+
+```text
+lineage_status: same_lineage / reset / unclear / pending
+attempt_direction: bullish_attempts / bearish_attempts / unknown
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
+first_reverse: none / touch / structural_break
+second_confirmation: yes / no / pending
+range_edge_three_push: yes / no / pending
+range_edge_side: upper / lower / none / pending
+direction: long / short / no_valid_direction
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / earnings_adjacent / event_unverified_or_pending / unknown / other_unclassified
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+gap_policy: accept_open / skip / flag_only / not_applicable
+structural_stop:
+first_independent_obstacle:
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+```
+
+本日志中 `strong-trend`、`H1-H2-like`、`provisional-H3-like`、`range-transition` 和 `event-gap-boundary` 是历史说明标签。新记录应将它们映射到上述字段：强趋势重复回调通常是 `channel_continuation` 或 `unclear`，事件/缺口通常是 `event_bucket: event_unverified_or_pending` 或 `event_driven` 加 `lineage_status: reset / pending`；不能把它们直接写成 H3/L3 正向交易。
 
 ## 1. AVGO：强趋势中的重复回调，不冻结为 H3/L3
 
