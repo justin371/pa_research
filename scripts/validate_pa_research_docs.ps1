@@ -1179,7 +1179,14 @@ $canonicalChecks = @{
         'validated win-rate: not-computable'
     )
     'docs/research_to_system_handoff_CN.md' = @(
-        'no-new-positive'
+        'no-new-positive',
+        'handoff_maturity',
+        '不是统一输出合同中的 `handoff_status` 字段',
+        'canonical `handoff_status` 只允许 `research_only / not_ready / ready_for_system`',
+        '| `handoff_maturity` |',
+        'implementation_ready',
+        '说明性的 `handoff_maturity` 从 `audited` 提升到 `validated`',
+        'canonical `handoff_status` 才能进一步写 `ready_for_system`'
     )
     'research/backtesting/README.md' = @(
         'contract_scope`、`data_status`、`chart_scope` 和 `timeframes_seen` 属于上游视觉/研究记录的证据 provenance',
@@ -1206,7 +1213,9 @@ $canonicalChecks = @{
         '| 视觉候选 ID | direction | 先看什么 | 代表性入口 | 当前状态 |',
         '完整候选卡和冻结合同仍必须逐行写 canonical `direction`',
         'validated evidence（若形成）',
-        'validated win-rate: not-computable'
+        'validated win-rate: not-computable',
+        'thesis_state                 # working / failed / invalidated / replaced / pending',
+        'handoff_status               # research_only / not_ready / ready_for_system'
     )
     'research/crm_bearish_abc_l1_l2_visual_candidate_2025-03-10_2025-03-28.md' = @(
         'contract_scope: historical_context_only',
@@ -1337,6 +1346,17 @@ foreach ($entry in $canonicalChecks.GetEnumerator()) {
         if (-not $content.Contains($token)) {
             Add-ValidationError "missing canonical token '$token': $($entry.Key)"
         }
+    }
+}
+
+$handoffDocPath = Join-Path -Path $repoRoot -ChildPath 'docs/research_to_system_handoff_CN.md'
+if (Test-Path -LiteralPath $handoffDocPath -PathType Leaf) {
+    $handoffDocContent = Get-Utf8Text -Path $handoffDocPath
+    if ($handoffDocContent -match '(?m)^\s*\|\s*`handoff_status`\s*\|') {
+        Add-ValidationError 'handoff maturity table must use handoff_maturity, not canonical handoff_status'
+    }
+    if ($handoffDocContent -notmatch 'canonical `handoff_status` 只允许 `research_only / not_ready / ready_for_system`') {
+        Add-ValidationError 'handoff document must state canonical handoff_status enum'
     }
 }
 

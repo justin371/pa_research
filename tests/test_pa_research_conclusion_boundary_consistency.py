@@ -132,6 +132,23 @@ class PaResearchConclusionBoundaryConsistencyTests(unittest.TestCase):
         self.assertIn("validated evidence（若形成）", inventory)
         self.assertIn("validated win-rate: not-computable", inventory)
 
+    def test_handoff_maturity_is_separate_from_canonical_handoff_status(self):
+        handoff = read(REPO_ROOT / "docs" / "research_to_system_handoff_CN.md")
+        inventory = read(REPO_ROOT / "strategy" / "pattern_inventory_candidates.md")
+        self.assertIn("交接成熟度（`handoff_maturity`）", handoff)
+        self.assertIn("不是统一输出合同中的 `handoff_status` 字段", handoff)
+        self.assertIn("research_only / not_ready / ready_for_system", handoff)
+        self.assertIn("| `handoff_maturity` |", handoff)
+        self.assertNotRegex(handoff, r"(?m)^\s*\|\s*`handoff_status`\s*\|")
+        self.assertIn(
+            "thesis_state                 # working / failed / invalidated / replaced / pending",
+            inventory,
+        )
+        self.assertIn(
+            "handoff_status               # research_only / not_ready / ready_for_system",
+            inventory,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

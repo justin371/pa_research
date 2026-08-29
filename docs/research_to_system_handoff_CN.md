@@ -45,18 +45,18 @@ Execution Agent（模拟/真实执行）
 
 Codex Trading 中已有的研究、代码和案例不在 PA Research 中整份复制；需要引用时记录来源、版本或链接，并只提炼对当前规则有用的证据。
 
-## 交接状态词汇
+## 交接成熟度词汇
 
-以下是 `handoff_status` 的成熟度词汇，避免“写进文件”被误解成“已经验证”。它不替代统一输出合同中的 `document_status`、`research_state`、`trade_state` 或 `gate_result`：
+以下是说明性的交接成熟度（`handoff_maturity`）词汇，避免“写进文件”被误解成“已经验证”。它不是统一输出合同中的 `handoff_status` 字段；canonical `handoff_status` 只允许 `research_only / not_ready / ready_for_system`。它也不替代统一输出合同中的 `document_status`、`research_state`、`trade_state` 或 `gate_result`：
 
-| `handoff_status` | 含义 | 能否进入 Codex Trading 实现 |
+| `handoff_maturity` | 含义 | 能否进入 Codex Trading 实现 |
 | --- | --- | --- |
 | `observation` | 图表上的观察，尚未形成完整规则 | 否 |
 | `hypothesis` | 有明确条件的研究假设 | 否 |
 | `replayed` | 已用历史数据按当时可见信息重放 | 否，除非完成审计 |
 | `audited` | 已检查无后见之明、订单、止损、第一障碍和事件边界 | 否，仍需跨案例 |
 | `validated` | 多个独立样本和反例支持，规则边界已可重复 | 可提出交接 |
-| `ready_for_system` | 程序员不需要再替规则做主观解释 | 可交给 Codex Trading |
+| `implementation_ready` | 程序员不需要再替规则做主观解释；对应 canonical `handoff_status: ready_for_system` | 可交给 Codex Trading |
 | `system_implemented` | 已在 Codex Trading 中实现并通过系统测试 | 不等于可实盘 |
 | `production_candidate` | 经过额外风险、模拟和用户明确授权 | 仍不自动授权真实下单 |
 
@@ -83,7 +83,7 @@ Codex Trading 中已有的研究、代码和案例不在 PA Research 中整份�
 
 ## 晋级闸门
 
-规则只有同时满足下面条件，才从 `audited` 提议晋级到 `validated` 或 `ready_for_system`：
+规则只有同时满足下面条件，才可把说明性的 `handoff_maturity` 从 `audited` 提升到 `validated`；只有再满足程序可直接执行的条件时，canonical `handoff_status` 才能进一步写 `ready_for_system`：
 
 1. 入场决定只使用触发前可见的信息；后续 MM、盈利、反转结果只能放在结果审计。
 2. A/B/C、H/L 计数、交易区间与趋势背景有明确边界；区间内的摆动不能伪装成趋势第二腿。
@@ -91,7 +91,7 @@ Codex Trading 中已有的研究、代码和案例不在 PA Research 中整份�
 4. 有正例、跳过交易和失败/反例；不能只凭一张漂亮图表晋级。
 5. 样本来自至少 3 个独立的 parent lineage；同一波行情的多周期或同一回调分支不能重复计数成独立样本。
 6. 规则能被另一位研究者按文字重放，且不会需要补充“你应该知道我的意思”。
-7. `ready_for_system` 还要求程序可以直接执行条件，不依赖视觉直觉词，例如“看起来很强”必须已经拆成可审计字段。
+7. canonical `handoff_status: ready_for_system` 还要求程序可以直接执行条件，不依赖视觉直觉词，例如“看起来很强”必须已经拆成可审计字段。
 
 即使通过 `ready_for_system`，也只代表可以在 Codex Trading 中实现和回测；不代表收益保证，也不代表允许连接真实账户。
 

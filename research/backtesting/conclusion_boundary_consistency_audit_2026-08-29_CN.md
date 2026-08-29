@@ -87,3 +87,9 @@ trade_state: not_authorized
 - `strategy/pattern_inventory_candidates.md` 与 `docs/common_context.md` 将 `validated evidence/specifications` 明确限定为未来或条件性状态，并保留当前 `validated win-rate: not-computable`。
 
 统一输出合同、日线候选卡和视觉复核卡原有的事前/事后分界、canonical 状态轴和历史别名映射未发现残留问题，因此不作无证据改写。上述修复只涉及 PA Research 文档和防回归检查，不新增样本、成交、回放结果或 engine 语义；结论仍为 `no-new-positive`。
+
+### 交接成熟度与 canonical `handoff_status` 追加复核
+
+本轮对 `docs/research_to_system_handoff_CN.md`、统一输出合同、日线候选规则、视觉复核卡和 `strategy/pattern_inventory_candidates.md` 做字段对照。发现交接规范原先把 `observation`、`hypothesis`、`replayed`、`audited`、`validated` 等说明性阶段写在名为 `handoff_status` 的表中，容易与 canonical `research_only / not_ready / ready_for_system` 混用；候选 inventory 的模板也只写了 `thesis_state / handoff_status`，没有给出枚举。
+
+现已将说明性阶段明确改为 `handoff_maturity`，把程序实现就绪阶段改称 `implementation_ready`，并说明它对应 canonical `handoff_status: ready_for_system`；inventory 模板则分别列出 `thesis_state` 与 `handoff_status` 的允许值。validator 和回归测试同时拒绝旧的 `handoff_status` 成熟度表头。该修复没有修改任何候选、CSV、样本、结果或 engine 有效语义；`no-new-positive` 与 `validated win-rate: not-computable` 保持不变，PA Research 仍不创建量化扫描器、不连接 Execution Agent。

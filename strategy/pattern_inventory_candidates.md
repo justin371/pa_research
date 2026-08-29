@@ -282,7 +282,8 @@ structural_invalidation
 event_context / sector_state / market_state / permission / gate_result
 research_state              # pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
 trade_state                 # not_authorized / conditional / valid_no_trade / observation_only / pending
-thesis_state / handoff_status
+thesis_state                 # working / failed / invalidated / replaced / pending
+handoff_status               # research_only / not_ready / ready_for_system
 outcome                     # 仅独立 replay/result 的事后字段；候选记录保持 pending，不用于授权
 ```
 
