@@ -14,7 +14,7 @@
 - [`TSLA/META 历史复盘`](reviews/2026-06-25-tsla-meta-example.md)：历史案例，不是实盘授权。
 - [`候选、视觉复核与交易日志边界一致性审计`](../research/candidate_visual_record_consistency_audit_2026-08-29_CN.md)：核对方向、候选状态、事前证据和事后路径的分轴边界。
 - [`Pattern 索引、别名与主次标签边界审计`](../research/pattern_index_alias_boundary_audit_2026-08-29_CN.md)：核对 16 个 pattern 目录入口、核心/独立层级和 canonical 主次标签边界。
-- [`Pattern 视觉复核前置证据审计`](../research/pattern_visual_preflight_audit_2026-08-29_CN.md)：核对完整图表左侧、EMA、强 A/受控 B、位置与首障碍的共同前置证据。
+- [`Pattern 视觉复核前置证据审计`](../research/pattern_visual_preflight_audit_2026-08-29_CN.md)：核对完整图表左侧、EMA、适用路径的 A/B 质量（强 A→H1/L1 优先；区间边缘三推不要求强 A）、位置与首障碍的共同前置证据。
 - [`Pattern 案例入口与状态一致性审计`](../research/pattern_case_entry_status_audit_2026-08-29_CN.md)：核对 16 个 pattern 的案例入口、条件/边界/no-trade 文案和状态别名。
 - [`共同视觉前置字段一致性审计`](../research/common_visual_preflight_field_consistency_audit_2026-08-29_CN.md)：统一两年 Daily 左侧、重要高低点、EMA、A/B 质量、位置/空间和 `data_status` 的字段边界。
 - [`Pattern 状态轴、字段与枚举一致性审计`](../research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md)：核对统一状态轴、字段命名和 pattern-specific 模板边界。

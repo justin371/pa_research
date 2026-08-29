@@ -129,7 +129,7 @@ H/L selection/replay 的合同数、成交状态和严格分母计数见[`H/L se
 
 先看背景和左侧，再看形态；先看第一独立障碍，再看 MM；强趋势不等于可以在趋势末端追价。统一背景见 [`docs/common_context.md`](../docs/common_context.md)，覆盖状态见 [`research/abc_pattern_coverage_audit_CN.md`](../research/abc_pattern_coverage_audit_CN.md)。
 
-16 个目录进入 pattern-specific 判断前，都先按[`PA 图表视觉复核卡`](../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点/低点、支撑阻力、前高/前低、EMA20/50/200、父级状态和第一独立障碍。对有 A/B 语义的案例核对强 A 与受控 B；独立主题只把它们作为背景对照，不强行添加 ABC/H-L 计数。涉及 H1/H2/L1/L2 时还要确认 Daily EMA20/50 与方向一致；缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`。
+16 个目录进入 pattern-specific 判断前，都先按[`PA 图表视觉复核卡`](../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），记录重要高点/低点、支撑阻力、前高/前低、EMA20/50/200、父级状态和第一独立障碍。对开放趋势 ABC/H-L、需要原趋势压力背景的 MTR 等适用路径核对 A/B 质量；强 A 优先服务 H1/L1，H2/L2 可以承接普通 A 后的第二次有意义尝试。成熟区间边缘三推是例外：A 腿可以普通或偏弱，但必须核对已确认的上沿/下沿、第三推位置、反向证据和空间；独立主题只把 A/B 作为背景对照，不强行添加 ABC/H-L 计数。涉及 H1/H2/L1/L2 时还要确认 Daily EMA20/50 与方向一致；缺少左侧、EMA 或位置/空间证据时保留 `pending`/`observation_only`。
 
 ## 核心 pattern 交叉审计
 
@@ -137,7 +137,7 @@ H/L selection/replay 的合同数、成交状态和严格分母计数见[`H/L se
 
 16 个目录的完整入口、独立主题边界和 canonical `primary_pattern`/`internal_label`/`state_transition` 映射见[`Pattern 索引、别名与主次标签边界审计`](../research/pattern_index_alias_boundary_audit_2026-08-29_CN.md)。
 
-16 个目录的两年 Daily 左侧、重要高低点、EMA20/50/200、强 A/受控 B、位置和首障碍共同前置证据见[`Pattern 视觉复核前置证据审计`](../research/pattern_visual_preflight_audit_2026-08-29_CN.md)。
+16 个目录的两年 Daily 左侧、重要高低点、EMA20/50/200、适用路径的 A/B 质量（强 A→H1/L1 优先；区间边缘三推不要求强 A）、位置和首障碍共同前置证据见[`Pattern 视觉复核前置证据审计`](../research/pattern_visual_preflight_audit_2026-08-29_CN.md)。
 
 共同视觉前置字段的 canonical 名称、批次级与逐标的覆盖边界见[`共同视觉前置字段一致性审计`](../research/common_visual_preflight_field_consistency_audit_2026-08-29_CN.md)。
 

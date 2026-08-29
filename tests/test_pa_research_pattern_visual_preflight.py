@@ -58,10 +58,26 @@ class PatternVisualPreflightTests(unittest.TestCase):
     def test_shared_index_preserves_strong_a_and_controlled_b_without_forcing_independent_counts(self):
         index = read(PATTERNS_ROOT / "README.md")
         self.assertIn("至少两年的 Daily 左侧", index)
-        self.assertIn("强 A/受控 B", index)
-        self.assertIn("独立主题只把它们作为背景对照，不强行添加 ABC/H-L 计数", index)
+        self.assertIn("强 A→H1/L1 优先", index)
+        self.assertIn("区间边缘三推不要求强 A", index)
+        self.assertIn("独立主题只把 A/B 作为背景对照，不强行添加 ABC/H-L 计数", index)
         self.assertIn("EMA20/50/200", index)
         self.assertIn("第一独立障碍", index)
+
+    def test_preflight_audit_preserves_route_specific_a_leg_exception(self):
+        report = read(AUDIT_PATH)
+        for token in (
+            "强 A→H1/L1 优先",
+            "H2/L2 可以承接普通 A",
+            "成熟区间边缘三推是明确例外",
+            "允许普通/偏弱 A",
+            "区间中部三推仍为观察",
+        ):
+            self.assertIn(token, report, token)
+        self.assertNotIn(
+            "对 ABC、H1/L1、H2/L2、BOP、MTR 和三推等含有 A/B 语义的入口，强 A 仍是优先筛选条件",
+            report,
+        )
 
     def test_audit_is_indexed_and_validator_guarded(self):
         report = read(AUDIT_PATH)

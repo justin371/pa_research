@@ -2003,7 +2003,7 @@ if (Test-Path -LiteralPath $evidenceScopeStatusAuditPath -PathType Leaf) {
 $patternVisualPreflightAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/pattern_visual_preflight_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $patternVisualPreflightAuditPath -PathType Leaf) {
     $patternVisualPreflightAuditContent = Get-Utf8Text -Path $patternVisualPreflightAuditPath
-    foreach ($token in @('daily_context_window: >=2y / <2y / unavailable', 'major_highs', 'major_lows', 'daily_ema20_50_200', 'A_quality: strong', 'B_quality: controlled', 'first_independent_obstacle', 'no-new-positive', 'validated win-rate: not-computable', 'PA Research only', 'no Codex Trading', 'no quantitative scanner', 'no Execution Agent')) {
+    foreach ($token in @('daily_context_window: >=2y / <2y / unavailable', 'major_highs', 'major_lows', 'daily_ema20_50_200', 'A_quality: strong', 'B_quality: controlled', 'first_independent_obstacle', '强 A→H1/L1 优先', 'H2/L2 可以承接普通 A', '成熟区间边缘三推是明确例外', '允许普通/偏弱 A', '区间中部三推仍为观察', 'no-new-positive', 'validated win-rate: not-computable', 'PA Research only', 'no Codex Trading', 'no quantitative scanner', 'no Execution Agent')) {
         if (-not $patternVisualPreflightAuditContent.Contains($token)) {
             Add-ValidationError "missing pattern-visual-preflight-audit token '$token'"
         }

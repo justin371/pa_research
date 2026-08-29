@@ -16,7 +16,7 @@
 - [`候选、视觉复核与交易日志边界一致性审计（2026-08-29）`](candidate_visual_record_consistency_audit_2026-08-29_CN.md)：核对选择记录的方向汇总、冻结前/回放后状态、两年 Daily/EMA/A-B/空间字段、ROST 视觉 provenance 和历史三推笔记；不新增样本或结果；
 - [`统一输出、视觉字段与状态轴审计（2026-08-29）`](unified_output_state_axis_audit_2026-08-29_CN.md)：区分文档成熟度与案例状态，补齐历史摘要的 `gate_result`，统一 BOP/H3-L3 的方向、lineage、事件、空间和多周期字段；不新增样本或结果；
 - [`Pattern 索引、别名与主次标签边界审计（2026-08-29）`](pattern_index_alias_boundary_audit_2026-08-29_CN.md)：逐项核对 16 个目录、核心/独立层级、canonical `primary_pattern`/`internal_label`/`state_transition` 与本地入口；不新增样本或结果；
-- [`Pattern 视觉复核前置证据审计（2026-08-29）`](pattern_visual_preflight_audit_2026-08-29_CN.md)：核对 16 个目录是否先看两年 Daily 左侧、重要高低点、EMA20/50/200、强 A/受控 B、位置和首障碍；不新增样本或结果；
+- [`Pattern 视觉复核前置证据审计（2026-08-29）`](pattern_visual_preflight_audit_2026-08-29_CN.md)：核对 16 个目录是否先看两年 Daily 左侧、重要高低点、EMA20/50/200、适用路径的 A/B 质量（强 A→H1/L1 优先；区间边缘三推不要求强 A）、位置和首障碍；不新增样本或结果；
 - [`Pattern 案例入口与状态一致性审计（2026-08-29）`](pattern_case_entry_status_audit_2026-08-29_CN.md)：核对 16 个目录的案例链接、条件/边界/no-trade 文案和 `valid_no_trade`/`no-new-positive` 状态；不新增样本或结果；
 - [`共同视觉前置字段一致性审计（2026-08-29）`](common_visual_preflight_field_consistency_audit_2026-08-29_CN.md)：统一两年 Daily 左侧、重要高低点、EMA、A/B 质量、位置/空间、方向和 `data_status` 的 canonical 字段；不新增样本或结果；
 - [`Pattern 状态轴、字段与枚举一致性审计（2026-08-29）`](pattern_state_axis_field_enum_audit_2026-08-29_CN.md)：核对 16 个目录、统一输出合同和视觉复核卡的字段命名、状态轴与 pattern-specific 边界；不新增样本或结果；
