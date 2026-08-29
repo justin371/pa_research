@@ -30,6 +30,10 @@
 
 冻结时历史几何空间只是由合同价格字段计算的审计值：多头为 `(第一障碍 - 触发价) / 结构风险`，空头为 `(触发价 - 第一障碍) / 结构风险`。5 条达到 `>=1R`、32 条低于 `1R`；这里的 `>=1R/<1R` 是历史几何分组，不是当前 CSV `space_status` 的 `strict_ge_1R` 或 `borderline_ge_1R`。本批旧 CSV 没有显式 `pre_entry_space_R/space_status`，所以当前 engine 对 37 条合同都只能给出 `unknown_contract_space`。32 条低于 `1R` 的合同仍可用于路径审计，但不能进入当前严格的“可入场机会”判断；`H1/H2/L1/L2` 的 EMA 闸门失败行只保留为 `observation_only`，不进入胜率分母。
 
+### 结构化字段覆盖边界
+
+本批 37 条旧 CSV 虽然在人工报告中描述了方向、两年 Daily、高低点、EMA 和局部 A/B，但没有结构化 `a_leg_quality`、`b_leg_class`、`pre_entry_space_R`、`space_status` 或 `contract_state`。因此“人工看过 A/B”不等于当前 canonical 合同字段完整；它们继续按历史/描述性合同和 `unknown_contract_space` 处理，不能从文字、回放结果或后验走势补写。下一批若要成为字段完整的当前候选，必须在结果发生前一次性冻结这些字段。
+
 ## 三个标的的人工复核分组
 
 | 标的 | 局部结构和合同日期 | 冻结前人工判断 |

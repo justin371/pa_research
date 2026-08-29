@@ -1,6 +1,6 @@
 # PA Research 候选、视觉复核与交易日志边界一致性审计（2026-08-29）
 
-结论：本轮只审计 PA Research 内的日线候选/冻结前选择记录、视觉复核索引、统一输出字段、策略候选目录和历史交易日志入口，没有下载行情、调用 Futu/OpenD、运行正式回放或新增样本。发现并修正了四类记录边界问题：部分选择报告没有显式汇总多空方向、`hl_next5` 把回放结果写进 `frozen_pre_outcome` 摘要、`hl_next4` 的 ROST 视觉 provenance 缺口没有在冻结状态旁单独强调，以及 TSLA/META 历史笔记缺少统一输出状态轴。修正后，形态、入场前证据、交易状态和事后路径保持分轴；结论保持 `no-new-positive`，`validated win-rate: not-computable`。
+结论：本轮只审计 PA Research 内的日线候选/冻结前选择记录、视觉复核索引、统一输出字段、策略候选目录和历史交易日志入口，没有下载行情、调用 Futu/OpenD、运行正式回放或新增样本。先前四类记录边界问题已保持修正；本轮追加修正了视觉候选目录缺少独立方向列、少数状态别名不规范，以及两批旧合同把人工 A/B 描述与 canonical 结构化字段完整度混在一起的歧义。修正后，形态、入场前证据、交易状态和事后路径保持分轴；结论保持 `no-new-positive`，`validated win-rate: not-computable`。
 
 ## 一、范围和判定方法
 
@@ -77,7 +77,21 @@
 
 本轮没有把外部 PNG 复制进仓库，没有新增交易样本，没有改 Pattern 规则或 `backtesting.py` engine 有效语义。
 
-## 五、结论
+## 五、追加字段覆盖与索引修复
+
+### 1. 视觉候选目录的方向轴
+
+原视觉候选表有 89 行，但方向主要藏在 `BULL`/`BEAR` ID、中文描述或 H/L 标签中；混合 universe、framework、状态转换和没有单一方向的行没有可直接读取的值。现已给表增加 canonical `direction` 列：单一研究方向保留 `long` 或 `short`，混合/框架/状态未冻结行明确写 `no_valid_direction`。这只是索引层研究方向，不是入场、成交或授权；完整候选卡和冻结合同仍必须逐标的填写方向。
+
+同时把该索引内的 `research_positive conditional`、`valid no-trade` 和 `research_positive_candidate` 统一为当前状态轴的 `research_positive_conditional`、`valid_no_trade` 和 `research_positive_conditional`。其他历史汇总中的旧别名仅在明确的“历史说明别名”上下文中保留，不把历史叙述强行改写成新的结果或合同。
+
+### 2. 旧合同的 A/B 与空间字段边界
+
+现有 60 条冻结 H/L 合同仍是核心字段完整；其中 50 条旧合同没有 `a_leg_quality`、`b_leg_class`、`pre_entry_space_R`、`space_status`、`contract_state` 这组较新的结构化字段。`hl_large_selection` 的 37 条和 `hl_next_selection` 的 5 条现已明确写出这一点：报告中的人工 A/B、空间和两年背景复核不能当作 CSV 已经拥有同名 canonical 字段，也不能由结果倒推补齐。最新详细批次继续要求在结果发生前一次性冻结这些字段；旧 CSV 不回填。
+
+25 条 ABC/BOP intake 仍全部为 `contract_frozen=no`，方向和缺失字段有记录但不进入回放分母；不存在实际 `journal/`、交易日志或券商成交记录。
+
+## 六、结论
 
 修正后，PA Research 的记录链为：
 

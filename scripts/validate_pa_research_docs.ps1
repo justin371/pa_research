@@ -1130,7 +1130,9 @@ $canonicalChecks = @{
         'timeframes_seen',
         'data_status: historical / delayed / live_confirmed / incomplete',
         'chart_scope: full / partial / unavailable',
-        'daily_context_window: >=2y / <2y / unavailable'
+        'daily_context_window: >=2y / <2y / unavailable',
+        '| 视觉候选 ID | direction | 先看什么 | 代表性入口 | 当前状态 |',
+        '完整候选卡和冻结合同仍必须逐行写 canonical `direction`'
     )
 }
 foreach ($entry in $canonicalChecks.GetEnumerator()) {
@@ -2751,6 +2753,30 @@ foreach ($file in $selectionMarkdownFiles) {
     }
     if ($content -match $selectionOutcomeTablePattern) {
         Add-ValidationError "post-outcome table leaked into selection record: $relativePath"
+    }
+}
+
+$candidateInventoryPath = Join-Path -Path $repoRoot -ChildPath 'strategy/pattern_inventory_candidates.md'
+if (Test-Path -LiteralPath $candidateInventoryPath -PathType Leaf) {
+    $candidateInventory = Get-Utf8Text -Path $candidateInventoryPath
+    foreach ($legacyAlias in @('research_positive conditional', 'valid no-trade', 'research_positive_candidate')) {
+        if ($candidateInventory.Contains($legacyAlias)) {
+            Add-ValidationError "non-canonical status alias in candidate inventory: $legacyAlias"
+        }
+    }
+    $candidateRows = @($candidateInventory -split '\r?\n' | Where-Object { $_ -match '^\| `VIS-' })
+    if ($candidateRows.Count -eq 0) {
+        Add-ValidationError 'candidate inventory has no visual candidate rows'
+    }
+    foreach ($candidateRow in $candidateRows) {
+        $cells = @($candidateRow.Trim('|').Split('|') | ForEach-Object { $_.Trim() })
+        if ($cells.Count -ne 5) {
+            Add-ValidationError "candidate inventory direction table must have five columns: $candidateRow"
+            continue
+        }
+        if ($cells[1] -notin @('long', 'short', 'no_valid_direction')) {
+            Add-ValidationError "candidate inventory row has invalid direction '$($cells[1])': $candidateRow"
+        }
     }
 }
 

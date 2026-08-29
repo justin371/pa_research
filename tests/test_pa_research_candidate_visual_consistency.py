@@ -157,6 +157,81 @@ class CandidateVisualConsistencyTests(unittest.TestCase):
         self.assertIn("目录标签，不是统一输出合同中的单一 `research_state`", inventory)
         self.assertIn("process-target-reached", inventory)
 
+    def test_visual_inventory_has_explicit_canonical_direction_for_every_row(self):
+        inventory = (REPO_ROOT / "strategy" / "pattern_inventory_candidates.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(
+            "| 视觉候选 ID | direction | 先看什么 | 代表性入口 | 当前状态 |",
+            inventory,
+        )
+        rows = [
+            line
+            for line in inventory.splitlines()
+            if line.startswith("| `VIS-")
+        ]
+        self.assertGreaterEqual(len(rows), 80)
+        allowed_directions = {"long", "short", "no_valid_direction"}
+        for row in rows:
+            cells = [cell.strip() for cell in row.strip("|").split("|")]
+            with self.subTest(candidate=row.split("|")[1].strip()):
+                self.assertEqual(len(cells), 5)
+                self.assertIn(cells[1], allowed_directions)
+        self.assertIn(
+            "完整候选卡和冻结合同仍必须逐行写 canonical `direction`",
+            inventory,
+        )
+        self.assertNotIn("research_positive conditional", inventory)
+        self.assertNotIn("valid no-trade", inventory)
+        self.assertNotIn("research_positive_candidate", inventory)
+        expected_direction = {
+            "VIS-ABC-BULL-H2-REPEATED-SUPPORT": "long",
+            "VIS-ABC-BEAR-L2-EARLY-TRIGGER": "short",
+            "VIS-H3-L3-SECOND-PUSH-EXPANSION": "no_valid_direction",
+            "VIS-ABC-BULL-GROWTH-UNIVERSE-2024Q3": "no_valid_direction",
+            "VIS-MTR-TSLA-RANGE-TOP-L2": "short",
+        }
+        by_id = {
+            row.split("|")[1].strip().strip("`"): row.split("|")[2].strip()
+            for row in rows
+        }
+        self.assertEqual(
+            {candidate: by_id[candidate] for candidate in expected_direction},
+            expected_direction,
+        )
+
+    def test_legacy_selection_batches_disclose_structured_field_boundary(self):
+        for filename, count in (
+            ("hl_large_selection_2026-08-27_CN.md", "37 条旧 CSV"),
+            ("hl_next_selection_2026-08-27_CN.md", "5 条旧 CSV"),
+        ):
+            content = (BACKTEST_ROOT / filename).read_text(encoding="utf-8")
+            with self.subTest(selection=filename):
+                self.assertIn("结构化字段覆盖边界", content)
+                self.assertIn(count, content)
+                for field in (
+                    "a_leg_quality",
+                    "b_leg_class",
+                    "pre_entry_space_R",
+                    "space_status",
+                    "contract_state",
+                ):
+                    self.assertIn(field, content)
+                self.assertTrue(
+                    "不能由历史几何或回放结果补齐" in content
+                    or "不能从文字、回放结果或后验走势补写" in content
+                )
+
+    def test_klac_case_exposes_direction_and_canonical_status(self):
+        content = (
+            REPO_ROOT
+            / "research"
+            / "klac_h3_bear_flag_case_2025-03-12_2025-03-28.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("方向：`short`（研究方向；不是交易授权）", content)
+        self.assertIn("research_positive_conditional", content)
+        self.assertNotIn("research_positive_candidate", content)
+
     def test_tsla_meta_note_is_observation_only(self):
         text = (
             REPO_ROOT / "strategy" / "reviews" / "2026-06-25-tsla-meta-example.md"
@@ -182,6 +257,8 @@ class CandidateVisualConsistencyTests(unittest.TestCase):
         self.assertIn("pattern_like", report)
         self.assertIn("candidate_pending", report)
         self.assertIn("valid_no_trade", report)
+        self.assertIn("视觉候选目录缺少独立方向列", report)
+        self.assertIn("50 条旧合同没有", report)
 
         research_readme = (REPO_ROOT / "research" / "README.md").read_text(encoding="utf-8")
         strategy_readme = (REPO_ROOT / "strategy" / "README.md").read_text(encoding="utf-8")

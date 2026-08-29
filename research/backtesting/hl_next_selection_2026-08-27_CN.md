@@ -25,6 +25,10 @@
 
 空间按多头 `(first_obstacle - entry_trigger) / (entry_trigger - structural_stop)`、空头 `(entry_trigger - first_obstacle) / (structural_stop - entry_trigger)` 计算。按冻结时合同中的触发、止损和第一障碍得到的历史几何均为 `>=1R`，但本批旧 CSV 没有显式 `pre_entry_space_R/space_status`；因此这些数值不是当前 engine 可审计的 strict-space 字段，当前 `contract_space_bucket` 仍须保留为 `unknown_contract_space`。
 
+### 结构化字段覆盖边界
+
+本批 5 条旧 CSV 虽然逐行写了方向、两年 Daily、高低点、EMA、A/B、触发、止损和第一障碍，但没有结构化 `a_leg_quality`、`b_leg_class`、`pre_entry_space_R`、`space_status` 或 `contract_state`。人工描述字段与 canonical 合同字段不是同一层；这些行保持历史/描述性状态，不能由历史几何或回放结果补齐当前字段。
+
 | 合同 | 方向 / 标签 | 决策日 | 触发 | 止损 | 第一障碍 | 冻结时历史几何空间（未写入显式 CSV 字段） | A/B 与位置判断 |
 | --- | --- | --- | ---: | ---: | ---: | ---: | --- |
 | ZS 2021-07-19 | long / H1 | 2021-07-19 | 223.56 | 217.30 | 236.46 | 2.06R | 强上涨腿；回调回到向上的 EMA20/前期支撑；B 后段有较大阴线，记为可交易但非完美小 B |
