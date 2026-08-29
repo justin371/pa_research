@@ -80,6 +80,8 @@ research_state / trade_state / thesis_state / handoff_status
 main_uncertainty_or_exclusion / failure_or_no_trade_reason
 ```
 
+选择报告、候选卡和视觉记录只保存入场前证据；成交、退出、胜负、胜率和 `realized_R` 只能出现在独立 replay/result 记录中。结果不能反向改写 pattern、方向、lineage、触发、结构止损、首障碍或空间字段。逐文件复核见[`选择记录与回放结果证据边界审计`](../research/backtesting/pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md)。
+
 ### Pattern-specific shorthand 与 canonical 几何
 
 各目录的最小视觉协议只补 pattern-specific 信息；其中的 `location`、`location_and_left_structure`、`major_location`、`prior_boundary`、`space`、`trigger`、`target_path` 和 `first_magnet` 等短字段是人读的差异字段，不是统一合同的新枚举。完整记录必须回填统一字段：

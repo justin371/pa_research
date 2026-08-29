@@ -26,6 +26,7 @@
 - [`人工冻结合同覆盖审计（2026-08-28）`](backtesting/contract_coverage_audit_2026-08-28_CN.md)：统计现有 H/L 合同的方向、标签、事件、空间和 lineage 覆盖，不把它解释为胜率；
 - [`冻结合同字段覆盖与分层完整性审计（2026-08-29）`](backtesting/frozen_contract_field_partition_audit_2026-08-29_CN.md)：逐文件核对方向、Pattern/内部标签、EMA gate、事件、空间、合同状态和 lineage；旧合同缺失字段不回填，继续隔离 ABC/BOP/H3/L3；
 - [`事前证据与结果证据隔离审计（2026-08-29）`](backtesting/pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md)：确认事件、空间和 EMA 资格只能来自入场前合同，回放结果不得反向改写派生分层或胜率分母；记录 mismatch 防护与 `no-new-positive`；
+- [`选择记录与回放结果证据边界审计（2026-08-29）`](backtesting/pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md)：逐文件核对选择报告、候选卡、视觉记录、冻结合同和 replay/result 记录的 pre-entry/post-outcome 分界；修复 `hl_next3` 选择报告中混入的空结果汇总，不新增样本或结果；
 - [`旧结果事前 provenance 完整性审计（2026-08-29）`](backtesting/legacy_result_provenance_completeness_audit_2026-08-29_CN.md)：为缺少合同、事件或 H/L EMA gate 的旧/最小结果建立 `pre_entry_provenance_status`，缺证据行只保留描述性记录，不进入完成交易分母；
 - [`回放 artifact schema round-trip 审计（2026-08-29）`](backtesting/artifact_schema_roundtrip_audit_2026-08-29_CN.md)：核对 `results.csv → summary.json → run_metadata.json` 的 provenance/mismatch 链路和旧 metadata 的历史状态；当前运行必须保留 `summary_provenance`，不把旧 artifact 或重复回放当成新样本；
 - [`回放 artifact 全仓库 inventory 审计（2026-08-29）`](backtesting/artifact_inventory_audit_2026-08-29_CN.md)：确认当前 checkout 没有持久化回放三件套，区分合同/价格输入与结果 artifact，避免缺文件或旧 metadata 进入统计分母；

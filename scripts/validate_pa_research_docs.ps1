@@ -168,6 +168,7 @@ $requiredFiles = @(
     'research/backtesting/replay_provenance_reproducibility_audit_2026-08-29_CN.md',
     'research/backtesting/frozen_contract_field_partition_audit_2026-08-29_CN.md',
     'research/backtesting/pre_entry_result_evidence_isolation_audit_2026-08-29_CN.md',
+    'research/backtesting/pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md',
     'research/backtesting/legacy_result_provenance_completeness_audit_2026-08-29_CN.md',
     'research/backtesting/artifact_schema_roundtrip_audit_2026-08-29_CN.md',
     'research/backtesting/validator_engine_contract_parity_audit_2026-08-29_CN.md',
@@ -394,7 +395,9 @@ $canonicalChecks = @{
     )
     'research/backtesting/README.md' = @(
         'contract_scope`、`data_status`、`chart_scope` 和 `timeframes_seen` 属于上游视觉/研究记录的证据 provenance',
-        'daily_context_window` 不是“CSV 有两年价格”这一事实的别名'
+        'daily_context_window` 不是“CSV 有两年价格”这一事实的别名',
+        '`*_selection_*.md`、候选卡和视觉资产 README 属于入场前记录',
+        '结果不得反向改写入场前字段'
     )
     'strategy/pattern_inventory_candidates.md' = @(
         'timeframes_seen',
@@ -797,6 +800,29 @@ if (Test-Path -LiteralPath $preEntryResultIsolationAuditPath -PathType Leaf) {
     }
 }
 
+$preEntryPostOutcomeBoundaryAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $preEntryPostOutcomeBoundaryAuditPath -PathType Leaf) {
+    $preEntryPostOutcomeBoundaryAuditContent = Get-Utf8Text -Path $preEntryPostOutcomeBoundaryAuditPath
+    foreach ($token in @(
+        '6 份 `research/backtesting/*_selection_*.md`',
+        'signal_bar / new_trigger',
+        'structural_invalidation / structural_stop',
+        'first_independent_obstacle / space_status',
+        'event_context / lineage_id',
+        'frozen_pre_outcome',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
+    )) {
+        if (-not $preEntryPostOutcomeBoundaryAuditContent.Contains($token)) {
+            Add-ValidationError "missing pre-entry/post-outcome boundary-audit token '$token'"
+        }
+    }
+}
+
 $legacyResultProvenanceAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/legacy_result_provenance_completeness_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $legacyResultProvenanceAuditPath -PathType Leaf) {
     $legacyResultProvenanceAuditContent = Get-Utf8Text -Path $legacyResultProvenanceAuditPath
@@ -1018,6 +1044,12 @@ $allowedContractStates = @('', 'frozen_pre_outcome')
 $allowedOrderBranches = @('stop_confirmation', 'limit_retest', 'market_close')
 $allowedGapPolicies = @('accept_open', 'skip', 'flag_only', 'not_applicable')
 $allowedMetaConfluence = @('present', 'absent', 'unknown')
+$postOutcomeColumns = @(
+    'entry_price', 'entry_date', 'exit_price', 'exit_date', 'exit_reason',
+    'bars_held', 'fill_status', 'trade_result', 'realized_R', 'win_rate_eligible',
+    'path_result', 'first_obstacle_hit', 'ambiguous_intrabar', 'gap_adjustment',
+    'evidence_status'
+)
 $requiredFrozenContractColumns = @(
     'sample_id', 'symbol', 'decision_date', 'direction', 'primary_pattern',
     'internal_label', 'order_branch', 'entry_trigger', 'structural_stop',
@@ -1039,6 +1071,9 @@ foreach ($file in $frozenContractFiles) {
         continue
     }
     $columnNames = @($rows[0].PSObject.Properties.Name)
+    foreach ($column in @($columnNames | Where-Object { $_ -in $postOutcomeColumns })) {
+        Add-ValidationError "post-outcome column is not allowed in frozen contract CSV: $($file.Name) / $column"
+    }
     $missingColumns = @($requiredFrozenContractColumns | Where-Object { $_ -notin $columnNames })
     foreach ($column in $missingColumns) {
         if ($column -notin $columnNames) {
@@ -1313,6 +1348,26 @@ foreach ($duplicate in @($frozenContractRecords | Group-Object sample_id_key | W
 }
 foreach ($duplicate in @($frozenContractRecords | Where-Object { $_.lineage_id } | Group-Object contract_family_key | Where-Object { $_.Count -gt 1 })) {
     Add-ValidationError "duplicate frozen contract family across contract CSVs: $($duplicate.Name)"
+}
+
+$selectionMarkdownFiles = @(Get-ChildItem -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'research/backtesting') -File -Filter '*_selection_*.md')
+$selectionPostOutcomeFieldPattern = '(?im)^\s*(?:entry_price|entry_date|exit_price|exit_date|exit_reason|bars_held|fill_status|trade_result|realized_R|win_rate_eligible|path_result|first_obstacle_hit|ambiguous_intrabar|gap_adjustment|evidence_status)\s*:'
+$selectionOutcomeTablePattern = '(?im)^\s*\|[^\r\n]*(?:完成成交|是否成交|胜负|胜率)[^\r\n]*实现\s*R[^\r\n]*\|'
+foreach ($file in $selectionMarkdownFiles) {
+    $relativePath = $file.FullName.Substring($repoRoot.Length + 1)
+    $content = Get-Utf8Text -Path $file.FullName
+    if ($content -notmatch '(?i)frozen_pre_outcome') {
+        Add-ValidationError "selection record missing frozen_pre_outcome status: $relativePath"
+    }
+    if ($content -match $selectionPostOutcomeFieldPattern) {
+        Add-ValidationError "post-outcome field leaked into selection record: $relativePath"
+    }
+    if ($content -match '(?im)^\s*##\s+回放与统计状态\s*$') {
+        Add-ValidationError "replay result section leaked into selection record: $relativePath"
+    }
+    if ($content -match $selectionOutcomeTablePattern) {
+        Add-ValidationError "post-outcome table leaked into selection record: $relativePath"
+    }
 }
 
 $activeRoots = @('docs', 'foundations', 'patterns', 'strategy') | ForEach-Object {

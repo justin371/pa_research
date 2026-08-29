@@ -57,6 +57,10 @@ major_high_low_review,ema20_50_200_review,event_context,contract_frozen,lineage_
 
 `market_context_id` 是可选的人工依赖标识，不是扫描器推断的市场状态。缺失时仍可回放逐行结果，但不能据此宣称跨标的市场环境独立。
 
+### 选择记录与结果记录的边界
+
+`*_selection_*.md`、候选卡和视觉资产 README 属于入场前记录：可以冻结 `direction`、`primary_pattern`/`internal_label`、`signal_bar`、`new_trigger`、`structural_invalidation`、`structural_stop`、`first_independent_obstacle`、`space_status`、`event_context` 和 `lineage_id`，但不能写入实际成交、退出、胜负、完成成交数、胜率或 `realized_R`。这些事后字段只属于独立 replay/result 记录；结果不得反向改写入场前字段。该边界的逐文件复核见[`选择记录与回放结果证据边界审计`](pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md)。
+
 ### 研究记录与回放输入的边界
 
 统一输出合同和视觉复核卡为了保留边界案例，允许比当前回放器更宽的记录状态。当前 engine `0.3.9` 的回放输入边界如下，必须在冻结合同时显式收敛：
