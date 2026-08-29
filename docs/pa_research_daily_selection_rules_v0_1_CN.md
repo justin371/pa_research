@@ -325,6 +325,8 @@ main_uncertainty_or_exclusion:
 
 这里的输出模板是日线研究记录，不是回放输入 CSV。日线候选的顶层 `primary_pattern` 只使用 `ABC_CONT` 或 `BOP`；H1/H2/L1/L2/H3/L3 是 `internal_label`，其他关系写入 `secondary_context`。`direction=no_valid_direction`、`order_branch=stop_limit/observation_only`、区域文字或 `pending/unknown` 只能保留为研究状态。只有冻结为 `contract_frozen=yes`，并把方向、价格字段和订单分支收敛到当前回放器支持的 `long/short`、有限数值价格以及 `stop_confirmation`、`limit_retest`、`market_close` 后，才可以进入回放；不得把记录枚举静默映射成另一种订单。
 
+`a_leg_quality`、`b_leg_class`、`b_leg_location` 分别记录 A 质量、B 类别和 B 位置，必须保持字段分离。当前 canonical 值分别为 `strong / ordinary / unclear / event_driven`、`controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear` 和自由文本位置。历史合同中的 `strong_A`、`ordinary_A`、`controlled_B`、`deep_late_controlled_B` 只作为已登记别名解释，不是当前规则新增枚举；缺失字段不能从 `h_l_pullback_location`、EMA 闸门或结果回填。
+
 ## 9. 统计边界
 
 这份规则只定义选股和分层，不宣称胜率。后续结果必须至少分开统计：

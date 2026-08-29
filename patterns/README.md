@@ -80,6 +80,10 @@ research_state / trade_state / thesis_state / handoff_status
 main_uncertainty_or_exclusion / failure_or_no_trade_reason
 ```
 
+`a_leg_quality`、`b_leg_class`、`b_leg_location` 的 canonical 字段分别代表 A 质量、B 类别和 B 位置。历史 H/L 合同可能缺少这些字段，或使用已登记的旧别名：`strong_A`→`strong`、`ordinary_A`→`ordinary`、`controlled_B`→`controlled`、`deep_late_controlled_B`→`deep_but_late_controlled`。别名只用于历史解释，不改变 CSV、不进入新的胜率分母，也不能把 `h_l_pullback_location` 当作独立 B 位置或类别字段。
+
+本次 H/L A/B 质量、位置和 EMA 字段覆盖核对见[`H/L A/B 质量、位置与 EMA 字段一致性审计`](../research/backtesting/hl_leg_quality_location_axis_consistency_audit_2026-08-29_CN.md)。
+
 选择报告、候选卡和视觉记录只保存入场前证据；成交、退出、胜负、胜率和 `realized_R` 只能出现在独立 replay/result 记录中。结果不能反向改写 pattern、方向、lineage、触发、结构止损、首障碍或空间字段。逐文件复核见[`选择记录与回放结果证据边界审计`](../research/backtesting/pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md)；事件/空间/独立性字段的派生与引用复核见[`事件、空间与独立性字段引用一致性审计`](../research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md)；H/L raw `event_context` 与 canonical `event_bucket` 的显示分层见[`H/L event bucket 标签一致性审计`](../research/backtesting/event_bucket_label_consistency_audit_2026-08-29_CN.md)；`special_subtype` 与事件轴的范围边界见[`H/L special subtype 与事件轴一致性审计`](../research/backtesting/special_subtype_event_axis_consistency_audit_2026-08-29_CN.md)；H/L 报告的历史几何、显式空间状态和敏感性阈值复核见[`H/L 报告空间、版本与结论表述一致性审计`](../research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md)。
 
 ### Pattern-specific shorthand 与 canonical 几何

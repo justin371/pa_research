@@ -141,6 +141,8 @@ secondary_context:
 
 B 段要单独判断反向压力是否收缩。大实体反向推进、越过关键极值或变成宽幅双向区间时，不能机械称为“受控 B”。如果出现新母腿或越过原回调关键极值，必须说明计数是否重置。
 
+`a_leg_quality`、`b_leg_class`、`b_leg_location` 必须分开填写。当前 canonical 值分别使用 `strong / ordinary / unclear / event_driven` 和 `controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear`；历史资料若出现 `strong_A`、`ordinary_A`、`controlled_B` 或 `deep_late_controlled_B`，只能标为历史别名，不能把它们当作新枚举或用 `h_l_pullback_location` 代替独立的 B 类别/位置字段。
+
 对 H1/H2/L1/L2，Daily EMA20 和 EMA50 的方向闸门与回调位置必须同时记录。均线走平、反向或不可见时，最多保留 `pattern_like / observation_only`；EMA 触碰本身不构成入场。
 
 ## 五、META 与空间：先写几何，再写结论

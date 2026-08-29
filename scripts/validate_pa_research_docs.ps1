@@ -165,6 +165,7 @@ $requiredFiles = @(
     'research/backtesting/event_space_eligibility_audit_2026-08-29_CN.md',
     'research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/special_subtype_event_axis_consistency_audit_2026-08-29_CN.md',
+    'research/backtesting/hl_leg_quality_location_axis_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/event_bucket_label_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/replay_outcome_denominator_audit_2026-08-29_CN.md',
@@ -1119,6 +1120,10 @@ $allowedPatterns = @('ABC_CONT', 'BOP', 'H1_L1', 'H2_L2', 'H3_L3', 'RFB', 'MTR',
 $allowedLabels = @('H1', 'H2', 'L1', 'L2', 'H3', 'L3', 'none', 'pending')
 $allowedEmaSlopes = @('up', 'flat', 'down', 'unknown')
 $allowedEmaGates = @('long_pass', 'short_pass', 'fail_flat_or_opposite', 'pending', 'not_applicable')
+$allowedALegQualities = @('strong', 'ordinary', 'unclear', 'event_driven')
+$legacyALegQualityAliases = @('strong_A', 'ordinary_A')
+$allowedBLegClasses = @('controlled', 'controlled_late', 'deep_but_late_controlled', 'uncontrolled', 'range_like', 'unclear')
+$legacyBLegClassAliases = @('controlled_B', 'deep_late_controlled_B')
 $allowedContractStates = @('', 'frozen_pre_outcome')
 $allowedOrderBranches = @('stop_confirmation', 'limit_retest', 'market_close')
 $allowedGapPolicies = @('accept_open', 'skip', 'flag_only', 'not_applicable')
@@ -1190,6 +1195,8 @@ foreach ($file in $frozenContractFiles) {
         $emaGate = (Get-TrimmedText $row.h_l_ema_slope_gate).ToLowerInvariant()
         $pullbackLocation = Get-TrimmedText $row.h_l_pullback_location
         $metaConfluence = (Get-TrimmedText $row.meta_confluence).ToLowerInvariant()
+        $aLegQuality = Get-TrimmedText $row.a_leg_quality
+        $bLegClass = Get-TrimmedText $row.b_leg_class
         $contractState = (Get-TrimmedText $row.contract_state).ToLowerInvariant()
 
         foreach ($column in $requiredNonEmptyFrozenContractColumns) {
@@ -1221,6 +1228,12 @@ foreach ($file in $frozenContractFiles) {
         }
         if ([string]::IsNullOrWhiteSpace($eventContext)) {
             Add-ValidationError "frozen contract row missing event_context: $($file.Name) / $sampleId"
+        }
+        if ($columnNames -contains 'a_leg_quality' -and $aLegQuality -and $aLegQuality -notin ($allowedALegQualities + $legacyALegQualityAliases)) {
+            Add-ValidationError "frozen contract row has invalid a_leg_quality (canonical or registered historical alias required): $($file.Name) / $sampleId"
+        }
+        if ($columnNames -contains 'b_leg_class' -and $bLegClass -and $bLegClass -notin ($allowedBLegClasses + $legacyBLegClassAliases)) {
+            Add-ValidationError "frozen contract row has invalid b_leg_class (canonical or registered historical alias required): $($file.Name) / $sampleId"
         }
         if ($orderBranch -notin $allowedOrderBranches) {
             Add-ValidationError "frozen contract row has invalid order_branch: $($file.Name) / $sampleId"

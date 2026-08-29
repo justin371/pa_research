@@ -13,6 +13,7 @@
 - [`事件、空间与独立性字段引用一致性审计`](../research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md)
 - [`H/L event bucket 标签一致性审计`](../research/backtesting/event_bucket_label_consistency_audit_2026-08-29_CN.md)
 - [`H/L special subtype 与事件轴一致性审计`](../research/backtesting/special_subtype_event_axis_consistency_audit_2026-08-29_CN.md)
+- [`H/L A/B 质量、位置与 EMA 字段一致性审计`](../research/backtesting/hl_leg_quality_location_axis_consistency_audit_2026-08-29_CN.md)
 - [`H/L 报告空间、版本与结论表述一致性审计`](../research/backtesting/hl_report_space_version_conclusion_consistency_audit_2026-08-29_CN.md)
 - [`PA Research → Codex Trading 研究交接规范`](research_to_system_handoff_CN.md)
 - [`冻结合同回放器（backtesting.py）`](../research/backtesting/README.md)

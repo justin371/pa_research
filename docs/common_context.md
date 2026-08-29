@@ -41,6 +41,8 @@ first_independent_obstacle:
 
 `data_status`、时间戳和 `chart_scope` 描述证据是否可用，不能用局部图或后续走势补写缺失的两年背景。批次级 `two_year_chart_coverage` 只是覆盖摘要；逐标的仍必须填写 `daily_context_window` 和两个 review 完整度字段。独立主题可以把强 A/受控 B 作为背景对照，但不因此继承 ABC/H-L 计数。
 
+`a_leg_quality`、`b_leg_class`、`b_leg_location` 分别记录 A 质量、B 类别和 B 所在位置。历史合同中的 `strong_A`/`ordinary_A`、`controlled_B`/`deep_late_controlled_B` 只能按已登记的历史别名理解，不能写回 canonical 字段或把位置文本当作 B 类别；缺字段就保留缺失，不从后续结果推断。
+
 ### Entry geometry and state boundary
 
 所有 pattern 的入场几何都按同一顺序审查：`structural_invalidation` → `structural_stop` → 方向上最近的 `first_independent_obstacle` → `pre_entry_space_R`/`space_status` → `rough_R_R` 和目标层。不能用更远的 measured move、区间另一侧或后续结果跳过首障碍；区域文字、`pending` 或 `unknown` 也不能冒充冻结的数值合同。
