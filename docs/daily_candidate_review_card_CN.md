@@ -241,4 +241,4 @@ event_or_gap_cases:
 - 不从图表自动生成股票池，不替代人工看图；
 - 不把 `pattern_like`、描述性胜率或单个成功案例写成已验证规则；
 - 不修改 Codex Trading，不创建量化扫描器，不连接 Execution Agent；
-- 当前整体研究结论仍由相关审计文件维护，若样本不足应保留 `no-new-positive` 和 `win_rate: not-computable`。
+- 当前整体研究结论仍由相关审计文件维护，若样本不足应保留 `no-new-positive` 和 `validated win-rate: not-computable`。

@@ -220,6 +220,7 @@ $requiredFiles = @(
     'research/backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md',
     'research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md',
     'research/backtesting/required_report_index_coverage_audit_2026-08-29_CN.md',
+    'research/backtesting/conclusion_boundary_consistency_audit_2026-08-29_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_manifest_2026-08-29.json',
@@ -323,6 +324,23 @@ $canonicalChecks = @{
         'gap_policy: accept_open / skip / flag_only / not_applicable',
         'gate_result:',
         'contract_scope:'
+    )
+    'research/backtesting/contract_coverage_audit_2026-08-28_CN.md' = @(
+        'validated win-rate: not-computable',
+        'conclusion: no-new-positive',
+        '本文件只属于 PA Research',
+        '不创建量化扫描器',
+        '不连接 Execution Agent'
+    )
+    'research/backtesting/conclusion_boundary_consistency_audit_2026-08-29_CN.md' = @(
+        'validated win-rate: not-computable',
+        'conclusion: no-new-positive',
+        'win_rate_eligible',
+        'research_positive_conditional',
+        'ready_for_system',
+        '不修改 Codex Trading',
+        '不创建量化扫描器',
+        '不连接 Execution Agent'
     )
     'docs/pa_research_daily_selection_rules_v0_1_CN.md' = @(
         'completed_bar_as_of:',
@@ -1108,6 +1126,27 @@ foreach ($entry in $canonicalChecks.GetEnumerator()) {
     foreach ($token in $entry.Value) {
         if (-not $content.Contains($token)) {
             Add-ValidationError "missing canonical token '$token': $($entry.Key)"
+        }
+    }
+}
+
+$legacyConclusionStatusPatterns = @(
+    '(?m)^\s*validated_win_rate\s*:',
+    '(?m)^\s*win_rate\s*:\s*not-computable\s*$'
+)
+$legacyConclusionMarkdownPaths = @(
+    Get-ChildItem -LiteralPath $repoRoot -File -Filter '*.md' -ErrorAction SilentlyContinue
+    Get-ChildItem -LiteralPath (Join-Path $repoRoot 'docs') -Recurse -File -Filter '*.md' -ErrorAction SilentlyContinue
+    Get-ChildItem -LiteralPath (Join-Path $repoRoot 'research') -Recurse -File -Filter '*.md' -ErrorAction SilentlyContinue
+    Get-ChildItem -LiteralPath (Join-Path $repoRoot 'strategy') -Recurse -File -Filter '*.md' -ErrorAction SilentlyContinue
+)
+foreach ($markdownPath in @($legacyConclusionMarkdownPaths | Sort-Object FullName -Unique)) {
+    $content = Get-Utf8Text -Path $markdownPath.FullName
+    foreach ($pattern in $legacyConclusionStatusPatterns) {
+        if ($content -match $pattern) {
+            $relativePath = $markdownPath.FullName.Substring($repoRoot.Length + 1).Replace('\', '/')
+            Add-ValidationError "legacy non-canonical conclusion status: $relativePath"
+            break
         }
     }
 }

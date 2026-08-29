@@ -207,7 +207,7 @@ Round5 使用 `cohr-revised-20260814/bars.json` 的 `COHR`、`SPY`、`QQQ`、`IW
 ```text
 abc_hl_stratification: established-for-research
 fully_comparable_trade_samples: 0 under the unified outcome schema
-win_rate: not-computable
+validated win-rate: not-computable
 realized_R_distribution: not-computable
 priority_geometry_strata: ABC+L1 no-gap space-positive; ABC+H2 late-stabilized low-cycle
 supplemental_cases_reviewed: 5

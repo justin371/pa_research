@@ -94,7 +94,7 @@
 
 ```text
 document_maturity: provisional
-validated_win_rate: not-computable
+validated win-rate: not-computable
 conclusion: no-new-positive
 ```
 
