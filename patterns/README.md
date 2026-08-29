@@ -205,6 +205,8 @@ Round5 两年 Daily 左侧背景练习见[`Round5 两年 Daily 左侧背景与 A
 
 视觉识别冒烟、快筛协议与 Round2/Round3 资产的字段映射和配对 provenance 见[`视觉识别冒烟、快筛协议与 Round2/Round3 资产 canonical 边界审计`](../research/backtesting/visual_recognition_canonical_boundary_audit_2026-08-29_CN.md)：历史展示标签不冒充 `primary_pattern`/`internal_label`，局部图不替代两年 Daily，`no-new-positive` 保持不变。
 
+Round4、Round5 与 TSLA 视觉资产的 provenance、两年 Daily、重要高低点、EMA 和多周期职责见[`Round4、Round5 与 TSLA 视觉资产 canonical 边界审计`](../research/backtesting/visual_asset_canonical_boundary_audit_2026-08-29_CN.md)：短窗口、未标注资产和配对复核均不自动冻结 pattern、订单或统计结果。
+
 优先 Pattern 的代表性视觉候选与正/反例矩阵见[`优先 Pattern 代表性视觉候选矩阵`](../research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)：每个案例只保留一个主标签，次标签、状态切换、订单合同和首障碍单独记录。
 
 BOP 真实多日回踩的专项审计见[`BOP 真实多日回踩候选审计`](../research/bop_multiday_pullback_candidate_audit_2026-08-24_CN.md)：当前区分了状态切换、同日回测、缺口重订和真正缺失的多日回踩正例。

@@ -75,6 +75,7 @@
 - [`Round5 两年 Daily 左侧背景视觉练习`](visual_recognition_round5_two_year_daily_2026-08-24_CN.md)：4 个标的、8 个历史截断案例的两年背景、重要高低点、EMA 和 H/L/三推边界。
 - [`历史视觉证据与 canonical 边界审计`](backtesting/visual_evidence_canonical_boundary_audit_2026-08-29_CN.md)：统一三推/H-L 历史显示标签、两年背景证据头、方向、订单/空间和统计隔离。
 - [`视觉识别冒烟、快筛协议与 Round2/Round3 资产 canonical 边界审计`](backtesting/visual_recognition_canonical_boundary_audit_2026-08-29_CN.md)：核对冒烟/快筛字段映射、两年 Daily/重要高低点/EMA provenance、Round2/Round3 局部资产和 `no-new-positive` 边界；不新增样本或结果。
+- [`Round4、Round5 与 TSLA 视觉资产 canonical 边界审计`](backtesting/visual_asset_canonical_boundary_audit_2026-08-29_CN.md)：补齐短窗口 Round4、两年 Daily Round5 与 TSLA 多周期资产的 canonical provenance、重要高低点/EMA、多周期职责和状态边界；不新增样本或结果。
 
 ## 冻结合同回放
 
@@ -126,4 +127,4 @@
 - [`Round5 两年 Daily 视觉练习资产`](assets/visual_recognition/2026-08-24/round5_two_year_daily/README.md)；
 - [`TSLA 多周期视觉识别资产`](assets/visual_recognition/2026-08-24/tsla_public_mtf/README.md)。
 
-Round4 的 5 个直接 MTF PNG 之前没有索引入链，现统一列在其资产 README 中；它们仍因 Daily 左侧不足两年而保持 `two_year_daily: pending`。
+Round4 的 5 个直接 MTF PNG 之前没有索引入链，现统一列在其资产 README 中；它们仍因 Daily 左侧不足两年而保持 `daily_context_window: <2y`。

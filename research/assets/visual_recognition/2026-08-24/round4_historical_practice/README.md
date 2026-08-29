@@ -2,6 +2,41 @@
 
 状态：`document_status=historical / contract_scope=historical_context_only / research_state=observation_only`
 
+## Canonical provenance boundary
+
+```text
+contract_scope: historical_context_only
+data_source: read-only historical OHLC snapshot; source material only, not PA Research authority
+data_status: historical
+as_of_time: 2026-08-10 dataset end; 2026-07-29 targeted cutoff case-specific
+timezone: unavailable_in_original_snapshot
+session_state: historical_close
+timeframes_seen: Daily / 4H / 15m (case-specific)
+chart_scope: partial
+daily_context_window: <2y
+major_high_low_review: partial
+ema20_50_200_review: partial
+daily_ema20_slope: unknown
+daily_ema50_slope: unknown
+h_l_ema_slope_gate: pending
+direction: no_valid_direction (aggregate; per-case visual direction remains descriptive)
+lineage_status: pending
+internal_label: pending
+third_push_state: unclear
+range_edge_three_push: pending
+range_edge_side: pending
+research_state: observation_only
+trade_state: observation_only
+gate_result: observation_only
+handoff_status: not_ready
+```
+
+Round4 的 `daily_context_window: <2y` 是 canonical 读取；原有的
+`two_year_daily: pending` 只能作为历史显示别名。`major_high_low_review` 和
+`ema20_50_200_review` 只覆盖现有短窗口，不能冒充用户要求的两年 Daily 左侧完整
+复核。资产未标注 `primary_pattern`、`secondary_context`、H1/H2/L1/L2、三推、
+BOP 或 MTR；这些只能在配对的历史研究记录中按证据记录。
+
 ## 用途
 
 这一轮只保存历史 OHLC 图表，用于 PA Research 的人工视觉练习。图中没有 ABC、H/L 或其它 pattern 标签；标签和结论写在研究记录中，不写回图像。
@@ -13,6 +48,8 @@
 - targeted 图在各自的历史决策日期截断；round4 选图板截断到 `2026-07-29`。不得用截断点之后的走势解释截断点的 pattern。
 - 资产生成日期：`2026-08-24`；数据窗口结束：`2026-08-10`；targeted 截止点：`2026-07-29`。
 - 原始 `h-tpb-gen-20260813` bars 不在 PA Research 资产中，因此本轮图不是对旧登记源文件的复原，而是独立的无标签历史图复核。
+
+对应的历史复核记录见[`Round4 历史图表视觉练习与 H/L/ABC 复核`](../../../../visual_recognition_round4_historical_practice_2026-08-24_CN.md)；资产本身不冻结 pattern、订单、空间或统计结论。
 
 ## 资产
 
@@ -27,4 +64,4 @@
 
 ## 缺失字段
 
-PA Research 当前视觉口径要求先看至少两年 Daily 左侧，再记录 EMA20/50/200、重要高低点、支撑阻力、母腿/尝试/lineage 和失效边界。Round4 数据集只有约一年 Daily，因此新增图统一保留 `two_year_daily: pending`；短窗口不能制造完整 lineage、H/L 计数或三推结论。
+PA Research 当前视觉口径要求先看至少两年 Daily 左侧，再记录 EMA20/50/200、重要高低点、支撑阻力、母腿/尝试/lineage 和失效边界。Round4 数据集只有约一年 Daily，因此新增图统一保留 `daily_context_window: <2y`；短窗口不能制造完整 lineage、H/L 计数或三推结论。

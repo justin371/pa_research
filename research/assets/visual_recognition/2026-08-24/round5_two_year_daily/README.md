@@ -2,6 +2,41 @@
 
 状态：`document_status=historical / contract_scope=historical_context_only / research_state=observation_only`
 
+## Canonical provenance boundary
+
+```text
+contract_scope: historical_context_only
+data_source: read-only historical OHLC snapshot; source material only, not PA Research authority
+data_status: historical
+as_of_time: per-case cutoff; query timestamp unavailable in original log
+timezone: unavailable_in_original_log
+session_state: historical_close
+timeframes_seen: Daily / 4H / 15m (case-specific)
+chart_scope: partial
+daily_context_window: >=2y
+major_high_low_review: complete in paired historical review; per-case text below
+ema20_50_200_review: complete in paired historical review; Daily EMA only
+daily_ema20_slope: unknown
+daily_ema50_slope: unknown
+h_l_ema_slope_gate: pending
+direction: no_valid_direction (aggregate; per-case visual direction is descriptive)
+lineage_status: pending
+internal_label: pending
+third_push_state: unclear
+range_edge_three_push: pending
+range_edge_side: pending
+research_state: observation_only
+trade_state: observation_only
+gate_result: observation_only
+handoff_status: not_ready
+```
+
+这组无标签资产只负责提供两年 Daily 背景和局部练习图；`primary_pattern`、
+`secondary_context`、H1/H2/L1/L2、三推、BOP、MTR、订单和空间不在资产本身冻结。
+对应的 canonical 案例摘要、历史别名映射和 `no-new-positive` 结论见配对的
+[`Round5 两年 Daily 左侧背景与 ABC/H-L/三推视觉练习`](../../../../visual_recognition_round5_two_year_daily_2026-08-24_CN.md)。
+Codex Trading 只提供只读历史素材，不提供本轮规则、代码或执行能力。
+
 ## 用途与来源
 
 本轮只保存没有 pattern 标注的历史 OHLC 图，用于 PA Research 的人工视觉复核。pattern、lineage、计数和边界结论写在研究记录中，不写入图像。

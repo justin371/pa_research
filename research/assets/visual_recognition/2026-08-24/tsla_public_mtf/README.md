@@ -2,6 +2,38 @@
 
 这些 PNG 是用于 PA Research 视觉识别验收的静态派生图，不是实时行情、交易授权或量化扫描输入。
 
+## Canonical provenance boundary
+
+```text
+contract_scope: historical_context_only
+data_source: public Yahoo Finance Chart API via Jina Reader
+data_status: historical
+as_of_time: 2026-08-21 16:00 America/New_York
+timezone: America/New_York
+session_state: historical_close
+timeframes_seen: Daily / 4H-like / 1H / 15m
+chart_scope: full
+daily_context_window: >=2y
+major_high_low_review: complete in paired smoke review; not drawn on the asset
+ema20_50_200_review: complete in paired smoke review; Daily EMA only
+daily_ema20_slope: unknown
+daily_ema50_slope: unknown
+h_l_ema_slope_gate: pending
+direction: no_valid_direction (unlabeled asset; per-case reading is in the paired smoke review)
+lineage_status: pending
+internal_label: pending
+third_push_state: unclear
+research_state: observation_only
+trade_state: observation_only
+gate_result: observation_only
+handoff_status: not_ready
+```
+
+资产本身没有 pattern 标签、计数或订单合同；`primary_pattern`、`secondary_context`、
+H1/H2/L1/L2、三推、BOP 和 MTR 只在配对的[`PA 图表视觉识别冒烟验收`](../../../../visual_recognition_smoke_test_2026-08-24_CN.md)
+中按证据读取。`4H-like` 是 60m RTH bar 的聚合名称，不冒充原生 4H；EMA 和两年
+Daily 只属于背景 provenance，不自动生成 trigger 或授权。
+
 - 标的：`TSLA`
 - 资产生成日期：`2026-08-24`
 - 数据状态：公开历史 OHLC；通过 Jina Reader 读取 Yahoo Finance Chart API；不是 Futu 数据，也不是实时授权

@@ -13,6 +13,7 @@
 - [`H3/L3 历史候选筛选日志证据与统计边界审计`](../research/backtesting/h3_l3_candidate_screen_provenance_audit_2026-08-29_CN.md)
 - [`历史视觉证据与 canonical 边界审计`](../research/backtesting/visual_evidence_canonical_boundary_audit_2026-08-29_CN.md)
 - [`视觉识别冒烟、快筛协议与 Round2/Round3 资产 canonical 边界审计`](../research/backtesting/visual_recognition_canonical_boundary_audit_2026-08-29_CN.md)
+- [`Round4、Round5 与 TSLA 视觉资产 canonical 边界审计`](../research/backtesting/visual_asset_canonical_boundary_audit_2026-08-29_CN.md)
 - [`证据范围与数据状态一致性审计`](../research/evidence_scope_status_boundary_audit_2026-08-29_CN.md)
 - [`选择记录与回放结果证据边界审计`](../research/backtesting/pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md)
 - [`事件、空间与独立性字段引用一致性审计`](../research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md)
