@@ -16,11 +16,12 @@
 
 ## 二、静态盘点结果
 
-本轮检查 `research/backtesting` 下 11 份文件名含 `replay` 的 Markdown 报告，并核对回放 README、schema 和索引：
+本轮检查 `research/backtesting` 下文件名含 `replay` 的 12 份 Markdown 文件，其中 11 份是独立回放结果报告，另 1 份是本审计文件自身；本审计文件不计入结果报告覆盖率。随后核对回放 README、schema 和索引：
 
 | 检查 | 结果 |
 | --- | --- |
-| 回放报告数 | 11 |
+| 文件名含 `replay` 的 Markdown 总数（含本审计） | 12 |
+| 独立回放结果报告数（排除本审计） | 11 |
 | 明确包含 `no-new-positive` | 11 / 11 |
 | 明确包含 `validated win-rate: not-computable` | 11 / 11 |
 | 当前维护版本 `0.3.9` 有明确语境 | 11 / 11 |

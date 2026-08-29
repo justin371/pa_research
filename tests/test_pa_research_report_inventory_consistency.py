@@ -115,14 +115,17 @@ class PaResearchReportInventoryConsistencyTests(unittest.TestCase):
         self.assertIn("| 全部 intake | 2 个 CSV、25 条 |", lineage)
         self.assertIn("| `market_context_id` | 0/60 条已记录 |", lineage)
 
+        replay_named_files = sorted(BACKTEST_ROOT.glob("*replay*.md"))
         replay_files = sorted(
             path
-            for path in BACKTEST_ROOT.glob("*replay*.md")
+            for path in replay_named_files
             if path.name != "historical_replay_result_log_provenance_audit_2026-08-29_CN.md"
         )
         version_report = (BACKTEST_ROOT / "version_conclusion_consistency_audit_2026-08-29_CN.md").read_text(encoding="utf-8")
+        self.assertEqual(len(replay_named_files), 12)
         self.assertEqual(len(replay_files), 11)
-        self.assertIn("| 回放报告数 | 11 |", version_report)
+        self.assertIn("| 文件名含 `replay` 的 Markdown 总数（含本审计） | 12 |", version_report)
+        self.assertIn("| 独立回放结果报告数（排除本审计） | 11 |", version_report)
         self.assertIn("| 明确包含 `no-new-positive` | 11 / 11 |", version_report)
         self.assertIn("| 明确包含 `validated win-rate: not-computable` | 11 / 11 |", version_report)
         self.assertIn(f"| 当前维护版本 `{ENGINE_VERSION}` 有明确语境 | 11 / 11 |", version_report)

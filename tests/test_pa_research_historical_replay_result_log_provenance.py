@@ -1,5 +1,8 @@
 """Regression checks for historical replay and transaction-log boundaries."""
 
+import shutil
+import subprocess
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -7,6 +10,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[1]
 BACKTEST_ROOT = REPO_ROOT / "research" / "backtesting"
 AUDIT_PATH = BACKTEST_ROOT / "historical_replay_result_log_provenance_audit_2026-08-29_CN.md"
+VALIDATOR_PATH = REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1"
 
 
 class HistoricalReplayResultLogProvenanceTests(unittest.TestCase):
@@ -36,6 +40,37 @@ class HistoricalReplayResultLogProvenanceTests(unittest.TestCase):
             self.assertIn(f"`{directory}/`", text)
             self.assertFalse((REPO_ROOT / directory).exists(), directory)
 
+    def test_recursive_transaction_log_inventory_is_empty_and_review_note_is_not_a_log(self):
+        excluded_parts = {".git", ".codex", ".venv", "node_modules", "__pycache__"}
+        reserved_names = {"journal", "trade_log", "transaction", "ledger"}
+        current_log_dirs = [
+            path
+            for path in REPO_ROOT.rglob("*")
+            if path.is_dir()
+            and path.name in reserved_names
+            and not any(part.lower() in excluded_parts for part in path.relative_to(REPO_ROOT).parts)
+        ]
+        self.assertEqual(current_log_dirs, [])
+
+        audit = AUDIT_PATH.read_text(encoding="utf-8")
+        for phrase in (
+            "当前 checkout 的交易日志 inventory",
+            "| `journal/` | 0 |",
+            "| `journal/plans/` | 0 |",
+            "| `journal/reviews/` | 0 |",
+            "| `trade_log/` | 0 |",
+            "| `transaction/` | 0 |",
+            "| `ledger/` | 0 |",
+            "| `strategy/reviews/` | 1 个研究文件 |",
+            "目录名 `reviews` 不能把其中的研究观察笔记升级成成交",
+        ):
+            self.assertIn(phrase, audit)
+
+        review = (
+            REPO_ROOT / "strategy" / "reviews" / "2026-06-25-tsla-meta-example.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("不是实际成交日志、冻结合同或胜率样本", review)
+
     def test_current_checkout_does_not_contain_persisted_replay_triples(self):
         artifact_names = {"results.csv", "summary.json", "run_metadata.json"}
         current_artifacts = [
@@ -44,6 +79,41 @@ class HistoricalReplayResultLogProvenanceTests(unittest.TestCase):
             if path.is_file() and path.name in artifact_names and ".git" not in path.parts
         ]
         self.assertEqual(current_artifacts, [])
+
+    def test_validator_rejects_nested_transaction_log_dirs_and_replay_artifacts(self):
+        with tempfile.TemporaryDirectory(prefix="pa-log-boundary-validator-") as temp_dir:
+            fixture_root = Path(temp_dir) / "repo"
+            shutil.copytree(
+                REPO_ROOT,
+                fixture_root,
+                ignore=shutil.ignore_patterns(
+                    ".git", ".codex", ".venv", "node_modules", "__pycache__"
+                ),
+            )
+            (fixture_root / "research" / "nested" / "journal").mkdir(parents=True)
+            (fixture_root / "research" / "nested" / "results.csv").write_text(
+                "sample_id\n", encoding="utf-8"
+            )
+
+            result = subprocess.run(
+                [
+                    "powershell.exe",
+                    "-NoProfile",
+                    "-ExecutionPolicy",
+                    "Bypass",
+                    "-File",
+                    str(fixture_root / "scripts" / VALIDATOR_PATH.name),
+                    "-RepoRoot",
+                    str(fixture_root),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("reserved actual transaction-log directory is present", result.stdout)
+            self.assertIn("persisted replay artifact is not allowed", result.stdout)
 
     def test_axes_cannot_be_reconstructed_from_outcomes(self):
         text = AUDIT_PATH.read_text(encoding="utf-8")
@@ -74,6 +144,8 @@ class HistoricalReplayResultLogProvenanceTests(unittest.TestCase):
             self.assertIn(filename, index_text)
         self.assertIn(filename, validator)
         self.assertIn("historical replay/result-log provenance audit", validator)
+        self.assertIn("reserved actual transaction-log directory is present", validator)
+        self.assertIn("persisted replay artifact is not allowed", validator)
         self.assertIn("当前 PA Research checkout 没有 `journal/`、`trade_log/`、`transaction/` 或 `ledger/` 目录", handoff)
         self.assertIn("no-new-positive", handoff)
         self.assertIn("validated win-rate: not-computable", handoff)

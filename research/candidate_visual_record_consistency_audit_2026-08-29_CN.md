@@ -109,7 +109,7 @@ Daily-first stage1 / historical inventory
   -> 通过日线前置后才可提升为 daily_candidate
   -> 可选的独立 4H/1H/60m/15m deep_review 或订单合同
   -> 独立冻结合同
-  -> replay / trade-log 结果分开记录
+  -> 独立 replay/result 记录（不等于 broker/account trade log）
 ```
 
 ## 七、历史、视觉与回放后验语义扫描
@@ -132,7 +132,7 @@ Daily-first 视觉复核/候选目录
   -> 只有通过日线前置后，补齐两年 Daily、重要高低点、EMA、A/B、lineage、触发、失效、首障碍和空间
   -> 低周期只进入独立 deep_review/订单合同
   -> 仅在独立冻结合同中出现精确订单字段
-  -> 结果只进入独立 replay / trade-log 审计
+  -> 结果只进入独立 replay/result 审计（不等于真实 broker/account trade log）
 ```
 
 本审计只属于 PA Research；不修改 Codex Trading，不创建量化扫描器，不连接 Execution Agent。

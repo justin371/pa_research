@@ -28,7 +28,7 @@
 ## 2. 报告、索引和版本交叉核对
 
 - `research/README.md` 与 `research/backtesting/README.md` 均有当前 inventory、parity 和本审计入口；validator 的必需文件清单包含本审计报告。
-- 当前文件名含 `replay` 的 Markdown 报告共 11 份；每份都包含 `no-new-positive`、`validated win-rate: not-computable` 和当前维护 engine `0.3.9` 的历史/当前边界说明。
+- 当前文件名含 `replay` 的 Markdown 文件共 12 份，其中 11 份是独立回放结果报告，1 份是本审计文件；本审计文件不计入结果报告覆盖率。11 份独立回放结果报告均包含 `no-new-positive`、`validated win-rate: not-computable` 和当前维护 engine `0.3.9` 的历史/当前边界说明。
 - 当前 engine 为 `0.3.9`；本次审计读取的 `pa_research_backtest/engine.py` SHA-256 为 `49afdf1649d33a911397509a1a9431edcab1ce4519399e8be18bd22129688c3a`。研究依赖仍固定为 `backtesting==0.6.6` 与 `matplotlib==3.10.9`。
 - 当前 checkout 没有 `results.csv`、`summary.json` 或 `run_metadata.json`；artifact inventory 中的 7 组合同/价格输入与当前 7 个冻结合同文件对应。此前在本机 artifact 目录发现的 13 组历史结果三件套属于外部历史 provenance，不是当前 checkout，也没有被本轮重新写入或混入。
 - 历史审计中的测试数量和 Markdown/link 数量（例如早期报告的 73/63 个测试、263/1232 个文档统计）保留为各自审计时的快照；本轮不把它们冒充当前值，也不因当前测试增长而重写历史审计证据。
@@ -39,7 +39,7 @@
 
 1. CSV 分类、行数、方向/标签/订单/空间/EMA/lineage/event 字段分布与现有审计表一致；
 2. ABC/BOP intake 的数量和冻结边界没有进入正式合同；
-3. 11 份 replay 报告均保留当前版本语境和两项总体验证边界；
+3. 11 份独立 replay 结果报告均保留当前版本语境和两项总体验证边界；本审计文件自身不作为结果报告统计对象；
 4. 当前 checkout 的 artifact 数量为零，engine 版本、源码 hash、依赖版本和索引/validator 入口一致。
 
 测试不下载行情、不读取交易账户、不运行正式回放、不写 artifact，也不改变任何 engine 有效语义或 pattern 规则。

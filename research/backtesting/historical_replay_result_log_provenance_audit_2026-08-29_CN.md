@@ -20,6 +20,21 @@
 
 机器核对摘要：`external_results_files=13`；`external_result_rows=88`；`unique_sample_ids=63`；`duplicate_sample_id_groups=13`；`rows_in_duplicate_groups=38`；`extra_duplicate_rows=25`；`current_valid=0`；`historical_incomplete=13`；`invalid=0`；`historical_exit_code=2`。
 
+当前 checkout 的交易日志 inventory 也做了递归核对（不把 `.git`、`.codex`、`.venv`、`node_modules` 和 `__pycache__` 等控制/环境目录当作研究记录）：
+
+| 路径/类别 | 当前数量 | 语义 |
+| --- | ---: | --- |
+| `journal/` | 0 | 不存在研究日志根目录 |
+| `journal/plans/` | 0 | 没有独立交易计划日志 |
+| `journal/reviews/` | 0 | 没有独立交易复盘日志 |
+| `trade_log/` | 0 | 没有券商/账户交易日志目录 |
+| `transaction/` | 0 | 没有交易流水目录 |
+| `ledger/` | 0 | 没有账户账本目录 |
+| `strategy/reviews/` | 1 个研究文件 | `2026-06-25-tsla-meta-example.md` 是 observation-only 历史研究笔记，不是交易日志 |
+| 持久化回放三件套 | 0 | 当前 checkout 没有 `results.csv`、`summary.json`、`run_metadata.json` |
+
+因此，`strategy/reviews/` 的存在不改变“没有真实交易日志”的结论；目录名 `reviews` 不能把其中的研究观察笔记升级成成交、持仓或账户 P&L 记录。
+
 因此结论继续保持：
 
 ```text
@@ -121,13 +136,13 @@ realized_R 为有限数值
 | `results.csv` | 回放器对冻结合同的模拟成交、退出、路径、`trade_result` 和 `realized_R` | 否；它是模拟结果记录 |
 | `summary.json` | 单次 artifact 的聚合计数、分层和描述性统计 | 否；不能替代逐笔日志 |
 | `run_metadata.json` | engine/依赖、输入、结果文件和 provenance 指纹 | 否；它是运行元数据 |
-| `journal/`、`trade_log/`、`transaction/`、`ledger/` | 当前 checkout 不存在这些独立日志目录 | 没有可声称的 broker/Execution Agent 记录 |
+| `journal/`、`trade_log/`、`transaction/`、`ledger/` | 当前 checkout 不存在这些独立日志目录；`strategy/reviews/` 只有 1 个 observation-only 研究文件 | 没有可声称的 broker/Execution Agent 记录 |
 
 因此，当前 PA Research 没有实际订单、实际成交、持仓、账户 P&L 或 Execution Agent 交易日志。任何把 `results.csv` 的一行称为“真实交易日志”的表述都应改为“历史回放结果行”；任何把冻结合同称为已成交记录的表述都应改为“入场前研究合同”。
 
 ## 七、已落实的修复与剩余边界
 
-本次新增本审计及回归测试，并把它加入 PA Research 研究索引、`docs/README.md`、`strategy/README.md`、回放 README、研究交接规范和文档 validator。修复内容只固化历史结果/交易日志/当前分母的语义边界，没有改写旧报告数字、没有新增合同、没有修改 engine 有效语义。
+本次新增本审计及回归测试，并把它加入 PA Research 研究索引、`docs/README.md`、`strategy/README.md`、回放 README、研究交接规范和文档 validator。修复内容只固化历史结果/交易日志/当前分母的语义边界，并把当前 checkout 的交易日志 inventory 纳入递归防回归检查；没有改写旧报告数字、没有新增合同、没有修改 engine 有效语义。
 
 当前可接受的读取顺序是：先看冻结合同的事前证据，再看当前 artifact validator 状态，最后才看旧 `results.csv` 的描述性路径；不能从旧结果反向补合同字段或选择胜率更好的一份变体。
 

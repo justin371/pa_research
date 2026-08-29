@@ -2150,7 +2150,7 @@ if (Test-Path -LiteralPath $artifactSchemaRoundtripAuditPath -PathType Leaf) {
 $historicalReplayResultLogAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/historical_replay_result_log_provenance_audit_2026-08-29_CN.md'
 if (Test-Path -LiteralPath $historicalReplayResultLogAuditPath -PathType Leaf) {
     $historicalReplayResultLogAuditContent = Get-Utf8Text -Path $historicalReplayResultLogAuditPath
-    foreach ($token in @('external_results_files=13', 'external_result_rows=88', 'unique_sample_ids=63', 'duplicate_sample_id_groups=13', 'rows_in_duplicate_groups=38', 'extra_duplicate_rows=25', 'current_valid=0', 'historical_incomplete=13', 'invalid=0', 'historical_exit_code=2', 'journal/', 'trade_log/', 'transaction/', 'ledger/', '冻结合同 CSV', 'results.csv` 是模拟结果记录，不是券商订单', '当前 PA Research 没有实际订单', 'no-new-positive', 'validated win-rate: not-computable')) {
+    foreach ($token in @('external_results_files=13', 'external_result_rows=88', 'unique_sample_ids=63', 'duplicate_sample_id_groups=13', 'rows_in_duplicate_groups=38', 'extra_duplicate_rows=25', 'current_valid=0', 'historical_incomplete=13', 'invalid=0', 'historical_exit_code=2', '当前 checkout 的交易日志 inventory', '| `journal/` | 0 |', '| `journal/plans/` | 0 |', '| `journal/reviews/` | 0 |', '| `trade_log/` | 0 |', '| `transaction/` | 0 |', '| `ledger/` | 0 |', '| `strategy/reviews/` | 1 个研究文件 |', 'journal/', 'trade_log/', 'transaction/', 'ledger/', '冻结合同 CSV', 'results.csv` 是模拟结果记录，不是券商订单', '当前 PA Research 没有实际订单', 'no-new-positive', 'validated win-rate: not-computable')) {
         if (-not $historicalReplayResultLogAuditContent.Contains($token)) {
             Add-ValidationError "missing historical replay/result-log provenance audit token '$token'"
         }
@@ -2166,6 +2166,33 @@ if (Test-Path -LiteralPath $historicalReplayResultLogAuditPath -PathType Leaf) {
             Add-ValidationError "missing transaction-log provenance audit link in '$indexRelativePath'"
         }
     }
+}
+
+$excludedInventoryPathPattern = '(?i)\\(?:\.git|\.codex|\.venv|node_modules|__pycache__)(?:\\|$)'
+$reservedTransactionLogDirectoryNames = @('journal', 'trade_log', 'transaction', 'ledger')
+$currentTransactionLogDirectories = @(
+    Get-ChildItem -LiteralPath $repoRoot -Recurse -Force -Directory -ErrorAction SilentlyContinue |
+        Where-Object {
+            $_.FullName -notmatch $excludedInventoryPathPattern -and
+            $reservedTransactionLogDirectoryNames -contains $_.Name
+        }
+)
+foreach ($directory in $currentTransactionLogDirectories) {
+    $relativePath = $directory.FullName.Substring($repoRoot.Length + 1).Replace('\', '/')
+    Add-ValidationError "reserved actual transaction-log directory is present: $relativePath"
+}
+
+$persistedReplayArtifactNames = @('results.csv', 'summary.json', 'run_metadata.json')
+$currentReplayArtifacts = @(
+    Get-ChildItem -LiteralPath $repoRoot -Recurse -Force -File -ErrorAction SilentlyContinue |
+        Where-Object {
+            $_.FullName -notmatch $excludedInventoryPathPattern -and
+            $persistedReplayArtifactNames -contains $_.Name
+        }
+)
+foreach ($artifact in $currentReplayArtifacts) {
+    $relativePath = $artifact.FullName.Substring($repoRoot.Length + 1).Replace('\', '/')
+    Add-ValidationError "persisted replay artifact is not allowed in the current PA Research checkout: $relativePath"
 }
 
 $unifiedOutputStateAxisAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/unified_output_state_axis_audit_2026-08-29_CN.md'
