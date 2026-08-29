@@ -4,6 +4,8 @@
 
 统一输出字段见[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)。本层的 `permission` 和 `gate_result` 是闸门字段，不是方向或交易授权的替代品。
 
+本层模板只记录事件、板块和大盘闸门；完整案例仍须回填统一合同的图表范围、结构、订单、空间和 `research_state`/`trade_state`/`handoff_status`，不能把闸门卡当成独立交易合同。
+
 这是所有 PA pattern 进入深审前的共同背景层。它不是 pattern，也不是评分器；它决定候选是否可以进入形态审计、需要拆成事件样本，还是应该直接观望。
 
 ## 1. 固定顺序

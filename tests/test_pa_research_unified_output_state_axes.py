@@ -72,7 +72,7 @@ class UnifiedOutputStateAxisTests(unittest.TestCase):
         self.assertIsNone(re.search(r"(?m)^direction:\s*bullish_attempts\s*/\s*bearish_attempts\s*$", text))
         self.assertIn("canonical `direction`", text)
         for token in (
-            "context_timeframes_seen:",
+            "timeframes_seen:",
             "daily_context_window:",
             "lineage_status: same_lineage / reset / unclear / pending",
             "event_bucket:",

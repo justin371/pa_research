@@ -109,28 +109,58 @@ Daily/4H 已经提供方向和位置，但高周期信号 K 太大或入场过�
 
 ## 7. 统一复核字段
 
+下面是本基础层的补充复核卡；完整案例仍须先按统一输出合同填写证据头、结构、订单和三条状态轴。这里的 `last_push`、`late_location_or_magnet`、`management` 等字段只描述后段过滤，不创建新的 pattern 或状态枚举。
+
 ```text
-timeframe:
+contract_scope: deep_review / daily_candidate / historical_context_only
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+timeframes_seen:
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
 parent_state:
+direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+secondary_context:
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
 trend_age_and_left_structure:
 late_location_or_magnet:
-last_push: continuation | climax-risk | accepted-breakout | mixed
+last_push: continuation / climax / accepted_breakout / mixed
 pullback_available: yes | no
 same_contract_or_new_contract:
-signal_and_trigger:
-order_branch: stop_confirmation | limit_retest | market_close | observation_only
+signal_bar:
+confirmation_bar:
+new_trigger:
+follow_through:
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / role_reversal_retest / gap_reprice / management
 gap_policy: accept_open / skip / flag_only / not_applicable
-actual_fill_assumption:
-parent_structural_stop:
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
+structural_invalidation:
+structural_stop:
 low_cycle_stop_if_independent:
 first_independent_obstacle:
-rough_R_R_to_first_obstacle:
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
+rough_R_R:
 event_sector_multitimeframe_gate:
 management: hold | partial | protect | exit | rebuild
 failure_condition:
-final_state:
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
+
+`parent_structural_stop`、`actual_fill_assumption`、`rough_R_R_to_first_obstacle` 和 `final_state` 不再作为活动统一字段；若历史笔记出现，只按旧说明阅读，不能替代 `structural_stop`、`actual_fill_or_open_skip`、`pre_entry_space_R`/`space_status` 或分轴状态。
 
 ## 8. 证据入口
 

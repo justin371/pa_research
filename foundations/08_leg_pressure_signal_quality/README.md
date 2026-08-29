@@ -32,27 +32,41 @@ EMA 触碰只是汇合项，不是形态本身；但高质量日线 H1/H2/L1/L2 
 
 ## 4. 工作复核卡
 
+下面的卡只记录腿与信号质量；它不是独立 pattern，也不替代完整案例的证据头、主标签、订单合同和状态轴。字段直接采用统一合同名称，质量层的补充描述另用 `pressure_asymmetry`、`B_shape` 等字段承载。
+
 ```text
 parent_state:
 leg_direction:
-A_quality: strong / ordinary / wide_channel / climax / unclear
+a_leg_quality: strong / ordinary / unclear / event_driven
 pressure_asymmetry: favorable / mixed / unfavorable
 B_shape: shallow_controlled / deep_stable / expanding / unclear
+b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear
 setup:
-signal_bar_quality:
-trigger_and_follow_through:
-EMA20_50_location:
-EMA20_slope: up / flat / down / unknown
-EMA50_slope: up / flat / down / unknown
+signal_bar:
+confirmation_bar:
+new_trigger:
+follow_through:
+daily_ema20_50_200:
+daily_ema20_slope: up / flat / down / unknown
+daily_ema50_slope: up / flat / down / unknown
 h_l_ema_slope_gate: long_pass / short_pass / fail_flat_or_opposite / pending / not_applicable
-pullback_location:
+h_l_pullback_location:
+b_leg_location:
 meta_confluence: present / absent / unknown
 meta_zone:
 meta_components:
 volume_reference: supportive / neutral / adverse / unavailable
 direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+lineage_status: same_lineage / reset / unclear / pending
 first_independent_obstacle:
-decision: candidate / conditional / wait / valid_no_trade
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
+
+`B_shape`、`pressure_asymmetry` 和 `leg_direction` 是本基础层的解释性补充；`a_leg_quality`、`b_leg_class`、`b_leg_location`、`direction`、`signal_bar`、`new_trigger`、`follow_through` 和分轴状态才是完整记录应回填的 canonical 字段。历史 `A_quality`、`EMA20_slope`、`EMA50_slope`、`pullback_location` 和 `decision` 不得作为新合同字段使用。
 
 本层只做视觉研究，不设固定实体、百分比、成交量或 EMA 距离阈值，不修改 Codex Trading，不连接 Execution Agent。专项对照见[`强 A 腿与信号 K 视觉证据审计`](../../research/leg_pressure_signal_quality_visual_evidence_audit_2026-08-24_CN.md)。

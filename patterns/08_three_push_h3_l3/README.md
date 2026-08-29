@@ -37,12 +37,24 @@ BOP 状态迁移：若事前可见边界被日线强收盘越过、获得跟随�
 ## 最小视觉协议
 
 ```text
-parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
-attempt_direction: bullish_attempts / bearish_attempts / unknown
-timeframe:
-context_timeframes_seen: Daily / 4H / 1H / 15m / unknown
+contract_scope: deep_review / daily_candidate / historical_context_only
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+timeframes_seen: Daily / 4H / 1H / 15m / other
+chart_scope: full / partial / unavailable
 daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
+direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP / H3_L3 / other
+secondary_context:
+attempt_direction: bullish_attempts / bearish_attempts / unknown
 lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 range_edge_three_push: yes / no / pending
 range_edge_side: upper / lower / none / pending
 push_1: origin -> extreme / quality / separation
@@ -54,11 +66,20 @@ event_bucket: ordinary_non_event / event_reviewed_non_event / event_driven / ear
 third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
 first_reverse: none / touch / structural_break
 second_confirmation: yes / no / pending
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+signal_bar:
+confirmation_bar:
+new_trigger:
+follow_through:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / management
 gap_policy: accept_open / skip / flag_only / not_applicable
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
+structural_invalidation:
 structural_stop:
 first_independent_obstacle:
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
 space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 rough_R_R: wide / borderline / insufficient / not_frozen
 research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
@@ -68,7 +89,7 @@ thesis_state: working / failed / replaced / pending
 handoff_status: research_only / not_ready / ready_for_system
 ```
 
-研究记录必须先填完 `lineage_status` 和 `third_push_state`，再讨论 H3/L3。若三次推进不能在当时被分开识别，标签写成 `not_h3_l3` 或 `new_lineage_pending`，`third_push_state` 写 `unclear`，不得用最终走势反推计数。
+研究记录必须先填完 `lineage_status` 和 `third_push_state`，再讨论 H3/L3。`timeframes_seen` 记录实际查看过的全部周期；若需要只在一个周期计数，另填 pattern-specific 的 `count_timeframe`，不能用单数 `timeframe` 或 `context_timeframes_seen` 替代 canonical 证据范围。若三次推进不能在当时被分开识别，标签写成 `not_h3_l3` 或 `new_lineage_pending`，`third_push_state` 写 `unclear`，不得用最终走势反推计数。
 
 ## 同一 lineage 的计数纪律
 

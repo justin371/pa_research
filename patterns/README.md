@@ -145,6 +145,8 @@ H/L selection/replay 的合同数、成交状态和严格分母计数见[`H/L se
 
 16 个目录的 canonical 状态轴、字段命名和 pattern-specific 模板边界见[`Pattern 状态轴、字段与枚举一致性审计`](../research/pattern_state_axis_field_enum_audit_2026-08-29_CN.md)。
 
+16 个 pattern README 与 8 个基础视觉层的 canonical 输出继承、局部模板字段和枚举边界见[`Pattern README 与基础视觉框架 canonical 输出覆盖审计`](../research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md)。
+
 订单语义和 R/R 的跨 pattern 规则见[`八个 Pattern 的订单合同与 R/R 审计`](../research/order_contract_cross_pattern_audit_CN.md)。
 
 16 个目录的日线主标签白名单、H/L 内部标签、三推/区间边缘分隔和 BOP 旧合同失效边界见[`Pattern 主标签映射与 BOP 状态迁移审计`](../research/pattern_label_transition_audit_2026-08-29_CN.md)。

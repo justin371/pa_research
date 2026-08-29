@@ -11,10 +11,10 @@
 | 状态 | 视觉特征 | 首选逻辑 |
 | --- | --- | --- |
 | `open_trend` | 方向腿有跟随、重叠较少、回调没有接受反向结构 | ABC、旗形、H1/H2 或 L1/L2 |
-| `mature_range` | 上下沿反复、双方突破尝试失败、重叠和反向摆动多 | 上沿/下沿反应、失败突破、区间二次入场 |
+| `trading_range` | 上下沿反复、双方突破尝试失败、重叠和反向摆动多 | 上沿/下沿反应、失败突破、区间二次入场 |
 | `range_edge` | 价格靠近上沿或下沿，已有反复测试和反向反应 | 边缘 limit/stop、二次入场、失败突破、区间边缘三推候选 |
 | `transition` | 趋势、区间、角色转换和新方向混合，父级尚未接受 | 保守标记、等待接受/失败，不强行继承计数 |
-| `climax_or_exhaustion` | 后段扩张、跳空、远离均线/结构，随后可能小反转或平衡 | 管理/观望，等待二次确认；不自动做反向 |
+| `climax` | 后段扩张、跳空、远离均线/结构，随后可能小反转或平衡 | 管理/观望，等待二次确认；不自动做反向 |
 
 ## 2. 交易区间不是单一根数定义
 
@@ -32,14 +32,14 @@ range_upper_zone:
 range_lower_zone:
 range_midpoint:
 major_left_levels:
-state: mature_range / developing_range / transition / not_range
+range_state: mature / developing / transition / not_range
 ```
 
 ## 3. 区间内不能强行使用趋势腿
 
 从区间下沿强力上涨到上沿，外观可能像 ABC 的第二上涨腿；只要父级仍是区间，它首先是区间摆动。`H2-like` 也只能记为边缘或区间尝试，不能自动升级为开放趋势 H2。
 
-区间中部优先 `observation_only / range_middle_no_trade`。若区间边缘出现第三次有意义测试、拒绝或假突破回区间，可进入 `range_edge_three_push` 候选；若边缘反应后走到中线或另一边缘，旧边缘合同的目标已到达，不能继续用“第二腿”追价。中部再出现的局部突破通常没有足够位置优势。
+区间中部优先 `observation_only`；若形态、方向和入场几何已足够复核但首障碍或其他硬闸门否决，则使用 `valid_no_trade`。若区间边缘出现第三次有意义测试、拒绝或假突破回区间，可进入 `range_edge_three_push` 候选；若边缘反应后走到中线或另一边缘，旧边缘合同的目标已到达，不能继续用“第二腿”追价。中部再出现的局部突破通常没有足够位置优势。
 
 ## 4. Second-leg trap
 
@@ -68,24 +68,44 @@ Second-leg trap 风险出现在：
 
 ## 6. 统一父级复核卡
 
+本卡是父级状态的补充记录，不单独建立订单。`parent_timeframe`、`range_state`、`decision_path` 等局部字段必须与完整案例的 canonical 证据头、结构、订单和状态轴一起保存；`parent_state` 使用统一枚举，不使用 `mature_range` 或 `climax_or_exhaustion` 作为替代值。
+
 ```text
-timeframe:
-parent_state: open_trend / mature_range / range_edge / transition / climax
+contract_scope: deep_review / daily_candidate / historical_context_only
+data_status: historical / delayed / live_confirmed / incomplete
+as_of_time:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+timeframes_seen:
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
+parent_timeframe:
+parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 range_upper_zone:
 range_lower_zone:
 range_midpoint:
 left_major_levels:
 directional_leg_quality:
 current_location: upper_edge / lower_edge / middle / outside
-attempt_lineage:
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
 abc_allowed: yes / conditional / no
 second_leg_trap_risk: low / medium / high
-breakout_acceptance:
+breakout_acceptance_evidence:
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
 direction: long / short / no_valid_direction
 first_independent_obstacle:
-decision: trend-contract / range-contract / wait-for-acceptance / no-trade
+decision_path: trend_contract / range_contract / wait_for_acceptance / no_trade
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 state_reset_condition:
 ```
+
+`attempt_lineage`、`breakout_acceptance` 和 `decision` 不再作为活动 canonical 字段；分别使用 `lineage_status`/`lineage_id`、`breakout_acceptance_evidence`/`state_transition` 和 `decision_path` 加三条状态轴。订单分支、结构止损和空间由统一合同或订单基础层补填，不能因为父级状态卡写了 `direction` 就假设已授权。
 
 ## 7. 证据入口
 

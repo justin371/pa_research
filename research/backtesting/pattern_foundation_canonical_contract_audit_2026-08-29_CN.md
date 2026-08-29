@@ -1,0 +1,99 @@
+# Pattern README 与基础视觉框架 canonical 输出覆盖审计（2026-08-29）
+
+状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / research-only / not-quantitative`
+
+## 审计目的与范围
+
+本轮只审计 PA Research 的 16 个 pattern README、8 个基础视觉层、`patterns/README.md`、`foundations/README.md`、统一输出合同和视觉复核卡。重点核对 canonical 字段是否有明确继承入口、局部工作卡是否误用旧字段或自定义枚举、以及索引是否能把入口追溯到统一合同。
+
+本轮只使用仓库现有文档、validator 和回归测试：不下载或查询行情、不连接 Futu/OpenD、不看新图、不运行回放、不增加样本，不修改 CSV、历史结果或 engine 有效语义。`scope_boundary: PA Research only; no Codex Trading; no quantitative scanner; no Execution Agent`。
+
+## Canonical authority
+
+完整案例以[`PA Research 统一输出合同 v0.1`](../../docs/pa_research_output_schema_v0_1_CN.md)和[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)为 authority。各层只允许补充本层语义，不能把局部字段变成新的主标签、订单分支或统一状态。
+
+本轮核对的共同字段边界为：
+
+```text
+contract_scope
+data_status / as_of_time / timezone / session_state / timeframes_seen / chart_scope
+daily_context_window / major_high_low_review / ema20_50_200_review
+direction / primary_pattern / internal_label / lineage_status / lineage_id
+third_push_state / state_transition
+order_branch / actual_fill_or_open_skip
+structural_invalidation / structural_stop
+first_independent_obstacle / rough_space_to_first_obstacle_R / pre_entry_space_R / space_status / rough_R_R
+research_state / trade_state / gate_result / handoff_status
+```
+
+状态轴仍然分开：
+
+```text
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
+```
+
+`daily_candidate` 的 `primary_pattern` 仍只允许 `ABC_CONT` 或 `BOP`；H1/H2/L1/L2/H3/L3 放入 `internal_label`，其他关系放入 `secondary_context`。`4H-like`、`60m proxy` 等只在来源确实使用聚合周期时作为 `timeframes_seen` 的可读 provenance，并必须说明聚合口径，不能冒充原生 4H，也不能代替 `daily_context_window` 或复核完整度。
+
+## 16 个 pattern README 覆盖
+
+以下 16 个目录全部实际存在，并均有统一合同、视觉复核卡、两年 Daily 左侧、重要高低点、支撑阻力、EMA20/50/200、`pending`/`observation_only` 状态边界和 daily-candidate 主标签映射入口：
+
+| 层级 | pattern README | canonical 处理 |
+| --- | --- | --- |
+| core | [`01_h1_l1_first_entry`](../../patterns/01_h1_l1_first_entry/README.md) | 继承统一合同；H1/L1 只作 `internal_label` |
+| core | [`02_h2_l2_second_entry`](../../patterns/02_h2_l2_second_entry/README.md) | 继承统一合同；H2/L2 只作 `internal_label` |
+| core | [`03_abc_continuation`](../../patterns/03_abc_continuation/README.md) | `ABC_CONT` 母结构，H/L 作为内部尝试 |
+| core | [`04_range_edge_second_entry`](../../patterns/04_range_edge_second_entry/README.md) | 区间边缘补充字段；兼容 `RFB` 只在闭合历史/深审合同使用 |
+| core | [`05_failed_breakout_climax`](../../patterns/05_failed_breakout_climax/README.md) | 失败突破/高潮补充字段；状态轴独立 |
+| core | [`06_breakout_pullback_bop`](../../patterns/06_breakout_pullback_bop/README.md) | `BOP` 主合同；接受状态写入 `state_transition` |
+| core | [`07_mtr_reversal`](../../patterns/07_mtr_reversal/README.md) | `mtr_state` 是专用观察轴，不替代 `thesis_state` |
+| core | [`08_three_push_h3_l3`](../../patterns/08_three_push_h3_l3/README.md) | 详细局部卡已补齐 canonical 证据、结构、订单、空间和状态轴 |
+| independent | [`09_vcp_minervini`](../../patterns/09_vcp_minervini/README.md) | 独立主题；未扩展 schema 时使用 `other`/补充语义 |
+| independent | [`10_final_flag`](../../patterns/10_final_flag/README.md) | 独立主题；不自动变成 MTR、ABC 或 BOP |
+| independent | [`11_opening_reversal`](../../patterns/11_opening_reversal/README.md) | 独立开盘事件主题；事件和订单另记 |
+| independent | [`12_channel`](../../patterns/12_channel/README.md) | 独立通道状态主题；画线不自动产生交易信号 |
+| independent | [`13_inside_bar_two_bar_reversal`](../../patterns/13_inside_bar_two_bar_reversal/README.md) | 独立 K 线结构；OHLC/接受未冻结时保留观察 |
+| independent | [`14_triangle_expanding_range`](../../patterns/14_triangle_expanding_range/README.md) | 独立双向结构；突破/失败另写状态转换 |
+| independent | [`15_double_top_bottom`](../../patterns/15_double_top_bottom/README.md) | 两次分离测试的独立主题；不自动升级 MTR |
+| independent | [`16_head_shoulders_rounded`](../../patterns/16_head_shoulders_rounded/README.md) | 复杂结构主题；颈线、确认和空间不足时不授权 |
+
+结论：15 个 README 采用“统一合同 + pattern-specific 差异字段”的继承模式，没有证据要求重复复制整套 22 个字段；`08_three_push_h3_l3` 原先有自己的局部合同，已改成 canonical 证据头和状态轴，并保留三推特有字段。没有把独立主题强行纳入 ABC/H-L/三推统计。
+
+## 8 个基础视觉层覆盖
+
+| 基础层 | 局部职责 | canonical 边界 |
+| --- | --- | --- |
+| [`01_support_resistance`](../../foundations/01_support_resistance/README.md) | 区域、角色、位置、止损和首障碍 | 只提供几何补充；不单独冻结 pattern 或订单 |
+| [`02_measured_move_targets`](../../foundations/02_measured_move_targets/README.md) | MM、AB=CD、磁铁和目标层 | 先审首障碍与空间，不能用远端测量补救坏 R/R |
+| [`03_late_trend_entry_filter`](../../foundations/03_late_trend_entry_filter/README.md) | 后段、追价、回调与后段状态 | 工作卡已改用 canonical 证据、触发、订单、止损、空间和三条状态轴；后段不是第四个 pattern |
+| [`04_multitimeframe_review`](../../foundations/04_multitimeframe_review/README.md) | 父级、低周期确认和独立低周期合同 | `parent_*`/`lower_*` 只标周期层级；顶层主标签、订单、空间和状态轴仍使用 canonical 字段 |
+| [`05_event_sector_market_gate`](../../foundations/05_event_sector_market_gate/README.md) | 财报、事件、板块、大盘和 permission | `permission`/`gate_result` 只是前置闸门，不代替方向、几何或交易状态 |
+| [`06_order_risk_contracts`](../../foundations/06_order_risk_contracts/README.md) | 订单分支、成交/跳过、止损和 R/R | 工作卡已改用 `new_trigger`、`actual_fill_or_open_skip`、`structural_stop`、空间字段和分轴状态 |
+| [`07_market_state_context`](../../foundations/07_market_state_context/README.md) | 趋势、交易区间、边缘、过渡和高潮 | `parent_state` 已统一为 `open_trend / trading_range / range_edge / transition / climax / unclear`；成熟度用本层 `range_state` 补充 |
+| [`08_leg_pressure_signal_quality`](../../foundations/08_leg_pressure_signal_quality/README.md) | 强 A、B 压力、信号 K、EMA 和量价背景 | `a_leg_quality`、`b_leg_class`、`b_leg_location`、`daily_ema20_slope`/`daily_ema50_slope` 等使用 canonical 名称；其余压力描述仍是补充 |
+
+## 已修复的明确问题
+
+1. `patterns/08_three_push_h3_l3/README.md` 的局部卡曾使用单数 `timeframe` 和 `context_timeframes_seen`，容易把计数周期与完整证据范围混淆。现在使用 `timeframes_seen`；若只在一个周期计数，另用 pattern-specific `count_timeframe`，并补齐 `contract_scope`、数据状态、图表完整度、方向、主标签、lineage、触发、成交/跳过、结构止损、空间和状态轴。
+2. `foundations/03_late_trend_entry_filter/README.md` 的局部卡曾缺少 `stop_limit`、`pre_entry_space_R`、`space_status` 和分轴状态，并使用 `final_state`。现在补齐 canonical 字段；`last_push` 的值也不再用活动连字符别名。
+3. `foundations/04_multitimeframe_review/README.md` 的局部卡曾使用 `parent_pattern`、`actual_or_assumed_fill`、`gap_state` 和合并式 `decision`。现在保留父级/低周期层级补充，但同时填写 `primary_pattern`、`signal_bar`、`new_trigger`、`actual_fill_or_open_skip`、`gap_policy`、结构/空间字段和三条状态轴。
+4. `foundations/06_order_risk_contracts/README.md` 的“统一订单卡”曾使用 `decision_time`、`trigger_or_zone`、`actual_or_assumed_fill`、`space_to_first_obstacle` 和 `final_status`。现在改为 canonical 订单、几何、成交/跳过和分轴状态字段；订单层的区域和管理描述仍作为补充保留。
+5. `foundations/07_market_state_context/README.md` 的 `parent_state` 曾使用非 canonical `mature_range`，并用 `climax_or_exhaustion` 表示统一高潮状态。现在统一为 `trading_range` 和 `climax`，区间成熟度另写 `range_state`，避免局部状态冒充顶层枚举。
+6. `foundations/08_leg_pressure_signal_quality/README.md` 的工作卡曾使用未登记的 `A_quality`、`EMA20_slope`、`EMA50_slope`、`pullback_location` 和合并式 `decision`。现在改为 `a_leg_quality`、`daily_ema20_slope`、`daily_ema50_slope`、`h_l_pullback_location`，并补充 `b_leg_class`、`b_leg_location`、触发和 canonical 状态轴；`B_shape` 等只保留为解释性压力字段。
+
+`01`/`02` 的位置和测量层没有独立序列化合同；`05` 的卡只覆盖事件/板块/大盘闸门。这是职责边界，不是缺失：需要形成完整案例时，必须回到统一合同，不能把基础层局部卡当成完整交易记录。
+
+## 验收结论
+
+- 16 个 pattern README 的目录和索引入口完整；核心八个与独立八个保持分层；
+- 16 个 pattern README 都继承统一合同和视觉复核卡，`08` 的详细模板已去除周期字段混淆；
+- 8 个基础层均指向统一合同，活动局部模板的旧字段和非 canonical 枚举已登记或修复；
+- `timeframes_seen`、两年 Daily 左侧、重要高低点、EMA20/50/200、方向、结构止损、首障碍、入场前空间和状态轴没有被局部字段替代；
+- 本轮没有新增样本、成交、回放结果或胜率分母；结论仍为 `no-new-positive`，`validated win-rate: not-computable`；
+- 本轮只属于 `PA Research only`，不修改 Codex Trading，不创建量化扫描器，不连接 Futu/OpenD，不连接 Execution Agent。
+
+该审计只验证文档契约和索引边界；它不表示 pattern 已自动识别、规则已验证或可以直接下单。

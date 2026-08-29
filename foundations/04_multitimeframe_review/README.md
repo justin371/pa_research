@@ -114,6 +114,10 @@ timezone:
 session_state: premarket / RTH / after_hours / historical_close / unknown
 completed_bar_as_of:
 timeframes_seen: Daily / 4H-like / 60m / 15m
+chart_scope: full / partial / unavailable
+daily_context_window: >=2y / <2y / unavailable
+major_high_low_review: complete / partial / unavailable
+ema20_50_200_review: complete / partial / unavailable
 direction: long / short / no_valid_direction
 ```
 
@@ -121,26 +125,54 @@ direction: long / short / no_valid_direction
 
 ## 8. 统一字段
 
+本层把父级与低周期的层级差异保留为补充字段，但完整记录仍必须使用统一合同的 canonical 字段。`parent_*`、`lower_*` 只说明证据来自哪个周期；它们不能替代顶层 `primary_pattern`、`signal_bar`、`structural_stop`、`first_independent_obstacle`、空间字段或分轴状态。
+
 ```text
 parent_timeframe:
 parent_state:
-parent_pattern:
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+secondary_context:
 parent_location:
+left_structure_and_location:
 parent_signal_bar:
+signal_bar:
+confirmation_bar:
+new_trigger:
+follow_through:
+state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate
+lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
+internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
+third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
 parent_structural_stop:
-parent_first_obstacle:
+structural_invalidation:
+structural_stop:
+parent_first_independent_obstacle:
+first_independent_obstacle:
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 parent_rough_R_R:
+rough_R_R:
 lower_timeframe:
 lower_role: confirmation / independent-trade / reprice / observation
-lower_signal_and_trigger:
-actual_or_assumed_fill:
-gap_state:
+lower_signal_bar:
+lower_trigger:
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
+order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
+branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
+gap_policy: accept_open / skip / flag_only / not_applicable
 lower_stop_if_independent:
 lower_first_obstacle_if_independent:
 lower_rough_R_R_if_independent:
-decision: same-contract-confirmation / new-contract / no-trade
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 failure_condition:
 ```
+
+旧字段 `parent_pattern`、`actual_or_assumed_fill`、`gap_state` 和 `decision` 不再作为活动 canonical 输出；历史说明可保留，但新记录分别使用 `primary_pattern`、`actual_fill_or_open_skip`、`gap_policy` 以及 `research_state`/`trade_state`/`gate_result`。
 
 ## 9. 证据入口与边界
 

@@ -32,29 +32,45 @@
 
 ## 3. 统一订单卡
 
+下面的订单卡是完整研究记录中的订单/风险部分；证据范围、结构解释和状态轴仍必须按统一输出合同填写。订单字段不能把研究状态、成交结果或交易授权压缩到一个 `final_status`。
+
 ```text
+contract_scope: deep_review / daily_candidate / historical_context_only
+as_of_time:
+timezone:
+session_state: premarket / RTH / after_hours / historical_close / unknown
+timeframes_seen:
+primary_pattern:
+secondary_context:
 pattern_state:
-decision_time:
-timeframe_and_parent_contract:
 signal_bar:
-trigger_or_zone:
+confirmation_bar:
+new_trigger:
+order_price_or_zone:
 order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only
 branch_role: same_contract / reverse_stop / role_reversal_retest / gap_reprice / lower_timeframe / management
 gap_policy: accept_open / skip / flag_only / not_applicable
-actual_or_assumed_fill:
-original_order_status: pending / triggered / filled / opening-skip / not-filled / fill-unknown
+actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable
+original_order_status: pending / triggered / filled / opening_skip / no_fill / fill_unknown
+structural_invalidation:
+structural_stop:
 structural_stop_zone:
 stop_price_or_area:
 first_independent_obstacle:
-space_to_first_obstacle: positive / borderline / blocked / unknown
+rough_space_to_first_obstacle_R: positive / borderline / blocked / unknown
+pre_entry_space_R:
+space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / blocked / unknown
 rough_R_R:
 gap_event_sector_adjustment:
 management_action:
 what_cancels_contract:
-final_status:
+research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
+trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
+gate_result: pass / conditional / observation_only / valid_no_trade / pending
+handoff_status: research_only / not_ready / ready_for_system
 ```
 
-数值可以先是区域和粗略范围；订单语义、因果时点和失效条件不能含糊。
+`structural_stop_zone`、`stop_price_or_area`、`original_order_status` 和 `management_action` 是订单层的补充字段；canonical 结构止损、成交/跳过、空间和状态字段仍分别保留。数值可以先是区域和粗略范围；订单语义、因果时点和失效条件不能含糊。历史 `decision_time`、`timeframe_and_parent_contract`、`trigger_or_zone`、`actual_or_assumed_fill`、`space_to_first_obstacle` 和 `final_status` 不能作为新记录字段使用。
 
 ## 4. 订单选择顺序
 

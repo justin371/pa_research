@@ -16,6 +16,7 @@
 - [`Round4、Round5 与 TSLA 视觉资产 canonical 边界审计`](../research/backtesting/visual_asset_canonical_boundary_audit_2026-08-29_CN.md)
 - [`全部视觉资产 README canonical provenance 覆盖审计`](../research/backtesting/visual_asset_provenance_coverage_audit_2026-08-29_CN.md)
 - [`视觉历史报告与 canonical authority schema 对齐审计`](../research/backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md)
+- [`Pattern README 与基础视觉框架 canonical 输出覆盖审计`](../research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md)
 - [`证据范围与数据状态一致性审计`](../research/evidence_scope_status_boundary_audit_2026-08-29_CN.md)
 - [`选择记录与回放结果证据边界审计`](../research/backtesting/pre_entry_post_outcome_boundary_audit_2026-08-29_CN.md)
 - [`事件、空间与独立性字段引用一致性审计`](../research/backtesting/event_space_lineage_consistency_audit_2026-08-29_CN.md)

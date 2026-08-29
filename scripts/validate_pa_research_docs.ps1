@@ -218,6 +218,7 @@ $requiredFiles = @(
     'research/backtesting/visual_asset_canonical_boundary_audit_2026-08-29_CN.md',
     'research/backtesting/visual_asset_provenance_coverage_audit_2026-08-29_CN.md',
     'research/backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md',
+    'research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md',
     'research/backtesting/visual_asset_pre_entry_evidence_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_provenance_audit_2026-08-29_CN.md',
     'research/backtesting/external_visual_artifact_manifest_2026-08-29.json',
@@ -390,7 +391,7 @@ $canonicalChecks = @{
         'first_reverse: none / touch / structural_break',
         'second_confirmation: yes / no / pending',
         'range_edge_side: upper / lower / none / pending',
-        'context_timeframes_seen:',
+        'timeframes_seen:',
         'event_bucket:',
         'space_status:',
         'trade_state:',
@@ -2024,6 +2025,250 @@ foreach ($relativePath in $visualAuthorityActiveTemplateRelativePaths) {
     )) {
         if ($content -match $legacyToken) {
             Add-ValidationError "legacy visual authority template field remains '$legacyToken': $relativePath"
+        }
+    }
+}
+
+$patternFoundationCanonicalAuditPath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md'
+if (Test-Path -LiteralPath $patternFoundationCanonicalAuditPath -PathType Leaf) {
+    $patternFoundationCanonicalAuditContent = Get-Utf8Text -Path $patternFoundationCanonicalAuditPath
+    foreach ($token in @(
+        '16 个 pattern README',
+        '8 个基础视觉层',
+        'contract_scope',
+        'timeframes_seen',
+        'daily_context_window',
+        'major_high_low_review',
+        'ema20_50_200_review',
+        'primary_pattern',
+        'internal_label',
+        'lineage_status',
+        'state_transition',
+        'order_branch',
+        'structural_stop',
+        'first_independent_obstacle',
+        'pre_entry_space_R',
+        'space_status',
+        'research_state',
+        'trade_state',
+        'gate_result',
+        'handoff_status',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
+    )) {
+        if (-not $patternFoundationCanonicalAuditContent.Contains($token)) {
+            Add-ValidationError "missing pattern-foundation-canonical-audit token '$token'"
+        }
+    }
+}
+
+$patternFoundationDirectories = @(
+    '01_h1_l1_first_entry',
+    '02_h2_l2_second_entry',
+    '03_abc_continuation',
+    '04_range_edge_second_entry',
+    '05_failed_breakout_climax',
+    '06_breakout_pullback_bop',
+    '07_mtr_reversal',
+    '08_three_push_h3_l3',
+    '09_vcp_minervini',
+    '10_final_flag',
+    '11_opening_reversal',
+    '12_channel',
+    '13_inside_bar_two_bar_reversal',
+    '14_triangle_expanding_range',
+    '15_double_top_bottom',
+    '16_head_shoulders_rounded'
+)
+foreach ($directory in $patternFoundationDirectories) {
+    $patternReadmePath = Join-Path -Path $repoRoot -ChildPath ("patterns\$directory\README.md")
+    if (-not (Test-Path -LiteralPath $patternReadmePath -PathType Leaf)) { continue }
+    $patternReadmeContent = Get-Utf8Text -Path $patternReadmePath
+    foreach ($token in @(
+        '../../docs/pa_research_output_schema_v0_1_CN.md',
+        '../../docs/visual_pa_review_card_CN.md',
+        'data_status: historical / delayed / live_confirmed / incomplete',
+        'as_of_time',
+        'timeframes_seen',
+        'chart_scope',
+        'daily_context_window',
+        'EMA20/50/200',
+        'pending',
+        'primary_pattern'
+    )) {
+        if (-not $patternReadmeContent.Contains($token)) {
+            Add-ValidationError "pattern README missing canonical coverage token '$token': $directory"
+        }
+    }
+    if ($patternReadmeContent -notmatch '重要高点|主要高点' -or $patternReadmeContent -notmatch '重要低点|主要低点') {
+        Add-ValidationError "pattern README missing major high/low preflight wording: $directory"
+    }
+    if ($patternReadmeContent -notmatch '第一独立障碍|first_independent_obstacle|首障碍') {
+        Add-ValidationError "pattern README missing independent-obstacle wording: $directory"
+    }
+}
+
+$threePushPatternReadmePath = Join-Path -Path $repoRoot -ChildPath 'patterns\08_three_push_h3_l3\README.md'
+if (Test-Path -LiteralPath $threePushPatternReadmePath -PathType Leaf) {
+    $threePushPatternReadmeContent = Get-Utf8Text -Path $threePushPatternReadmePath
+    foreach ($token in @(
+        'contract_scope: deep_review / daily_candidate / historical_context_only',
+        'timeframes_seen: Daily / 4H / 1H / 15m / other',
+        'major_high_low_review: complete / partial / unavailable',
+        'ema20_50_200_review: complete / partial / unavailable',
+        'direction: long / short / no_valid_direction',
+        'primary_pattern: ABC_CONT / BOP / H3_L3 / other',
+        'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
+        'lineage_id:',
+        'state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate',
+        'actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable',
+        'structural_invalidation:',
+        'rough_space_to_first_obstacle_R:',
+        'pre_entry_space_R:',
+        'count_timeframe',
+        '不能用单数 `timeframe` 或 `context_timeframes_seen`'
+    )) {
+        if (-not $threePushPatternReadmeContent.Contains($token)) {
+            Add-ValidationError "three-push README missing canonical local-card token '$token'"
+        }
+    }
+    if ($threePushPatternReadmeContent -match '(?m)^timeframe:' -or
+        $threePushPatternReadmeContent -match '(?m)^context_timeframes_seen:') {
+        Add-ValidationError 'three-push README retains singular timeframe evidence field'
+    }
+}
+
+$foundationCanonicalChecks = @{
+    'foundations/03_late_trend_entry_filter/README.md' = @(
+        'contract_scope: deep_review / daily_candidate / historical_context_only',
+        'timeframes_seen:',
+        'daily_context_window: >=2y / <2y / unavailable',
+        'major_high_low_review: complete / partial / unavailable',
+        'ema20_50_200_review: complete / partial / unavailable',
+        'direction: long / short / no_valid_direction',
+        'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
+        'actual_fill_or_open_skip:',
+        'structural_stop:',
+        'first_independent_obstacle:',
+        'pre_entry_space_R:',
+        'space_status:',
+        'research_state:',
+        'trade_state:',
+        'gate_result:',
+        'handoff_status:'
+    )
+    'foundations/04_multitimeframe_review/README.md' = @(
+        'chart_scope: full / partial / unavailable',
+        'daily_context_window: >=2y / <2y / unavailable',
+        'major_high_low_review: complete / partial / unavailable',
+        'ema20_50_200_review: complete / partial / unavailable',
+        'primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other',
+        'signal_bar:',
+        'new_trigger:',
+        'actual_fill_or_open_skip:',
+        'gap_policy:',
+        'structural_stop:',
+        'first_independent_obstacle:',
+        'pre_entry_space_R:',
+        'space_status:',
+        'research_state:',
+        'trade_state:',
+        'gate_result:',
+        'handoff_status:'
+    )
+    'foundations/05_event_sector_market_gate/README.md' = @(
+        'contract_scope: deep_review',
+        'data_status: historical / delayed / live_confirmed / incomplete',
+        'as_of_time:',
+        'timeframes_seen:',
+        'direction: long / short / no_valid_direction',
+        'permission: long_allowed / short_allowed / both_allowed / no_direction / unknown',
+        'gate_result: pass / conditional / observation_only / valid_no_trade / pending'
+    )
+    'foundations/06_order_risk_contracts/README.md' = @(
+        'contract_scope: deep_review / daily_candidate / historical_context_only',
+        'as_of_time:',
+        'timeframes_seen:',
+        'new_trigger:',
+        'order_price_or_zone:',
+        'order_branch: stop_confirmation / limit_retest / market_close / stop_limit / observation_only',
+        'actual_fill_or_open_skip: filled / no_fill / opening_skip / fill_unknown / not_applicable',
+        'structural_invalidation:',
+        'structural_stop:',
+        'first_independent_obstacle:',
+        'rough_space_to_first_obstacle_R:',
+        'pre_entry_space_R:',
+        'space_status:',
+        'research_state:',
+        'trade_state:',
+        'gate_result:',
+        'handoff_status:'
+    )
+    'foundations/07_market_state_context/README.md' = @(
+        'contract_scope: deep_review / daily_candidate / historical_context_only',
+        'data_status: historical / delayed / live_confirmed / incomplete',
+        'timeframes_seen:',
+        'daily_context_window: >=2y / <2y / unavailable',
+        'parent_state: open_trend / trading_range / range_edge / transition / climax / unclear',
+        'range_state: mature / developing / transition / not_range',
+        'lineage_status: same_lineage / reset / unclear / pending',
+        'state_transition: none / breakout_acceptance / role_reversal / failed_breakout / range_transition / MTR_candidate',
+        'research_state:',
+        'trade_state:',
+        'gate_result:',
+        'handoff_status:'
+    )
+    'foundations/08_leg_pressure_signal_quality/README.md' = @(
+        'a_leg_quality: strong / ordinary / unclear / event_driven',
+        'b_leg_class: controlled / controlled_late / deep_but_late_controlled / uncontrolled / range_like / unclear',
+        'b_leg_location:',
+        'signal_bar:',
+        'confirmation_bar:',
+        'new_trigger:',
+        'follow_through:',
+        'daily_ema20_slope: up / flat / down / unknown',
+        'daily_ema50_slope: up / flat / down / unknown',
+        'h_l_pullback_location:',
+        'direction: long / short / no_valid_direction',
+        'primary_pattern:',
+        'internal_label:',
+        'lineage_status:',
+        'research_state:',
+        'trade_state:',
+        'gate_result:',
+        'handoff_status:'
+    )
+}
+foreach ($entry in $foundationCanonicalChecks.GetEnumerator()) {
+    $relativePath = $entry.Key
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    foreach ($token in $entry.Value) {
+        if (-not $content.Contains($token)) {
+            Add-ValidationError "foundation README missing canonical coverage token '$token': $relativePath"
+        }
+    }
+}
+
+$foundationLegacyFieldChecks = @{
+    'foundations/03_late_trend_entry_filter/README.md' = @('(?m)^timeframe:', '(?m)^actual_fill_assumption:', '(?m)^rough_R_R_to_first_obstacle:', '(?m)^final_state:')
+    'foundations/04_multitimeframe_review/README.md' = @('(?m)^parent_pattern:', '(?m)^actual_or_assumed_fill:', '(?m)^gap_state:', '(?m)^decision:')
+    'foundations/06_order_risk_contracts/README.md' = @('(?m)^decision_time:', '(?m)^timeframe_and_parent_contract:', '(?m)^trigger_or_zone:', '(?m)^actual_or_assumed_fill:', '(?m)^space_to_first_obstacle:', '(?m)^final_status:')
+    'foundations/07_market_state_context/README.md' = @('(?m)^timeframe:', '(?m)^attempt_lineage:', '(?m)^breakout_acceptance:', '(?m)^decision:', '(?m)^parent_state:.*mature_range')
+    'foundations/08_leg_pressure_signal_quality/README.md' = @('(?m)^A_quality:', '(?m)^EMA20_slope:', '(?m)^EMA50_slope:', '(?m)^pullback_location:', '(?m)^decision:')
+}
+foreach ($entry in $foundationLegacyFieldChecks.GetEnumerator()) {
+    $absolutePath = Join-Path -Path $repoRoot -ChildPath ($entry.Key -replace '/', '\')
+    if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
+    $content = Get-Utf8Text -Path $absolutePath
+    foreach ($legacyPattern in $entry.Value) {
+        if ($content -match $legacyPattern) {
+            Add-ValidationError "active foundation legacy field remains '$legacyPattern': $($entry.Key)"
         }
     }
 }

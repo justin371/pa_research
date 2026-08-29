@@ -12,3 +12,13 @@
 - [`Leg Pressure / Signal Quality`](08_leg_pressure_signal_quality/README.md)
 
 所有新案例的方向、订单和状态字段统一遵循[`PA Research 统一输出合同`](../docs/pa_research_output_schema_v0_1_CN.md)。
+
+## Canonical 输出边界
+
+8 个基础层都是共用视觉补充，不是额外 pattern，也不各自定义一套状态枚举。完整案例先使用统一合同和[`PA 图表视觉复核卡`](../docs/visual_pa_review_card_CN.md)，再按需要填写基础层字段；`contract_scope`、`data_status`、`as_of_time`、`timeframes_seen`、两年 Daily/重要高低点/EMA 复核、`direction`、`primary_pattern`、`internal_label`、`lineage_status`、`state_transition`、`order_branch`、`structural_stop`、`first_independent_obstacle`、`pre_entry_space_R`、`space_status`、`research_state`、`trade_state`、`gate_result` 和 `handoff_status` 不能被基础层的局部字段替代。
+
+- `01`/`02` 主要提供位置与目标层观察，不单独冻结 pattern 或订单；
+- `03`/`04`/`06`/`07`/`08` 的工作卡保留后段、多周期、订单、父级状态和 A/B 质量等补充语义，但活动模板使用 canonical 字段；
+- `05` 的 `permission` 与 `gate_result` 只表示前置闸门，不能代替方向、几何或交易状态。
+
+逐项覆盖、枚举和旧字段边界见[`Pattern README 与基础视觉框架 canonical 输出覆盖审计`](../research/backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md)。

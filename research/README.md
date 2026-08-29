@@ -20,6 +20,7 @@
 - [`Pattern 案例入口与状态一致性审计（2026-08-29）`](pattern_case_entry_status_audit_2026-08-29_CN.md)：核对 16 个目录的案例链接、条件/边界/no-trade 文案和 `valid_no_trade`/`no-new-positive` 状态；不新增样本或结果；
 - [`共同视觉前置字段一致性审计（2026-08-29）`](common_visual_preflight_field_consistency_audit_2026-08-29_CN.md)：统一两年 Daily 左侧、重要高低点、EMA、A/B 质量、位置/空间、方向和 `data_status` 的 canonical 字段；不新增样本或结果；
 - [`Pattern 状态轴、字段与枚举一致性审计（2026-08-29）`](pattern_state_axis_field_enum_audit_2026-08-29_CN.md)：核对 16 个目录、统一输出合同和视觉复核卡的字段命名、状态轴与 pattern-specific 边界；不新增样本或结果；
+- [`Pattern README 与基础视觉框架 canonical 输出覆盖审计（2026-08-29）`](backtesting/pattern_foundation_canonical_contract_audit_2026-08-29_CN.md)：核对 16 个 pattern README、8 个基础层、局部模板的 canonical 字段/枚举与索引入口；不新增样本或结果；
 - [`入场几何与不交易状态边界审计（2026-08-29）`](entry_geometry_state_boundary_audit_2026-08-29_CN.md)：统一首障碍、结构止损、入场前空间、粗略 R/R 与 pattern-specific 短字段映射，并区分 `observation_only` 与 `valid_no_trade`；不新增样本或结果；
 - [`Pattern 主标签映射与 BOP 状态迁移审计（2026-08-29）`](pattern_label_transition_audit_2026-08-29_CN.md)：核对 16 个 pattern 入口、日线 `ABC_CONT`/`BOP` 白名单、H/L 内部标签、三推/区间边缘分隔、BOP 接受后的旧合同失效和视觉冒烟字段；不新增样本或结果；
 - [`三推/H3-L3 与区间边缘合同边界审计（2026-08-29）`](backtesting/three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md)：统一 `third_push_state`、`range_edge_side`、多空研究方向、订单/状态分轴，并确认当前没有冻结 H3/L3 统计分母；不新增样本或结果；
