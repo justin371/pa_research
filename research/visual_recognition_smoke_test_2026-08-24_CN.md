@@ -61,6 +61,11 @@ recognition_result:
 
 `visual_pattern_label` 是本冒烟记录的自由文本展示标签，不是统一合同的 `primary_pattern` 字段；若图像进入完整研究记录，必须按统一合同和 `contract_scope` 收敛主标签、内部标签和状态转换。
 
+本冒烟输出的 `stage_1_fast_screen` 范围故意不写 active `primary_pattern`、
+`internal_label` 或 `lineage_id`；只有逐案完整且已闭合的入场前研究记录，才按证据填写
+这些 canonical 轴。快筛的“像”不等于合同闭合、订单输入或交易授权；证据不足时保留
+`pending`/`unknown`/`observation_only`。
+
 `recognition_result` 只允许：`pattern_candidate`、`boundary_candidate`、`observation_only`、`not_enough_image_evidence`。只有在未标注、周期和价格轴清晰、父级与局部结构均可复核的图像集上重复通过，才可以从 `smoke-test` 升级为 `acceptance`。
 
 ## 本轮图像结果

@@ -106,6 +106,13 @@ TSLA 资产已经有公开历史来源、约两年 Daily、EMA20/50/200 和 4H-l
 - `daily_ema20_slope`/`daily_ema50_slope` 未从资产说明中冻结，`h_l_ema_slope_gate`
   保持 `pending`，因此不能把它升级为严格 H/L 样本。
 
+### 4. 聚合资产与逐案闭合记录的边界
+
+资产级聚合 provenance 只证明图像来源、窗口和配对复核职责，故意不填写 active `primary_pattern` 和 `lineage_id`。
+逐案完整闭合的入场前研究记录才负责填写主标签、
+内部标签和依赖 ID；聚合资产没有 lineage ID 不代表样本独立，也不把窗口数量变成
+pattern 或胜率分母。
+
 ## 统计、回放和安全边界
 
 - Round4：42 个筛选标的、7 个 targeted 案例、3 个额外多周期练习和 1 个 MRVL 直接

@@ -64,6 +64,7 @@ class VisualRecognitionCanonicalBoundaryTests(unittest.TestCase):
             "research_state",
             "trade_state",
             "gate_result",
+            "stage_1_fast_screen` 范围故意不写 active `primary_pattern`",
             "as_of_time: unavailable_in_original_images",
             "daily_context_window: unavailable",
             "major_high_low_review: unavailable",
@@ -108,6 +109,7 @@ class VisualRecognitionCanonicalBoundaryTests(unittest.TestCase):
             "primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other",
             "internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending",
             "lineage_status: same_lineage / reset / unclear / pending",
+            "lineage_id:",
             "third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear",
             "range_edge_side: upper / lower / none / pending",
             "research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending",
@@ -115,6 +117,7 @@ class VisualRecognitionCanonicalBoundaryTests(unittest.TestCase):
             "gap_policy: accept_open / skip / flag_only / not_applicable",
             "rough_space` 和",
             "stage_2_status` 是历史工作别名",
+            "快筛与完整闭合记录的硬边界",
             "strong-looking-A",
             "a_leg_quality: strong / ordinary / unclear / event_driven",
             "它不是扫描器，也不是胜率模型",
@@ -155,6 +158,7 @@ class VisualRecognitionCanonicalBoundaryTests(unittest.TestCase):
                 ):
                     self.assertIn(token, content, token)
                 self.assertNotRegex(content, r"(?m)^primary_pattern:")
+                self.assertNotRegex(content, r"(?m)^lineage_id:")
 
     def test_audit_and_indexes_preserve_no_new_positive_boundary(self):
         audit = read(AUDIT)
@@ -169,6 +173,8 @@ class VisualRecognitionCanonicalBoundaryTests(unittest.TestCase):
             "primary_pattern",
             "internal_label",
             "third_push_state",
+            "完整闭合的逐案研究记录",
+            "lineage_id",
             "BOP",
             "MTR",
             "no-new-positive",

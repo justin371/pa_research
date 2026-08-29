@@ -78,14 +78,14 @@
 - [`回放 provenance 与再现性审计（2026-08-29）`](backtesting/replay_provenance_reproducibility_audit_2026-08-29_CN.md)：核对历史报告与 artifact 数值、输入/结果指纹和旧运行冲突；当前仍不能把历史描述升级为验证胜率；
 - [`历史回放结果、交易日志与分母 provenance 审计（2026-08-29）`](backtesting/historical_replay_result_log_provenance_audit_2026-08-29_CN.md)：确认 13 组外部历史结果全部是 `historical_incomplete`，区分模拟 `results.csv`、冻结合同、运行 metadata 与实际交易日志，固定重复样本和当前胜率分母边界；不新增样本；
 - [`BOP 合同准入审计（2026-08-28）`](backtesting/bop_contract_intake_audit_2026-08-28_CN.md)：逐案隔离接受、同日回测、缺口重订和相邻 H/L/ABC 案例；当前没有日线级多日 BOP 正向候选；
-- [`PA 图表视觉识别冒烟验收`](visual_recognition_smoke_test_2026-08-24_CN.md)：图表识别能力、两年背景和当前 acceptance-pending 状态。
+- [`PA 图表视觉识别冒烟验收`](visual_recognition_smoke_test_2026-08-24_CN.md)：图表识别能力、两年背景和当前 acceptance-pending 状态；快筛不冻结 `primary_pattern`/`lineage_id`。
 - [`三推/H3-L3 视觉证据缺口审计`](three_push_h3_l3_visual_evidence_gap_audit_2026-08-24_CN.md)：区分衰竭、扩张/高潮、区间重复和通道延续，分开 canonical 主标签/内部标签，并保留 KLAC 条件候选与 L3 `no-new-positive` 边界。
 - [`Round4 历史图表视觉练习`](visual_recognition_round4_historical_practice_2026-08-24_CN.md)：历史图表练习、H/L/ABC 复核和 Daily 左侧不足两年的证据边界。
-- [`Round5 两年 Daily 左侧背景视觉练习`](visual_recognition_round5_two_year_daily_2026-08-24_CN.md)：4 个标的、8 个历史截断案例的两年背景、重要高低点、EMA 和 H/L/三推边界。
-- [`历史视觉证据与 canonical 边界审计`](backtesting/visual_evidence_canonical_boundary_audit_2026-08-29_CN.md)：统一三推/H-L 历史显示标签、两年背景证据头、方向、订单/空间和统计隔离。
+- [`Round5 两年 Daily 左侧背景视觉练习`](visual_recognition_round5_two_year_daily_2026-08-24_CN.md)：4 个标的、8 个历史截断案例的两年背景、重要高低点、EMA 和 H/L/三推边界；聚合头不冻结 `primary_pattern`/`lineage_id`。
+- [`历史视觉证据与 canonical 边界审计`](backtesting/visual_evidence_canonical_boundary_audit_2026-08-29_CN.md)：统一三推/H-L 历史显示标签、两年背景证据头、方向、订单/空间和统计隔离；逐案闭合才填写主标签与 lineage ID。
 - [`视觉识别冒烟、快筛协议与 Round2/Round3 资产 canonical 边界审计`](backtesting/visual_recognition_canonical_boundary_audit_2026-08-29_CN.md)：核对冒烟/快筛字段映射、两年 Daily/重要高低点/EMA provenance、Round2/Round3 局部资产和 `no-new-positive` 边界；不新增样本或结果。
-- [`Round4、Round5 与 TSLA 视觉资产 canonical 边界审计`](backtesting/visual_asset_canonical_boundary_audit_2026-08-29_CN.md)：补齐短窗口 Round4、两年 Daily Round5 与 TSLA 多周期资产的 canonical provenance、重要高低点/EMA、多周期职责和状态边界；不新增样本或结果。
-- [`全部视觉资产 README canonical provenance 覆盖审计`](backtesting/visual_asset_provenance_coverage_audit_2026-08-29_CN.md)：覆盖 11 个视觉资产目录、105 张 PNG 的 README provenance、配对职责、历史别名和索引边界；不新增样本或结果。
+- [`Round4、Round5 与 TSLA 视觉资产 canonical 边界审计`](backtesting/visual_asset_canonical_boundary_audit_2026-08-29_CN.md)：补齐短窗口 Round4、两年 Daily Round5 与 TSLA 多周期资产的 canonical provenance、重要高低点/EMA、多周期职责和状态边界；聚合资产不冻结 `primary_pattern`/`lineage_id`。
+- [`全部视觉资产 README canonical provenance 覆盖审计`](backtesting/visual_asset_provenance_coverage_audit_2026-08-29_CN.md)：覆盖 11 个视觉资产目录、105 张 PNG 的 README provenance、配对职责、历史别名和索引边界；聚合 README 不冻结 `primary_pattern`/`lineage_id`，不新增样本或结果。
 - [`视觉历史报告与 canonical authority schema 对齐审计`](backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md)：核对六个活动视觉框架、历史报告、配对复核记录与 canonical 字段/状态轴，区分当前模板修复和历史事实别名；不新增样本或结果。
 
 ## 冻结合同回放
@@ -117,7 +117,7 @@
 - [`优先 Pattern 代表性视觉候选矩阵`](priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)；
 - [`事件/板块/大盘视觉证据审计`](event_sector_market_gate_visual_evidence_audit_2026-08-24_CN.md)；
 - [`订单类型与风险合同视觉证据审计`](order_risk_contract_visual_evidence_audit_2026-08-24_CN.md)；
-- [`H/L lineage 与三推状态视觉边界复核`](h_l_lineage_visual_boundary_audit_2026-08-24_CN.md)；
+- [`H/L lineage 与三推状态视觉边界复核`](h_l_lineage_visual_boundary_audit_2026-08-24_CN.md)：逐案闭合记录才填写 `primary_pattern`/`lineage_id`，聚合账本不主张样本独立；
 - [`三推/H3-L3 压力状态框架`](three_push_pressure_state_framework_CN.md)：区间边缘三推、区间中部重复测试、趋势/通道延续和反向确认的分流，并要求主标签、内部标签与压力状态分轴；
 - [`跨 Pattern 视觉优先级与冲突消解审计`](cross_pattern_visual_priority_audit_2026-08-24_CN.md)。
 

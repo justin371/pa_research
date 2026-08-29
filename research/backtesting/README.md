@@ -38,13 +38,13 @@ H/L selection/replay 每批合同数与状态计数见[`H/L selection/replay 状
 
 三推/H3-L3 与成熟区间边缘的 canonical 主次标签、字段、方向、订单状态和统计隔离见[`三推/H3-L3 与区间边缘合同边界审计`](three_push_h3_l3_contract_boundary_audit_2026-08-29_CN.md)。当前 7 份冻结 CSV 的 60 条合同没有 H3/L3 或区间边缘三推行；本审计不增加分母。
 
-历史视觉证据与 canonical 字段边界见[`历史视觉证据与 canonical 边界审计`](visual_evidence_canonical_boundary_audit_2026-08-29_CN.md)：核对 H/L lineage、Round5 两年 Daily、三推状态、订单/空间显示和 `no-new-positive`；不新增 CSV 或统计分母。
+历史视觉证据与 canonical 字段边界见[`历史视觉证据与 canonical 边界审计`](visual_evidence_canonical_boundary_audit_2026-08-29_CN.md)：核对 H/L lineage、Round5 两年 Daily、三推状态、订单/空间显示和 `no-new-positive`；逐案闭合才填写主标签与 lineage ID，不新增 CSV 或统计分母。
 
-视觉识别冒烟、快筛协议与 Round2/Round3 资产的 canonical provenance 见[`视觉识别冒烟、快筛协议与 Round2/Round3 资产 canonical 边界审计`](visual_recognition_canonical_boundary_audit_2026-08-29_CN.md)：只修复字段映射、历史显示标签和局部/配对图像边界，不新增样本、回放结果或统计分母。
+视觉识别冒烟、快筛协议与 Round2/Round3 资产的 canonical provenance 见[`视觉识别冒烟、快筛协议与 Round2/Round3 资产 canonical 边界审计`](visual_recognition_canonical_boundary_audit_2026-08-29_CN.md)：只修复字段映射、历史显示标签和局部/配对图像边界；快筛不冻结 `primary_pattern`/`lineage_id`，不新增样本、回放结果或统计分母。
 
-Round4、Round5 与 TSLA 资产的 canonical provenance、两年 Daily/重要高低点/EMA 和多周期职责见[`Round4、Round5 与 TSLA 视觉资产 canonical 边界审计`](visual_asset_canonical_boundary_audit_2026-08-29_CN.md)：短窗口保持 `daily_context_window: <2y`，三组资产都不新增 pattern、订单或统计结果。
+Round4、Round5 与 TSLA 资产的 canonical provenance、两年 Daily/重要高低点/EMA 和多周期职责见[`Round4、Round5 与 TSLA 视觉资产 canonical 边界审计`](visual_asset_canonical_boundary_audit_2026-08-29_CN.md)：短窗口保持 `daily_context_window: <2y`，聚合资产不冻结 `primary_pattern`/`lineage_id`，三组资产都不新增 pattern、订单或统计结果。
 
-全部视觉资产 README 的 canonical provenance、11 个目录/105 张 PNG 的配对职责和历史别名覆盖见[`全部视觉资产 README canonical provenance 覆盖审计`](visual_asset_provenance_coverage_audit_2026-08-29_CN.md)：资产数量不等于合同样本数，`no-new-positive` 与 `validated win-rate: not-computable` 保持不变。
+全部视觉资产 README 的 canonical provenance、11 个目录/105 张 PNG 的配对职责和历史别名覆盖见[`全部视觉资产 README canonical provenance 覆盖审计`](visual_asset_provenance_coverage_audit_2026-08-29_CN.md)：资产级聚合头不冻结 `primary_pattern`/`lineage_id`，资产数量不等于合同样本数，`no-new-positive` 与 `validated win-rate: not-computable` 保持不变。
 
 六个活动视觉框架、视觉历史报告、配对复核记录与 canonical authority schema 的字段对齐见[`视觉历史报告与 canonical authority schema 对齐审计`](visual_authority_schema_alignment_audit_2026-08-29_CN.md)：当前模板使用统一状态轴，历史案例别名只保留为事实/显示语义，不新增样本或结果。
 

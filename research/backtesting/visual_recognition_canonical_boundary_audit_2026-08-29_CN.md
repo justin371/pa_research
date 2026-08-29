@@ -92,6 +92,14 @@ Round3 H/L 证据头还明确 `direction: no_valid_direction` 是未标注局部
 逐案例的多空视觉解释不因此变成冻结方向。MAR 的空头读法保留为配对历史候选，
 但在缺少 15m 和 EMA slope gate 时仍是 `observation_only`。
 
+### 3.5 快筛与完整闭合记录的边界
+
+本轮补充确认：`stage_1_fast_screen` 只保存候选、背景和不确定项，不实例化 active
+`primary_pattern`、`internal_label` 或 `lineage_id`。只有完整闭合的逐案研究记录，才按
+当时证据填写这些 canonical 轴；若 lineage 尚未证明，仍保留
+`pending`/`unknown`，不能由资产聚合头、后续走势或结果反填。闭合表示入场前证据已封口，
+不表示已经成交、知道结果或获得交易授权。
+
 ### 4. 资产 README 与配对研究记录边界已固定
 
 Round2、Round3 H/L 和 MAR 的 README 现在都声明：

@@ -15,7 +15,7 @@
 | 资产目录 | PNG | canonical Daily / review 边界 | 配对职责 |
 | --- | ---: | --- | --- |
 | `2026-08-24/round2_multisymbol` | 20 | `>=2y`；重要高低点/EMA 在配对冒烟复核中 complete | 无标签多标的 Daily/4H-like/1H/15m 背景 |
-| `2026-08-24/round3_hl_drills` | 6 | `>=2y` via paired Daily；局部图 `partial` | H/L 局部计数练习，不在图上冻结标签 |
+| `2026-08-24/round3_hl_drills` | 6 | `>=2y`（由配对 Daily 提供）；局部图 `partial` | H/L 局部计数练习，不在图上冻结标签 |
 | `2026-08-24/round3_l1_l2_mar` | 4 | `>=2y`；15m 缺失，保留 `partial` | MAR 空头 L1/L2-like 对照 |
 | `2026-08-24/round4_historical_practice` | 19 | `<2y`；重要高低点/EMA `partial` | 约一年 Daily 的边界练习 |
 | `2026-08-24/round5_two_year_daily` | 13 | `>=2y`；配对复核 complete | 两年 Daily 与局部练习，不冻结合同 |
@@ -36,11 +36,16 @@
 - 多案例资产的 `direction: no_valid_direction`、`lineage_status: pending`、`internal_label: pending` 和 `h_l_ema_slope_gate: pending` 只表示聚合 README 不替代逐行合同；实际 long/short、H1/H2/L1/L2、EMA gate、lineage、事件和空间仍在配对 CSV/研究记录中；
 - `research_state`、`trade_state`、`gate_result`、`order_branch`、`space_status` 和 `handoff_status` 不从图像资产推导交易授权；资产本身不冻结 `primary_pattern`、订单或结果。
 
+11 个 README 的 evidence header 都是资产级聚合 provenance，不是逐案闭合研究合同。
+因此 active `primary_pattern` 和 `lineage_id` 故意不写在这些 README 中；逐案完整记录或
+冻结合同才负责填写主标签、内部标签和依赖 ID。资产目录、配对图或 README 缺少
+`lineage_id`，不表示样本彼此独立，也不能把资产数量当作 pattern 样本数。
+
 Round4 的短窗口仍明确为 `daily_context_window: <2y`，`major_high_low_review` 与 `ema20_50_200_review` 为 `partial`，EMA slope 和 H/L gate 为 `unknown/pending`。Round5、TSLA 和五个合同资产的两年背景/EMA 完整度只说明配对视觉 provenance 已记录，不把 H/L、三推、BOP 或 MTR 自动升级为已验证样本。
 
 ## 历史别名与索引修复
 
-1. Round4 资产和复核报告的有效读取统一为 `daily_context_window: <2y`；`two_year_daily: pending` 只在明确的历史别名映射中保留。旧的《视觉资产与事前证据边界审计》同步改为 canonical 表述。
+1. Round4 资产和复核报告的有效读取统一为 `daily_context_window: <2y`；`two_year_daily: pending` 只在明确的历史别名映射中保留。Round3 H/L 局部资产统一写 `daily_context_window: >=2y`，配对 Daily 的职责改在正文说明。旧的《视觉资产与事前证据边界审计》同步改为 canonical 表述。
 2. 冒烟报告的旧汇总字段 `two_year_daily_context: pass` 改为按资产范围说明的 `daily_context_window_review: saved assets >=2y; public five unavailable`；前五张公开图仍保持 `unavailable`，不被保存资产覆盖。
 3. 交接文档中的 `no_new_positive` 改为 canonical 结论 `no-new-positive`。批次级 `two_year_chart_coverage`、历史报告的 `round4_two_year_daily_complete_cases` 和显式 alias mapping 仍按各自用途保留，不冒充逐标的 provenance 字段。
 4. 五个新增 header、Round4/Round5/TSLA 资产和本审计已加入 `docs/README.md`、`research/README.md`、`strategy/README.md`、`patterns/README.md`、`research/backtesting/README.md` 及 validator 必需文件/字段检查。

@@ -57,6 +57,11 @@ handoff_status: not_ready
 `internal_label` 或 `third_push_state`。局部 EMA 数值不是 slope gate，视觉首障碍
 也不是冻结的 `first_independent_obstacle` 或 `space_status`。
 
+上面的证据头是 Round4 的聚合历史 provenance，故意不填写 active `primary_pattern`
+或 `lineage_id`。当前案例仍是短窗口的历史练习和待复核显示别名；只有拆成逐案、
+证据已封口的完整研究记录后，才可按当时证据填写主标签和 lineage ID，且不能由聚合
+记录推导样本独立性。
+
 Round4 来源中的 Codex Trading 历史 OHLC 只作为只读素材来源，不导入 Codex Trading
 规则、代码、实现状态或执行能力。
 

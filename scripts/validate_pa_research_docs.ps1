@@ -328,6 +328,15 @@ foreach ($assetReadmeFile in $visualAssetReadmePaths) {
         $relativePath = $assetReadmeFile.FullName.Substring($repoRoot.Length + 1).Replace('\', '/')
         Add-ValidationError "visual asset README is not referenced by a canonical index: $relativePath"
     }
+    $assetReadmeContent = Get-Utf8Text -Path $assetReadmeFile.FullName
+    if ($assetReadmeContent -match '(?m)^\s*primary_pattern\s*:') {
+        $relativePath = $assetReadmeFile.FullName.Substring($repoRoot.Length + 1).Replace('\', '/')
+        Add-ValidationError "visual asset README must not freeze primary_pattern in its aggregate header: $relativePath"
+    }
+    if ($assetReadmeContent -match '(?m)^\s*lineage_id\s*:') {
+        $relativePath = $assetReadmeFile.FullName.Substring($repoRoot.Length + 1).Replace('\', '/')
+        Add-ValidationError "visual asset README must not assign lineage_id in its aggregate header: $relativePath"
+    }
 }
 $externalVisualManifestRelativePath = 'research/backtesting/external_visual_artifact_manifest_2026-08-29.json'
 $externalVisualManifestAbsolutePath = [IO.Path]::GetFullPath(
@@ -778,6 +787,8 @@ $canonicalChecks = @{
     )
     'research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md' = @(
         'direction: long / short / no_valid_direction',
+        'primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other',
+        'secondary_context:',
         'parent_state: open_trend / trading_range / range_edge / transition / climax / unclear',
         'lineage_status: same_lineage / reset / unclear / pending',
         'lineage_id:',
@@ -850,6 +861,7 @@ $canonicalChecks = @{
         'historical_count_label',
         'same-lineage-provisional',
         'same-pressure-zone-provisional',
+        '聚合 provenance，故意不填写 active `primary_pattern`',
         'unclear-to-range',
         'first-obstacle-boundary',
         'space_status: unknown',
@@ -885,6 +897,7 @@ $canonicalChecks = @{
         'trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending',
         'gate_result: pass / conditional / observation_only / valid_no_trade / pending',
         'handoff_status: not_ready',
+        '故意不填写 active `primary_pattern`',
         'no-new-positive: maintained',
         'validated win-rate: not-computable'
     )
@@ -895,6 +908,8 @@ $canonicalChecks = @{
         'lineage_status: pending',
         'third_push_state: range_repeat_test',
         'space_status: unknown',
+        '完整闭合逐案记录',
+        '样本独立性',
         '7 份 CSV、60 行',
         'H3/L3 冻结合同仍为 0',
         'no-new-positive',
@@ -919,6 +934,7 @@ $canonicalChecks = @{
         'primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'lineage_status: same_lineage / reset / unclear / pending',
+        'lineage_id:',
         'third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear',
         'range_edge_side: upper / lower / none / pending',
         'research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending',
@@ -926,6 +942,7 @@ $canonicalChecks = @{
         'gap_policy: accept_open / skip / flag_only / not_applicable',
         'rough_space` 和',
         'stage_2_status` 是历史工作别名',
+        '快筛与完整闭合记录的硬边界',
         'strong-looking-A'
     )
     'research/visual_recognition_smoke_test_2026-08-24_CN.md' = @(
@@ -937,6 +954,7 @@ $canonicalChecks = @{
         'as_of_time: unavailable_in_original_images',
         'major_high_low_review: unavailable',
         'ema20_50_200_review: unavailable',
+        'stage_1_fast_screen` 范围故意不写 active `primary_pattern`',
         'daily_context_window_review: saved assets >=2y; public five unavailable',
         'research_state: observation_only',
         'trade_state: observation_only',
@@ -970,7 +988,8 @@ $canonicalChecks = @{
         'session_state: historical_close',
         'timeframes_seen: 1H / 15m plus paired Daily from round2_multisymbol',
         'chart_scope: partial',
-        'daily_context_window: >=2y via paired Daily asset',
+        'daily_context_window: >=2y',
+        '只来自配对 Daily 资产',
         'major_high_low_review: complete in paired smoke review',
         'ema20_50_200_review: complete in paired smoke review',
         'direction: no_valid_direction',
@@ -1237,6 +1256,8 @@ $canonicalChecks = @{
         'round2_multisymbol/README.md',
         'round3_hl_drills/README.md',
         'round3_l1_l2_mar/README.md',
+        '完整闭合的逐案研究记录',
+        'lineage_id',
         'major_high_low_review',
         'ema20_50_200_review',
         'primary_pattern',
@@ -1258,6 +1279,8 @@ $canonicalChecks = @{
         'daily_context_window: >=2y',
         'major_high_low_review',
         'ema20_50_200_review',
+        '资产级聚合 provenance',
+        'active `primary_pattern` 和 `lineage_id`',
         'timeframes_seen',
         'no-new-positive',
         'validated win-rate: not-computable',
@@ -1274,6 +1297,8 @@ $canonicalChecks = @{
         'daily_context_window: >=2y',
         'major_high_low_review',
         'ema20_50_200_review',
+        '资产级聚合 provenance',
+        'active `primary_pattern` 和 `lineage_id`',
         'two_year_daily: pending',
         'two_year_daily_context: pass',
         'no-new-positive',

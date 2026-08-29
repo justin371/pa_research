@@ -73,6 +73,16 @@ space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / borderline / 
 
 跳空重订、首障碍拥挤、`no-fill` 或 `opening-skip` 都不是 win/loss；本轮三份历史视觉记录没有新增冻结订单，也没有进入胜率分母。
 
+### 4. 聚合头与完整闭合逐案记录
+
+本轮补充核对后，H/L lineage 账本的字段清单已包含 canonical
+`primary_pattern`、`secondary_context`、`internal_label`、`lineage_status` 和
+`lineage_id`，但这些只是可用轴，不代表跨案例聚合已经冻结某个主标签。Round5 的
+聚合证据头和所有未标注视觉资产同样故意不填写 active `primary_pattern` 或
+`lineage_id`；只有逐案、在截断时点封口的入场前研究记录才按证据填写，且缺失时保持
+`pending`/`unknown`。闭合不等于知道结果、实际成交或获得授权，lineage ID 缺失也不
+能推导样本独立性。
+
 ## 结论和统计隔离
 
 - H/L 视觉协议的 provisional lineage 现在显式降为 `pending`，RBLX 等区间重复样本显式使用 `range_repeat_test`，不再把模糊标签当作严格计数；

@@ -24,6 +24,10 @@
 `range-repeat` 和 `H2-like`）只作为显示别名。字段位置一律按当前 canonical 轴读取；
 缺少严格证据时使用 `pending`/`unclear`，而不是用“provisional”拼接出新的枚举。
 
+只有逐案、完整且已闭合的研究记录，才可以在该案例的证据范围内填写
+`primary_pattern`、`internal_label` 和必要的 `lineage_id`；本跨案例账本不替任何案例
+冻结这些值，也不把聚合记录当作独立样本。
+
 ## 零、所有局部识别共用的左侧两年基准
 
 先看至少两年的 Daily 左侧背景（来源窗口支持时），再看局部 4H/1H/15m 图；同一标的的多周期图像共用这份背景。先标主要高点、主要低点、支撑、阻力、前高/前低角色转换区，再记录 Daily EMA20/50/200 的位置和价格在其上/下关系。局部形状不得覆盖或事后改写这些左侧事实。
@@ -60,6 +64,8 @@ major_high_low_review: complete / partial / unavailable
 ema20_50_200_review: complete / partial / unavailable
 count_timeframe:                  # 只允许一个主计数周期；timeframes_seen 记录全部可见周期
 direction: long / short / no_valid_direction
+primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
+secondary_context:
 parent_state: open_trend / trading_range / range_edge / transition / climax / unclear
 lineage_status: same_lineage / reset / unclear / pending
 lineage_id:
@@ -95,6 +101,16 @@ research_state: pattern_like / research_candidate / research_positive_conditiona
 trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
 gate_result: pass / conditional / observation_only / valid_no_trade / pending
 ```
+
+### 聚合协议与完整闭合逐案记录的边界
+
+这里的字段块是跨案例的 canonical 轴清单，不是给当前历史聚合记录填写一组主标签。
+“完整且已闭合”只表示该案例在预先确定的截断时点已经封口了入场前证据；它不表示
+已经知道后续结果、已经成交，或已经具备交易授权。逐案记录必须显式处理证据头、
+`direction`、`primary_pattern`、`internal_label` 和 `lineage_status`；只有在记录主张
+具体父级/尝试依赖时才填写对应 `lineage_id`。证据或 lineage 未解决时，保留
+`pending`/`unknown`，并把案例留在 `observation_only` 或未冻结状态；不能用聚合 README、
+后续走势或结果反填。冻结回放另需独立的数值订单字段，本协议不创建回放输入。
 
 本协议实际只冻结视觉字段；`order_branch`、`gap_policy`、`structural_stop`、
 `first_independent_obstacle`、`pre_entry_space_R` 和 `space_status` 在这些历史例子中不因

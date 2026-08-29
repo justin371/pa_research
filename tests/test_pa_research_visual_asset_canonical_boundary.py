@@ -93,6 +93,7 @@ class VisualAssetCanonicalBoundaryTests(unittest.TestCase):
 
         self.assertIsNone(re.search(r"(?m)^two_year_daily:", content))
         self.assertIsNone(re.search(r"(?m)^primary_pattern:", content))
+        self.assertIsNone(re.search(r"(?m)^lineage_id:", content))
 
     def test_all_remaining_asset_readmes_are_unlabelled_and_canonical(self):
         cases = (
@@ -153,6 +154,7 @@ class VisualAssetCanonicalBoundaryTests(unittest.TestCase):
                 for token in common + tokens:
                     self.assertIn(token, content, token)
                 self.assertIsNone(re.search(r"(?m)^primary_pattern:", content))
+                self.assertIsNone(re.search(r"(?m)^lineage_id:", content))
 
     def test_paired_reports_and_audit_keep_no_new_positive_boundary(self):
         for path, tokens in (
@@ -175,6 +177,8 @@ class VisualAssetCanonicalBoundaryTests(unittest.TestCase):
                     "daily_context_window: >=2y",
                     "major_high_low_review",
                     "ema20_50_200_review",
+                    "资产级聚合 provenance",
+                    "lineage_id",
                     "no-new-positive",
                     "validated win-rate: not-computable",
                     "PA Research only",

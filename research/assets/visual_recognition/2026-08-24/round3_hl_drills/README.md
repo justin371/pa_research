@@ -13,7 +13,7 @@ timezone: America/New_York
 session_state: historical_close
 timeframes_seen: 1H / 15m plus paired Daily from round2_multisymbol
 chart_scope: partial
-daily_context_window: >=2y via paired Daily asset
+daily_context_window: >=2y
 major_high_low_review: complete in paired smoke review; not in local drill
 ema20_50_200_review: complete in paired smoke review; Daily EMA only
 daily_ema20_slope: unknown
@@ -30,7 +30,8 @@ handoff_status: not_ready
 
 该 README 只描述局部资产；`primary_pattern`、`secondary_context`、H1/H2/L1/L2、
 三推、BOP 和 MTR 不在未标注图像中冻结。`chart_scope: partial` 明确表示局部
-放大图不能替代两年 Daily、重要高低点或 EMA20/50/200 的独立复核。
+放大图不能替代两年 Daily、重要高低点或 EMA20/50/200 的独立复核。这里的
+`daily_context_window: >=2y` 只来自配对 Daily 资产；本地局部 drill 不单独提供该窗口。
 
 - 标的：`SPY`、`NVDA`
 - 数据状态：公开历史 OHLC；通过 Jina Reader 读取 Yahoo Finance Chart API；不是 Futu 数据，也不是实时授权

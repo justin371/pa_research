@@ -84,6 +84,7 @@ primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other
 secondary_context:
 internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending
 lineage_status: same_lineage / reset / unclear / pending
+lineage_id:
 attempt_direction: bullish_attempts / bearish_attempts / unknown
 third_push_state: exhaustion_candidate / continuation_or_climax / range_repeat_test / channel_continuation / unclear
 first_reverse: none / touch / structural_break
@@ -105,6 +106,19 @@ not_this_pattern / pending` 分别只可作为视觉阶段别名，不能直接�
 通常映射为 `research_state: pattern_like / observation_only / valid_no_trade /
 pending`，但具体状态仍须由证据决定。`directional_bias` 不能覆盖
 `direction: no_valid_direction`。
+
+### 快筛与完整闭合记录的硬边界
+
+`contract_scope: stage_1_fast_screen` 只产生候选和显示层信息：
+`pattern_candidate`、`stage_1_status`、背景、A/B 质量、位置和不确定项可以先记录，
+但该阶段不实例化 active `primary_pattern`、`internal_label` 或 `lineage_id`，也不产生
+订单、授权或胜率结论。canonical 映射块列出的是可能的轴，不代表快筛记录已经完成这些轴。
+
+“完整且已闭合的研究记录”是逐案、逐截断时点的入场前证据封口：证据头、`direction`、
+`primary_pattern`、`internal_label`、`lineage_status` 都必须有明确值或明确的
+`pending`/`unknown`；如果记录声称某个父级/尝试依赖，必须同时有对应 `lineage_id`。
+闭合不等于知道结果、实际成交或交易授权；未解决的记录仍只能是观察/未冻结状态。只有
+独立冻结合同另行补齐数值触发、止损、首障碍和订单分支后，才可能进入回放准备。
 
 `major_high_low_review`、`ema20_50_200_review` 和 `daily_context_window` 是证据
 provenance，不是“图上出现一条线”的同义词。若图像没有两年 Daily 左侧、重要

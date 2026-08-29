@@ -207,13 +207,13 @@ Round4 历史图表视觉练习见[`Round4 历史图表视觉练习与 H/L/ABC �
 
 Round5 两年 Daily 左侧背景练习见[`Round5 两年 Daily 左侧背景与 ABC/H-L/三推视觉练习`](../research/visual_recognition_round5_two_year_daily_2026-08-24_CN.md)及其[`无标签图表资产`](../research/assets/visual_recognition/2026-08-24/round5_two_year_daily/README.md)；本轮 4 个标的、8 个 targeted 案例完成两年背景字段，但严格计数和可比正样本仍为 `0`。
 
-历史视觉证据与 canonical 字段边界的统一审计见[`历史视觉证据与 canonical 边界审计`](../research/backtesting/visual_evidence_canonical_boundary_audit_2026-08-29_CN.md)：provisional lineage 映射为 `pending`，区间重复使用 `range_repeat_test`，视觉首障碍不自动成为冻结空间。
+历史视觉证据与 canonical 字段边界的统一审计见[`历史视觉证据与 canonical 边界审计`](../research/backtesting/visual_evidence_canonical_boundary_audit_2026-08-29_CN.md)：provisional lineage 映射为 `pending`，区间重复使用 `range_repeat_test`，视觉首障碍不自动成为冻结空间；逐案闭合才填写主标签与 lineage ID。
 
-视觉识别冒烟、快筛协议与 Round2/Round3 资产的字段映射和配对 provenance 见[`视觉识别冒烟、快筛协议与 Round2/Round3 资产 canonical 边界审计`](../research/backtesting/visual_recognition_canonical_boundary_audit_2026-08-29_CN.md)：历史展示标签不冒充 `primary_pattern`/`internal_label`，局部图不替代两年 Daily，`no-new-positive` 保持不变。
+视觉识别冒烟、快筛协议与 Round2/Round3 资产的字段映射和配对 provenance 见[`视觉识别冒烟、快筛协议与 Round2/Round3 资产 canonical 边界审计`](../research/backtesting/visual_recognition_canonical_boundary_audit_2026-08-29_CN.md)：历史展示标签不冒充 `primary_pattern`/`internal_label`，快筛不冻结 `lineage_id`，局部图不替代两年 Daily，`no-new-positive` 保持不变。
 
-Round4、Round5 与 TSLA 视觉资产的 provenance、两年 Daily、重要高低点、EMA 和多周期职责见[`Round4、Round5 与 TSLA 视觉资产 canonical 边界审计`](../research/backtesting/visual_asset_canonical_boundary_audit_2026-08-29_CN.md)：短窗口、未标注资产和配对复核均不自动冻结 pattern、订单或统计结果。
+Round4、Round5 与 TSLA 视觉资产的 provenance、两年 Daily、重要高低点、EMA 和多周期职责见[`Round4、Round5 与 TSLA 视觉资产 canonical 边界审计`](../research/backtesting/visual_asset_canonical_boundary_audit_2026-08-29_CN.md)：短窗口、未标注资产和配对复核均不自动冻结 pattern、`lineage_id`、订单或统计结果。
 
-全部 11 个视觉资产目录的 README provenance 和 105 张 PNG 的配对/统计边界见[`全部视觉资产 README canonical provenance 覆盖审计`](../research/backtesting/visual_asset_provenance_coverage_audit_2026-08-29_CN.md)：合同资产仍按逐行合同读取，窗口数量不等于样本数量。
+全部 11 个视觉资产目录的 README provenance 和 105 张 PNG 的配对/统计边界见[`全部视觉资产 README canonical provenance 覆盖审计`](../research/backtesting/visual_asset_provenance_coverage_audit_2026-08-29_CN.md)：README 聚合头不冻结 `primary_pattern`/`lineage_id`，合同资产仍按逐行合同读取，窗口数量不等于样本数量。
 
 六个活动视觉框架、视觉历史报告、配对复核记录与 canonical authority schema 的字段对齐见[`视觉历史报告与 canonical authority schema 对齐审计`](../research/backtesting/visual_authority_schema_alignment_audit_2026-08-29_CN.md)：当前模板使用统一状态轴，历史案例别名只保留为事实/显示语义，不新增样本或结果。
 

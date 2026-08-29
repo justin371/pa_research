@@ -16,6 +16,7 @@ CANONICAL_THIRD_PUSH = (
     "range_repeat_test / channel_continuation / unclear"
 )
 CANONICAL_LINEAGE = "lineage_status: same_lineage / reset / unclear / pending"
+CANONICAL_PATTERN = "primary_pattern: ABC_CONT / BOP / H1_L1 / H2_L2 / H3_L3 / RFB / MTR / other"
 CANONICAL_SPACE = (
     "space_status: strict_ge_1R / borderline_ge_1R / clearly_positive / "
     "borderline / blocked / unknown"
@@ -35,6 +36,9 @@ class VisualEvidenceCanonicalBoundaryTests(unittest.TestCase):
             "major_high_low_review: complete / partial / unavailable",
             "ema20_50_200_review: complete / partial / unavailable",
             CANONICAL_LINEAGE,
+            CANONICAL_PATTERN,
+            "secondary_context:",
+            "lineage_id:",
             "internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending",
             "attempt_direction: bullish_attempts / bearish_attempts / unknown",
             CANONICAL_THIRD_PUSH,
@@ -70,6 +74,8 @@ class VisualEvidenceCanonicalBoundaryTests(unittest.TestCase):
             "major_high_low_review: complete (8/8 cases)",
             "ema20_50_200_review: complete (8/8 cases)",
             CANONICAL_LINEAGE,
+            "聚合 provenance，故意不填写 active `primary_pattern`",
+            "lineage_id",
             "internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending",
             CANONICAL_THIRD_PUSH,
             CANONICAL_SPACE,
@@ -102,6 +108,8 @@ class VisualEvidenceCanonicalBoundaryTests(unittest.TestCase):
 
         self.assertIsNone(re.search(r"(?m)^\s*lineage_status:\s*(?:same-lineage-provisional|same-pressure-zone-provisional|provisional)", content))
         self.assertIsNone(re.search(r"(?m)^\s*first_obstacle_candidate:", content))
+        self.assertIsNone(re.search(r"(?m)^\s*primary_pattern:", content))
+        self.assertIsNone(re.search(r"(?m)^\s*lineage_id:", content))
 
     def test_three_push_audit_preserves_conditional_not_production_boundary(self):
         content = read(THREE_PUSH)
@@ -137,6 +145,8 @@ class VisualEvidenceCanonicalBoundaryTests(unittest.TestCase):
             "lineage_status: pending",
             "third_push_state: range_repeat_test",
             "space_status: unknown",
+            "完整闭合逐案记录",
+            "样本独立性",
             "7 份 CSV、60 行",
             "H3/L3 冻结合同仍为 0",
             "no-new-positive",

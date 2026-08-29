@@ -18,6 +18,7 @@ EMA20/50/200 是按截断日前全部可见 Daily 收盘递推的背景线；重
 `contract_scope: historical_context_only`，不是当前行情或可直接回放的交易合同。原始日志没有保存查询时间和时区，因此统一记录为：
 
 ```text
+contract_scope: historical_context_only
 data_status: historical
 as_of_time: per-case cutoff; query timestamp unavailable in original log
 timezone: unavailable_in_original_log
@@ -28,6 +29,11 @@ daily_context_window: >=2y (8/8 cases)
 major_high_low_review: complete (8/8 cases)
 ema20_50_200_review: complete (8/8 cases)
 ```
+
+上面的证据头是 8 个案例的聚合 provenance，故意不填写 active `primary_pattern` 或
+`lineage_id`。两年 Daily、重要高低点和 EMA review 完成，只说明背景证据已记录，
+不等于每个案例的 pattern 或 lineage 已闭合；只有逐案封口的入场前研究记录才能按
+证据填写这些字段，缺失或不确定时仍保持 `pending`/`unknown`，也不能据此声称样本独立。
 
 每个案例的 `daily_context_window`、主要高低点、支撑阻力和 `daily_ema20_50_200` 数值仍以该案例文字和无标签图为准；
 `chart_scope: partial` 反映各案例低周期覆盖不对称，不能被读成所有周期完整。`daily_ema20_50_200` 只记录位置/数值背景；

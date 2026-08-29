@@ -130,6 +130,7 @@ class VisualAssetProvenanceCoverageTests(unittest.TestCase):
                 for token in common:
                     self.assertIn(token, content, token)
                 self.assertIsNone(re.search(r"(?m)^primary_pattern:", content))
+                self.assertIsNone(re.search(r"(?m)^lineage_id:", content))
                 self.assertIsNone(re.search(r"(?m)^timeframe_seen:", content))
 
     def test_contract_asset_readmes_keep_per_case_fields_out_of_aggregate_header(self):
@@ -151,6 +152,7 @@ class VisualAssetProvenanceCoverageTests(unittest.TestCase):
                 ):
                     self.assertIn(token, content, token)
                 self.assertIsNone(re.search(r"(?m)^primary_pattern:", content))
+                self.assertIsNone(re.search(r"(?m)^lineage_id:", content))
 
     def test_known_aliases_are_mapped_or_removed_from_active_fields(self):
         pre_entry = read(PRE_ENTRY)
@@ -176,6 +178,8 @@ class VisualAssetProvenanceCoverageTests(unittest.TestCase):
             "daily_context_window: >=2y",
             "major_high_low_review",
             "ema20_50_200_review",
+            "资产级聚合 provenance",
+            "active `primary_pattern` 和 `lineage_id`",
             "two_year_daily: pending",
             "two_year_daily_context: pass",
             "no-new-positive",
