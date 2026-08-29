@@ -10,6 +10,14 @@ TRIAGE = REPO_ROOT / "research" / "visual_pattern_triage_protocol_CN.md"
 BACKTEST_README = REPO_ROOT / "research" / "backtesting" / "README.md"
 PATTERN_INVENTORY = REPO_ROOT / "strategy" / "pattern_inventory_candidates.md"
 SMOKE = REPO_ROOT / "research" / "visual_recognition_smoke_test_2026-08-24_CN.md"
+LEGACY_PROVENANCE_REPAIRS = (
+    REPO_ROOT / "research" / "nflx_three_push_top_boundary_2024-08-05_2024-09-26.md",
+    REPO_ROOT / "research" / "tsla_range_after_sell_climax_2025-03-11_2025-05-13.md",
+)
+LEGACY_NARRATIVE_BOUNDARY_CASES = (
+    REPO_ROOT / "research" / "hd_bullish_h1_ema200_sector_boundary_2024-07-01_2024-07-31.md",
+    REPO_ROOT / "research" / "qcom_bearish_abc_l1_l2_gap_sector_boundary_2024-07-17_2024-07-30.md",
+)
 
 
 PATTERN_DIRS = (
@@ -117,6 +125,32 @@ class EvidenceScopeStatusTests(unittest.TestCase):
         self.assertEqual(len(re.findall(r"^data_status: historical$", smoke, re.MULTILINE)), 5)
         self.assertEqual(len(re.findall(r"^daily_context_window: >=2y$", smoke, re.MULTILINE)), 4)
         self.assertIn("data_status_note: public data; not Futu; not live authorization", smoke)
+
+    def test_legacy_provenance_gaps_are_explicitly_incomplete(self):
+        required = (
+            "contract_scope: historical_context_only",
+            "data_source: source provenance not recorded in original note",
+            "data_status: incomplete",
+            "as_of_time: unavailable_in_original_log",
+            "timezone: unavailable_in_original_log",
+            "chart_scope: partial",
+            "daily_context_window: unavailable",
+        )
+        for path in LEGACY_PROVENANCE_REPAIRS:
+            content = read(path)
+            with self.subTest(path=path.as_posix()):
+                for token in required:
+                    self.assertIn(token, content, token)
+                self.assertNotRegex(content, r"(?m)^data_status:\s*live_confirmed\s*$")
+                self.assertNotRegex(content, r"(?m)^handoff_status:\s*ready_for_system\s*$")
+
+    def test_legacy_narrative_cases_keep_historical_non_live_boundary(self):
+        for path in LEGACY_NARRATIVE_BOUNDARY_CASES:
+            content = read(path)
+            with self.subTest(path=path.as_posix()):
+                self.assertIn("Futu OpenD 历史 QFQ", content)
+                self.assertIn("不使用实时数据", content)
+                self.assertNotRegex(content, r"(?m)^data_status:\s*live_confirmed\s*$")
 
     def test_replay_and_candidate_inventory_disclose_upstream_boundary(self):
         backtest = read(BACKTEST_README)

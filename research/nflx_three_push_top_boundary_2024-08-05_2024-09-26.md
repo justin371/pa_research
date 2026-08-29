@@ -4,7 +4,25 @@
 
 这是一份视觉研究边界，不是交易建议，也不是量化规则。它用来检查：强多头 A 之后，高位多次测试能否称为三推顶部，以及反向触发后首支撑和结构止损谁先到。
 
-## 1. 完整图表中的外形
+## 0. 证据范围与 provenance
+
+```text
+contract_scope: historical_context_only
+data_source: source provenance not recorded in original note; historical narrative only
+data_status: incomplete
+as_of_time: unavailable_in_original_log
+timezone: unavailable_in_original_log
+session_state: unknown
+timeframes_seen: Daily / 15m (as described in this note; provenance not frozen)
+chart_scope: partial
+daily_context_window: unavailable
+major_high_low_review: partial
+ema20_50_200_review: unavailable
+```
+
+本文件保留的是历史图形和顺序描述；原始记录没有在本文件内锁定数据源、查询截止时间、时区、图表资产或两年 Daily 覆盖。因此 `data_status: incomplete`，不能把正文中的“完整图表”、价格数值或后续结果升级为当前证据、可重放证据或完整两年视觉证据。
+
+## 1. 记录中的外形（不等于仓库内完整视觉 artifact）
 
 `2024-08-05` 低点约 `58.70`，价格连续向上推进到 `2024-08-20` 高点约 `71.13`。这段可以先标为方向性较强的多头 A；但 A 之后的多头推进已经接近高位区，不能只因为随后出现多个高点就自动授权做空。
 

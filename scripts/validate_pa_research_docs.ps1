@@ -2343,7 +2343,9 @@ $canonicalEvidenceLegacyPaths = @(
     'research/visual_recognition_round4_historical_practice_2026-08-24_CN.md',
     'research/assets/visual_recognition/2026-08-24/round4_historical_practice/README.md',
     'research/assets/visual_recognition/2026-08-24/round5_two_year_daily/README.md',
-    'research/assets/visual_recognition/2026-08-24/tsla_public_mtf/README.md'
+    'research/assets/visual_recognition/2026-08-24/tsla_public_mtf/README.md',
+    'research/nflx_three_push_top_boundary_2024-08-05_2024-09-26.md',
+    'research/tsla_range_after_sell_climax_2025-03-11_2025-05-13.md'
 )
 foreach ($relativePath in $canonicalEvidenceLegacyPaths) {
     $absolutePath = Join-Path -Path $repoRoot -ChildPath ($relativePath -replace '/', '\')

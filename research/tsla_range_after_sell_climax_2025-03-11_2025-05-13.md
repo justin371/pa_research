@@ -8,12 +8,24 @@
 
 ```text
 contract_scope: historical_context_only
+data_source: source provenance not recorded in original note; historical case narrative only
+data_status: incomplete
+as_of_time: unavailable_in_original_log
+timezone: unavailable_in_original_log
+session_state: historical_close
+timeframes_seen: Daily
+chart_scope: partial
+daily_context_window: unavailable
+major_high_low_review: partial
+ema20_50_200_review: unavailable
 direction: no_valid_direction
 research_state: observation_only
 trade_state: not_authorized
 gate_result: observation_only
 handoff_status: research_only
 ```
+
+本记录明确是历史复盘，但原始记录没有在本文件内留下可核对的数据源、查询截止时间、时区、图表 artifact 或两年 Daily 覆盖；因此使用 `data_status: incomplete`，不把它描述成当前行情或完整视觉证据。
 
 ## 一句话结论
 
