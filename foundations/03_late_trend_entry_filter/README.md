@@ -111,6 +111,8 @@ Daily/4H 已经提供方向和位置，但高周期信号 K 太大或入场过�
 
 下面是本基础层的补充复核卡；完整案例仍须先按统一输出合同填写证据头、结构、订单和三条状态轴。这里的 `last_push`、`late_location_or_magnet`、`management` 等字段只描述后段过滤，不创建新的 pattern 或状态枚举。
 
+当 `contract_scope: daily_candidate` 时，下面的 `primary_pattern` 只能写 `ABC_CONT` 或 `BOP`；H/L 计数写入 `internal_label`，其他后段关系写入 `secondary_context`。只有 `deep_review` 或 `historical_context_only` 的闭合记录才能按统一合同使用兼容主标签。
+
 ```text
 contract_scope: deep_review / daily_candidate / historical_context_only
 data_status: historical / delayed / live_confirmed / incomplete

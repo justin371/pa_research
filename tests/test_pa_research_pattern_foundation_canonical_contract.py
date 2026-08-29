@@ -240,6 +240,43 @@ class PatternFoundationCanonicalContractTests(unittest.TestCase):
         self.assertIsNone(re.search(r"(?m)^timeframe:", content))
         self.assertIsNone(re.search(r"(?m)^context_timeframes_seen:", content))
 
+    def test_three_push_local_card_uses_the_complete_thesis_state_enum(self):
+        content = read(PATTERNS_ROOT / "08_three_push_h3_l3" / "README.md")
+        self.assertIn(
+            "thesis_state: working / failed / invalidated / replaced / pending",
+            content,
+        )
+
+    def test_event_gate_matches_the_daily_earnings_hard_exclusion(self):
+        event_gate = read(FOUNDATIONS_ROOT / "05_event_sector_market_gate" / "README.md")
+        daily_rules = read(
+            REPO_ROOT / "docs" / "pa_research_daily_selection_rules_v0_1_CN.md"
+        )
+        expected = (
+            "已知财报在未来三个交易 session 内：不新开仓，不赌财报；候选写 "
+            "`gate_result: valid_no_trade` 和 `trade_state: valid_no_trade`"
+        )
+        self.assertIn(expected, event_gate)
+        for token in (
+            "earnings_next_three_sessions: yes",
+            "gate_result: valid_no_trade",
+            "trade_state: valid_no_trade",
+        ):
+            self.assertIn(token, daily_rules)
+        self.assertNotIn(
+            "候选写 `gate_result: valid_no_trade` 或 `gate_result: pending`",
+            event_gate,
+        )
+
+    def test_late_trend_pattern_whitelist_is_scoped_to_the_contract(self):
+        content = read(
+            FOUNDATIONS_ROOT / "03_late_trend_entry_filter" / "README.md"
+        )
+        self.assertIn(
+            "当 `contract_scope: daily_candidate` 时，下面的 `primary_pattern` 只能写 `ABC_CONT` 或 `BOP`",
+            content,
+        )
+
     def test_foundation_index_and_readmes_keep_authority_links(self):
         index = read(FOUNDATIONS_ROOT / "README.md")
         self.assertIn("pa_research_output_schema_v0_1_CN.md", index)

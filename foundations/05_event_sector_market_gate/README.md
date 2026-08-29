@@ -25,7 +25,7 @@
 
 ## 3. 财报与重大事件
 
-- 已知财报在未来三个交易 session 内：不新开仓，不赌财报；候选写 `gate_result: valid_no_trade` 或 `gate_result: pending`，并保留 `earnings_next_three_sessions: yes`。
+- 已知财报在未来三个交易 session 内：不新开仓，不赌财报；候选写 `gate_result: valid_no_trade` 和 `trade_state: valid_no_trade`，并保留 `earnings_next_three_sessions: yes`。只有财报日期或影响仍不清楚时才写 `pending`。
 - 已有仓位的管理与新入场分开，不能把减仓/止损悄悄算成新交易。
 - 财报后的跳空、宏观冲击、监管消息、并购和产品发布记录为 `event_context: earnings / macro / gap / other`，不能与普通 PA K 线混作无事件基准。
 - 事件时间或影响不清楚时保留 `pending`，不凭结果删除事件字段。

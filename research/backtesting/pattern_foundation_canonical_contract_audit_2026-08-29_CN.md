@@ -103,3 +103,13 @@ handoff_status: research_only / not_ready / ready_for_system
 - 本轮只属于 `PA Research only`，不修改 Codex Trading，不创建量化扫描器，不连接 Futu/OpenD，不连接 Execution Agent。
 
 该审计只验证文档契约和索引边界；它不表示 pattern 已自动识别、规则已验证或可以直接下单。
+
+## 追加 canonical 枚举与事件闸门复核（2026-08-29）
+
+继续逐项对照 16 个 pattern README、8 个基础层、日线选股规则和统一输出合同后，发现三处可复现的文档偏差：
+
+1. `patterns/08_three_push_h3_l3/README.md` 的局部协议把 `thesis_state` 写成 `working / failed / replaced / pending`，遗漏统一合同的 `invalidated`；现已补齐。
+2. `foundations/05_event_sector_market_gate/README.md` 原先对“已知财报未来三个交易 session”同时允许 `gate_result: pending`，与日线规则“已知即 `valid_no_trade`，仅日期/影响不清楚才 `pending`”冲突；现已统一为 `gate_result: valid_no_trade` + `trade_state: valid_no_trade`。
+3. `foundations/03_late_trend_entry_filter/README.md` 的兼容 `primary_pattern` 列表覆盖 `daily_candidate`，但原文没有提示按 `contract_scope` 收窄；现已明确日线候选只能使用 `ABC_CONT`/`BOP`，兼容值仅用于闭合深审/历史记录。
+
+validator 和回归测试已覆盖上述三条边界及旧事件文案回归。修复只涉及 PA Research 文档和守卫，不修改 16 个 pattern 的案例、CSV、样本、结果或 engine 有效语义；`no-new-positive` 与 `validated win-rate: not-computable` 保持不变，不创建量化扫描器、不连接 Execution Agent。

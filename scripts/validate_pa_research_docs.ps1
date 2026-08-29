@@ -518,6 +518,7 @@ $canonicalChecks = @{
         'space_status:',
         'trade_state:',
         'gate_result:',
+        'thesis_state: working / failed / invalidated / replaced / pending',
         'handoff_status: research_only / not_ready / ready_for_system'
     )
     'strategy/01_three_push_wedge_candidate.md' = @(
@@ -2480,6 +2481,7 @@ if (Test-Path -LiteralPath $threePushPatternReadmePath -PathType Leaf) {
 $foundationCanonicalChecks = @{
     'foundations/03_late_trend_entry_filter/README.md' = @(
         'contract_scope: deep_review / daily_candidate / historical_context_only',
+        '当 `contract_scope: daily_candidate` 时，下面的 `primary_pattern` 只能写 `ABC_CONT` 或 `BOP`',
         'timeframes_seen:',
         'daily_context_window: >=2y / <2y / unavailable',
         'major_high_low_review: complete / partial / unavailable',
@@ -2517,6 +2519,7 @@ $foundationCanonicalChecks = @{
     )
     'foundations/05_event_sector_market_gate/README.md' = @(
         'contract_scope: deep_review',
+        '已知财报在未来三个交易 session 内：不新开仓，不赌财报；候选写 `gate_result: valid_no_trade` 和 `trade_state: valid_no_trade`',
         'data_status: historical / delayed / live_confirmed / incomplete',
         'as_of_time:',
         'timeframes_seen:',
@@ -2588,6 +2591,14 @@ foreach ($entry in $foundationCanonicalChecks.GetEnumerator()) {
         if (-not $content.Contains($token)) {
             Add-ValidationError "foundation README missing canonical coverage token '$token': $relativePath"
         }
+    }
+}
+
+$eventGatePath = Join-Path -Path $repoRoot -ChildPath 'foundations/05_event_sector_market_gate/README.md'
+if (Test-Path -LiteralPath $eventGatePath -PathType Leaf) {
+    $eventGateContent = Get-Utf8Text -Path $eventGatePath
+    if ($eventGateContent.Contains('候选写 `gate_result: valid_no_trade` 或 `gate_result: pending`')) {
+        Add-ValidationError 'known earnings gate must not allow pending as an alternative to valid_no_trade'
     }
 }
 

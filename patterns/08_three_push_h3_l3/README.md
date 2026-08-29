@@ -87,7 +87,7 @@ rough_R_R: wide / borderline / insufficient / not_frozen
 research_state: pattern_like / research_candidate / research_positive_conditional / observation_only / valid_no_trade / failed_thesis / pending
 trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending
 gate_result: pass / conditional / observation_only / valid_no_trade / pending
-thesis_state: working / failed / replaced / pending
+thesis_state: working / failed / invalidated / replaced / pending
 handoff_status: research_only / not_ready / ready_for_system
 ```
 
