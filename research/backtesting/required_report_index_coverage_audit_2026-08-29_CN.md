@@ -50,3 +50,14 @@
 - 173 个顶层研究报告全部可从另一个 Markdown 文件到达；新增视觉协议、基线批次和报告不构成孤立入口。
 
 这只是索引和可达性快照，不新增结果或胜率分母；结论仍为 `no-new-positive`、`validated win-rate: not-computable`、`PA Research only`、`no Codex Trading`、`no quantitative scanner`、`no Execution Agent`。
+
+## 2026-09-01 形态覆盖候选集后的当前追加快照
+
+本段继续保留上方历史计数，记录形态覆盖候选集加入后的动态 inventory：
+
+- validator 的 `$requiredFiles` 当前包含 99 个必需文件，其中 65 个是 `research/` 或 `research/backtesting/` 直接目录下的研究报告；
+- 当前 `research/backtesting/` 有 77 个 Markdown 文件，其中 76 个是报告文件；
+- 当前 `research/` 顶层有 174 个历史研究报告，其中 58 个由 7 个 canonical index 直接承载，另外 116 个由专题报告、Pattern 或 Strategy 入口承载；
+- 174 个顶层研究报告全部可从另一个 Markdown 文件到达；新审计、盲审资产和 review form 均有真实本地入口。
+
+本次只增加标签隐藏、结果隐藏的候选图和守卫，不产生专家真值、交易结果或胜率分母；结论保持 `no-new-positive / validated win-rate: not-computable`。

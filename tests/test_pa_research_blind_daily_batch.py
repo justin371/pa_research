@@ -52,6 +52,7 @@ class BlindDailyBatchTests(unittest.TestCase):
             manifest = {
                 "label_hidden": True,
                 "outcome_hidden": True,
+                "selection_mode": "deterministic_cutoff",
                 "selection_seed": "seed",
                 "minimum_context_bars": 600,
                 "minimum_hidden_future_bars": 40,
@@ -106,6 +107,7 @@ class BlindDailyBatchTests(unittest.TestCase):
                     {
                         "label_hidden": True,
                         "outcome_hidden": True,
+                        "selection_mode": "deterministic_cutoff",
                         "selection_seed": "seed",
                         "minimum_context_bars": 600,
                         "minimum_hidden_future_bars": 40,
@@ -124,6 +126,57 @@ class BlindDailyBatchTests(unittest.TestCase):
             )
             with self.assertRaisesRegex(ValueError, "does not match deterministic selection"):
                 MODULE.render_manifest(manifest_file, root, root / "charts")
+
+    def test_explicit_cutoff_mode_preserves_context_and_hidden_future(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir)
+            price_file = root / "prices.csv"
+            first = date(2020, 1, 1)
+            rows = []
+            for index in range(700):
+                rows.append(
+                    {
+                        "Symbol": "TEST",
+                        "Date": (first + timedelta(days=index)).isoformat(),
+                        "Open": 100,
+                        "High": 101,
+                        "Low": 99,
+                        "Close": 100.5,
+                        "Volume": 1_000_000,
+                    }
+                )
+            with price_file.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+                writer.writeheader()
+                writer.writerows(rows)
+
+            manifest_file = root / "manifest.json"
+            manifest_file.write_text(
+                json.dumps(
+                    {
+                        "label_hidden": True,
+                        "outcome_hidden": True,
+                        "selection_mode": "explicit_cutoff",
+                        "minimum_context_bars": 500,
+                        "minimum_hidden_future_bars": 40,
+                        "daily_chart_bars": 504,
+                        "local_chart_bars": 120,
+                        "samples": [
+                            {
+                                "sample_id": "MC-001",
+                                "symbol": "TEST",
+                                "price_file": "prices.csv",
+                                "cutoff_date": rows[549]["Date"],
+                                "chart_file": "MC-001.png",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            outputs = MODULE.render_manifest(manifest_file, root, root / "charts")
+            self.assertEqual(outputs, [root / "charts" / "MC-001.png"])
+            self.assertTrue(outputs[0].is_file())
 
     def test_manifest_requires_blind_flags(self):
         with tempfile.TemporaryDirectory() as temp_dir:

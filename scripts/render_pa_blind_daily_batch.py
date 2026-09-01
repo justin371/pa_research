@@ -96,6 +96,13 @@ def deterministic_index(symbol: str, row_count: int, seed: str, minimum_context:
     return minimum_context - 1 + value % span
 
 
+def explicit_cutoff_index(bars: Sequence[DailyBar], cutoff_date: str) -> int:
+    matches = [index for index, bar in enumerate(bars) if bar.session_date.isoformat() == cutoff_date]
+    if len(matches) != 1:
+        raise ValueError(f"explicit cutoff {cutoff_date} must match exactly one completed Daily bar")
+    return matches[0]
+
+
 def _set_date_ticks(axis: plt.Axes, bars: Sequence[DailyBar], maximum: int = 9) -> None:
     if not bars:
         return
@@ -192,7 +199,12 @@ def render_manifest(manifest_path: Path, repo_root: Path, output_dir: Path) -> l
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     if manifest.get("label_hidden") is not True or manifest.get("outcome_hidden") is not True:
         raise ValueError("blind manifest must set label_hidden and outcome_hidden to true")
-    seed = manifest["selection_seed"]
+    selection_mode = manifest.get("selection_mode", "deterministic_cutoff")
+    if selection_mode not in {"deterministic_cutoff", "explicit_cutoff"}:
+        raise ValueError(f"unsupported selection_mode: {selection_mode}")
+    seed = manifest.get("selection_seed")
+    if selection_mode == "deterministic_cutoff" and not seed:
+        raise ValueError("deterministic_cutoff requires selection_seed")
     minimum_context = int(manifest["minimum_context_bars"])
     minimum_future = int(manifest["minimum_hidden_future_bars"])
     daily_window = int(manifest.get("daily_chart_bars", 504))
@@ -215,12 +227,15 @@ def render_manifest(manifest_path: Path, repo_root: Path, output_dir: Path) -> l
         symbol = sample["symbol"].upper()
         price_file = (repo_root / sample["price_file"]).resolve()
         bars = load_symbol_bars(price_file, symbol)
-        cutoff_index = deterministic_index(symbol, len(bars), seed, minimum_context, minimum_future)
-        expected_cutoff = bars[cutoff_index].session_date.isoformat()
-        if sample["cutoff_date"] != expected_cutoff:
-            raise ValueError(
-                f"{sample_id}: cutoff {sample['cutoff_date']} does not match deterministic selection {expected_cutoff}"
-            )
+        if selection_mode == "deterministic_cutoff":
+            cutoff_index = deterministic_index(symbol, len(bars), seed, minimum_context, minimum_future)
+            expected_cutoff = bars[cutoff_index].session_date.isoformat()
+            if sample["cutoff_date"] != expected_cutoff:
+                raise ValueError(
+                    f"{sample_id}: cutoff {sample['cutoff_date']} does not match deterministic selection {expected_cutoff}"
+                )
+        else:
+            cutoff_index = explicit_cutoff_index(bars, sample["cutoff_date"])
         if cutoff_index + 1 < minimum_context or len(bars) - cutoff_index - 1 < minimum_future:
             raise ValueError(f"{sample_id}: context/future boundary failed")
         output_file = output_dir / chart_file.name

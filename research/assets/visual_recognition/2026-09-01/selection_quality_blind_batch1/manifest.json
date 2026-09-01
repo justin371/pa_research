@@ -2,6 +2,7 @@
   "batch_id": "selection-quality-blind-batch1-2026-09-01",
   "contract_scope": "historical_context_only",
   "selection_method": "sha256(seed|symbol) deterministic cutoff over every eligible row",
+  "selection_mode": "deterministic_cutoff",
   "symbol_selection_scope": "fixed symbols from existing PA Research historical-price artifacts; not market-random",
   "selection_seed": "pa-selection-quality-v1",
   "minimum_context_bars": 600,
