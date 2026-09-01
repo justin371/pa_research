@@ -137,19 +137,19 @@ class CanonicalEntryCrossCoverageTests(unittest.TestCase):
         self.assertEqual(
             [path for path in asset_readme_paths() if path not in indexed], []
         )
-        self.assertEqual(len(section_entry_paths()), 40)
+        self.assertEqual(len(section_entry_paths()), 41)
         self.assertEqual(len(backtesting_report_paths()), 76)
-        self.assertEqual(len(asset_readme_paths()), 11)
+        self.assertEqual(len(asset_readme_paths()), 12)
 
     def test_visual_png_manifests_have_no_unlisted_assets(self):
         readmes = sorted(ASSET_ROOT.rglob("README.md"))
-        self.assertEqual(len(readmes), 11)
+        self.assertEqual(len(readmes), 12)
         for readme in readmes:
             with self.subTest(asset=readme.relative_to(ASSET_ROOT).as_posix()):
                 actual = {path.name for path in readme.parent.rglob("*.png")}
                 listed = set(PNG_TOKEN_RE.findall(read(readme)))
                 self.assertEqual(actual, listed)
-        self.assertEqual(sum(len(list(readme.parent.rglob("*.png"))) for readme in readmes), 105)
+        self.assertEqual(sum(len(list(readme.parent.rglob("*.png"))) for readme in readmes), 117)
 
     def test_audit_preserves_missing_zero_and_research_boundaries(self):
         content = read(AUDIT_PATH)

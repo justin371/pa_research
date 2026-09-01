@@ -72,3 +72,14 @@ validated win-rate: not-computable
 ```
 
 本文件只属于 PA Research；不修改 Codex Trading，不创建量化扫描器，不连接 Execution Agent，不连接 Futu/OpenD。
+
+## 七、当前 inventory 追加快照（2026-09-01）
+
+本段只追加当前 checkout 的动态计数，不改写上方 2026-08-29 的历史快照，也不形成新样本或统计证据：
+
+- patterns/ 下有 16 个 pattern 目录，foundations/ 下有 8 个基础层目录；
+- research/assets/visual_recognition/ 下有 12 个资产 README 和 117 张 PNG；
+- research/ 顶层有 173 个历史研究报告，research/backtesting/ 有 76 个报告文件、18 个 CSV 和 1 个 JSON 机器产物；
+- 文档 validator 已检查 315 个 Markdown 文件、2193 个 Markdown 链接。
+
+新增数量来自 2026-09-01 的视觉校准协议、选股质量审计、首次视觉答案和 12 张 outcome-hidden 图，不改变 `no-new-positive`、`validated win-rate: not-computable`、`PA Research only`、`no Codex Trading`、`no quantitative scanner`、`no Execution Agent`。

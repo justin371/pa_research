@@ -39,3 +39,14 @@
 本次进一步盘点 `research/*.md`（不含 `research/README.md`）的完整入口图：当前 `research/` 顶层有 171 个历史研究报告，其中 55 个由 7 个 canonical index 直接承载，另外 116 个由专题报告、Pattern 或 Strategy 入口承载；171 个均至少被另一个 Markdown 文件实际链接，没有全局孤立报告。
 
 因此，canonical index 是精选重点入口，不要求把 171 个历史文件逐条重复到每一个 README；但“精选”不等于“无入口”。validator 现在会解析全部仓库内 Markdown 的真实本地链接，并拒绝新增后没有任何其他 Markdown 入口的顶层 research 报告；回归测试采用相同的非自引用可达性语义。该策略不把历史报告升级为当前规则、交易日志、回放样本或统计证据。
+
+## 2026-09-01 选股质量工作后的当前追加快照
+
+本段追加当前 checkout 的真实 inventory；上方 2026-08-29 的 `89 / 62 / 171 / 55 / 116` 保留为当时快照。
+
+- validator 的 `$requiredFiles` 当前包含 95 个必需文件，其中 64 个是 `research/` 或 `research/backtesting/` 直接目录下的研究报告；
+- 当前 `research/backtesting/` 有 77 个 Markdown 文件，其中 76 个是报告文件；
+- 当前 `research/` 顶层有 173 个历史研究报告，其中 57 个由 7 个 canonical index 直接承载，另外 116 个由专题报告、Pattern 或 Strategy 入口承载；
+- 173 个顶层研究报告全部可从另一个 Markdown 文件到达；新增视觉协议、基线批次和报告不构成孤立入口。
+
+这只是索引和可达性快照，不新增结果或胜率分母；结论仍为 `no-new-positive`、`validated win-rate: not-computable`、`PA Research only`、`no Codex Trading`、`no quantitative scanner`、`no Execution Agent`。

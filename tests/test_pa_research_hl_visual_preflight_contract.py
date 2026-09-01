@@ -63,14 +63,15 @@ class PaResearchHlVisualPreflightContractTests(unittest.TestCase):
             self.assertEqual(Counter(row[field] for row in rows), expected_counters[field])
 
     def test_local_asset_cardinality_and_external_boundaries_are_explicit(self):
-        self.assertEqual(len(list(ASSET_ROOT.rglob("README.md"))), 11)
-        self.assertEqual(len(list(ASSET_ROOT.rglob("*.png"))), 105)
+        self.assertEqual(len(list(ASSET_ROOT.rglob("README.md"))), 12)
+        self.assertEqual(len(list(ASSET_ROOT.rglob("*.png"))), 117)
         expected_local_counts = {
             "2026-08-26/hl_contract_batch": 5,
             "2026-08-26/hl_contract_batch2": 3,
             "2026-08-27/hl_large_backtest": 23,
             "2026-08-27/hl_next_backtest": 5,
             "2026-08-27/hl_next2_backtest": 3,
+            "2026-09-01/selection_quality_blind_batch1": 12,
         }
         for relative_dir, expected_count in expected_local_counts.items():
             with self.subTest(asset_dir=relative_dir):

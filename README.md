@@ -8,6 +8,8 @@ PA Research 是一个只读、视觉优先的 Price Action 研究仓库。它记
 
 每日候选批次与两年图表证据记录：[`每日候选批次与图表审查卡`](docs/daily_candidate_review_card_CN.md)。
 
+视觉校准与发现召回：[`视觉识别校准协议 v0.1`](docs/visual_calibration_protocol_v0_1_CN.md)及[`选股质量审计（2026-09-01）`](research/selection_quality_process_audit_2026-09-01_CN.md)。
+
 ## 目录
 
 - [`docs/`](docs/README.md)：日线规则、视觉复核卡、共同上下文和研究交接边界；

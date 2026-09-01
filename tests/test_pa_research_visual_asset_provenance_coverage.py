@@ -100,8 +100,8 @@ class VisualAssetProvenanceCoverageTests(unittest.TestCase):
             validator,
         )
 
-    def test_all_eleven_asset_readmes_expose_canonical_provenance(self):
-        self.assertEqual(len(ASSET_READMES), 11)
+    def test_all_current_asset_readmes_expose_canonical_provenance(self):
+        self.assertEqual(len(ASSET_READMES), 12)
         common = (
             "contract_scope: historical_context_only",
             "data_status: historical",

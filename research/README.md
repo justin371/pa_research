@@ -16,6 +16,9 @@
 - [`核心八个 Pattern 交叉一致性审计`](core_pattern_cross_audit_CN.md)：主标签、状态转换和历史状态别名；
 - [`PA Pattern 视觉筛选协议`](visual_pattern_triage_protocol_CN.md)：快筛与深审的执行顺序；
 - [`每日候选批次与图表审查卡`](../docs/daily_candidate_review_card_CN.md)：候选池覆盖、数据来源、两年 Daily 左侧、事件、流动性和空间证据的统一记录；
+- [`视觉识别校准协议 v0.1`](../docs/visual_calibration_protocol_v0_1_CN.md)：分开确定性发现 cohort、类别配平 morphology cohort、专家裁决与交易结果分母；
+- [`选股质量：发现召回、视觉分层与盲测基线审计（2026-09-01）`](selection_quality_process_audit_2026-09-01_CN.md)：记录发现流水对账、序数排序、强 A 等待结构、首批 outcome-hidden 基线及严格盲测限制；
+- [`选股质量盲测 Batch 1 首次视觉答案`](selection_quality_blind_batch1_predictions_2026-09-01_CN.md)：冻结 12 张随机发现图的首次读法；专家裁决仍 pending，不计算准确率或胜率；
 - [`流程改进审计（2026-08-28）`](process_improvement_audit_2026-08-28_CN.md)：记录本轮独立修复、验证证据和仍需用户决定的研究设计事项；
 - [`候选、视觉复核与交易日志边界一致性审计（2026-08-29）`](candidate_visual_record_consistency_audit_2026-08-29_CN.md)：核对选择记录的方向汇总、冻结前/回放后状态、两年 Daily/EMA/A-B/空间字段、ROST 视觉 provenance 和历史三推笔记；不新增样本或结果；
 - [`统一输出、视觉字段与状态轴审计（2026-08-29）`](unified_output_state_axis_audit_2026-08-29_CN.md)：区分文档成熟度与案例状态，补齐历史摘要的 `gate_result`，统一 BOP/H3-L3 的方向、lineage、事件、空间和多周期字段；不新增样本或结果；
@@ -147,6 +150,8 @@
 - [`TSLA H1/H2 候选筛选`](tsla_h1_h2_candidate_screen_2024-08-22_2026-08-21.md)。
 
 ## 图像资产入口
+
+- [`选股质量盲测 Batch 1 图表资产`](assets/visual_recognition/2026-09-01/selection_quality_blind_batch1/README.md)：12 张确定性抽样、结果隐藏的两年 Daily 图；属于发现 cohort，不是类别配平准确率测试；
 
 - [`第二轮多标的多周期视觉资产`](assets/visual_recognition/2026-08-24/round2_multisymbol/README.md)；
 - [`H1/H2 与 L1/L2 局部盲测资产`](assets/visual_recognition/2026-08-24/round3_hl_drills/README.md)；

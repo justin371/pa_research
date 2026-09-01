@@ -201,6 +201,7 @@ $requiredFiles = @(
     'docs/pa_research_daily_selection_rules_v0_1_CN.md',
     'docs/visual_pa_review_card_CN.md',
     'docs/daily_candidate_review_card_CN.md',
+    'docs/visual_calibration_protocol_v0_1_CN.md',
     'docs/common_context.md',
     'patterns/README.md',
     'patterns/08_three_push_h3_l3/README.md',
@@ -254,6 +255,8 @@ $requiredFiles = @(
     'research/backtesting/visual_evidence_canonical_boundary_audit_2026-08-29_CN.md',
     'research/visual_recognition_smoke_test_2026-08-24_CN.md',
     'research/visual_pattern_triage_protocol_CN.md',
+    'research/selection_quality_process_audit_2026-09-01_CN.md',
+    'research/selection_quality_blind_batch1_predictions_2026-09-01_CN.md',
     'research/assets/visual_recognition/2026-08-24/round2_multisymbol/README.md',
     'research/assets/visual_recognition/2026-08-24/round3_hl_drills/README.md',
     'research/assets/visual_recognition/2026-08-24/round3_l1_l2_mar/README.md',
@@ -265,6 +268,8 @@ $requiredFiles = @(
     'research/assets/visual_recognition/2026-08-27/hl_large_backtest/README.md',
     'research/assets/visual_recognition/2026-08-27/hl_next_backtest/README.md',
     'research/assets/visual_recognition/2026-08-27/hl_next2_backtest/README.md',
+    'research/assets/visual_recognition/2026-09-01/selection_quality_blind_batch1/README.md',
+    'research/assets/visual_recognition/2026-09-01/selection_quality_blind_batch1/manifest.json',
     'research/backtesting/visual_recognition_canonical_boundary_audit_2026-08-29_CN.md',
     'research/backtesting/visual_asset_canonical_boundary_audit_2026-08-29_CN.md',
     'research/backtesting/visual_asset_provenance_coverage_audit_2026-08-29_CN.md',
@@ -283,6 +288,7 @@ $requiredFiles = @(
     'research/backtesting/bop_contract_intake_2026-08-28.csv',
     'research/backtesting/bop_contract_intake_audit_2026-08-28_CN.md',
     'scripts/validate_pa_research_artifact.py',
+    'scripts/render_pa_blind_daily_batch.py',
     'strategy/README.md'
 )
 foreach ($relativePath in $requiredFiles) {
@@ -905,6 +911,11 @@ $canonicalChecks = @{
         'daily_ema20_50_200:',
         'special_subtype: ordinary / deep_late_controlled_B / bull_flag / earnings_driven / event_driven / gap_reprice / none',
         'universe_coverage: complete / partial / discovery_only / unknown',
+        'coverage_bucket:',
+        'shortlist_rank:',
+        'rank_basis:',
+        'selection_disposition: deep_reviewed / deferred_capacity / wait_for_structure / rejected_gate / duplicate_lineage / event_boundary / insufficient_evidence',
+        'disposition_reason:',
         'avg_20d_dollar_volume_usd:',
         'internal_label: H1 / H2 / L1 / L2 / H3 / L3 / none / pending',
         'range_edge_side: upper / lower / none / pending',
@@ -937,6 +948,27 @@ $canonicalChecks = @{
         'Execution Agent',
         '关键图表、事件、触发或空间证据尚不完整',
         '本卡只记录入场前候选证据，不填写实际成交、退出、胜负、`realized_R` 或 broker/account transaction log'
+    )
+    'docs/visual_calibration_protocol_v0_1_CN.md' = @(
+        'deterministic_discovery_cohort',
+        'curated_morphology_cohort',
+        'knowledge_contaminated',
+        'standard_converging',
+        'parabolic_climactic',
+        'expanding',
+        'truncated_third_push',
+        'overshoot_failed_breakout',
+        'nested_or_complex',
+        'trend_pullback',
+        'range_edge',
+        '候选 precision / recall',
+        '视觉一致不等于交易盈利',
+        'no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        '不修改 Codex Trading',
+        '不创建量化扫描器',
+        '不连接 Execution Agent'
     )
     'patterns/08_three_push_h3_l3/README.md' = @(
         'attempt_direction: bullish_attempts / bearish_attempts / unknown',
@@ -1253,9 +1285,45 @@ $canonicalChecks = @{
         'trade_state: not_authorized / conditional / valid_no_trade / observation_only / pending',
         'gap_policy: accept_open / skip / flag_only / not_applicable',
         'rough_space` 和',
+        'coverage_bucket:',
+        'shortlist_rank:',
+        'rank_basis:',
+        'selection_disposition: deep_reviewed / deferred_capacity / wait_for_structure / rejected_gate / duplicate_lineage / event_boundary / insufficient_evidence',
+        'wait_for_structure',
         'stage_2_status` 是历史工作别名',
         '快筛与完整闭合记录的硬边界',
         'strong-looking-A'
+    )
+    'research/selection_quality_process_audit_2026-09-01_CN.md' = @(
+        'audit_scope: discovery_recall_visual_triage_and_blind_baseline',
+        'current_visual_asset_readmes: 12',
+        'current_visual_png_assets: 117',
+        'blind_batch_type: deterministic_discovery_cohort',
+        'selection_disposition',
+        'wait_for_structure',
+        'strict_class_balanced_calibration: not_started',
+        'expert_adjudication: pending',
+        'conclusion: no-new-positive',
+        'validated win-rate: not-computable',
+        'PA Research only',
+        'no Codex Trading',
+        'no quantitative scanner',
+        'no Execution Agent'
+    )
+    'research/selection_quality_blind_batch1_predictions_2026-09-01_CN.md' = @(
+        'frozen_visual_answer',
+        'outcome-hidden',
+        'expert-adjudication-pending',
+        'shortlist_rank=1',
+        'deferred_wait_for_B',
+        'range_edge_observation',
+        'expert_adjudication: pending',
+        'trade_state: not_authorized',
+        'conclusion: no-new-positive',
+        'validated win-rate: not-computable',
+        '不修改 Codex Trading',
+        '不创建量化扫描器',
+        '不连接 Execution Agent'
     )
     'research/visual_recognition_smoke_test_2026-08-24_CN.md' = @(
         'contract_scope: stage_1_fast_screen',
@@ -1561,6 +1629,33 @@ $canonicalChecks = @{
         'order_branch: observation_only',
         'label_source: human_chart_review',
         'handoff_status: not_ready'
+    )
+    'research/assets/visual_recognition/2026-09-01/selection_quality_blind_batch1/README.md' = @(
+        'contract_scope: historical_context_only',
+        'data_status: historical',
+        'as_of_time: per-sample cutoff in manifest.json',
+        'timezone: America/New_York where preserved by the source snapshot',
+        'session_state: historical_close',
+        'timeframes_seen: Daily',
+        'chart_scope: full',
+        'daily_context_window: >=2y',
+        'major_high_low_review: visually_available; per-case completion belongs to the frozen prediction record',
+        'ema20_50_200_review: visually_available; per-case completion belongs to the frozen prediction record',
+        'daily_ema20_slope: unknown',
+        'daily_ema50_slope: unknown',
+        'h_l_ema_slope_gate: pending',
+        'direction: no_valid_direction',
+        'lineage_status: pending',
+        'internal_label: pending',
+        'third_push_state: unclear',
+        'range_edge_three_push: pending',
+        'range_edge_side: pending',
+        'research_state: observation_only',
+        'trade_state: observation_only',
+        'gate_result: observation_only',
+        'handoff_status: not_ready',
+        '确定性发现 cohort',
+        '不是按 H1/H2/L1/L2/三推/负例配平'
     )
     'research/backtesting/visual_recognition_canonical_boundary_audit_2026-08-29_CN.md' = @(
         'visual_recognition_smoke_test_2026-08-24_CN.md',

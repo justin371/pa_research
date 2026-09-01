@@ -1,6 +1,6 @@
 # PA Research 每日候选批次与图表审查卡 v0.1
 
-日期：2026-08-28<br>
+日期：2026-08-28；发现池排序与召回留痕修订：2026-09-01<br>
 文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 本卡是 PA Research 的**批次记录和人工审查模板**。它把候选池覆盖、数据来源、两年 Daily 左侧、强阻力、A/B/H-L、事件、流动性和空间证据放在同一张卡上，避免把“发现页上的股票”误称为“已经通过规则的候选”。
@@ -38,6 +38,11 @@ short_pool_reviewed:
 event_status_coverage: complete / partial / unknown
 two_year_chart_coverage: complete / partial / unknown
 deep_review_limit:
+discovery_pool_total:
+stage_1_reviewed_total:
+deep_reviewed_total:
+coverage_bucket_counts:
+selection_disposition_counts:
 ```
 
 ### 批次级硬要求
@@ -47,6 +52,29 @@ deep_review_limit:
 3. 多头和空头要分别记录。某一方向没有合格案例是有效结果，不能为了凑数把另一方向的标的补进去。
 4. 发现池可以高召回；最终候选仍必须逐标的通过 PA Research 日线规则和人工图表审查。
 5. 同一批次内必须统一数据截止日、时区和已完成 K 线口径。不同日期的数据不能混成“今天的机会”。
+6. `discovery_pool_total`、方向/形态覆盖桶和处置汇总必须能与逐标的发现记录对账；不能只报告最终合同数后反推“市场没有 H2/L2”或“没有多头/空头”。
+7. `deep_review_limit` 是人工容量，不是形态闸门。因容量延后的候选必须保留为 `deferred_capacity`，不能与规则否决混在一起。
+
+### 发现池与深审排序留痕
+
+每个进入发现池的标的先保留一行，不论它随后被深审、等待结构、事件分组、硬闸门否决或因同一 lineage 不进入统计：
+
+```text
+symbol:
+coverage_bucket: long_ABC_CONT / short_ABC_CONT / long_HL / short_HL / long_BOP / short_BOP / upper_range_three_push / lower_range_three_push / other / unclear
+pattern_candidate:
+stage_1_status: pattern_like / boundary / not_this_pattern / pending
+shortlist_rank: positive_integer / not_ranked
+rank_basis:
+selection_disposition: deep_reviewed / deferred_capacity / wait_for_structure / rejected_gate / duplicate_lineage / event_boundary / insufficient_evidence
+disposition_reason:
+```
+
+- `coverage_bucket` 只用于批次召回对账，不是新的 `primary_pattern` 或统计标签；实际方向、主标签和内部 H/L 仍按统一合同记录。
+- `shortlist_rank` 是同一批次、同一截止时点的事前序数。只对值得深审或因容量延后的项目填写正整数；硬闸门否决、证据不足和 duplicate lineage 使用 `not_ranked`。
+- `rank_basis` 只引用当时可见的父级、A/B 质量、EMA20/50方向、两年位置、META、事件状态、首障碍和不确定点；不换算成复合分数，也不能引用回放胜负或实现 R。
+- `duplicate_lineage` 只阻止重复统计，不删除发现记录；`event_boundary` 只分层，不把事件型强 A 静默当成普通样本；`wait_for_structure` 用于强 A 已出现但受控 B、信号或 BOP 回踩尚未形成的情况。
+- 每批必须分别汇总发现、快筛、深审、容量延后、等待结构、闸门否决、事件边界、证据不足和 lineage 排除数。任一发现池条目都不能无处置地消失。
 
 ## 二、逐标的证据头
 
@@ -234,9 +262,13 @@ main_uncertainty_or_exclusion:
 pattern_candidates:
 conditional_candidates:
 immediate_entry_candidates:
+deferred_capacity_cases:
+wait_for_structure_cases:
 valid_no_trade_cases:
 observation_only_cases:
 event_or_gap_cases:
+duplicate_lineage_cases:
+insufficient_evidence_cases:
 ```
 
 `immediate_entry_candidates` 可以为零。零个立即入场不表示筛选失败；在候选池覆盖不完整时，也不能反过来断言整个市场没有机会。

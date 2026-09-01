@@ -1,0 +1,99 @@
+{
+  "batch_id": "selection-quality-blind-batch1-2026-09-01",
+  "contract_scope": "historical_context_only",
+  "selection_method": "sha256(seed|symbol) deterministic cutoff over every eligible row",
+  "symbol_selection_scope": "fixed symbols from existing PA Research historical-price artifacts; not market-random",
+  "selection_seed": "pa-selection-quality-v1",
+  "minimum_context_bars": 600,
+  "minimum_hidden_future_bars": 40,
+  "daily_chart_bars": 504,
+  "local_chart_bars": 120,
+  "outcome_hidden": true,
+  "label_hidden": true,
+  "samples": [
+    {
+      "sample_id": "BQ1-CBOE",
+      "symbol": "CBOE",
+      "price_file": "research/backtesting/hl_next4_prices_2026-08-27.csv",
+      "cutoff_date": "2025-01-13",
+      "chart_file": "BQ1-CBOE.png"
+    },
+    {
+      "sample_id": "BQ1-COHR",
+      "symbol": "COHR",
+      "price_file": "research/backtesting/hl_large_prices_2026-08-27.csv",
+      "cutoff_date": "2024-01-04",
+      "chart_file": "BQ1-COHR.png"
+    },
+    {
+      "sample_id": "BQ1-DDOG",
+      "symbol": "DDOG",
+      "price_file": "research/backtesting/hl_next_prices_2026-08-27.csv",
+      "cutoff_date": "2026-05-28",
+      "chart_file": "BQ1-DDOG.png"
+    },
+    {
+      "sample_id": "BQ1-MAR",
+      "symbol": "MAR",
+      "price_file": "research/backtesting/hl_large_prices_2026-08-27.csv",
+      "cutoff_date": "2025-11-14",
+      "chart_file": "BQ1-MAR.png"
+    },
+    {
+      "sample_id": "BQ1-MCHP",
+      "symbol": "MCHP",
+      "price_file": "research/backtesting/hl_next5_prices_2026-08-27.csv",
+      "cutoff_date": "2023-02-03",
+      "chart_file": "BQ1-MCHP.png"
+    },
+    {
+      "sample_id": "BQ1-NDAQ",
+      "symbol": "NDAQ",
+      "price_file": "research/backtesting/hl_next5_prices_2026-08-27.csv",
+      "cutoff_date": "2022-12-20",
+      "chart_file": "BQ1-NDAQ.png"
+    },
+    {
+      "sample_id": "BQ1-RBLX",
+      "symbol": "RBLX",
+      "price_file": "research/backtesting/hl_large_prices_2026-08-27.csv",
+      "cutoff_date": "2024-08-20",
+      "chart_file": "BQ1-RBLX.png"
+    },
+    {
+      "sample_id": "BQ1-ROST",
+      "symbol": "ROST",
+      "price_file": "research/backtesting/hl_next4_prices_2026-08-27.csv",
+      "cutoff_date": "2025-04-23",
+      "chart_file": "BQ1-ROST.png"
+    },
+    {
+      "sample_id": "BQ1-TOL",
+      "symbol": "TOL",
+      "price_file": "research/backtesting/hl_next2_prices_2026-08-27.csv",
+      "cutoff_date": "2022-11-02",
+      "chart_file": "BQ1-TOL.png"
+    },
+    {
+      "sample_id": "BQ1-TSLA",
+      "symbol": "TSLA",
+      "price_file": "research/backtesting/hl_contract_batch_prices_2026-08-26.csv",
+      "cutoff_date": "2024-09-03",
+      "chart_file": "BQ1-TSLA.png"
+    },
+    {
+      "sample_id": "BQ1-VEEV",
+      "symbol": "VEEV",
+      "price_file": "research/backtesting/hl_next2_prices_2026-08-27.csv",
+      "cutoff_date": "2026-04-21",
+      "chart_file": "BQ1-VEEV.png"
+    },
+    {
+      "sample_id": "BQ1-ZS",
+      "symbol": "ZS",
+      "price_file": "research/backtesting/hl_next_prices_2026-08-27.csv",
+      "cutoff_date": "2022-11-28",
+      "chart_file": "BQ1-ZS.png"
+    }
+  ]
+}

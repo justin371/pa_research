@@ -1,6 +1,6 @@
 # PA Pattern 视觉筛选协议 v0.3
 
-日期：2026-08-23  
+日期：2026-08-23；发现池召回与排序修订：2026-09-01
 文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 日线候选的范围、流动性、两年背景、财报窗口和 ABC/BOP 主标签先遵循 [`PA Research 日线选股规则 v0.1`](../docs/pa_research_daily_selection_rules_v0_1_CN.md)；本协议负责通过前置闸门后的视觉快筛与深审，不把 4H/1H/15m 倒灌成日线选股证据。
@@ -51,6 +51,11 @@ local_A_B_C_or_attempts:
 visual_reason:
 main_uncertainty:
 stage_1_status: pattern_like / boundary / not_this_pattern / pending
+coverage_bucket:
+shortlist_rank: positive_integer / not_ranked
+rank_basis:
+selection_disposition: deep_reviewed / deferred_capacity / wait_for_structure / rejected_gate / duplicate_lineage / event_boundary / insufficient_evidence
+disposition_reason:
 ```
 
 ### 第一阶段字段与 canonical 合同映射
@@ -124,6 +129,19 @@ pending`，但具体状态仍须由证据决定。`directional_bias` 不能覆�
 provenance，不是“图上出现一条线”的同义词。若图像没有两年 Daily 左侧、重要
 高低点或 EMA20/50/200 复核，就保留对应缺失状态，不能仅凭局部图冻结 H/L、三推、
 BOP 或 MTR。
+
+### 发现池召回与深审交接
+
+快筛的职责是保留发现和不确定性，深审的职责才是收紧资格。后续批次统一执行：
+
+1. 发现池中的每个 symbol/window 都保留 `coverage_bucket`、`stage_1_status` 和 `selection_disposition`；不能只留下最终合同或漂亮正例。
+2. `shortlist_rank` 只决定有限深审容量的先后，不改变硬闸门；排名采用事前定性比较，不建立复合分数或自动 pattern 评分。
+3. 强 A 但尚无受控 B 的项目使用 `wait_for_structure`；事件或跳空主导的强 A 使用 `event_boundary`。两类都可以保留观察，但不能混入普通 H/L 统计。
+4. 因容量没有深审的合格外形使用 `deferred_capacity`；不能写成 `rejected_gate`，否则无法判断是召回失败还是规则否决。
+5. 同一 lineage 的重复窗口仍保留发现记录并标为 `duplicate_lineage`，只从独立回放分母排除；不能从召回账本中删除。
+6. 批次结论若声称“没有 H2/L2”“没有多头”或“找不到好形态”，必须同时给出对应方向 × 形态覆盖桶的发现数、快筛数和深审数。发现池覆盖为 `partial/discovery_only` 时，只能说明已审查子集。
+
+逐批字段和汇总模板见[`每日候选批次与图表审查卡`](../docs/daily_candidate_review_card_CN.md)。这些字段是流程审计层，不改变 canonical `primary_pattern/internal_label`，也不授权订单。
 
 ### 第一轮可以使用的证据
 
