@@ -105,3 +105,14 @@
 - 177 个顶层研究报告全部可从另一个 Markdown 文件到达；新增校准审计、JSON 和 packet 入口没有形成孤立文件。
 
 本批是 reused calibration，不是新 holdout；它不产生人工专家真值、交易结果或胜率分母。结论保持 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。
+
+## 2026-09-01 外部人工 H/L 盲标包后的当前追加快照
+
+本段继续保留上方历史计数，记录专家标准、空白标注表、中性 manifest 和审计报告加入后的动态 inventory：
+
+- validator 的 `$requiredFiles` 当前包含 121 个必需文件，其中 69 个是 `research/` 或 `research/backtesting/` 直接目录下的研究报告；
+- 当前 `research/backtesting/` 有 77 个 Markdown 文件，其中 76 个是报告文件；
+- 当前 `research/` 顶层有 178 个历史研究报告，其中 62 个由 7 个 canonical index 直接承载，另外 116 个由专题报告、Pattern 或 Strategy 入口承载；
+- 178 个顶层研究报告全部可从另一个 Markdown 文件到达；新增专家 packet 和审计没有形成孤立文件。
+
+本轮只准备 label/outcome/future-hidden 的空白专家包，没有人工标签、ground truth、准确率或交易分母。结论保持 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。
