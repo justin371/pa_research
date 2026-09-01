@@ -3,7 +3,7 @@
 日期：2026-09-01
 状态：`packet_ready / annotation_not_performed / label-hidden / outcome-hidden / future-hidden`
 
-本包包含 16 张既有历史 Daily 截止图。候选集在外部专家标注前冻结，并经过平衡策划；具体平衡类别、来源假设、股票和截止日期对专家隐藏。所有来源假设只是 model/source hypotheses，不是答案或 ground truth。
+本包包含 16 张由既有历史 Daily 截止图重新渲染的身份中性副本。候选集在外部专家标注前冻结，并经过平衡策划；图标题、文件名和横轴只显示 `EH1-###` 与相对 bar 编号，不显示股票、日历日期、具体平衡类别或来源假设。所有来源假设只是 model/source hypotheses，不是答案或 ground truth。
 
 使用顺序：
 
@@ -14,22 +14,22 @@
 
 | expert_sample_id | 截止图 |
 |---|---|
-| EH1-001 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-004.png) |
-| EH1-002 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-009.png) |
-| EH1-003 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-002.png) |
-| EH1-004 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-010.png) |
-| EH1-005 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-007.png) |
-| EH1-006 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-013.png) |
-| EH1-007 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-005.png) |
-| EH1-008 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-014.png) |
-| EH1-009 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_boundary_holdout_v1/BH1-001.png) |
-| EH1-010 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_boundary_holdout_v1/BH1-009.png) |
-| EH1-011 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-003.png) |
-| EH1-012 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-012.png) |
-| EH1-013 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-008.png) |
-| EH1-014 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_boundary_holdout_v1/BH1-002.png) |
-| EH1-015 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-001.png) |
-| EH1-016 | [打开图](../../assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-006.png) |
+| EH1-001 | [打开图](charts/EH1-001.png) |
+| EH1-002 | [打开图](charts/EH1-002.png) |
+| EH1-003 | [打开图](charts/EH1-003.png) |
+| EH1-004 | [打开图](charts/EH1-004.png) |
+| EH1-005 | [打开图](charts/EH1-005.png) |
+| EH1-006 | [打开图](charts/EH1-006.png) |
+| EH1-007 | [打开图](charts/EH1-007.png) |
+| EH1-008 | [打开图](charts/EH1-008.png) |
+| EH1-009 | [打开图](charts/EH1-009.png) |
+| EH1-010 | [打开图](charts/EH1-010.png) |
+| EH1-011 | [打开图](charts/EH1-011.png) |
+| EH1-012 | [打开图](charts/EH1-012.png) |
+| EH1-013 | [打开图](charts/EH1-013.png) |
+| EH1-014 | [打开图](charts/EH1-014.png) |
+| EH1-015 | [打开图](charts/EH1-015.png) |
+| EH1-016 | [打开图](charts/EH1-016.png) |
 
 [机器 manifest](manifest.json)只保存中性编号和图路径，不包含标签、股票、日期、候选 family、结果或未来路径。
 

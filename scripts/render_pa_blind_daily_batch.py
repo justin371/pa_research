@@ -112,6 +112,39 @@ def _set_date_ticks(axis: plt.Axes, bars: Sequence[DailyBar], maximum: int = 9) 
     axis.set_xticklabels([bars[index].session_date.isoformat() for index in positions], rotation=30, ha="right")
 
 
+def _relative_tick_spec(bars: Sequence[DailyBar], maximum: int = 9) -> tuple[list[int], list[str]]:
+    """Return identity-neutral bar offsets ending at T0."""
+    if not bars:
+        return [], []
+    count = min(maximum, len(bars))
+    positions = sorted({round(index * (len(bars) - 1) / max(1, count - 1)) for index in range(count)})
+    labels = ["T0" if index == len(bars) - 1 else f"T-{len(bars) - 1 - index}" for index in positions]
+    return positions, labels
+
+
+def _set_relative_ticks(axis: plt.Axes, bars: Sequence[DailyBar], maximum: int = 9) -> None:
+    positions, labels = _relative_tick_spec(bars, maximum)
+    axis.set_xticks(positions)
+    axis.set_xticklabels(labels, rotation=0, ha="center")
+
+
+def _chart_title(
+    sample_id: str,
+    last_bar: DailyBar,
+    daily_count: int,
+    local_count: int,
+    identity_hidden: bool,
+) -> str:
+    if identity_hidden:
+        heading = f"{sample_id} | historical Daily | identity and calendar date hidden | outcome hidden"
+    else:
+        heading = (
+            f"{sample_id} | {last_bar.symbol} | historical Daily cutoff "
+            f"{last_bar.session_date.isoformat()} | outcome hidden"
+        )
+    return f"{heading}\nTop: last {daily_count} completed Daily bars; Bottom: last {local_count} completed Daily bars"
+
+
 def _plot_price(axis: plt.Axes, bars: Sequence[DailyBar], ema_series: dict[int, Sequence[float]]) -> None:
     body_width = 0.66
     for index, bar in enumerate(bars):
@@ -154,6 +187,7 @@ def render_sample(
     output_file: Path,
     daily_window: int,
     local_window: int,
+    identity_hidden: bool = False,
 ) -> None:
     context = list(bars[: cutoff_index + 1])
     closes = [bar.close for bar in context]
@@ -179,16 +213,21 @@ def render_sample(
     _plot_volume(local_volume, local_bars)
 
     daily_price.set_title(
-        f"{sample_id} | {context[-1].symbol} | historical Daily cutoff {context[-1].session_date.isoformat()} | outcome hidden\n"
-        f"Top: last {len(daily_bars)} completed Daily bars; Bottom: last {len(local_bars)} completed Daily bars",
+        _chart_title(sample_id, context[-1], len(daily_bars), len(local_bars), identity_hidden),
         fontsize=12,
     )
     plt.setp(daily_price.get_xticklabels(), visible=False)
     plt.setp(local_price.get_xticklabels(), visible=False)
-    _set_date_ticks(daily_volume, daily_bars)
-    _set_date_ticks(local_volume, local_bars)
-    daily_volume.set_xlabel("Historical completed Daily bars only")
-    local_volume.set_xlabel("Local detail; no pattern, entry, stop, target, or result annotation")
+    if identity_hidden:
+        _set_relative_ticks(daily_volume, daily_bars)
+        _set_relative_ticks(local_volume, local_bars)
+        daily_volume.set_xlabel("Completed Daily bars relative to cutoff (T0); calendar dates hidden")
+        local_volume.set_xlabel("Local detail relative to T0; identity, dates, pattern and outcome hidden")
+    else:
+        _set_date_ticks(daily_volume, daily_bars)
+        _set_date_ticks(local_volume, local_bars)
+        daily_volume.set_xlabel("Historical completed Daily bars only")
+        local_volume.set_xlabel("Local detail; no pattern, entry, stop, target, or result annotation")
 
     output_file.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(output_file, bbox_inches="tight")
@@ -209,6 +248,9 @@ def render_manifest(manifest_path: Path, repo_root: Path, output_dir: Path) -> l
     minimum_future = int(manifest["minimum_hidden_future_bars"])
     daily_window = int(manifest.get("daily_chart_bars", 504))
     local_window = int(manifest.get("local_chart_bars", 120))
+    identity_hidden = manifest.get("identity_hidden", False)
+    if not isinstance(identity_hidden, bool):
+        raise ValueError("identity_hidden must be boolean")
     outputs = []
     seen_ids = set()
     seen_chart_files = set()
@@ -239,7 +281,15 @@ def render_manifest(manifest_path: Path, repo_root: Path, output_dir: Path) -> l
         if cutoff_index + 1 < minimum_context or len(bars) - cutoff_index - 1 < minimum_future:
             raise ValueError(f"{sample_id}: context/future boundary failed")
         output_file = output_dir / chart_file.name
-        render_sample(bars, cutoff_index, sample_id, output_file, daily_window, local_window)
+        render_sample(
+            bars,
+            cutoff_index,
+            sample_id,
+            output_file,
+            daily_window,
+            local_window,
+            identity_hidden=identity_hidden,
+        )
         outputs.append(output_file)
     return outputs
 

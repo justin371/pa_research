@@ -29,11 +29,13 @@ conclusion: no-new-positive
 ## 二、冻结证据
 
 - [专家包入口](calibration/external_human_hl_v1/README.md)；
-- [中性 manifest](calibration/external_human_hl_v1/manifest.json)：SHA-256 `5b4d75981253cc8cc47fa6a40242fad1ef889bbd9db7f4912696d64d3b54675a`；
+- [中性 manifest](calibration/external_human_hl_v1/manifest.json)：身份中性重渲染后的 SHA-256 `d1616e568bceebbe605d498548ffc5c346cec1365831ba9035ab131ad9765b23`；
 - [专家标注标准](calibration/external_human_hl_v1/expert_criteria_CN.md)；
 - [空白标注表](calibration/external_human_hl_v1/annotation_form.md)。
 
-manifest 的每个 sample 只有 `expert_sample_id` 和 `chart_path`。回归测试重新读取两个来源 manifest，确认 16 张图均在来源 cohort 中、文件存在且图像大小合理，并重新验证来源 cohort 的 context/future/label/outcome 隐藏合同。
+manifest 的每个 sample 只有 `expert_sample_id` 和 `chart_path`。初始构建时由两个已冻结来源 manifest 验证 16 张图的 500-bar context、40-bar hidden future 和 label/outcome/future 隐藏合同；来源映射随后只保留在被忽略的 curation key。当前回归测试不读取该 key，而是检查 16 张身份中性副本的路径、文件名、PNG 尺寸和冻结 SHA-256。
+
+2026-09-01 后续交接审计发现原始来源 PNG 的标题和日期轴仍显示 symbol、cutoff date 与 MC2/BH1 来源 ID，因此原始图不再作为专家交付物。当前 manifest 已改为 16 张 `EH1-###` 身份中性重渲染副本：标题不含 symbol/date，横轴只用相对 `T-…/T0`，文件名和路径不含来源 ID；OHLC、EMA20/50/200、成交量和 504/120 bar 窗口保持不变。16 张副本的 SHA-256 另由内部完整性文件冻结。
 
 ## 三、专家判断顺序
 

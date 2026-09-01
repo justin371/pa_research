@@ -1,0 +1,23 @@
+{
+  "packet_id": "external-human-hl-v1-2026-09-01",
+  "renderer_contract": "identity_and_calendar_date_hidden_relative_bar_axis",
+  "chart_count": 16,
+  "charts": [
+    {"expert_sample_id":"EH1-001","chart_sha256":"5f6fff0df1924ff4bd004769a937091f2b7176bd27d241c2ac56feeca507364f"},
+    {"expert_sample_id":"EH1-002","chart_sha256":"33f3c2b9c3293020c3ead7568531edcd9a2a127404259fc32d7bd31fb3af7689"},
+    {"expert_sample_id":"EH1-003","chart_sha256":"65647226426a6d6d6c1f620a880e5a10a2adeaa1a204766fa8fda724da4fe0f3"},
+    {"expert_sample_id":"EH1-004","chart_sha256":"a361aaf0203fbdff259faaec5dfb8d585f503dfebe553a417f5a771f24512b19"},
+    {"expert_sample_id":"EH1-005","chart_sha256":"4be5e11a4c3d3f93ec6ee6b07c52e5cce97d4a8999b49358f7022f7a22201c16"},
+    {"expert_sample_id":"EH1-006","chart_sha256":"92802523f017580f09ed6a46a183dbddcc91669782fdf1cf794bf4318a9bbb3f"},
+    {"expert_sample_id":"EH1-007","chart_sha256":"b64878628da6c7871fa41adfd7502394df1904a142f2cdb6fee0537cd316e937"},
+    {"expert_sample_id":"EH1-008","chart_sha256":"ba31ebf3c3711550536269bb8e85e66b8a44aba1d739eddc7c89117f4fe39376"},
+    {"expert_sample_id":"EH1-009","chart_sha256":"400fc3d6b37f15a2f095b677e9525c3d032941fc0b1816b13999425308cfd88a"},
+    {"expert_sample_id":"EH1-010","chart_sha256":"53e0be324f82cf3617e48843eaefb40d9602d74f972869828d3b9a5ab9142f1c"},
+    {"expert_sample_id":"EH1-011","chart_sha256":"27289503beee30c3fbc16c12a5112eee671cee52ba041fee8bddf4f49b446dea"},
+    {"expert_sample_id":"EH1-012","chart_sha256":"6a6803ef6d602e3b3a58f30c113d94a7572de71588b90cf6c3e4d73728eb864c"},
+    {"expert_sample_id":"EH1-013","chart_sha256":"d1e4eb0d3fabd4a540042f53b11c117e970f0e5b5ae31c1536ec6e536ce54011"},
+    {"expert_sample_id":"EH1-014","chart_sha256":"0c97c3f3ed71f59f3bc2c3bb09ccbf908486e16d3ae3d55af74fd8ed5783482b"},
+    {"expert_sample_id":"EH1-015","chart_sha256":"bc3f6c801b4fa346632410cd8cd8ca5257b05b1a41456f3ee87cee8a61c96793"},
+    {"expert_sample_id":"EH1-016","chart_sha256":"f31d90e5106b6625d81623bbe4a23d8f105fbce70b5b0cc950fe211a08bbfc0d"}
+  ]
+}

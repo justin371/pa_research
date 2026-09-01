@@ -11,11 +11,8 @@ MANIFEST_PATH = PACKET_ROOT / "manifest.json"
 README_PATH = PACKET_ROOT / "README.md"
 CRITERIA_PATH = PACKET_ROOT / "expert_criteria_CN.md"
 FORM_PATH = PACKET_ROOT / "annotation_form.md"
-EXPECTED_MANIFEST_SHA256 = "5b4d75981253cc8cc47fa6a40242fad1ef889bbd9db7f4912696d64d3b54675a"
-SOURCE_MANIFESTS = (
-    REPO_ROOT / "research/assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/manifest.json",
-    REPO_ROOT / "research/assets/visual_recognition/2026-09-01/morphology_boundary_holdout_v1/manifest.json",
-)
+EXPECTED_MANIFEST_SHA256 = "d1616e568bceebbe605d498548ffc5c346cec1365831ba9035ab131ad9765b23"
+CHART_HASH_PATH = PACKET_ROOT / "neutral_chart_sha256.json"
 
 
 def read_json(path: Path):
@@ -34,6 +31,8 @@ class ExternalHumanHlPacketTests(unittest.TestCase):
         self.assertTrue(manifest["selection_frozen_before_external_review"])
         self.assertTrue(manifest["candidate_balance_hidden_from_expert"])
         self.assertTrue(manifest["source_hypotheses_isolated"])
+        self.assertTrue(manifest["identity_hidden"])
+        self.assertTrue(manifest["calendar_dates_hidden"])
         self.assertTrue(manifest["label_hidden"])
         self.assertTrue(manifest["outcome_hidden"])
         self.assertTrue(manifest["future_bars_hidden"])
@@ -41,24 +40,24 @@ class ExternalHumanHlPacketTests(unittest.TestCase):
         self.assertGreaterEqual(manifest["minimum_hidden_future_bars"], 40)
         self.assertEqual(manifest["sample_count"], 16)
 
-    def test_sixteen_neutral_samples_resolve_to_qualified_source_charts(self):
+    def test_sixteen_identity_neutral_samples_match_frozen_hashes(self):
         samples = self.manifest["samples"]
         self.assertEqual([s["expert_sample_id"] for s in samples], [f"EH1-{n:03d}" for n in range(1, 17)])
         self.assertEqual(len({s["chart_path"] for s in samples}), 16)
-        source_by_directory = {path.parent.resolve(): read_json(path) for path in SOURCE_MANIFESTS}
+        hash_manifest = read_json(CHART_HASH_PATH)
+        self.assertEqual(hash_manifest["chart_count"], 16)
+        hashes = {row["expert_sample_id"]: row["chart_sha256"] for row in hash_manifest["charts"]}
+        self.assertEqual(set(hashes), {f"EH1-{n:03d}" for n in range(1, 17)})
+        self.assertEqual(len(set(hashes.values())), 16)
         for sample in samples:
             with self.subTest(sample=sample["expert_sample_id"]):
                 self.assertEqual(set(sample), {"expert_sample_id", "chart_path"})
-                chart = (REPO_ROOT / sample["chart_path"]).resolve()
+                chart = (PACKET_ROOT / sample["chart_path"]).resolve()
                 self.assertTrue(chart.is_file())
                 self.assertGreater(chart.stat().st_size, 100_000)
-                source = source_by_directory[chart.parent]
-                self.assertGreaterEqual(source["minimum_context_bars"], 500)
-                self.assertGreaterEqual(source["minimum_hidden_future_bars"], 40)
-                self.assertTrue(source["label_hidden"])
-                self.assertTrue(source["outcome_hidden"])
-                self.assertTrue(source["future_bars_hidden"])
-                self.assertIn(chart.name, {row["chart_file"] for row in source["samples"]})
+                self.assertEqual(chart.parent, (PACKET_ROOT / "charts").resolve())
+                self.assertEqual(chart.name, f"{sample['expert_sample_id']}.png")
+                self.assertEqual(hashlib.sha256(chart.read_bytes()).hexdigest(), hashes[sample["expert_sample_id"]])
 
     def test_expert_packet_does_not_expose_source_identity_or_hypothesis_mapping(self):
         combined = "\n".join(path.read_text(encoding="utf-8") for path in (README_PATH, CRITERIA_PATH, FORM_PATH))
@@ -72,6 +71,9 @@ class ExternalHumanHlPacketTests(unittest.TestCase):
             self.assertNotIn("candidate_label", sample)
             self.assertNotIn("hypothesis", sample)
             self.assertNotIn("outcome", sample)
+            self.assertNotIn("MC2-", sample["chart_path"])
+            self.assertNotIn("BH1-", sample["chart_path"])
+            self.assertNotIn("morphology_", sample["chart_path"])
 
     def test_annotation_rows_are_blank_and_require_reasoned_evidence(self):
         form = FORM_PATH.read_text(encoding="utf-8")

@@ -127,3 +127,14 @@
 - 179 个顶层研究报告全部可从另一个 Markdown 文件到达；新增 schema、policy、validator 和审计没有形成孤立文件。
 
 测试输入只存在于临时目录，不进入仓库。真实专家标签、ground truth、准确率和交易分母仍为未形成状态。结论保持 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。
+
+## 2026-09-01 外部人工安全交接就绪后的当前追加快照
+
+本段继续保留上方历史计数，记录协调人 allowlist、交接审计和回归守卫加入后的动态 inventory：
+
+- validator 的 `$requiredFiles` 当前包含 129 个必需文件，其中 71 个是 `research/` 或 `research/backtesting/` 直接目录下的研究报告；
+- 当前 `research/backtesting/` 有 77 个 Markdown 文件，其中 76 个是报告文件；
+- 当前 `research/` 顶层有 180 个历史研究报告，其中 64 个由 7 个 canonical index 直接承载，另外 116 个由专题报告、Pattern 或 Strategy 入口承载；
+- 180 个顶层研究报告全部可从另一个 Markdown 文件到达；协调人清单和交接审计均有真实入口。
+
+本轮没有真实 annotation 或人工结果。内部就绪状态不能进入准确率或交易分母，结论保持 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。
