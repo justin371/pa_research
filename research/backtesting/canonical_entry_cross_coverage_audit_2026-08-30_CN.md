@@ -121,3 +121,23 @@ no Execution Agent
 
 本报告只属于 PA Research。validator/测试的入口覆盖不会赋予行情访问、图表自动识别、交易
 授权、Execution Agent 连接或胜率验证能力。
+
+## 6. 2026-09-01 形态边界决策卡后的当前追加快照
+
+上方 `7 / 9 / 17 / 7 / 41` 保留为审计建立时的历史快照。新增形态边界视觉决策卡并进入 canonical index 后，当前动态计数为：
+
+```text
+current_docs_markdown_entries: 9
+current_foundations_readme_entries: 9
+current_patterns_readme_entries: 17
+current_strategy_markdown_entries: 7
+current_section_entry_total: 42
+current_backtesting_reports: 76
+current_required_research_reports: 66
+current_visual_asset_readmes: 13
+current_png_assets: 133
+current_top_level_research_reports: 175
+current_missing_section_entries: 0
+```
+
+新增 docs 入口已由 `docs/README.md` 和 `research/README.md` 直接承载，活动 section entry 仍无缺口。本次没有新增图表、回放结果或交易分母，结论继续保持 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。

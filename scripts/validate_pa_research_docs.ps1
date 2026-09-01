@@ -200,6 +200,7 @@ $requiredFiles = @(
     'docs/pa_research_output_schema_v0_1_CN.md',
     'docs/pa_research_daily_selection_rules_v0_1_CN.md',
     'docs/visual_pa_review_card_CN.md',
+    'docs/morphology_boundary_decision_card_CN.md',
     'docs/daily_candidate_review_card_CN.md',
     'docs/visual_calibration_protocol_v0_1_CN.md',
     'docs/common_context.md',

@@ -114,6 +114,13 @@ class CanonicalEntryCrossCoverageTests(unittest.TestCase):
             "canonical_direct_top_level: 55",
             "topical_only_top_level: 116",
             "all_top_level_research_reachable: yes",
+            "current_docs_markdown_entries: 9",
+            "current_section_entry_total: 42",
+            "current_required_research_reports: 66",
+            "current_visual_asset_readmes: 13",
+            "current_png_assets: 133",
+            "current_top_level_research_reports: 175",
+            "current_missing_section_entries: 0",
         ):
             self.assertIn(token, content, token)
 
@@ -137,7 +144,7 @@ class CanonicalEntryCrossCoverageTests(unittest.TestCase):
         self.assertEqual(
             [path for path in asset_readme_paths() if path not in indexed], []
         )
-        self.assertEqual(len(section_entry_paths()), 41)
+        self.assertEqual(len(section_entry_paths()), 42)
         self.assertEqual(len(backtesting_report_paths()), 76)
         self.assertEqual(len(asset_readme_paths()), 13)
 

@@ -5,6 +5,8 @@
 
 日线候选的范围、流动性、两年背景、财报窗口和 ABC/BOP 主标签先遵循 [`PA Research 日线选股规则 v0.1`](../docs/pa_research_daily_selection_rules_v0_1_CN.md)；本协议负责通过前置闸门后的视觉快筛与深审，不把 4H/1H/15m 倒灌成日线选股证据。
 
+当快筛同时像 H/L、BOP、三推或普通 ABC continuation 时，先按[`形态边界视觉决策卡`](../docs/morphology_boundary_decision_card_CN.md)判断状态迁移、区间/第三推、B 腿和 lineage，再冻结候选 family 与 H/L-like 计数。
+
 输出字段统一遵循[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)。快筛可以保留 `pending` 或 `unknown`，但不能省略方向字段或把快筛状态当作交易授权。
 
 ## 这份协议解决什么问题

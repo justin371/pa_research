@@ -105,3 +105,14 @@ validated win-rate: not-computable
 - 文档 validator 已检查 319 个 Markdown 文件、2224 个 Markdown 链接。
 
 新增记录只验证盲审顺序、模型间一致率和形态边界混淆；它不是人工专家真值，不产生交易结果或胜率分母。结论继续保持 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。
+
+## 十、形态边界视觉决策卡追加快照（2026-09-01）
+
+本段继续保留上方历史快照，只记录决策卡、authority 入口和回归守卫加入后的当前动态计数：
+
+- patterns/ 下有 16 个 pattern 目录，foundations/ 下有 8 个基础层目录；
+- research/assets/visual_recognition/ 下有 13 个资产 README 和 133 张 PNG；
+- research/ 顶层有 175 个历史研究报告，research/backtesting/ 有 76 个报告文件、18 个 CSV 和 1 个 JSON 机器产物；
+- 文档 validator 已检查 320 个 Markdown 文件、2235 个 Markdown 链接。
+
+新增决策卡只收紧 BOP、区间/第三推、B 腿、lineage 与普通 H/L 的判断顺序，并把独立模型裁决与人工专家真值分层；不产生新样本、交易结果或胜率分母。结论继续保持 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。

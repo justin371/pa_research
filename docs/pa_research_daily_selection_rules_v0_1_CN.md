@@ -1,6 +1,6 @@
 # PA Research 日线选股规则 v0.1
 
-日期：2026-08-24；合同修订：2026-08-25；三推与股票池修订：2026-08-26；H/L EMA 方向与 META 修订：2026-08-26；批次证据修订：2026-08-28；回放输入边界修订：2026-08-29
+日期：2026-08-24；合同修订：2026-08-25；三推与股票池修订：2026-08-26；H/L EMA 方向与 META 修订：2026-08-26；批次证据修订：2026-08-28；回放输入边界修订：2026-08-29；形态边界决策卡修订：2026-09-01
 文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / not-quantitative`
 
 这份文件是 PA Research 的日线候选筛选合同。它用于从美股日线图表中筛选少量值得继续研究的 ABC 和 BOP 候选，不是量化扫描器、生产交易规则或下单授权。
@@ -352,6 +352,7 @@ main_uncertainty_or_exclusion:
 ## 10. 与现有研究合同的关系
 
 - [PA 图表视觉复核卡](visual_pa_review_card_CN.md)：完整图表、两年背景和统一字段；
+- [形态边界视觉决策卡](morphology_boundary_decision_card_CN.md)：先分 BOP、区间/第三推和 B 腿/lineage，再冻结 H1/H2/L1/L2；
 - [ABC 趋势延续](../patterns/03_abc_continuation/README.md)：A/B/C 与深但后段受控 B 的分层；
 - [BOP 突破回踩](../patterns/06_breakout_pullback_bop/README.md)：突破接受、真实回踩和失败突破；
 - [财报/事件/板块/大盘前置闸门](../foundations/05_event_sector_market_gate/README.md)：事件与市场背景；

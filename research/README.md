@@ -17,6 +17,7 @@
 - [`PA Pattern 视觉筛选协议`](visual_pattern_triage_protocol_CN.md)：快筛与深审的执行顺序；
 - [`每日候选批次与图表审查卡`](../docs/daily_candidate_review_card_CN.md)：候选池覆盖、数据来源、两年 Daily 左侧、事件、流动性和空间证据的统一记录；
 - [`视觉识别校准协议 v0.1`](../docs/visual_calibration_protocol_v0_1_CN.md)：分开确定性发现 cohort、类别配平 morphology cohort、专家裁决与交易结果分母；
+- [`形态边界视觉决策卡`](../docs/morphology_boundary_decision_card_CN.md)：根据盲审暴露的 B 腿与 H/L—BOP—三推—ABC 混淆，固定 reviewer 分流顺序和计数重置条件；
 - [`选股质量：发现召回、视觉分层与盲测基线审计（2026-09-01）`](selection_quality_process_audit_2026-09-01_CN.md)：记录发现流水对账、序数排序、强 A 等待结构、首批 outcome-hidden 基线及严格盲测限制；
 - [`选股质量盲测 Batch 1 首次视觉答案`](selection_quality_blind_batch1_predictions_2026-09-01_CN.md)：冻结 12 张随机发现图的首次读法；专家裁决仍 pending，不计算准确率或胜率；
 - [`形态覆盖候选集 v1 审计（2026-09-01）`](morphology_calibration_candidate_cohort_audit_2026-09-01_CN.md)：冻结 16 张 H/L、三推变形与相似负控候选图；标签来源隔离，专家真值、识别准确率和交易结果仍 pending；

@@ -5,6 +5,7 @@
 - [`PA Research 日线选股规则 v0.1`](pa_research_daily_selection_rules_v0_1_CN.md)
 - [`PA Research 统一输出合同 v0.1`](pa_research_output_schema_v0_1_CN.md)
 - [`PA 图表视觉复核卡`](visual_pa_review_card_CN.md)
+- [`形态边界视觉决策卡`](morphology_boundary_decision_card_CN.md)：按 BOP 状态迁移、区间/第三推、B 腿和 lineage 固定顺序分流 H1/H2/L1/L2、三推与 ABC；
 - [`每日候选批次与图表审查卡`](daily_candidate_review_card_CN.md)
 - [`视觉识别校准协议 v0.1`](visual_calibration_protocol_v0_1_CN.md)：分开确定性发现 cohort、类别配平 morphology cohort、专家裁决和交易结果分母。
 - [`共同上下文`](common_context.md)

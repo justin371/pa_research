@@ -99,19 +99,33 @@ prediction_frozen_at:
 
 `calibration_*` 是盲测显示字段，不得直接写入正式 `primary_pattern`、`internal_label` 或冻结交易合同。精确 H/L 计数仍需同一主周期、同一 lineage、第一次失败/不足和第二次尝试证据。
 
-## 五、专家裁决
+## 五、独立模型裁决与人工专家真值分层
 
-专家在首次答案冻结后独立填写同一组字段，并对每个分歧选择：
+### 5.1 独立模型裁决
+
+可以在两份首次答案冻结后，让一个未接触候选答案、未来 K 线或结果的独立模型 adjudicator 查看同图和两份 reviewer 记录，并对每个样本选择：
 
 ```text
-model_correct
-expert_correct
+reviewers_agree
 both_reasonable_boundary
+adjudicator_choice
 insufficient_chart_evidence
 knowledge_contaminated
 ```
 
-`both_reasonable_boundary` 不得为了提高一致率改成一致；它单独报告。若专家需要打开事件资料、低周期或未来 K 线才能裁决，该字段必须标记为证据不足或进入另一层合同，不能倒灌到 Daily 首次答案。
+模型裁决用于定位字段分歧和边界，不是人工专家 ground truth。`both_reasonable_boundary` 不得为了提高一致率改成一致；`adjudicator_choice` 也不能称为模型正确或识别准确率。若需要事件资料、低周期或未来 K 线才能裁决，必须标记证据不足或进入另一层合同，不能倒灌到 Daily 首次答案。
+
+### 5.2 外部人工专家复核
+
+外部人工专家若在不知道首次答案和候选来源的条件下先冻结独立答案，才可形成单独的 human-expert comparison。人工专家仍需声明知识污染状态、图表充分性和使用的证据层；其意见不能由模型裁决代替，也不能因为和候选来源一致就自动成为交易真值。
+
+在人工专家复核未完成前，统一写：
+
+```text
+human_expert_status: not_performed
+ground_truth_status: not_established
+overall_accuracy: not-computable
+```
 
 ## 六、识别指标
 

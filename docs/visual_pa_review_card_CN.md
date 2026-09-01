@@ -10,6 +10,8 @@
 
 第一轮筛选与第二轮交易优化的边界，先看[`PA Pattern 视觉筛选协议`](../research/visual_pattern_triage_protocol_CN.md)。跨 pattern 同时出现多个名字时，按[`Cross-Pattern 视觉优先级与冲突消解审计`](../research/cross_pattern_visual_priority_audit_2026-08-24_CN.md)只选一个主标签；本卡是进入第二轮后使用的完整复核卡，没有必要为每个“看起来像”的图形一开始就填满所有价格和 R/R 字段。
 
+H1/H2/L1/L2、BOP、三推与普通 ABC continuation 出现边界混淆时，先使用[`形态边界视觉决策卡`](morphology_boundary_decision_card_CN.md)：固定顺序是 BOP 状态迁移、区间/第三推分流、B 腿与 lineage、最后才冻结普通 H/L 计数。
+
 代表性条件候选与有效不交易对照见[`优先 Pattern 代表性视觉候选矩阵`](../research/priority_pattern_visual_candidate_matrix_2026-08-24_CN.md)。
 
 ## 图表范围前置要求：先看左侧两年

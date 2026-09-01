@@ -22,6 +22,8 @@ BOP 状态迁移：若事前可见边界被日线强收盘越过、获得跟随�
 
 进入 H2/L2 计数前，先按[`PA 图表视觉复核卡`](../../docs/visual_pa_review_card_CN.md)查看同一标的至少两年的 Daily 左侧背景（若窗口支持），标出主要高点、主要低点、支撑阻力和 EMA20/50/200。然后使用[`H/L lineage 与三推状态视觉边界复核`](../../research/h_l_lineage_visual_boundary_audit_2026-08-24_CN.md)先登记母腿、A/B、第一次失败/不足和 `lineage_status`；左侧背景或第一次失败不可见时只能写 `H2/L2-like` 或 `pending`。
 
+若同一图同时像 BOP、H3/L3、区间边缘或普通 ABC，先按[`形态边界视觉决策卡`](../../docs/morphology_boundary_decision_card_CN.md)完成状态迁移和 B 腿分流；没有同一 B、同一 lineage 的第一次失败证据，就不能冻结 H2/L2。
+
 ## 视觉定义
 
 - 父级方向明确，A 腿有足够方向性；
