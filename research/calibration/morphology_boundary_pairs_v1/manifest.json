@@ -1,0 +1,90 @@
+{
+  "cohort_id": "curated_morphology_boundary_pairs_v1",
+  "batch_id": "morphology-boundary-pairs-v1-2026-09-01",
+  "selection_mode": "curated_from_prior_blind_boundary_evidence",
+  "evidence_role": "calibration_not_holdout_not_accuracy_test",
+  "selection_frozen_before_current_review": true,
+  "reuses_prior_blind_images": true,
+  "label_hidden": true,
+  "outcome_hidden": true,
+  "future_bars_hidden": true,
+  "timeframe": "Daily",
+  "minimum_left_context": ">=2y",
+  "visible_indicators": ["EMA20", "EMA50", "EMA200", "raw_volume"],
+  "pair_count": 6,
+  "sample_count": 12,
+  "samples": [
+    {
+      "packet_sample_id": "PB1-001A",
+      "pair_id": "PB1-001",
+      "source_sample_id": "BH1-001",
+      "chart_path": "research/assets/visual_recognition/2026-09-01/morphology_boundary_holdout_v1/BH1-001.png"
+    },
+    {
+      "packet_sample_id": "PB1-001B",
+      "pair_id": "PB1-001",
+      "source_sample_id": "BH1-003",
+      "chart_path": "research/assets/visual_recognition/2026-09-01/morphology_boundary_holdout_v1/BH1-003.png"
+    },
+    {
+      "packet_sample_id": "PB1-002A",
+      "pair_id": "PB1-002",
+      "source_sample_id": "BH1-007",
+      "chart_path": "research/assets/visual_recognition/2026-09-01/morphology_boundary_holdout_v1/BH1-007.png"
+    },
+    {
+      "packet_sample_id": "PB1-002B",
+      "pair_id": "PB1-002",
+      "source_sample_id": "BH1-011",
+      "chart_path": "research/assets/visual_recognition/2026-09-01/morphology_boundary_holdout_v1/BH1-011.png"
+    },
+    {
+      "packet_sample_id": "PB1-003A",
+      "pair_id": "PB1-003",
+      "source_sample_id": "MC2-009",
+      "chart_path": "research/assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-009.png"
+    },
+    {
+      "packet_sample_id": "PB1-003B",
+      "pair_id": "PB1-003",
+      "source_sample_id": "MC2-008",
+      "chart_path": "research/assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-008.png"
+    },
+    {
+      "packet_sample_id": "PB1-004A",
+      "pair_id": "PB1-004",
+      "source_sample_id": "MC2-013",
+      "chart_path": "research/assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-013.png"
+    },
+    {
+      "packet_sample_id": "PB1-004B",
+      "pair_id": "PB1-004",
+      "source_sample_id": "MC2-006",
+      "chart_path": "research/assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-006.png"
+    },
+    {
+      "packet_sample_id": "PB1-005A",
+      "pair_id": "PB1-005",
+      "source_sample_id": "MC2-004",
+      "chart_path": "research/assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-004.png"
+    },
+    {
+      "packet_sample_id": "PB1-005B",
+      "pair_id": "PB1-005",
+      "source_sample_id": "MC2-010",
+      "chart_path": "research/assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-010.png"
+    },
+    {
+      "packet_sample_id": "PB1-006A",
+      "pair_id": "PB1-006",
+      "source_sample_id": "MC2-001",
+      "chart_path": "research/assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-001.png"
+    },
+    {
+      "packet_sample_id": "PB1-006B",
+      "pair_id": "PB1-006",
+      "source_sample_id": "MC2-002",
+      "chart_path": "research/assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/MC2-002.png"
+    }
+  ]
+}

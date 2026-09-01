@@ -1,0 +1,50 @@
+{
+  "batch_id": "morphology-boundary-pairs-v1-2026-09-01",
+  "metric_scope": "curated_reused_visual_calibration_only_not_holdout_accuracy_or_trade_results",
+  "manifest_sha256": "8cfa9ce927718bd60daa6aee640f86ebab92d33c323879859b7f6c6ebc3deaed",
+  "normalized_blind_reviews_sha256": "fa8e7251479159879fcd5320ece8cbe8f6d80dd13af6dde000e3ee9401bcd54e",
+  "sample_count": 12,
+  "review_count": 24,
+  "pair_count": 6,
+  "pair_contrast_count": 12,
+  "reviewer_pair_field_agreement": {
+    "parent_state": {"denominator": 12, "exact_agreements": 8, "rate": 0.6667},
+    "direction": {"denominator": 12, "exact_agreements": 10, "rate": 0.8333},
+    "a_leg_quality": {"denominator": 12, "exact_agreements": 11, "rate": 0.9167},
+    "b_leg_class": {"denominator": 12, "exact_agreements": 5, "rate": 0.4167},
+    "breakout_acceptance_status": {"denominator": 12, "exact_agreements": 9, "rate": 0.75},
+    "lineage_status": {"denominator": 12, "exact_agreements": 9, "rate": 0.75},
+    "visual_family": {"denominator": 12, "exact_agreements": 10, "rate": 0.8333},
+    "attempt_label": {"denominator": 12, "exact_agreements": 5, "rate": 0.4167},
+    "three_push_variant": {"denominator": 12, "exact_agreements": 8, "rate": 0.6667},
+    "ema_gate": {"denominator": 12, "exact_agreements": 8, "rate": 0.6667},
+    "stage_1_status": {"denominator": 12, "exact_agreements": 9, "rate": 0.75},
+    "selection_disposition": {"denominator": 12, "exact_agreements": 9, "rate": 0.75}
+  },
+  "pair_route_contrast": {
+    "warning": "manually normalized semantic agreement on the decisive route, not exact text agreement or accuracy",
+    "agreement_pairs": ["PB1-001", "PB1-002", "PB1-003", "PB1-005", "PB1-006"],
+    "unresolved_pairs": ["PB1-004"],
+    "exact_agreements": 5,
+    "denominator": 6,
+    "rate": 0.8333
+  },
+  "routing_observations": {
+    "mutual_family_agreement_samples": 10,
+    "mutual_h_l_like_samples": 0,
+    "mutual_deep_review_samples": 5,
+    "family_disagreement_samples": ["PB1-001B", "PB1-004A"],
+    "b_leg_disagreement_samples": ["PB1-001A", "PB1-001B", "PB1-002B", "PB1-004A", "PB1-004B", "PB1-005A", "PB1-005B"],
+    "attempt_disagreement_samples": ["PB1-001A", "PB1-001B", "PB1-002A", "PB1-003A", "PB1-004A", "PB1-004B", "PB1-006B"]
+  },
+  "ground_truth": {
+    "human_expert_status": "not_performed",
+    "ground_truth_status": "not_established",
+    "overall_accuracy": "not-computable"
+  },
+  "trade_statistics": {
+    "completed_trade_denominator": 0,
+    "validated_win_rate": "not-computable",
+    "conclusion": "no-new-positive"
+  }
+}

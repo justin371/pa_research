@@ -25,6 +25,8 @@
 - [`形态覆盖盲审原始记录`](morphology_calibration_blind_reviews_2026-09-01.json)、[`盲裁决原始记录`](morphology_calibration_blind_adjudication_2026-09-01.json)与[`机器可读统计`](morphology_calibration_metrics_2026-09-01.json)：保存冻结记录、哈希、分母和逐样本候选来源比较；
 - [`形态边界决策卡独立 Holdout 审计（2026-09-01）`](morphology_boundary_holdout_audit_2026-09-01_CN.md)：在 12 张不重叠、标签和结果隐藏的 Daily 图上冻结 24 份独立复核；B 腿与 family 一致性有描述性改善信号，但普通 H/L 共同正例为 0，不能报告准确率；
 - [`形态边界 Holdout 盲审原始记录`](morphology_boundary_holdout_blind_reviews_2026-09-01.json)与[`机器可读统计`](morphology_boundary_holdout_metrics_2026-09-01.json)：保存冻结哈希、字段一致率、旧批次描述性差值和无人工真值边界；
+- [`形态边界正反例对校准审计（2026-09-01）`](morphology_boundary_pairs_audit_2026-09-01_CN.md)：复用 12 张旧盲图组成 6 对 reviewer-first 校准样本；family 与决定性路由更稳定，但 B 腿和普通 H/L 仍未验收；
+- [`形态边界正反例对校准包`](calibration/morphology_boundary_pairs_v1/README.md)、[`标准化盲审记录`](morphology_boundary_pairs_normalized_blind_reviews_2026-09-01.json)与[`机器可读统计`](morphology_boundary_pairs_metrics_2026-09-01.json)：明确 reused calibration、非 holdout、无人工真值和无交易结果边界；
 - [`流程改进审计（2026-08-28）`](process_improvement_audit_2026-08-28_CN.md)：记录本轮独立修复、验证证据和仍需用户决定的研究设计事项；
 - [`候选、视觉复核与交易日志边界一致性审计（2026-08-29）`](candidate_visual_record_consistency_audit_2026-08-29_CN.md)：核对选择记录的方向汇总、冻结前/回放后状态、两年 Daily/EMA/A-B/空间字段、ROST 视觉 provenance 和历史三推笔记；不新增样本或结果；
 - [`统一输出、视觉字段与状态轴审计（2026-08-29）`](unified_output_state_axis_audit_2026-08-29_CN.md)：区分文档成熟度与案例状态，补齐历史摘要的 `gate_result`，统一 BOP/H3-L3 的方向、lineage、事件、空间和多周期字段；不新增样本或结果；

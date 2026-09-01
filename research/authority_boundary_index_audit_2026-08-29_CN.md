@@ -127,3 +127,14 @@ validated win-rate: not-computable
 - 文档 validator 已检查 323 个 Markdown 文件、2244 个 Markdown 链接。
 
 最后一项链接数是本轮索引完成后的当前快照；如后续文档链接继续增加，动态回归守卫会要求本段同步。新增 holdout 只衡量模型 reviewer 的边界一致性，不建立人工专家真值，不产生交易结果或胜率分母。结论继续保持 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。
+
+## 十二、形态边界正反例对校准追加快照（2026-09-01）
+
+本段继续保留上方历史快照，只记录 6 对 reused calibration、标准化复核和审计加入后的当前动态计数：
+
+- patterns/ 下有 16 个 pattern 目录，foundations/ 下有 8 个基础层目录；
+- research/assets/visual_recognition/ 下有 14 个资产 README 和 145 张 PNG；
+- research/ 顶层有 177 个历史研究报告，research/backtesting/ 有 76 个报告文件、18 个 CSV 和 1 个 JSON 机器产物；
+- 文档 validator 已检查 326 个 Markdown 文件、2252 个 Markdown 链接。
+
+本批只复用旧盲图做成对边界校准，不是新 holdout，不建立人工专家真值，不产生交易结果或胜率分母。结论继续保持 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。
