@@ -116,10 +116,10 @@ class CanonicalEntryCrossCoverageTests(unittest.TestCase):
             "all_top_level_research_reachable: yes",
             "current_docs_markdown_entries: 9",
             "current_section_entry_total: 42",
-            "current_required_research_reports: 66",
-            "current_visual_asset_readmes: 13",
-            "current_png_assets: 133",
-            "current_top_level_research_reports: 175",
+            "current_required_research_reports: 67",
+            "current_visual_asset_readmes: 14",
+            "current_png_assets: 145",
+            "current_top_level_research_reports: 176",
             "current_missing_section_entries: 0",
         ):
             self.assertIn(token, content, token)
@@ -146,17 +146,17 @@ class CanonicalEntryCrossCoverageTests(unittest.TestCase):
         )
         self.assertEqual(len(section_entry_paths()), 42)
         self.assertEqual(len(backtesting_report_paths()), 76)
-        self.assertEqual(len(asset_readme_paths()), 13)
+        self.assertEqual(len(asset_readme_paths()), 14)
 
     def test_visual_png_manifests_have_no_unlisted_assets(self):
         readmes = sorted(ASSET_ROOT.rglob("README.md"))
-        self.assertEqual(len(readmes), 13)
+        self.assertEqual(len(readmes), 14)
         for readme in readmes:
             with self.subTest(asset=readme.relative_to(ASSET_ROOT).as_posix()):
                 actual = {path.name for path in readme.parent.rglob("*.png")}
                 listed = set(PNG_TOKEN_RE.findall(read(readme)))
                 self.assertEqual(actual, listed)
-        self.assertEqual(sum(len(list(readme.parent.rglob("*.png"))) for readme in readmes), 133)
+        self.assertEqual(sum(len(list(readme.parent.rglob("*.png"))) for readme in readmes), 145)
 
     def test_audit_preserves_missing_zero_and_research_boundaries(self):
         content = read(AUDIT_PATH)

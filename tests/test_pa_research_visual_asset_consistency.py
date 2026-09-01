@@ -121,7 +121,7 @@ def assert_pre_entry_contract_fields(test_case, rows, source_name):
 class PaResearchVisualAssetConsistencyTests(unittest.TestCase):
     def test_every_local_visual_readme_covers_exact_png_inventory(self):
         readmes = sorted(ASSET_ROOT.rglob("README.md"))
-        self.assertEqual(len(readmes), 13)
+        self.assertEqual(len(readmes), 14)
 
         for readme in readmes:
             with self.subTest(readme=readme.relative_to(ASSET_ROOT)):
@@ -149,7 +149,7 @@ class PaResearchVisualAssetConsistencyTests(unittest.TestCase):
 
         self.assertEqual(
             sum(1 for _ in ASSET_ROOT.rglob("*.png")),
-            133,
+            145,
         )
 
     def test_local_png_assets_have_valid_headers_and_dimensions(self):

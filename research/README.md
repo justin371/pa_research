@@ -23,6 +23,8 @@
 - [`形态覆盖候选集 v1 审计（2026-09-01）`](morphology_calibration_candidate_cohort_audit_2026-09-01_CN.md)：冻结 16 张 H/L、三推变形与相似负控候选图；标签来源隔离，专家真值、识别准确率和交易结果仍 pending；
 - [`形态覆盖候选集 v1 独立盲审与裁决审计（2026-09-01）`](morphology_calibration_adjudication_audit_2026-09-01_CN.md)：冻结 32 份模型盲审和 16 份模型裁决，记录字段一致率及 H/L、BOP、三推边界混淆；不是人工专家真值，不产生交易胜率分母；
 - [`形态覆盖盲审原始记录`](morphology_calibration_blind_reviews_2026-09-01.json)、[`盲裁决原始记录`](morphology_calibration_blind_adjudication_2026-09-01.json)与[`机器可读统计`](morphology_calibration_metrics_2026-09-01.json)：保存冻结记录、哈希、分母和逐样本候选来源比较；
+- [`形态边界决策卡独立 Holdout 审计（2026-09-01）`](morphology_boundary_holdout_audit_2026-09-01_CN.md)：在 12 张不重叠、标签和结果隐藏的 Daily 图上冻结 24 份独立复核；B 腿与 family 一致性有描述性改善信号，但普通 H/L 共同正例为 0，不能报告准确率；
+- [`形态边界 Holdout 盲审原始记录`](morphology_boundary_holdout_blind_reviews_2026-09-01.json)与[`机器可读统计`](morphology_boundary_holdout_metrics_2026-09-01.json)：保存冻结哈希、字段一致率、旧批次描述性差值和无人工真值边界；
 - [`流程改进审计（2026-08-28）`](process_improvement_audit_2026-08-28_CN.md)：记录本轮独立修复、验证证据和仍需用户决定的研究设计事项；
 - [`候选、视觉复核与交易日志边界一致性审计（2026-08-29）`](candidate_visual_record_consistency_audit_2026-08-29_CN.md)：核对选择记录的方向汇总、冻结前/回放后状态、两年 Daily/EMA/A-B/空间字段、ROST 视觉 provenance 和历史三推笔记；不新增样本或结果；
 - [`统一输出、视觉字段与状态轴审计（2026-08-29）`](unified_output_state_axis_audit_2026-08-29_CN.md)：区分文档成熟度与案例状态，补齐历史摘要的 `gate_result`，统一 BOP/H3-L3 的方向、lineage、事件、空间和多周期字段；不新增样本或结果；
@@ -157,6 +159,7 @@
 
 - [`选股质量盲测 Batch 1 图表资产`](assets/visual_recognition/2026-09-01/selection_quality_blind_batch1/README.md)：12 张确定性抽样、结果隐藏的两年 Daily 图；属于发现 cohort，不是类别配平准确率测试；
 - [`形态覆盖盲审候选集 v1`](assets/visual_recognition/2026-09-01/morphology_calibration_candidate_v1/README.md)：16 张中性编号、标签与结果隐藏的两年 Daily 图；候选答案隔离，等待独立专家裁决；
+- [`形态边界决策卡 Holdout v1`](assets/visual_recognition/2026-09-01/morphology_boundary_holdout_v1/README.md)：12 张确定性、不重叠、标签与结果隐藏的两年 Daily 图；用于复核 B 腿、BOP/三推/ABC/H-L 分流一致性；
 
 - [`第二轮多标的多周期视觉资产`](assets/visual_recognition/2026-08-24/round2_multisymbol/README.md)；
 - [`H1/H2 与 L1/L2 局部盲测资产`](assets/visual_recognition/2026-08-24/round3_hl_drills/README.md)；

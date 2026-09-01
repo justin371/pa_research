@@ -1,0 +1,61 @@
+{
+  "batch_id": "morphology-boundary-holdout-v1-2026-09-01",
+  "metric_scope": "visual_boundary_agreement_only_not_accuracy_or_trade_results",
+  "manifest_sha256": "13d82d0065f4c1acc73f3e065e1412651cda63c252a66a82e0d7e0a0421c38dd",
+  "blind_reviews_sha256": "c818f536ce6b38f04e57579bc15902773dd6434d8ca6ded72fd5a9dc531bdbfc",
+  "sample_count": 12,
+  "review_count": 24,
+  "exact_symbol_date_overlap_with_prior_blind_cohorts": 0,
+  "reviewer_pair_field_agreement": {
+    "parent_state": {"denominator": 12, "exact_agreements": 8, "rate": 0.6667},
+    "direction": {"denominator": 12, "exact_agreements": 9, "rate": 0.75},
+    "a_leg_quality": {"denominator": 12, "exact_agreements": 10, "rate": 0.8333},
+    "b_leg_class": {"denominator": 12, "exact_agreements": 5, "rate": 0.4167},
+    "breakout_acceptance_status": {"denominator": 12, "exact_agreements": 8, "rate": 0.6667},
+    "lineage_status": {"denominator": 12, "exact_agreements": 9, "rate": 0.75},
+    "visual_family": {"denominator": 12, "exact_agreements": 8, "rate": 0.6667},
+    "attempt_label": {"denominator": 12, "exact_agreements": 6, "rate": 0.5},
+    "three_push_variant": {"denominator": 12, "exact_agreements": 7, "rate": 0.5833},
+    "ema_gate": {"denominator": 12, "exact_agreements": 10, "rate": 0.8333},
+    "stage_1_status": {"denominator": 12, "exact_agreements": 5, "rate": 0.4167},
+    "selection_disposition": {"denominator": 12, "exact_agreements": 9, "rate": 0.75}
+  },
+  "descriptive_comparison_to_prior_nonoverlapping_cohort": {
+    "warning": "different deterministic cohorts and review packets; deltas are descriptive only and do not establish causal improvement or generalization",
+    "prior_sample_count": 16,
+    "fields": {
+      "parent_state": {"prior_rate": 0.75, "holdout_rate": 0.6667, "delta": -0.0833},
+      "direction": {"prior_rate": 0.8125, "holdout_rate": 0.75, "delta": -0.0625},
+      "a_leg_quality": {"prior_rate": 0.75, "holdout_rate": 0.8333, "delta": 0.0833},
+      "b_leg_class": {"prior_rate": 0.25, "holdout_rate": 0.4167, "delta": 0.1667},
+      "visual_family": {"prior_rate": 0.5625, "holdout_rate": 0.6667, "delta": 0.1042},
+      "attempt_label": {"prior_rate": 0.625, "holdout_rate": 0.5, "delta": -0.125},
+      "three_push_variant": {"prior_rate": 0.625, "holdout_rate": 0.5833, "delta": -0.0417},
+      "ema_gate": {"prior_rate": 0.75, "holdout_rate": 0.8333, "delta": 0.0833},
+      "stage_1_status": {"prior_rate": 0.75, "holdout_rate": 0.4167, "delta": -0.3333},
+      "selection_disposition": {"prior_rate": 0.6875, "holdout_rate": 0.75, "delta": 0.0625}
+    }
+  },
+  "routing_observations": {
+    "mutual_family_agreement_samples": 8,
+    "mutual_deep_review_samples": 1,
+    "mutual_h_l_like_samples": 0,
+    "mutual_bop_like_samples": 3,
+    "mutual_three_push_like_samples": 3,
+    "mutual_abc_cont_like_samples": 1,
+    "mutual_none_samples": 1,
+    "major_family_boundary_samples": ["BH1-004", "BH1-006", "BH1-007", "BH1-011"],
+    "b_leg_disagreement_samples": ["BH1-002", "BH1-003", "BH1-004", "BH1-005", "BH1-008", "BH1-011", "BH1-012"],
+    "stage_disagreement_samples": ["BH1-002", "BH1-004", "BH1-005", "BH1-006", "BH1-007", "BH1-009", "BH1-011"]
+  },
+  "ground_truth": {
+    "human_expert_status": "not_performed",
+    "ground_truth_status": "not_established",
+    "overall_accuracy": "not-computable"
+  },
+  "trade_statistics": {
+    "completed_trade_denominator": 0,
+    "validated_win_rate": "not-computable",
+    "conclusion": "no-new-positive"
+  }
+}
