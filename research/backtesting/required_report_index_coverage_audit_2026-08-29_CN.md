@@ -149,3 +149,14 @@
 - 181 个顶层研究报告全部可从另一个 Markdown 文件到达；新增内部合同、脚本和审计均有真实入口。
 
 本轮测试只使用临时合成记录；真实专家标签、ground truth、准确率和交易分母仍未形成。结论保持 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。
+
+## 2026-09-01 双专家裁决记录 Validator 后的当前追加快照
+
+本段继续保留上方历史计数，记录只读 validator、合成测试和审计报告加入后的动态 inventory：
+
+- validator 的 `$requiredFiles` 当前包含 136 个必需文件，其中 73 个是 `research/` 或 `research/backtesting/` 直接目录下的研究报告；
+- 当前 `research/backtesting/` 有 77 个 Markdown 文件，其中 76 个是报告文件；
+- 当前 `research/` 顶层有 182 个历史研究报告，其中 66 个由 7 个 canonical index 直接承载，另外 116 个由专题报告、Pattern 或 Strategy 入口承载；
+- 182 个顶层研究报告全部可从另一个 Markdown 文件到达；新增 validator 和审计均有真实入口。
+
+本轮没有真实 annotation/adjudication 或人工结果；跨字段校验不产生视觉 ground truth 或交易分母。结论保持 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。

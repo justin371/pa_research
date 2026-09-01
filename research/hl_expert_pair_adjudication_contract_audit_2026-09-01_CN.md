@@ -79,3 +79,7 @@ real annotation artifacts: 0
 ```
 
 本工作只修改 PA Research；不修改 Codex Trading，不创建量化扫描器或自动 pattern detector，不连接 Futu/OpenD，不连接 Execution Agent，也不请求、推断或伪造专家标签。
+
+## 七、后续跨字段 validator 闭合（2026-09-01）
+
+后续独立 goal 已增加只读 pair-adjudication record validator，用两份原始专家 JSON、comparator 和 manifest 重新核对 source hash/identifier、snapshot、裁决状态、冻结顺序、分母资格和 summary。它补足 JSON Schema 无法跨文件、跨字段证明的关系，不修改本审计中的 21 文件 allowlist 或零真实标注结论。

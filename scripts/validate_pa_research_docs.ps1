@@ -290,6 +290,8 @@ $requiredFiles = @(
     'research/calibration/external_human_hl_v1/transcription_mapping_CN.md',
     'research/hl_expert_pair_adjudication_contract_audit_2026-09-01_CN.md',
     'scripts/compare_pa_hl_expert_annotations.py',
+    'research/hl_pair_adjudication_validator_audit_2026-09-01_CN.md',
+    'scripts/validate_pa_hl_expert_pair_adjudication.py',
     'research/assets/visual_recognition/2026-08-24/round2_multisymbol/README.md',
     'research/assets/visual_recognition/2026-08-24/round3_hl_drills/README.md',
     'research/assets/visual_recognition/2026-08-24/round3_l1_l2_mar/README.md',

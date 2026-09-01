@@ -32,6 +32,7 @@
 - [`普通 H/L 专家标注回收 Validator 审计（2026-09-01）`](hl_expert_annotation_intake_validator_audit_2026-09-01_CN.md)：定义 schema、只读 0/1/2 状态 validator、双专家分歧和准确率分母政策；测试仅使用合成记录，真实专家标签仍为 0；
 - [`普通 H/L 外部人工交接就绪审计（2026-09-01）`](hl_external_human_handoff_readiness_audit_2026-09-01_CN.md)：确认 16 图 packet、隔离 key、schema/validator/policy 和安全 21 文件 allowlist 已内部就绪；剩余 outcome-critical 步骤是两位独立外部人工专家，尚未启动；
 - [`普通 H/L 双专家比较、裁决与无推断转录合同审计（2026-09-01）`](hl_expert_pair_adjudication_contract_audit_2026-09-01_CN.md)：补齐 pair adjudication schema、先过单专家 validator 的只读 comparator 和表到 JSON 的逐字段无推断映射；只用合成测试，不生成裁决、标签或准确率分母；
+- [`普通 H/L 双专家裁决记录 Validator 审计（2026-09-01）`](hl_pair_adjudication_validator_audit_2026-09-01_CN.md)：交叉核对 manifest、两份源记录、comparator 与裁决 JSON，强制冻结顺序、状态不变量和 summary/denominator 重算；只用合成 fixtures，真实裁决仍为 0；
 - [`流程改进审计（2026-08-28）`](process_improvement_audit_2026-08-28_CN.md)：记录本轮独立修复、验证证据和仍需用户决定的研究设计事项；
 - [`候选、视觉复核与交易日志边界一致性审计（2026-08-29）`](candidate_visual_record_consistency_audit_2026-08-29_CN.md)：核对选择记录的方向汇总、冻结前/回放后状态、两年 Daily/EMA/A-B/空间字段、ROST 视觉 provenance 和历史三推笔记；不新增样本或结果；
 - [`统一输出、视觉字段与状态轴审计（2026-08-29）`](unified_output_state_axis_audit_2026-08-29_CN.md)：区分文档成熟度与案例状态，补齐历史摘要的 `gate_result`，统一 BOP/H3-L3 的方向、lineage、事件、空间和多周期字段；不新增样本或结果；

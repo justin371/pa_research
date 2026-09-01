@@ -62,6 +62,34 @@ contaminated
 
 表单转录必须遵守[无推断转录合同](transcription_mapping_CN.md)和机器映射 `transcription_mapping_v1.json`。空白、含糊或冲突值只能退回人工确认，不能由模型、转录人或 comparator 补齐。
 
+裁决记录完成后运行只读 pair-adjudication validator：
+
+```powershell
+python .\scripts\validate_pa_hl_expert_pair_adjudication.py `
+  --manifest .\research\calibration\external_human_hl_v1\manifest.json `
+  --expert-a <expert-a-json> `
+  --expert-b <expert-b-json> `
+  --adjudication <pair-adjudication-json>
+```
+
+validator 先重新验证两份源记录和 comparator，再核对 source hash/identifier、16 个固定 ID、冻结时间、snapshot、精确分歧、裁决状态和 summary。状态为 `valid`（exit 0）、`invalid`（exit 1）或全局裁决冻结受污染时的 `valid_ineligible`（exit 2）。它不改写源文件或裁决文件。
+
+每个样本的唯一 `excluded_reason` 按以下优先级机械重算：
+
+```text
+sample contaminated
+-> global pair/adjudication freeze not clean
+-> either expert evidence not usable
+-> both_reasonable_boundary
+-> insufficient_evidence
+-> no final single label
+-> model prediction missing
+-> model prediction not frozen before expert reveal
+-> eligible
+```
+
+summary 必须从 16 行重新计数，不能信任手填总数。validator 仍不判断标签内容是否“看图正确”，也不计算交易统计。
+
 ## 三、视觉准确率分母
 
 只有在专家标签冻结并完成裁决后，才允许揭示事前冻结的模型预测。必须同时报告：

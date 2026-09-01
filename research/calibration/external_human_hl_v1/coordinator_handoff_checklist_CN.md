@@ -54,7 +54,8 @@ python .\scripts\export_pa_hl_expert_packet.py --repo-root . --output-dir <isola
 5. 人工表到 JSON 的转录只能逐字段复制，不能由模型推断或补齐空白；
 6. 分别运行只读 validator。只有两份 `clean_eligible` 才能进入逐样本比较；
 7. 按内部 `transcription_mapping_CN.md` 逐字段双人复核，再运行 pair comparator；
-8. 按 `pair_adjudication_schema_v1.json` 和裁决政策由人工处理分歧，最后才允许揭示隔离 curation key。
+8. 按 `pair_adjudication_schema_v1.json` 和裁决政策由人工处理分歧；
+9. 裁决冻结后运行内部只读 pair-adjudication validator，只有记录一致性通过后才允许揭示隔离 curation key。
 
 ## 五、当前门槛
 
