@@ -1,0 +1,60 @@
+{
+  "mapping_version": "pa_hl_expert_form_transcription_v1",
+  "source_form": "annotation_form.md",
+  "target_schema": "annotation_schema_v1.json",
+  "policy": "exact_fields_only_no_inference",
+  "coordinator_constants": [
+    {"target": "schema_version", "source": "literal:pa_hl_expert_annotations_v1"},
+    {"target": "packet_id", "source": "manifest.json.packet_id"},
+    {"target": "manifest_sha256", "source": "sha256(manifest.json bytes)"}
+  ],
+  "declaration_fields": [
+    {"source": "annotator_role", "target": "annotator.role", "conversion": "exact_literal_external_human_expert"},
+    {"source": "signature_or_identifier", "target": "annotator.identifier", "conversion": "verbatim_nonempty"},
+    {"source": "annotator_independent", "target": "annotator.independent", "conversion": "exact_no_false_yes_true"},
+    {"source": "annotation_started_at", "target": "freeze.annotation_started_at", "conversion": "verbatim_iso8601_with_timezone"},
+    {"source": "annotation_frozen_at", "target": "freeze.annotation_frozen_at", "conversion": "verbatim_iso8601_with_timezone"},
+    {"source": "source_or_model_hypotheses_seen_before_freeze", "target": "freeze.source_or_model_hypotheses_seen_before_freeze", "conversion": "exact_no_false_yes_true"},
+    {"source": "future_or_outcome_evidence_seen_before_freeze", "target": "freeze.future_or_outcome_evidence_seen_before_freeze", "conversion": "exact_no_false_yes_true"},
+    {"source": "knowledge_status", "target": "freeze.knowledge_status", "conversion": "exact_enum"}
+  ],
+  "annotation_fields": [
+    {"source_section": "table", "source": "expert_sample_id", "target": "annotations[].expert_sample_id", "conversion": "verbatim_exact_id"},
+    {"source_section": "table", "source": "evidence_usable", "target": "annotations[].evidence_usable", "conversion": "exact_enum"},
+    {"source_section": "table", "source": "parent_state", "target": "annotations[].parent_state", "conversion": "exact_enum"},
+    {"source_section": "table", "source": "direction", "target": "annotations[].direction", "conversion": "exact_enum"},
+    {"source_section": "table", "source": "ema20_slope", "target": "annotations[].ema20_slope", "conversion": "exact_enum"},
+    {"source_section": "table", "source": "ema50_slope", "target": "annotations[].ema50_slope", "conversion": "exact_enum"},
+    {"source_section": "table", "source": "ema200_context", "target": "annotations[].ema200_context", "conversion": "exact_enum"},
+    {"source_section": "table", "source": "A_leg_quality", "target": "annotations[].A_leg_quality", "conversion": "exact_enum"},
+    {"source_section": "table", "source": "B_leg_class", "target": "annotations[].B_leg_class", "conversion": "exact_enum"},
+    {"source_section": "table", "source": "lineage_status", "target": "annotations[].lineage_status", "conversion": "exact_enum"},
+    {"source_section": "table", "source": "expert_ordinary_hl_label", "target": "annotations[].expert_ordinary_hl_label", "conversion": "exact_enum"},
+    {"source_section": "table", "source": "primary_exclusion", "target": "annotations[].primary_exclusion", "conversion": "exact_enum"},
+    {"source_section": "table", "source": "confidence_1_to_5", "target": "annotations[].confidence_1_to_5", "conversion": "exact_base10_integer_1_to_5"},
+    {"source_section": "free_text", "source": "major_high_low_reading", "target": "annotations[].major_high_low_reading", "conversion": "verbatim_nonempty"},
+    {"source_section": "free_text", "source": "A_leg_evidence", "target": "annotations[].A_leg_evidence", "conversion": "verbatim_nonempty"},
+    {"source_section": "free_text", "source": "B_leg_evidence", "target": "annotations[].B_leg_evidence", "conversion": "verbatim_nonempty"},
+    {"source_section": "free_text", "source": "lineage_and_attempt_evidence", "target": "annotations[].lineage_and_attempt_evidence", "conversion": "verbatim_nonempty"},
+    {"source_section": "free_text", "source": "first_obstacle_and_space", "target": "annotations[].first_obstacle_and_space", "conversion": "verbatim_nonempty"},
+    {"source_section": "free_text", "source": "why_not_BOP_or_third_push_or_range_repeat", "target": "annotations[].why_not_BOP_or_third_push_or_range_repeat", "conversion": "verbatim_nonempty"},
+    {"source_section": "free_text", "source": "main_uncertainty", "target": "annotations[].main_uncertainty", "conversion": "verbatim_nonempty"}
+  ],
+  "stop_conditions": [
+    "blank_required_field",
+    "value_outside_printed_allowed_values",
+    "ambiguous_yes_no",
+    "duplicate_or_missing_expert_sample_id",
+    "conflicting_table_and_free_text_sample_id",
+    "timestamp_without_timezone",
+    "unreadable_or_overwritten_human_text"
+  ],
+  "forbidden_operations": [
+    "infer_from_chart",
+    "normalize_expert_meaning",
+    "repair_label_consistency",
+    "fill_blank",
+    "summarize_or_rewrite_evidence",
+    "consult_source_hypothesis_future_or_outcome"
+  ]
+}

@@ -119,7 +119,7 @@ class HlExternalHandoffReadinessTests(unittest.TestCase):
         for token in (
             "internal_packet_and_contract_work: complete",
             "collection_handoff_readiness: ready",
-            "independent_agent_work_remaining_before_requesting_humans: pair_adjudication_contract_and_transcription_mapping",
+            "independent_agent_work_remaining_before_requesting_humans: none",
             "external_human_expert_A: not_started",
             "external_human_expert_B: not_started",
             "external_human_execution=not_started",
@@ -131,16 +131,23 @@ class HlExternalHandoffReadinessTests(unittest.TestCase):
             self.assertIn(token, combined, token)
 
     def test_real_annotations_and_tracked_curation_keys_remain_absent(self):
+        allowed_machine_contracts = {
+            "annotation_schema_v1.json",
+            "manifest.json",
+            "neutral_chart_sha256.json",
+            "pair_adjudication_schema_v1.json",
+            "transcription_mapping_v1.json",
+        }
         annotation_artifacts = [
             path
             for path in PACKET_ROOT.iterdir()
             if path.is_file()
             and path.suffix.lower() in {".json", ".csv"}
-            and path.name != "annotation_schema_v1.json"
-            and path.name != "manifest.json"
-            and path.name != "neutral_chart_sha256.json"
+            and path.name not in allowed_machine_contracts
         ]
         self.assertEqual(annotation_artifacts, [])
+        self.assertTrue((PACKET_ROOT / "pair_adjudication_schema_v1.json").is_file())
+        self.assertTrue((PACKET_ROOT / "transcription_mapping_v1.json").is_file())
         tracked_scope_keys = [
             path
             for path in REPO_ROOT.rglob("curation_key.json")

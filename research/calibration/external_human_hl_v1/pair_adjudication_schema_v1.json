@@ -1,0 +1,352 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pa-research://external-human-hl/pair-adjudication-schema-v1",
+  "title": "PA Research external-human ordinary H/L pair adjudication record v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_id",
+    "manifest_sha256",
+    "expert_pair",
+    "adjudication_freeze",
+    "samples",
+    "summary"
+  ],
+  "properties": {
+    "schema_version": {"const": "pa_hl_expert_pair_adjudication_v1"},
+    "packet_id": {"type": "string", "minLength": 1},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "expert_pair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expert_a", "expert_b", "distinct_identifiers"],
+      "properties": {
+        "expert_a": {"$ref": "#/$defs/expertRecordIdentity"},
+        "expert_b": {"$ref": "#/$defs/expertRecordIdentity"},
+        "distinct_identifiers": {"const": true}
+      }
+    },
+    "adjudication_freeze": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "comparison_frozen_at",
+        "adjudication_started_at",
+        "adjudication_frozen_at",
+        "source_or_model_hypotheses_seen_before_freeze",
+        "future_or_outcome_evidence_seen_before_freeze",
+        "knowledge_status"
+      ],
+      "properties": {
+        "comparison_frozen_at": {"type": "string", "format": "date-time"},
+        "adjudication_started_at": {"type": "string", "format": "date-time"},
+        "adjudication_frozen_at": {"type": "string", "format": "date-time"},
+        "source_or_model_hypotheses_seen_before_freeze": {"type": "boolean"},
+        "future_or_outcome_evidence_seen_before_freeze": {"type": "boolean"},
+        "knowledge_status": {"enum": ["clean", "contaminated", "uncertain"]}
+      }
+    },
+    "samples": {
+      "type": "array",
+      "minItems": 16,
+      "maxItems": 16,
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-001"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-002"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-003"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-004"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-005"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-006"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-007"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-008"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-009"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-010"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-011"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-012"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-013"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-014"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-015"}}}]},
+        {"allOf": [{"$ref": "#/$defs/sampleAdjudication"}, {"properties": {"expert_sample_id": {"const": "EH1-016"}}}]}
+      ],
+      "items": false
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "packet_total",
+        "clean_expert_pair_count",
+        "adjudicated_single_label_count",
+        "boundary_or_unclear_count",
+        "contaminated_count",
+        "model_prediction_coverage",
+        "accuracy_denominator",
+        "excluded_reasons",
+        "completed_trade_denominator",
+        "validated_win_rate",
+        "conclusion"
+      ],
+      "properties": {
+        "packet_total": {"const": 16},
+        "clean_expert_pair_count": {"type": "integer", "minimum": 0, "maximum": 16},
+        "adjudicated_single_label_count": {"type": "integer", "minimum": 0, "maximum": 16},
+        "boundary_or_unclear_count": {"type": "integer", "minimum": 0, "maximum": 16},
+        "contaminated_count": {"type": "integer", "minimum": 0, "maximum": 16},
+        "model_prediction_coverage": {"type": "integer", "minimum": 0, "maximum": 16},
+        "accuracy_denominator": {"type": "integer", "minimum": 0, "maximum": 16},
+        "excluded_reasons": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        },
+        "completed_trade_denominator": {"const": 0},
+        "validated_win_rate": {"const": "not-computable"},
+        "conclusion": {"const": "no-new-positive"}
+      }
+    }
+  },
+  "$defs": {
+    "ordinaryOrHardNegativeLabel": {
+      "enum": ["H1", "H2", "L1", "L2", "not_ordinary_HL"]
+    },
+    "expertObservedLabel": {
+      "enum": ["H1", "H2", "L1", "L2", "not_ordinary_HL", "unclear"]
+    },
+    "primaryExclusion": {
+      "enum": [
+        "not_applicable",
+        "accepted_BOP",
+        "third_push_H3_L3",
+        "range_repeat",
+        "event_or_gap",
+        "EMA_gate_fail",
+        "insufficient_space",
+        "A_not_directional",
+        "B_not_controlled",
+        "lineage_reset",
+        "no_valid_direction",
+        "insufficient_evidence",
+        "other"
+      ]
+    },
+    "expertRecordIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_sha256", "annotator_identifier", "single_record_validator_status"],
+      "properties": {
+        "record_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "annotator_identifier": {"type": "string", "minLength": 1},
+        "single_record_validator_status": {"const": "clean_eligible"}
+      }
+    },
+    "expertSampleSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expert_ordinary_hl_label", "primary_exclusion", "evidence_usable"],
+      "properties": {
+        "expert_ordinary_hl_label": {"$ref": "#/$defs/expertObservedLabel"},
+        "primary_exclusion": {"$ref": "#/$defs/primaryExclusion"},
+        "evidence_usable": {"enum": ["yes", "no", "uncertain"]}
+      }
+    },
+    "adjudicator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "identifier",
+        "independent_of_expert_a_and_b",
+        "source_or_model_hypotheses_seen_before_freeze",
+        "future_or_outcome_evidence_seen_before_freeze",
+        "knowledge_status"
+      ],
+      "properties": {
+        "role": {"const": "external_human_adjudicator"},
+        "identifier": {"type": "string", "minLength": 1},
+        "independent_of_expert_a_and_b": {"const": true},
+        "source_or_model_hypotheses_seen_before_freeze": {"const": false},
+        "future_or_outcome_evidence_seen_before_freeze": {"const": false},
+        "knowledge_status": {"const": "clean"}
+      }
+    },
+    "accuracyEligibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model_prediction_frozen_before_expert_reveal",
+        "model_prediction_label",
+        "eligible",
+        "excluded_reason"
+      ],
+      "properties": {
+        "model_prediction_frozen_before_expert_reveal": {"type": "boolean"},
+        "model_prediction_label": {
+          "oneOf": [
+            {"$ref": "#/$defs/ordinaryOrHardNegativeLabel"},
+            {"type": "null"}
+          ]
+        },
+        "eligible": {"type": "boolean"},
+        "excluded_reason": {
+          "oneOf": [
+            {
+              "enum": [
+                "pair_not_clean",
+                "evidence_not_usable",
+                "no_final_single_label",
+                "boundary_or_unclear",
+                "insufficient_evidence",
+                "contaminated",
+                "model_prediction_missing",
+                "model_prediction_not_frozen_before_reveal"
+              ]
+            },
+            {"type": "null"}
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"eligible": {"const": true}}, "required": ["eligible"]},
+          "then": {
+            "properties": {
+              "model_prediction_frozen_before_expert_reveal": {"const": true},
+              "model_prediction_label": {"$ref": "#/$defs/ordinaryOrHardNegativeLabel"},
+              "excluded_reason": {"type": "null"}
+            }
+          },
+          "else": {
+            "properties": {
+              "excluded_reason": {"type": "string"}
+            }
+          }
+        }
+      ]
+    },
+    "sampleAdjudication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expert_sample_id",
+        "expert_a",
+        "expert_b",
+        "comparison",
+        "adjudication_state",
+        "adjudicator",
+        "final_label",
+        "rationale",
+        "accuracy_eligibility"
+      ],
+      "properties": {
+        "expert_sample_id": {"type": "string", "pattern": "^EH1-[0-9]{3}$"},
+        "expert_a": {"$ref": "#/$defs/expertSampleSnapshot"},
+        "expert_b": {"$ref": "#/$defs/expertSampleSnapshot"},
+        "comparison": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["label_and_exclusion_agree", "disagreement_fields"],
+          "properties": {
+            "label_and_exclusion_agree": {"type": "boolean"},
+            "disagreement_fields": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "evidence_usable",
+                  "parent_state",
+                  "direction",
+                  "ema20_slope",
+                  "ema50_slope",
+                  "ema200_context",
+                  "A_leg_quality",
+                  "B_leg_class",
+                  "lineage_status",
+                  "expert_ordinary_hl_label",
+                  "primary_exclusion",
+                  "confidence_1_to_5",
+                  "major_high_low_reading",
+                  "A_leg_evidence",
+                  "B_leg_evidence",
+                  "lineage_and_attempt_evidence",
+                  "first_obstacle_and_space",
+                  "why_not_BOP_or_third_push_or_range_repeat",
+                  "main_uncertainty"
+                ]
+              }
+            }
+          }
+        },
+        "adjudication_state": {
+          "enum": [
+            "experts_agree",
+            "both_reasonable_boundary",
+            "adjudicator_choice",
+            "insufficient_evidence",
+            "contaminated"
+          ]
+        },
+        "adjudicator": {
+          "oneOf": [
+            {"$ref": "#/$defs/adjudicator"},
+            {"type": "null"}
+          ]
+        },
+        "final_label": {
+          "oneOf": [
+            {"$ref": "#/$defs/ordinaryOrHardNegativeLabel"},
+            {"type": "null"}
+          ]
+        },
+        "rationale": {"type": "string", "minLength": 1},
+        "accuracy_eligibility": {"$ref": "#/$defs/accuracyEligibility"}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"adjudication_state": {"const": "adjudicator_choice"}},
+            "required": ["adjudication_state"]
+          },
+          "then": {
+            "properties": {
+              "adjudicator": {"$ref": "#/$defs/adjudicator"},
+              "final_label": {"$ref": "#/$defs/ordinaryOrHardNegativeLabel"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"adjudication_state": {"const": "experts_agree"}},
+            "required": ["adjudication_state"]
+          },
+          "then": {
+            "properties": {
+              "adjudicator": {"type": "null"},
+              "final_label": {"$ref": "#/$defs/ordinaryOrHardNegativeLabel"},
+              "comparison": {
+                "properties": {"label_and_exclusion_agree": {"const": true}}
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "adjudication_state": {
+                "enum": ["both_reasonable_boundary", "insufficient_evidence", "contaminated"]
+              }
+            },
+            "required": ["adjudication_state"]
+          },
+          "then": {
+            "properties": {
+              "final_label": {"type": "null"},
+              "accuracy_eligibility": {
+                "properties": {"eligible": {"const": false}}
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

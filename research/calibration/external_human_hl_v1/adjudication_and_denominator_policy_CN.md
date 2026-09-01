@@ -29,6 +29,19 @@ exit 2 记录可以留作污染研究，但不能进入 clean 专家一致率、
 - parent state、方向、EMA20/50、A、B、lineage；
 - evidence usable 与 confidence。
 
+先运行只读 pair comparator：
+
+```powershell
+python .\scripts\compare_pa_hl_expert_annotations.py `
+  --manifest .\research\calibration\external_human_hl_v1\manifest.json `
+  --expert-a <expert-a-json> `
+  --expert-b <expert-b-json>
+```
+
+comparator 结果分三类：`comparison_ready`（exit 0）、`invalid`（exit 1）和 `valid_ineligible`（exit 2）。它会先调用上节单专家 validator；同一标注人 identifier 即使两份记录各自声称 independent，也属于 pair ineligible。只有 `comparison_ready` 才返回 16 行逐字段精确比较。
+
+comparator 只报告两份冻结记录的 label/exclusion/evidence snapshot、逐字段 `disagreement_fields` 和当前分母排除原因。它固定写 `adjudication_state=not_recorded`、`final_label=null`、`accuracy_denominator=0`，不判断谁对、不把一致直接升级为真值，也不创建裁决记录。
+
 裁决状态：
 
 ```text
@@ -39,11 +52,15 @@ insufficient_evidence
 contaminated
 ```
 
-- 标签和主要排除项一致时可写 `experts_agree`；
+- 标签和主要排除项一致、两人 evidence usable，且一致标签属于 `H1/H2/L1/L2/not_ordinary_HL` 时可写 `experts_agree`；两人都写 `unclear` 或证据不可用时应转为 `insufficient_evidence`，不能制造最终单一标签；
 - 标签不同但两套证据均合理时保留 `both_reasonable_boundary`，不能强制制造单一真值；
 - 需要第三位专家时，第三人只看截止图、标准和两份已冻结记录，不看 curation key、未来或结果；
 - 图不可用或两份证据均不足时写 `insufficient_evidence`；
 - 任一进入裁决的记录发现污染时写 `contaminated` 并退出 clean 分母。
+
+正式裁决记录必须符合 [`pair_adjudication_schema_v1.json`](pair_adjudication_schema_v1.json)。该 schema 固定两份原始记录 hash、标注人 identifier、逐样本原始 snapshot、精确分歧、裁决状态、第三人冻结声明、最终单一标签和逐样本准确率分母资格。`both_reasonable_boundary`、`insufficient_evidence` 和 `contaminated` 不允许产生最终单一标签或进入准确率分母；`adjudicator_choice` 必须有第三位 clean、独立且未看来源/未来/结果的人工裁决者。
+
+表单转录必须遵守[无推断转录合同](transcription_mapping_CN.md)和机器映射 `transcription_mapping_v1.json`。空白、含糊或冲突值只能退回人工确认，不能由模型、转录人或 comparator 补齐。
 
 ## 三、视觉准确率分母
 

@@ -53,14 +53,15 @@ python .\scripts\export_pa_hl_expert_packet.py --repo-root . --output-dir <isola
 4. 如实记录是否在冻结前看到来源/模型假设、未来或结果，以及 knowledge status；
 5. 人工表到 JSON 的转录只能逐字段复制，不能由模型推断或补齐空白；
 6. 分别运行只读 validator。只有两份 `clean_eligible` 才能进入逐样本比较；
-7. 按裁决政策处理分歧，最后才允许揭示隔离 curation key。
+7. 按内部 `transcription_mapping_CN.md` 逐字段双人复核，再运行 pair comparator；
+8. 按 `pair_adjudication_schema_v1.json` 和裁决政策由人工处理分歧，最后才允许揭示隔离 curation key。
 
 ## 五、当前门槛
 
 ```text
 internal_packet_and_contract_work: complete
 collection_handoff_readiness: ready
-independent_agent_work_remaining_before_requesting_humans: pair_adjudication_contract_and_transcription_mapping
+independent_agent_work_remaining_before_requesting_humans: none
 external_human_expert_A: not_started
 external_human_expert_B: not_started
 adjudication: not_started
@@ -71,6 +72,6 @@ validated win-rate: not-computable
 conclusion: no-new-positive
 ```
 
-安全采集包已经可交接，但按“先完成独立工作”的顺序，下一独立 goal 先补 pair-level 裁决机器合同/只读比较器和表到 JSON 的无推断转录边界；之后才由用户/协调人选择两位真正独立的外部人工专家。本 repo 不自动联系专家，也不代表任何人完成标注。
+安全采集包和内部 pair/transcription 合同已经闭合。下一步属于外部人工 gate：由用户/协调人选择两位真正独立的外部人工专家。本 repo 不自动联系专家，也不代表任何人完成标注。
 
 边界：`PA Research only / no Codex Trading / no quantitative scanner / no automatic pattern detector / no Futu/OpenD / no Execution Agent`。

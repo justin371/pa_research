@@ -33,7 +33,7 @@
 
 [机器 manifest](manifest.json)只保存中性编号和图路径，不包含标签、股票、日期、候选 family、结果或未来路径。
 
-未来专家返回 JSON 时，必须遵守[机器 schema](annotation_schema_v1.json)，先通过[双专家裁决与分母政策](adjudication_and_denominator_policy_CN.md)规定的只读 validator。当前目录仍没有真实 annotation JSON/CSV。
+未来专家返回 JSON 时，必须遵守[机器 schema](annotation_schema_v1.json)，先通过[双专家裁决与分母政策](adjudication_and_denominator_policy_CN.md)规定的只读 validator。内部另有[无推断转录合同](transcription_mapping_CN.md)、机器映射和 pair adjudication schema；它们不预填标签，也不进入 21 文件专家可见 allowlist。当前目录仍没有真实 annotation JSON/CSV。
 
 ```text
 human_expert_status: not_performed

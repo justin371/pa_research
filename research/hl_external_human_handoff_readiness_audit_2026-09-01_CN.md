@@ -88,3 +88,9 @@ document validation: 334 Markdown files / 2288 links passed
 compileall and git diff --check: passed
 real annotation artifacts: 0
 ```
+
+## 七、后续内部合同闭合（2026-09-01）
+
+后续独立 goal 已补齐本审计第四节列出的两项非阻塞工具：pair-level 裁决 schema、先调用单专家 validator 的只读双记录 comparator，以及空白表到 schema JSON 的逐字段无推断转录合同/机器映射。协调清单现在把 `independent_agent_work_remaining_before_requesting_humans` 记为 `none`。
+
+这不改变本审计的外部人工状态：两位专家仍未开始，真实 annotation 仍为 0，ground truth 和准确率仍未建立。身份中性专家包继续保持严格 21 文件 allowlist，没有把内部 comparator、裁决 schema、转录合同、来源 key 或审计暴露给专家。

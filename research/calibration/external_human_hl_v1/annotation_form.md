@@ -53,7 +53,8 @@ main_uncertainty:
 冻结声明：
 
 ```text
-annotator_role:
+annotator_role: external_human_expert
+annotator_independent: no / yes
 annotation_started_at:
 annotation_frozen_at:
 source_or_model_hypotheses_seen_before_freeze: no / yes
@@ -61,3 +62,5 @@ future_or_outcome_evidence_seen_before_freeze: no / yes
 knowledge_status: clean / contaminated / uncertain
 signature_or_identifier:
 ```
+
+所有字段都必须由专家明确填写。表到 JSON 只能由协调人按内部无推断转录合同逐字段复制；空白、含糊或冲突值必须退回人工确认，不能推断或代填。
