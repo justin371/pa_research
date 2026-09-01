@@ -94,3 +94,14 @@ validated win-rate: not-computable
 - 文档 validator 已检查 318 个 Markdown 文件、2216 个 Markdown 链接。
 
 新增的 16 张图只构成标签隐藏、结果隐藏的形态覆盖候选集；专家真值、识别准确率和交易结果仍未形成，结论继续保持 `no-new-positive / validated win-rate: not-computable`。
+
+## 九、形态覆盖盲审与裁决追加快照（2026-09-01）
+
+本段继续保留上方历史快照，只记录独立模型盲审、裁决和机器可读统计加入后的当前动态计数：
+
+- patterns/ 下有 16 个 pattern 目录，foundations/ 下有 8 个基础层目录；
+- research/assets/visual_recognition/ 下有 13 个资产 README 和 133 张 PNG；
+- research/ 顶层有 175 个历史研究报告，research/backtesting/ 有 76 个报告文件、18 个 CSV 和 1 个 JSON 机器产物；
+- 文档 validator 已检查 319 个 Markdown 文件、2224 个 Markdown 链接。
+
+新增记录只验证盲审顺序、模型间一致率和形态边界混淆；它不是人工专家真值，不产生交易结果或胜率分母。结论继续保持 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。

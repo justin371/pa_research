@@ -1,0 +1,398 @@
+{
+  "batch_id": "morphology-candidate-v1-2026-09-01",
+  "metric_scope": "visual_calibration_only_not_trade_results",
+  "blind_reviews_sha256": "0f290849431ed2f246be08de9526b4fa58e7453b98af21b9f6a7a5299200d160",
+  "blind_adjudication_sha256": "101b7e6da4d0d11f04ffc5bf1e52f3bdf1efb1857d1d727a5aec8b7b1ceefa40",
+  "candidate_key_sha256": "bbd2a31bab4034727ebcab3061f6c7f0a5c556e1237edc9fb35b90a34a98e145",
+  "strict_sample_count": 16,
+  "reviewer_pair_field_agreement": {
+    "parent_state": {
+      "denominator": 16,
+      "exact_agreements": 12,
+      "rate": 0.75
+    },
+    "direction": {
+      "denominator": 16,
+      "exact_agreements": 13,
+      "rate": 0.8125
+    },
+    "a_leg_quality": {
+      "denominator": 16,
+      "exact_agreements": 12,
+      "rate": 0.75
+    },
+    "b_leg_class": {
+      "denominator": 16,
+      "exact_agreements": 4,
+      "rate": 0.25
+    },
+    "visual_family": {
+      "denominator": 16,
+      "exact_agreements": 9,
+      "rate": 0.5625
+    },
+    "attempt_label": {
+      "denominator": 16,
+      "exact_agreements": 10,
+      "rate": 0.625
+    },
+    "three_push_variant": {
+      "denominator": 16,
+      "exact_agreements": 10,
+      "rate": 0.625
+    },
+    "ema_gate": {
+      "denominator": 16,
+      "exact_agreements": 12,
+      "rate": 0.75
+    },
+    "stage_1_status": {
+      "denominator": 16,
+      "exact_agreements": 12,
+      "rate": 0.75
+    },
+    "selection_disposition": {
+      "denominator": 16,
+      "exact_agreements": 11,
+      "rate": 0.6875
+    }
+  },
+  "reviewer_to_adjudication_field_agreement": {
+    "parent_state": {
+      "denominator": 32,
+      "exact_agreements": 28,
+      "rate": 0.875
+    },
+    "direction": {
+      "denominator": 32,
+      "exact_agreements": 29,
+      "rate": 0.9063
+    },
+    "a_leg_quality": {
+      "denominator": 32,
+      "exact_agreements": 28,
+      "rate": 0.875
+    },
+    "b_leg_class": {
+      "denominator": 32,
+      "exact_agreements": 20,
+      "rate": 0.625
+    },
+    "visual_family": {
+      "denominator": 32,
+      "exact_agreements": 25,
+      "rate": 0.7813
+    },
+    "attempt_label": {
+      "denominator": 32,
+      "exact_agreements": 26,
+      "rate": 0.8125
+    },
+    "three_push_variant": {
+      "denominator": 32,
+      "exact_agreements": 26,
+      "rate": 0.8125
+    },
+    "ema_gate": {
+      "denominator": 32,
+      "exact_agreements": 28,
+      "rate": 0.875
+    },
+    "stage_1_status": {
+      "denominator": 32,
+      "exact_agreements": 28,
+      "rate": 0.875
+    },
+    "selection_disposition": {
+      "denominator": 32,
+      "exact_agreements": 27,
+      "rate": 0.8438
+    }
+  },
+  "adjudication_decisions": {
+    "both_reasonable_boundary": 12,
+    "reviewers_agree": 1,
+    "adjudicator_choice": 3
+  },
+  "candidate_source_comparison": {
+    "warning": "candidate source labels are hypotheses, not ground truth; no overall accuracy is reported",
+    "family_confusion_matrix": {
+      "NEGATIVE_CONTROL": {
+        "NONE": 1,
+        "H_L_like": 2,
+        "BOP_like": 1
+      },
+      "H_L_like": {
+        "H_L_like": 1,
+        "BOP_like": 3,
+        "THREE_PUSH_like": 3,
+        "ABC_CONT_like": 1
+      },
+      "THREE_PUSH_like": {
+        "THREE_PUSH_like": 3,
+        "ABC_CONT_like": 1
+      }
+    },
+    "hl_attempt_confusion_matrix": {
+      "H2_like": {
+        "H2_like": 1,
+        "H1_like": 1
+      },
+      "H1_like": {
+        "H2_like": 1,
+        "H3_like": 1
+      },
+      "L2_like": {
+        "pending": 1,
+        "L3_like": 1
+      },
+      "L1_like": {
+        "L3_like": 1,
+        "pending": 1
+      }
+    },
+    "hl_attempt_exact": {
+      "numerator": 1,
+      "denominator": 8
+    },
+    "three_push_family_exact": {
+      "numerator": 3,
+      "denominator": 4
+    },
+    "negative_control_not_deep_reviewed": {
+      "numerator": 4,
+      "denominator": 4
+    },
+    "samples": [
+      {
+        "sample_id": "MC2-001",
+        "candidate_family": "NEGATIVE_CONTROL",
+        "candidate_label": "EMA_conflict_transition",
+        "adjudicated_visual_family": "NONE",
+        "adjudicated_attempt_label": "pending",
+        "adjudicated_selection_disposition": "wait_for_structure",
+        "adjudication_decision": "both_reasonable_boundary",
+        "comparable_family": false,
+        "family_exact": null,
+        "comparable_hl_attempt": false,
+        "hl_attempt_exact": null,
+        "negative_control_not_deep_reviewed": true
+      },
+      {
+        "sample_id": "MC2-002",
+        "candidate_family": "H_L_like",
+        "candidate_label": "H2_like",
+        "adjudicated_visual_family": "H_L_like",
+        "adjudicated_attempt_label": "H2_like",
+        "adjudicated_selection_disposition": "wait_for_structure",
+        "adjudication_decision": "both_reasonable_boundary",
+        "comparable_family": true,
+        "family_exact": true,
+        "comparable_hl_attempt": true,
+        "hl_attempt_exact": true,
+        "negative_control_not_deep_reviewed": null
+      },
+      {
+        "sample_id": "MC2-003",
+        "candidate_family": "THREE_PUSH_like",
+        "candidate_label": "continuation_or_climax_expansion",
+        "adjudicated_visual_family": "THREE_PUSH_like",
+        "adjudicated_attempt_label": "L3_like",
+        "adjudicated_selection_disposition": "rejected_gate",
+        "adjudication_decision": "both_reasonable_boundary",
+        "comparable_family": true,
+        "family_exact": true,
+        "comparable_hl_attempt": false,
+        "hl_attempt_exact": null,
+        "negative_control_not_deep_reviewed": null
+      },
+      {
+        "sample_id": "MC2-004",
+        "candidate_family": "H_L_like",
+        "candidate_label": "H1_like",
+        "adjudicated_visual_family": "BOP_like",
+        "adjudicated_attempt_label": "H2_like",
+        "adjudicated_selection_disposition": "wait_for_structure",
+        "adjudication_decision": "both_reasonable_boundary",
+        "comparable_family": true,
+        "family_exact": false,
+        "comparable_hl_attempt": true,
+        "hl_attempt_exact": false,
+        "negative_control_not_deep_reviewed": null
+      },
+      {
+        "sample_id": "MC2-005",
+        "candidate_family": "H_L_like",
+        "candidate_label": "L2_like_event_or_expansion_boundary",
+        "adjudicated_visual_family": "BOP_like",
+        "adjudicated_attempt_label": "pending",
+        "adjudicated_selection_disposition": "event_boundary",
+        "adjudication_decision": "both_reasonable_boundary",
+        "comparable_family": true,
+        "family_exact": false,
+        "comparable_hl_attempt": true,
+        "hl_attempt_exact": false,
+        "negative_control_not_deep_reviewed": null
+      },
+      {
+        "sample_id": "MC2-006",
+        "candidate_family": "NEGATIVE_CONTROL",
+        "candidate_label": "support_too_close_transition",
+        "adjudicated_visual_family": "H_L_like",
+        "adjudicated_attempt_label": "L2_like",
+        "adjudicated_selection_disposition": "wait_for_structure",
+        "adjudication_decision": "both_reasonable_boundary",
+        "comparable_family": false,
+        "family_exact": null,
+        "comparable_hl_attempt": false,
+        "hl_attempt_exact": null,
+        "negative_control_not_deep_reviewed": true
+      },
+      {
+        "sample_id": "MC2-007",
+        "candidate_family": "H_L_like",
+        "candidate_label": "L1_like_expansion_boundary",
+        "adjudicated_visual_family": "THREE_PUSH_like",
+        "adjudicated_attempt_label": "L3_like",
+        "adjudicated_selection_disposition": "rejected_gate",
+        "adjudication_decision": "both_reasonable_boundary",
+        "comparable_family": true,
+        "family_exact": false,
+        "comparable_hl_attempt": true,
+        "hl_attempt_exact": false,
+        "negative_control_not_deep_reviewed": null
+      },
+      {
+        "sample_id": "MC2-008",
+        "candidate_family": "THREE_PUSH_like",
+        "candidate_label": "range_repeat_test",
+        "adjudicated_visual_family": "ABC_CONT_like",
+        "adjudicated_attempt_label": "H2_like",
+        "adjudicated_selection_disposition": "wait_for_structure",
+        "adjudication_decision": "reviewers_agree",
+        "comparable_family": true,
+        "family_exact": false,
+        "comparable_hl_attempt": false,
+        "hl_attempt_exact": null,
+        "negative_control_not_deep_reviewed": null
+      },
+      {
+        "sample_id": "MC2-009",
+        "candidate_family": "H_L_like",
+        "candidate_label": "H1_like_event_boundary",
+        "adjudicated_visual_family": "THREE_PUSH_like",
+        "adjudicated_attempt_label": "H3_like",
+        "adjudicated_selection_disposition": "wait_for_structure",
+        "adjudication_decision": "both_reasonable_boundary",
+        "comparable_family": true,
+        "family_exact": false,
+        "comparable_hl_attempt": true,
+        "hl_attempt_exact": false,
+        "negative_control_not_deep_reviewed": null
+      },
+      {
+        "sample_id": "MC2-010",
+        "candidate_family": "H_L_like",
+        "candidate_label": "H2_like",
+        "adjudicated_visual_family": "BOP_like",
+        "adjudicated_attempt_label": "H1_like",
+        "adjudicated_selection_disposition": "deep_reviewed",
+        "adjudication_decision": "adjudicator_choice",
+        "comparable_family": true,
+        "family_exact": false,
+        "comparable_hl_attempt": true,
+        "hl_attempt_exact": false,
+        "negative_control_not_deep_reviewed": null
+      },
+      {
+        "sample_id": "MC2-011",
+        "candidate_family": "NEGATIVE_CONTROL",
+        "candidate_label": "wide_range_flat_EMA",
+        "adjudicated_visual_family": "H_L_like",
+        "adjudicated_attempt_label": "not_applicable",
+        "adjudicated_selection_disposition": "event_boundary",
+        "adjudication_decision": "both_reasonable_boundary",
+        "comparable_family": false,
+        "family_exact": null,
+        "comparable_hl_attempt": false,
+        "hl_attempt_exact": null,
+        "negative_control_not_deep_reviewed": true
+      },
+      {
+        "sample_id": "MC2-012",
+        "candidate_family": "THREE_PUSH_like",
+        "candidate_label": "range_edge_lower_multi_push",
+        "adjudicated_visual_family": "THREE_PUSH_like",
+        "adjudicated_attempt_label": "H3_like",
+        "adjudicated_selection_disposition": "rejected_gate",
+        "adjudication_decision": "adjudicator_choice",
+        "comparable_family": true,
+        "family_exact": true,
+        "comparable_hl_attempt": false,
+        "hl_attempt_exact": null,
+        "negative_control_not_deep_reviewed": null
+      },
+      {
+        "sample_id": "MC2-013",
+        "candidate_family": "H_L_like",
+        "candidate_label": "L1_like_transition_boundary",
+        "adjudicated_visual_family": "ABC_CONT_like",
+        "adjudicated_attempt_label": "pending",
+        "adjudicated_selection_disposition": "rejected_gate",
+        "adjudication_decision": "both_reasonable_boundary",
+        "comparable_family": true,
+        "family_exact": false,
+        "comparable_hl_attempt": true,
+        "hl_attempt_exact": false,
+        "negative_control_not_deep_reviewed": null
+      },
+      {
+        "sample_id": "MC2-014",
+        "candidate_family": "H_L_like",
+        "candidate_label": "L2_like",
+        "adjudicated_visual_family": "THREE_PUSH_like",
+        "adjudicated_attempt_label": "L3_like",
+        "adjudicated_selection_disposition": "rejected_gate",
+        "adjudication_decision": "adjudicator_choice",
+        "comparable_family": true,
+        "family_exact": false,
+        "comparable_hl_attempt": true,
+        "hl_attempt_exact": false,
+        "negative_control_not_deep_reviewed": null
+      },
+      {
+        "sample_id": "MC2-015",
+        "candidate_family": "THREE_PUSH_like",
+        "candidate_label": "terminal_or_breakout_boundary",
+        "adjudicated_visual_family": "THREE_PUSH_like",
+        "adjudicated_attempt_label": "H3_like",
+        "adjudicated_selection_disposition": "wait_for_structure",
+        "adjudication_decision": "both_reasonable_boundary",
+        "comparable_family": true,
+        "family_exact": true,
+        "comparable_hl_attempt": false,
+        "hl_attempt_exact": null,
+        "negative_control_not_deep_reviewed": null
+      },
+      {
+        "sample_id": "MC2-016",
+        "candidate_family": "NEGATIVE_CONTROL",
+        "candidate_label": "ordinary_A_resistance_transition",
+        "adjudicated_visual_family": "BOP_like",
+        "adjudicated_attempt_label": "H2_like",
+        "adjudicated_selection_disposition": "wait_for_structure",
+        "adjudication_decision": "both_reasonable_boundary",
+        "comparable_family": false,
+        "family_exact": null,
+        "comparable_hl_attempt": false,
+        "hl_attempt_exact": null,
+        "negative_control_not_deep_reviewed": true
+      }
+    ]
+  },
+  "trade_statistics": {
+    "completed_trade_denominator": 0,
+    "validated_win_rate": "not-computable",
+    "conclusion": "no-new-positive"
+  }
+}

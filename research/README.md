@@ -20,6 +20,8 @@
 - [`选股质量：发现召回、视觉分层与盲测基线审计（2026-09-01）`](selection_quality_process_audit_2026-09-01_CN.md)：记录发现流水对账、序数排序、强 A 等待结构、首批 outcome-hidden 基线及严格盲测限制；
 - [`选股质量盲测 Batch 1 首次视觉答案`](selection_quality_blind_batch1_predictions_2026-09-01_CN.md)：冻结 12 张随机发现图的首次读法；专家裁决仍 pending，不计算准确率或胜率；
 - [`形态覆盖候选集 v1 审计（2026-09-01）`](morphology_calibration_candidate_cohort_audit_2026-09-01_CN.md)：冻结 16 张 H/L、三推变形与相似负控候选图；标签来源隔离，专家真值、识别准确率和交易结果仍 pending；
+- [`形态覆盖候选集 v1 独立盲审与裁决审计（2026-09-01）`](morphology_calibration_adjudication_audit_2026-09-01_CN.md)：冻结 32 份模型盲审和 16 份模型裁决，记录字段一致率及 H/L、BOP、三推边界混淆；不是人工专家真值，不产生交易胜率分母；
+- [`形态覆盖盲审原始记录`](morphology_calibration_blind_reviews_2026-09-01.json)、[`盲裁决原始记录`](morphology_calibration_blind_adjudication_2026-09-01.json)与[`机器可读统计`](morphology_calibration_metrics_2026-09-01.json)：保存冻结记录、哈希、分母和逐样本候选来源比较；
 - [`流程改进审计（2026-08-28）`](process_improvement_audit_2026-08-28_CN.md)：记录本轮独立修复、验证证据和仍需用户决定的研究设计事项；
 - [`候选、视觉复核与交易日志边界一致性审计（2026-08-29）`](candidate_visual_record_consistency_audit_2026-08-29_CN.md)：核对选择记录的方向汇总、冻结前/回放后状态、两年 Daily/EMA/A-B/空间字段、ROST 视觉 provenance 和历史三推笔记；不新增样本或结果；
 - [`统一输出、视觉字段与状态轴审计（2026-08-29）`](unified_output_state_axis_audit_2026-08-29_CN.md)：区分文档成熟度与案例状态，补齐历史摘要的 `gate_result`，统一 BOP/H3-L3 的方向、lineage、事件、空间和多周期字段；不新增样本或结果；
