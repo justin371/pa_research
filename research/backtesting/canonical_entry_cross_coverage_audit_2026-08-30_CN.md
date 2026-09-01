@@ -201,3 +201,23 @@ current_missing_section_entries: 0
 ```
 
 专家包和审计已由 canonical index 承载；活动 section、backtesting 报告、required report 和视觉资产入口仍无缺口。本轮只准备空白专家包，没有执行或伪造人工标签，不建立 ground truth、准确率、交易结果或胜率分母。结论继续保持 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。
+
+## 10. 2026-09-01 专家标注回收 Validator 后的当前追加快照
+
+本段保留上方历史快照，只记录 annotation schema、裁决/分母政策、只读 validator 和审计进入当前 checkout 后的动态计数：
+
+```text
+current_docs_markdown_entries: 9
+current_foundations_readme_entries: 9
+current_patterns_readme_entries: 17
+current_strategy_markdown_entries: 7
+current_section_entry_total: 42
+current_backtesting_reports: 76
+current_required_research_reports: 70
+current_visual_asset_readmes: 14
+current_png_assets: 145
+current_top_level_research_reports: 179
+current_missing_section_entries: 0
+```
+
+新 schema、policy、validator 和审计均有 canonical 入口；活动 section、backtesting 报告、required report 和视觉资产仍无缺口。测试只使用临时合成 annotation；真实专家包保持空白，ground truth、准确率、交易结果和胜率分母仍未形成。结论继续保持 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。

@@ -116,10 +116,10 @@ class CanonicalEntryCrossCoverageTests(unittest.TestCase):
             "all_top_level_research_reachable: yes",
             "current_docs_markdown_entries: 9",
             "current_section_entry_total: 42",
-            "current_required_research_reports: 69",
+            "current_required_research_reports: 70",
             "current_visual_asset_readmes: 14",
             "current_png_assets: 145",
-            "current_top_level_research_reports: 178",
+            "current_top_level_research_reports: 179",
             "current_missing_section_entries: 0",
         ):
             self.assertIn(token, content, token)

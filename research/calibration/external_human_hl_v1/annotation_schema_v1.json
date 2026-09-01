@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pa-research://external-human-hl/annotation-schema-v1",
+  "title": "PA Research external-human ordinary H/L annotation record v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "packet_id", "manifest_sha256", "annotator", "freeze", "annotations"],
+  "properties": {
+    "schema_version": {"const": "pa_hl_expert_annotations_v1"},
+    "packet_id": {"type": "string", "minLength": 1},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "annotator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "identifier", "independent"],
+      "properties": {
+        "role": {"const": "external_human_expert"},
+        "identifier": {"type": "string", "minLength": 1},
+        "independent": {"type": "boolean"}
+      }
+    },
+    "freeze": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["annotation_started_at", "annotation_frozen_at", "source_or_model_hypotheses_seen_before_freeze", "future_or_outcome_evidence_seen_before_freeze", "knowledge_status"],
+      "properties": {
+        "annotation_started_at": {"type": "string", "format": "date-time"},
+        "annotation_frozen_at": {"type": "string", "format": "date-time"},
+        "source_or_model_hypotheses_seen_before_freeze": {"type": "boolean"},
+        "future_or_outcome_evidence_seen_before_freeze": {"type": "boolean"},
+        "knowledge_status": {"enum": ["clean", "contaminated", "uncertain"]}
+      }
+    },
+    "annotations": {
+      "type": "array",
+      "minItems": 16,
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["expert_sample_id", "evidence_usable", "parent_state", "direction", "ema20_slope", "ema50_slope", "ema200_context", "A_leg_quality", "B_leg_class", "lineage_status", "expert_ordinary_hl_label", "primary_exclusion", "confidence_1_to_5", "major_high_low_reading", "A_leg_evidence", "B_leg_evidence", "lineage_and_attempt_evidence", "first_obstacle_and_space", "why_not_BOP_or_third_push_or_range_repeat", "main_uncertainty"],
+        "properties": {
+          "expert_sample_id": {"type": "string", "pattern": "^EH1-[0-9]{3}$"},
+          "evidence_usable": {"enum": ["yes", "no", "uncertain"]},
+          "parent_state": {"enum": ["open_trend", "trading_range", "range_edge", "transition", "climax", "unclear"]},
+          "direction": {"enum": ["long", "short", "no_valid_direction"]},
+          "ema20_slope": {"enum": ["rising", "falling", "flat", "unclear"]},
+          "ema50_slope": {"enum": ["rising", "falling", "flat", "unclear"]},
+          "ema200_context": {"enum": ["supportive", "conflicting", "neutral", "unclear"]},
+          "A_leg_quality": {"enum": ["strong", "ordinary", "event_driven", "unclear"]},
+          "B_leg_class": {"enum": ["controlled", "controlled_late", "deep_but_late_controlled", "uncontrolled", "range_like", "not_formed", "unclear"]},
+          "lineage_status": {"enum": ["same_lineage", "reset", "unclear"]},
+          "expert_ordinary_hl_label": {"enum": ["H1", "H2", "L1", "L2", "not_ordinary_HL", "unclear"]},
+          "primary_exclusion": {"enum": ["not_applicable", "accepted_BOP", "third_push_H3_L3", "range_repeat", "event_or_gap", "EMA_gate_fail", "insufficient_space", "A_not_directional", "B_not_controlled", "lineage_reset", "no_valid_direction", "insufficient_evidence", "other"]},
+          "confidence_1_to_5": {"type": "integer", "minimum": 1, "maximum": 5},
+          "major_high_low_reading": {"type": "string", "minLength": 1},
+          "A_leg_evidence": {"type": "string", "minLength": 1},
+          "B_leg_evidence": {"type": "string", "minLength": 1},
+          "lineage_and_attempt_evidence": {"type": "string", "minLength": 1},
+          "first_obstacle_and_space": {"type": "string", "minLength": 1},
+          "why_not_BOP_or_third_push_or_range_repeat": {"type": "string", "minLength": 1},
+          "main_uncertainty": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}
