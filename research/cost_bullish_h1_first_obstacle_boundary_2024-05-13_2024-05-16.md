@@ -1,6 +1,6 @@
 # COST 多头 H1-like：优质信号 K，但第一阻力贴近与开盘跳过边界（2024-05-13 至 2024-05-16）
 
-状态：`pattern_like / strong-looking-A / controlled-after-first-pressure-B / bullish-H1-like / low-cycle-trigger-confirmed / first-obstacle-crowded / opening-skip / sector-mixed / event-context-pending / valid_no_trade`
+状态（历史观察；非已成交订单）：`pattern_like / strong-looking-A / controlled-after-first-pressure-B / bullish-H1-like / low-cycle-price-observation / first-obstacle-crowded / opening-path-unproven / sector-mixed / event-context-pending / valid_no_trade`
 
 ## 1. 研究目的与数据
 
@@ -25,9 +25,9 @@
 
 ## 3. 订单与低周期顺序
 
-- 研究触发可放在 `05-15` 高点约 `779.96` 上方；
-- `05-15` 的 15m 在约 `14:15–14:30` 重新越过 `779.78–779.96`，因此低周期触发顺序可以重建；
-- `05-16` 开盘约 `782.08`，已经高于原 `779.96` 触发参考。若原先挂 buy-stop，精确 `779.96` 成交不能从日线/15m OHLC 得出；接受开盘价重订是另一份合同；
+- `05-15` 收盘后的 Daily 高点约 `779.96`，才可以作为假设的 **Daily signal-high contract** 的 signal-high；Daily K 未收盘前不能据此冻结合同，也不能从 15m 观察推导激活时间；
+- `05-15` 的 15m 在约 `14:15–14:30` 重新越过 `779.78–779.96`，这里只是 `intraday observation`，可核对价格先后，但不证明 Daily signal-high contract 已激活或已有订单；
+- `05-16` 开盘约 `782.08`，已经高于原 `779.96` 触发参考。只有在入场前已冻结 `gap_policy: skip` 时，才可把这个次日开盘分支标为 `opening-skip`；本记录没有冻结该 policy，因此原始成交仍是 `unproven`，开盘重订是另一份 `reprice` 合同，不能声称已有订单；
 - 不能因为 `05-16` 后继续上涨，就把原 buy-stop 写成已经按理想价成交。
 
 ## 4. 第一阻力、结构止损与 R/R
@@ -58,17 +58,17 @@
 | A quality | `strong-looking-A` |
 | B quality | 第一天下压较强、第二天收窄；`controlled-after-first-pressure` |
 | H/L count | `05-15` bullish H1-like；不把后续上涨倒灌为 H2 |
-| signal quality | Daily 实体和收盘较好；15m 触发顺序可重建 |
-| order | 原 buy-stop 触发价被 `05-16` 开盘越过；精确成交与开盘重订分开 |
+| signal quality | Daily 实体和收盘较好；15m 价格观察顺序可核对，不是冻结订单触发证明 |
+| order | 未冻结 `gap_policy`；`05-16` 开盘越过 `779.96`；只有 `gap_policy: skip` 才是 `opening-skip`，否则保留 `unproven`/`reprice` 分支，不声称已有订单 |
 | structural stop | `05-14` 低点 `761.95` 下方的结构观察区 |
 | first obstacle | `05-13`/`05-10` 高点簇 `777.52–779.78`，贴近触发 |
 | tradeability | 第一段空间不足，直接日线入场 `valid_no_trade` |
-| status | `pattern_like / first-obstacle-crowded / opening-skip / sector-mixed / valid_no_trade` |
+| status | `pattern_like / first-obstacle-crowded / opening-path-unproven / sector-mixed / valid_no_trade` |
 
 ## 7. 可复用结论
 
 1. 优质信号 K 只能提高形态层的可信度，不能取消第一阻力；
 2. 形态上的 H1-like 与交易上的“值得买”必须分栏记录；
-3. 触发位被次日开盘越过时，精确 stop、开盘重订和放弃交易必须是三个独立分支；
+3. 触发位被次日开盘越过时，只有预先冻结 `gap_policy: skip` 才能标记 `opening-skip`；否则精确 stop 的成交保持 `unproven`，开盘重订和放弃交易是独立分支；
 4. 后续价格走得很远，不会把入场前已经拥挤的第一障碍变成事前可知的宽阔空间；
-5. 这是视觉助手应快速筛出的 `pattern_like but no-trade` 样本，不是已验证规则或交易建议。
+5. 这是视觉助手应快速筛出的 `pattern_like but no-trade` 样本，不是已验证规则或交易建议；保留原始价格观察，`no-new-positive`。

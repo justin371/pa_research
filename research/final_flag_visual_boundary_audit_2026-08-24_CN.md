@@ -18,7 +18,8 @@
 | 趋势中段压缩后原方向接受 | `trend_flag_continuation` | 延续/BOP，不逆势 |
 | 末端压缩、最后尝试失败 | `final_flag_reversal_candidate` | 等反向 H1/H2 或 L1/L2、跟随和空间 |
 | 窄平台破坏但双方反复 | `final_flag_range_transition` | 小区间/观望 |
-| 只有一根反向 K 或首磁铁近 | `valid_no_trade` | 记录形态，不强行交易 |
+| 只有一根反向 K，尚无确认/跟随 | `observation_only` / `pending` | 记录形态，等待方向/确认/几何证据，不建立订单 |
+| 方向和几何已可复核但首磁铁近 | `valid_no_trade` | 记录已知空间硬闸门，不强行交易 |
 
 ## 案例裁决
 

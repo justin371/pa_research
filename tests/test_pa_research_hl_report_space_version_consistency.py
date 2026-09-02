@@ -42,6 +42,11 @@ HL_SELECTION_REPORTS = (
     "hl_next5_selection_2026-08-27_CN.md",
 )
 
+# These dated replay reports are historical audit artifacts generated under
+# engine 0.3.9.  Keep their provenance pinned to the recorded version; current
+# runtime/readme version checks belong to current-state tests.
+HISTORICAL_REPLAY_ENGINE_VERSION = "0.3.9"
+
 
 class PaResearchHlReportSpaceVersionConsistencyTests(unittest.TestCase):
     def _rows(self, filename: str) -> list[dict[str, str]]:
@@ -100,7 +105,7 @@ class PaResearchHlReportSpaceVersionConsistencyTests(unittest.TestCase):
         for filename in HL_REPLAY_REPORTS:
             with self.subTest(report=filename):
                 text = (BACKTEST_ROOT / filename).read_text(encoding="utf-8")
-                self.assertIn(f"当前 PA Research engine 为 `{ENGINE_VERSION}`", text)
+                self.assertIn(f"当前 PA Research engine 为 `{HISTORICAL_REPLAY_ENGINE_VERSION}`", text)
                 self.assertIn("no-new-positive", text)
                 self.assertIn("validated win-rate: not-computable", text)
 

@@ -64,8 +64,13 @@ def load_symbol_bars(price_file: Path, symbol: str) -> list[DailyBar]:
                 close=_finite_float(row["Close"], "Close"),
                 volume=_finite_float(row["Volume"], "Volume"),
             )
-            if bar.high < max(bar.open, bar.close) or bar.low > min(bar.open, bar.close):
-                raise ValueError(f"{symbol} {bar.session_date}: invalid OHLC geometry")
+            if (
+                min(bar.open, bar.high, bar.low, bar.close) <= 0
+                or bar.volume < 0
+                or bar.high < max(bar.open, bar.close)
+                or bar.low > min(bar.open, bar.close)
+            ):
+                raise ValueError(f"{symbol} {bar.session_date}: invalid OHLCV row")
             bars.append(bar)
     bars.sort(key=lambda bar: bar.session_date)
     if not bars:
@@ -200,7 +205,9 @@ def render_sample(
     daily_emas = {period: values[daily_start:] for period, values in full_emas.items()}
     local_emas = {period: values[local_start:] for period, values in full_emas.items()}
 
-    figure = plt.figure(figsize=(18, 11), dpi=140)
+    # Reserve space for both date/relative ticks and the context xlabel before
+    # the local panel. Applies only to new renders; frozen PNGs are unchanged.
+    figure = plt.figure(figsize=(18, 11), dpi=140, layout="constrained")
     grid = figure.add_gridspec(4, 1, height_ratios=(3.8, 0.9, 3.8, 0.9), hspace=0.08)
     daily_price = figure.add_subplot(grid[0, 0])
     daily_volume = figure.add_subplot(grid[1, 0], sharex=daily_price)

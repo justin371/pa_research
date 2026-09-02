@@ -11,6 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 BACKTEST_ROOT = REPO_ROOT / "research" / "backtesting"
 AUDIT_PATH = BACKTEST_ROOT / "historical_replay_result_log_provenance_audit_2026-08-29_CN.md"
 VALIDATOR_PATH = REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1"
+EXCLUDED_INVENTORY_PARTS = {".git", ".codex", ".venv", "node_modules", "__pycache__"}
 
 
 class HistoricalReplayResultLogProvenanceTests(unittest.TestCase):
@@ -77,6 +78,10 @@ class HistoricalReplayResultLogProvenanceTests(unittest.TestCase):
             path
             for path in REPO_ROOT.rglob("*")
             if path.is_file() and path.name in artifact_names and ".git" not in path.parts
+            and not any(
+                part.casefold() in EXCLUDED_INVENTORY_PARTS
+                for part in path.relative_to(REPO_ROOT).parts
+            )
         ]
         self.assertEqual(current_artifacts, [])
 

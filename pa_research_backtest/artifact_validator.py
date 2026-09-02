@@ -98,28 +98,9 @@ REQUIRED_RESULT_COLUMNS = {
     "planned_entry_trigger",
 }
 
-ROUNDTRIP_SUMMARY_FIELDS = (
-    "contract_count",
-    "filled_count",
-    "completed_trade_count",
-    "win_rate_eligible_count",
-    "win_rate_eligibility_mismatch_count",
-    "win_rate_guard_exclusion_count",
-    "pre_entry_provenance_complete_count",
-    "pre_entry_provenance_incomplete_count",
-    "pre_entry_provenance_status_counts",
-    "contract_eligibility_mismatch_count",
-    "event_bucket_mismatch_count",
-    "contract_space_bucket_mismatch_count",
-    "event_bucket_contract_counts",
-    "contract_space_bucket_counts",
-    "outcome_bucket_counts",
-    "win_rate_pct",
-    "realized_R_mean",
-    "realized_R_median",
-    "realized_R_min",
-    "realized_R_max",
-)
+# Every field emitted by build_summary is derived from the result rows and
+# must round-trip. Do not maintain a partial allowlist: a renamed/new statistic
+# could otherwise escape validation (including None-vs-missing comparisons).
 
 
 def _sha256_file(path: Path) -> str:
@@ -139,7 +120,7 @@ def _canonical_result_set_sha256(path: Path) -> str:
 
 def _values_equal(left: Any, right: Any) -> bool:
     if isinstance(left, bool) or isinstance(right, bool):
-        return left == right
+        return type(left) is type(right) and left == right
     if isinstance(left, (int, float)) and isinstance(right, (int, float)):
         if isinstance(left, float) and math.isnan(left):
             return isinstance(right, float) and math.isnan(right)
@@ -306,6 +287,30 @@ def validate_artifact(artifact_dir: str | Path) -> dict[str, Any]:
             if source_hash is not None and metadata.get("engine_source_sha256") != source_hash:
                 issues.append("metadata engine_source_sha256 does not match engine_source")
 
+    input_hashes: dict[str, str | None] = {}
+    for field in ("price_file", "contract_file"):
+        input_hashes[field] = None
+        source_value = metadata.get(field)
+        if not isinstance(source_value, str) or not source_value.strip():
+            issues.append(f"metadata {field} is missing or empty")
+            continue
+        source_path = Path(source_value)
+        # Relative metadata paths belong to the artifact, never the caller's
+        # working directory. Missing sources cannot establish current validity;
+        # keep the artifact intact and report the absent provenance explicitly.
+        if not source_path.is_absolute():
+            source_path = directory / source_path
+        if not source_path.is_file():
+            issues.append(f"metadata {field} file is unavailable; input provenance is unverified")
+            continue
+        try:
+            input_hashes[field] = _sha256_file(source_path)
+        except OSError as exc:
+            issues.append(f"cannot hash metadata {field}: {exc}")
+            continue
+        if metadata.get(f"{field}_sha256") != input_hashes[field]:
+            issues.append(f"metadata {field}_sha256 does not match {field}")
+
     result_columns = list(results.columns)
     if summary_provenance.get("result_columns") != result_columns:
         issues.append("summary_provenance result_columns do not equal results.csv columns")
@@ -339,13 +344,14 @@ def validate_artifact(artifact_dir: str | Path) -> dict[str, Any]:
             issues.append(f"summary_provenance does not match summary field {field}")
 
     if roundtrip_summary is not None:
-        for field in ROUNDTRIP_SUMMARY_FIELDS:
-            if not _values_equal(roundtrip_summary.get(field), summary.get(field)):
+        for field, expected in roundtrip_summary.items():
+            if field not in summary or not _values_equal(expected, summary[field]):
                 issues.append(f"CSV round-trip does not match summary field {field}")
 
     result["status"] = "current_valid" if not issues else "invalid"
     result["checks"] = {
         "engine_source_sha256": source_hash,
+        "input_file_sha256": input_hashes,
         "results_file_sha256": results_hash,
         "result_set_sha256": roundtrip_result_set_hash,
         "summary_metadata_equal": summary.get("run_metadata") == metadata,

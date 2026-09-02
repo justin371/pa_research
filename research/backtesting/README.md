@@ -4,9 +4,9 @@
 
 统一统计结论：`no-new-positive`；`validated win-rate: not-computable`。`60%` 只是待检验目标，不是已验证胜率。
 
-这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.9`；当前维护版本仅指研究引擎）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
+这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.10`；当前维护版本仅指研究引擎）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
 
-统一边界：`v0.x` 规则/合同与研究引擎 `0.3.9` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；不创建量化扫描器，不连接 Execution Agent。
+统一边界：`v0.x` 规则/合同与研究引擎 `0.3.10` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；不创建量化扫描器，不连接 Execution Agent。
 
 研究实现与校验入口（仅限 PA Research）见：[`回放 CLI`](../../scripts/pa_research_backtest.py)、[`回放 engine`](../../pa_research_backtest/engine.py) 和 [`artifact validator`](../../scripts/validate_pa_research_artifact.py)。这些入口只处理冻结合同、历史价格输入和研究 artifact，不连接账户、券商或 Execution Agent。
 
@@ -116,7 +116,7 @@ major_high_low_review,ema20_50_200_review,event_context,contract_frozen,lineage_
 
 ### 研究记录与回放输入的边界
 
-统一输出合同和视觉复核卡为了保留边界案例，允许比当前回放器更宽的记录状态。当前 engine `0.3.9` 的回放输入边界如下，必须在冻结合同时显式收敛：
+统一输出合同和视觉复核卡为了保留边界案例，允许比当前回放器更宽的记录状态。当前 engine `0.3.10` 的回放输入边界如下，必须在冻结合同时显式收敛：
 
 - `direction` 只接受 `long` 或 `short`；`no_valid_direction` 是研究记录状态，不能进入回放。
 - `primary_pattern` 接受 `ABC_CONT`、`BOP`、`H1_L1`、`H2_L2`、`H3_L3`、`RFB`、`MTR`、`other`。其中额外的 H/L、三推和旧模式值是历史/兼容冻结合同的支持，不改变当前日线候选顶层只用 `ABC_CONT/BOP` 的规则。
@@ -198,13 +198,26 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 
 1. 订单只从 `decision_date` 之后开始生效；程序不读取未来结果来创建 pattern 标签。
 2. `gap_policy=skip` 遇到第一根 K 线开盘跳过触发位时记录 `opening-skip`；`accept_open` 记录实际开盘成交；`flag_only` 也按实际开盘成交，但把 `gap_adjustment` 保留为 `flag_only`；三者不混算。
-3. 止损和目标在入场 K 线完成后才挂入，避免把入场 K 线内无法确定的先后顺序伪装成结果。
-4. 后续 K 线同时触及止损和目标时，结果标记为 `ambiguous_intrabar`，不进入胜率分母；歧义路径上的首障碍若不能确认在持仓仍有效时到达，则标为 `unknown`。
+3. 止损和目标随父订单在实际入场时挂入。非 `market_close` 入场 K 线同时触及止损和目标时，结果标记为 `ambiguous_intrabar`，不进入胜率分母；若 `backtesting.py` 将入场 K 线的保护性成交延迟到下一根才报告，则标记为 `unresolved-entry-bar-protective-fill`/`pending`，不能把下一日的合成成交当作 win/loss。`market_close` 入场不暴露入场前的 intraday range。
+4. 后续 K 线同时触及止损和目标时，结果标记为 `ambiguous_intrabar`，不进入胜率分母；歧义路径上的首障碍若不能确认在持仓仍有效时到达，则标为 `unknown`。若后续保护性止损因缺口在该 K 线开盘成交，开盘后的同 K 线 H/L 不再制造 stop/target 歧义或首障碍命中（多空相同）。
 5. 时间退出以实际 `entry_bar` 计数；`max_hold_bars` 表示 entry 之后允许观察的完整 K 线数，非 `market_close` 的时间退出在观察窗口结束后的下一根开盘成交，因此 backtesting.py 的 `bars_held` 索引距离可能比 `max_hold_bars` 多 1，这不是额外的自由持仓。`market_close` 按收盘时间索引计数；若数据末尾没有可执行的时间退出价格则标为 `incomplete-horizon`。
 6. 结果使用 `backtesting.py` 的交易记录，并以净 PnL 除以结构风险计算 `realized_R`；手续费和 spread 由命令行传入并写入元数据。
-7. 第一障碍空间只做事前几何字段，不自动授权、不自动排除，也不把首障碍到达改写成胜利。
+7. 第一障碍空间默认只做事前几何字段；缺省或历史几何不自动分类、授权或排除，也不把首障碍到达改写成胜利；但合同显式冻结为 `strict_ge_1R`、`clearly_positive` 或 `borderline_ge_1R` 时，实际开盘重算若不满足 `>=1R` 必须排除并要求重订价。
 8. 回放器不计算 EMA 斜率或自动寻找 META；这些字段必须来自回放前的人工图表审查，并在结果中原样保留。
-9. `engine_source_sha256`、运行时版本、`price_file_sha256`、`contract_file_sha256`、`result_set_sha256` 和 `results_file_sha256` 只用于 artifact provenance；重复输入或结果版本不能合并成更大的独立样本。
+9. `engine_source_sha256`、运行时版本、`price_file_sha256`、`contract_file_sha256`、`result_set_sha256` 和 `results_file_sha256` 用于 artifact provenance 与输入/结果一致性核验；重复输入或结果版本不能合并成更大的独立样本。
+
+### 0.3.10 本轮回放与摘要校正
+
+以下边界只适用于新生成的 0.3.10 replay/result；历史 artifact 和历史输出不静默重写：
+
+- 缺口成交按实际开盘价重算风险与首障碍空间；冻结为 `strict_ge_1R`、`clearly_positive` 或 `borderline_ge_1R` 的合同，实际开盘空间低于 `1R` 时必须保留为 pending/reprice-required，不得进入完成分母。缺少显式空间的旧合同继续隔离为 `unknown_contract_space`，不重新提升为 strict-space 研究。
+- 若 OHLC 显示目标在开盘被触及且同日也触及止损，入场/出场先后仍不确定，后端无法可靠重建顺序，仍保守保留为 pending；本轮不宣称所有 gap 情形已解决。
+- 由 `results.csv` 可重建的 `build_summary` 派生字段（包括 groups、R 分布、独立性、完成分母和 outcome buckets 等）必须递归 round-trip 并与 `summary.json` 一致；`summary_provenance` 与 `run_metadata` 另行做嵌套结构/字段一致性校验，不宣称 CSV 可重建全部 metadata。price/contract 输入文件及其 SHA-256 必须可核验，缺失源文件只能标为 invalid/unverified，原始 artifact 不改写。
+- 当 H/L EMA gate 存在时，`contract_eligibility` 从事前 gate 重算；声明 `observation_only`/`pending` 却派生为 `eligible`，或任何声明/派生不一致，都从所有 completed 分母排除且不得重新提升。无法通过同一冻结合同校验的行归入 `pre_entry_provenance_incomplete`，保留具体缺失诊断。
+- `win`、`loss`、`scratch` 必须分别与有限 `realized_R` 的正、负、零符号一致；符号冲突的导入行只保留审计信息，不得计入完成分母。价格文件可省略 `Volume`（默认 `0`），但显式 Volume 的空值、非数字、NaN 或 Inf 必须拒绝；权益类 OHLC 还必须为正且满足 OHLC 几何约束。
+- `event_bucket` 的普通非事件清除只接受显式 clearance token；否定词或包含某个子串不能把未核实事件升级为 `ordinary_non_event`。
+- renderer 两种模式的布局修复只适用于新生成图；旧冻结 PNG 及其 hash 保持不变。
+- 这些是执行与审计边界修正，不是策略表现证明；统一结论仍为 `no-new-positive`、`validated win-rate: not-computable`。
 
 ## 目前不能说明什么
 

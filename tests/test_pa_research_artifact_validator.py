@@ -10,7 +10,7 @@ import pandas as pd
 
 from pa_research_backtest.artifact_validator import main as validate_main
 from pa_research_backtest.artifact_validator import validate_artifact
-from pa_research_backtest.engine import main as replay_main
+from pa_research_backtest.engine import ENGINE_VERSION, main as replay_main
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -157,7 +157,7 @@ class PaResearchArtifactValidatorTests(unittest.TestCase):
 
             self.assertEqual(report["status"], "historical_incomplete")
             self.assertIn("metadata predates the current artifact schema", report["historical_reasons"])
-            self.assertIn("metadata engine_version='0.3.1' is not current '0.3.9'", report["historical_reasons"])
+            self.assertIn(f"metadata engine_version='0.3.1' is not current '{ENGINE_VERSION}'", report["historical_reasons"])
             output = io.StringIO()
             with contextlib.redirect_stdout(output):
                 exit_code = validate_main([str(output_dir)])

@@ -1,7 +1,7 @@
 import csv
 from collections import Counter
-import hashlib
 from pathlib import Path
+import tempfile
 import unittest
 
 from pa_research_backtest.engine import ENGINE_VERSION
@@ -9,6 +9,23 @@ from pa_research_backtest.engine import ENGINE_VERSION
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 BACKTEST_ROOT = REPO_ROOT / "research" / "backtesting"
+PERSISTED_REPLAY_ARTIFACT_NAMES = {"results.csv", "summary.json", "run_metadata.json"}
+EXCLUDED_INVENTORY_PARTS = {".git", ".codex", ".venv", "node_modules", "__pycache__"}
+HISTORICAL_AUDIT_ENGINE_VERSION = "0.3.9"
+HISTORICAL_AUDIT_ENGINE_SHA256 = "49afdf1649d33a911397509a1a9431edcab1ce4519399e8be18bd22129688c3a"
+
+
+def _persisted_replay_artifacts(root: Path) -> list[Path]:
+    return [
+        path
+        for path in root.rglob("*")
+        if path.is_file()
+        and path.name in PERSISTED_REPLAY_ARTIFACT_NAMES
+        and not any(
+            part.casefold() in EXCLUDED_INVENTORY_PARTS
+            for part in path.relative_to(root).parts
+        )
+    ]
 
 
 class PaResearchReportInventoryConsistencyTests(unittest.TestCase):
@@ -128,19 +145,17 @@ class PaResearchReportInventoryConsistencyTests(unittest.TestCase):
         self.assertIn("| 独立回放结果报告数（排除本审计） | 11 |", version_report)
         self.assertIn("| 明确包含 `no-new-positive` | 11 / 11 |", version_report)
         self.assertIn("| 明确包含 `validated win-rate: not-computable` | 11 / 11 |", version_report)
-        self.assertIn(f"| 当前维护版本 `{ENGINE_VERSION}` 有明确语境 | 11 / 11 |", version_report)
+        self.assertIn(
+            f"| 当前维护版本 `{HISTORICAL_AUDIT_ENGINE_VERSION}` 有明确语境 | 11 / 11 |",
+            version_report,
+        )
         for path in replay_files:
             content = path.read_text(encoding="utf-8")
             self.assertIn("no-new-positive", content, path.name)
             self.assertIn("validated win-rate: not-computable", content, path.name)
-            self.assertIn(ENGINE_VERSION, content, path.name)
+            self.assertIn(HISTORICAL_AUDIT_ENGINE_VERSION, content, path.name)
 
-        artifact_names = {"results.csv", "summary.json", "run_metadata.json"}
-        current_artifacts = [
-            path
-            for path in REPO_ROOT.rglob("*")
-            if path.is_file() and path.name in artifact_names and ".git" not in path.parts
-        ]
+        current_artifacts = _persisted_replay_artifacts(REPO_ROOT)
         artifact_report = (BACKTEST_ROOT / "artifact_inventory_audit_2026-08-29_CN.md").read_text(encoding="utf-8")
         self.assertEqual(current_artifacts, [])
         self.assertIn("| 当前 checkout 中的 `results.csv` | 0 |", artifact_report)
@@ -153,12 +168,14 @@ class PaResearchReportInventoryConsistencyTests(unittest.TestCase):
         validator = (REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1").read_text(encoding="utf-8")
         consistency_report = (BACKTEST_ROOT / "report_index_inventory_consistency_audit_2026-08-29_CN.md").read_text(encoding="utf-8")
         batch_report = (BACKTEST_ROOT / "batch_report_numeric_consistency_audit_2026-08-29_CN.md").read_text(encoding="utf-8")
-        engine_sha256 = hashlib.sha256((REPO_ROOT / "pa_research_backtest" / "engine.py").read_bytes()).hexdigest()
         self.assertIn(f"当前引擎版本 `{ENGINE_VERSION}`", readme)
         self.assertIn("backtesting==0.6.6", scope_report)
         self.assertIn("matplotlib==3.10.9", scope_report)
         self.assertIn("validator_engine_contract_parity_audit_2026-08-29_CN.md", validator)
-        self.assertIn(f"engine.py` SHA-256 为 `{engine_sha256}`", consistency_report)
+        self.assertIn(
+            f"engine.py` SHA-256 为 `{HISTORICAL_AUDIT_ENGINE_SHA256}`",
+            consistency_report,
+        )
         self.assertIn("| 全部 intake | 2 | 25 |", batch_report)
         self.assertIn("旧批次报告里的 `xR` 是冻结价格几何审计值", batch_report)
 
@@ -171,6 +188,24 @@ class PaResearchReportInventoryConsistencyTests(unittest.TestCase):
             self.assertIn(relative_path, readme)
             research_readme = (REPO_ROOT / "research" / "README.md").read_text(encoding="utf-8")
             self.assertIn(relative_path, research_readme)
+
+    def test_artifact_inventory_ignores_local_state_but_detects_research_triple(self):
+        with tempfile.TemporaryDirectory(prefix="pa-replay-inventory-filter-") as directory:
+            root = Path(directory)
+            local_paths = [
+                root / ".codex" / "goals" / "local" / name
+                for name in sorted(PERSISTED_REPLAY_ARTIFACT_NAMES)
+            ]
+            research_paths = [
+                root / "research" / "replay" / name
+                for name in sorted(PERSISTED_REPLAY_ARTIFACT_NAMES)
+            ]
+            for path in local_paths + research_paths:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("fixture\n", encoding="utf-8")
+
+            actual = _persisted_replay_artifacts(root)
+            self.assertEqual(actual, research_paths)
 
 
 if __name__ == "__main__":

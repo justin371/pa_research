@@ -25,7 +25,7 @@ import pandas as pd
 from backtesting import Backtest, Strategy
 
 
-ENGINE_VERSION = "0.3.9"
+ENGINE_VERSION = "0.3.10"
 SUPPORTED_DIRECTIONS = {"long", "short"}
 SUPPORTED_PATTERNS = {"ABC_CONT", "BOP", "H1_L1", "H2_L2", "H3_L3", "RFB", "MTR", "other"}
 SUPPORTED_LABELS = {"H1", "H2", "L1", "L2", "H3", "L3", "none", "pending"}
@@ -250,6 +250,24 @@ def _event_bucket(event_context: str) -> str:
     """Classify raw event evidence conservatively for summary stratification."""
 
     context = _as_string(event_context).lower()
+    # Non-event clearance is an explicit token, not a substring. In
+    # particular, `earnings_filter_passed=false` must never grant clearance.
+    tokens = {token.strip() for token in re.split(r"[;|]", context) if token.strip()}
+    clearance_pattern = re.compile(
+        r"(?:ordinary_non_event|earnings_filter_passed(?:_reaudit)?|"
+        r"no_event_inside_a_b_or_10bar_horizon|outside_10bar_horizon|"
+        r"outside_a_b_and_10bar_horizon|setup_window_no_known_event)(?:=true)?"
+    )
+    clearance_markers = (
+        "ordinary_non_event", "earnings_filter_passed", "no_event_inside",
+        "outside_10bar_horizon", "outside_a_b_and_10bar_horizon", "setup_window_no_known_event",
+    )
+    if any(
+        any(marker in token for marker in clearance_markers)
+        and clearance_pattern.fullmatch(token) is None
+        for token in tokens
+    ):
+        return "event_unverified_or_pending"
     if re.search(
         r"historical_event_filter_not_verified|event_context_pending|"
         r"sector_context_pending|public_price_reaudit",
@@ -260,13 +278,9 @@ def _event_bucket(event_context: str) -> str:
         return "event_driven"
     if "earnings_adjacent" in context:
         return "earnings_adjacent"
-    if "ordinary_non_event" in context and "gap_reprice" not in context:
+    if tokens.intersection({"ordinary_non_event", "ordinary_non_event=true"}) and "gap_reprice" not in context:
         return "ordinary_non_event"
-    if re.search(
-        r"earnings_filter_passed|no_event_inside|outside_10bar_horizon|"
-        r"outside_a_b_and_10bar_horizon|setup_window_no_known_event",
-        context,
-    ):
+    if any(clearance_pattern.fullmatch(token) and not token.startswith("ordinary_non_event") for token in tokens):
         return "event_reviewed_non_event"
     if context == "none":
         return "unknown"
@@ -426,6 +440,20 @@ def _pre_entry_provenance(frame: pd.DataFrame) -> tuple[pd.Series, pd.Series]:
     mark("pre_entry_space_R", strict_space & space_value.notna() & space_value.lt(1))
     mark("pre_entry_space_R", space_status.eq("blocked") & space_value.isna())
     mark("pre_entry_space_R", space_status.eq("blocked") & space_value.gt(0))
+
+    # Non-empty text is not proof of a valid frozen contract. Reuse the same
+    # loader/contract rules for imported results (e.g. >=2y, complete visual
+    # review, finite prices, and slope/pass agreement), rather than maintaining
+    # a weaker second schema for statistics. Preserve specific missing-field
+    # diagnostics already collected above.
+    for position, record in enumerate(frame.to_dict(orient="records")):
+        if missing_by_row[position]:
+            continue
+        contract_record = dict(record, entry_trigger=record.get("planned_entry_trigger"))
+        try:
+            validate_contract(BacktestContract.from_row(contract_record))
+        except (ContractValidationError, TypeError, ValueError, OverflowError):
+            missing_by_row[position].append("invalid_frozen_contract")
 
     missing_fields = pd.Series(
         [";".join(fields) for fields in missing_by_row],
@@ -684,14 +712,17 @@ def load_prices(path: str | Path, default_symbol: str | None = None) -> pd.DataF
     if "Volume" not in frame.columns:
         frame["Volume"] = 0.0
     else:
-        frame["Volume"] = pd.to_numeric(frame["Volume"], errors="coerce").fillna(0.0)
+        # Only an absent optional column gets the neutral default. A present
+        # malformed/missing observation must fail the finite-data check below.
+        frame["Volume"] = pd.to_numeric(frame["Volume"], errors="coerce")
 
     if frame[["Open", "High", "Low", "Close"]].isna().any().any():
         raise ValueError("price CSV contains a missing or non-numeric OHLC value")
     if not np.isfinite(frame[["Open", "High", "Low", "Close", "Volume"]].to_numpy(dtype=float)).all():
         raise ValueError("price CSV contains a non-finite OHLCV value")
     invalid_ohlc = (
-        (frame["High"] < frame[["Open", "Close", "Low"]].max(axis=1))
+        (frame[["Open", "High", "Low", "Close"]] <= 0).any(axis=1)
+        | (frame["High"] < frame[["Open", "Close", "Low"]].max(axis=1))
         | (frame["Low"] > frame[["Open", "Close", "High"]].min(axis=1))
         | (frame["High"] < frame["Low"])
         | (frame["Volume"] < 0)
@@ -851,10 +882,13 @@ def _find_ambiguous_bar(
     target_price: float,
     entry_bar: int,
     exit_bar: int,
+    *,
+    include_entry: bool = False,
 ) -> pd.Timestamp | None:
-    # Protective orders are attached after the entry bar is observed.  The
-    # entry bar is therefore intentionally excluded from this check.
-    for bar_number in range(entry_bar + 1, min(exit_bar, len(prices) - 1) + 1):
+    # A close entry has no exposure to the preceding intraday range; a
+    # stop/limit entry does. Never silently discard its SL/TP conflict.
+    start_bar = entry_bar if include_entry else entry_bar + 1
+    for bar_number in range(start_bar, min(exit_bar, len(prices) - 1) + 1):
         row = prices.iloc[bar_number]
         if direction == "long":
             stop_hit = row["Low"] <= structural_stop
@@ -983,6 +1017,12 @@ def run_contract(
             # directional sense at the open, require a separately frozen
             # gap-reprice contract instead of silently reusing old levels.
             validate_contract(contract, entry_reference=gap_open)
+            gap_risk = abs(gap_open - contract.structural_stop)
+            gap_space = abs(contract.first_obstacle - gap_open) / gap_risk
+            if _normalise_space_status(contract.space_status) in {"strict_ge_1R", "clearly_positive", "borderline_ge_1R"} and gap_space < 1.0 - 1e-12:
+                raise ContractValidationError(
+                    "actual gap-open space is below the frozen >=1R requirement"
+                )
         except ContractValidationError as exc:
             result = _base_result(contract, fill_status="unproven", reason="gap-reprice-required")
             result["gap_through"] = True
@@ -1001,21 +1041,22 @@ def run_contract(
             current_date = _normalise_date_index(self.data.index[-1])
             current_bar = len(self.data) - 1
             if not self._order_submitted and current_date == contract.decision_date:
+                protective = {"sl": contract.structural_stop, "tp": contract.target_price}
                 if contract.order_branch == "market_close":
                     if contract.direction == "long":
-                        self.buy(size=1, tag=contract.sample_id)
+                        self.buy(size=1, tag=contract.sample_id, **protective)
                     else:
-                        self.sell(size=1, tag=contract.sample_id)
+                        self.sell(size=1, tag=contract.sample_id, **protective)
                 elif contract.order_branch == "stop_confirmation":
                     if contract.direction == "long":
-                        self.buy(stop=contract.entry_trigger, size=1, tag=contract.sample_id)
+                        self.buy(stop=contract.entry_trigger, size=1, tag=contract.sample_id, **protective)
                     else:
-                        self.sell(stop=contract.entry_trigger, size=1, tag=contract.sample_id)
+                        self.sell(stop=contract.entry_trigger, size=1, tag=contract.sample_id, **protective)
                 elif contract.order_branch == "limit_retest":
                     if contract.direction == "long":
-                        self.buy(limit=contract.entry_trigger, size=1, tag=contract.sample_id)
+                        self.buy(limit=contract.entry_trigger, size=1, tag=contract.sample_id, **protective)
                     else:
-                        self.sell(limit=contract.entry_trigger, size=1, tag=contract.sample_id)
+                        self.sell(limit=contract.entry_trigger, size=1, tag=contract.sample_id, **protective)
                 self._order_submitted = True
                 return
 
@@ -1028,12 +1069,8 @@ def run_contract(
                     # trade_on_close=True a market-close order becomes visible
                     # one strategy iteration after the trade's entry bar.
                     self._entry_bar = min(int(trade.entry_bar) for trade in active_trades)
-                    for trade in active_trades:
-                        # Attach exits only after the entry bar has completed.
-                        # This avoids backtesting.py's documented ambiguity when
-                        # a contingent SL/TP is hit in the parent entry candle.
-                        trade.sl = contract.structural_stop
-                        trade.tp = contract.target_price
+                    # SL/TP are attached to the parent order, not one bar late.
+                    # Upstream deferred entry-bar fills are excluded below.
                 if (
                     not self._time_exit_submitted
                     and current_bar - self._entry_bar >= contract.max_hold_bars
@@ -1112,6 +1149,18 @@ def run_contract(
         if protective_exit_reason == "data_end"
         else exit_bar
     )
+    exit_open = float(symbol_prices.iloc[exit_bar]["Open"])
+    stop_gap_at_exit_open = (
+        exit_bar > entry_bar
+        and protective_exit_reason == "stop"
+        and math.isclose(exit_price, exit_open, rel_tol=1e-12, abs_tol=1e-12)
+        and (exit_open <= contract.structural_stop if contract.direction == "long"
+             else exit_open >= contract.structural_stop)
+    )
+    if stop_gap_at_exit_open:
+        # The protective stop was filled at the open. Later extremes in this
+        # bar cannot create a stop/target conflict or a first-obstacle hit.
+        path_end_bar = exit_bar - 1
     ambiguous_date = _find_ambiguous_bar(
         symbol_prices,
         contract.direction,
@@ -1119,6 +1168,25 @@ def run_contract(
         contract.target_price,
         entry_bar,
         path_end_bar,
+        include_entry=contract.order_branch != "market_close",
+    )
+    entry_row = symbol_prices.iloc[entry_bar]
+    entry_stop_hit = (
+        entry_row["Low"] <= contract.structural_stop
+        if contract.direction == "long" else entry_row["High"] >= contract.structural_stop
+    )
+    entry_target_hit = (
+        entry_row["High"] >= contract.target_price
+        if contract.direction == "long" else entry_row["Low"] <= contract.target_price
+    )
+    # backtesting.py may defer a contingent order on its parent stop/limit
+    # candle. Its later synthetic fill is not evidence of the original path.
+    # Even a single touched level must remain pending when not resolved on
+    # the entry bar; do not present the later fill as a completed trade.
+    entry_fill_unresolved = (
+        contract.order_branch != "market_close"
+        and (entry_stop_hit or entry_target_hit)
+        and exit_bar != entry_bar
     )
     obstacle_hit = _first_obstacle_hit(
         symbol_prices,
@@ -1127,12 +1195,36 @@ def run_contract(
         entry_bar,
         path_end_bar,
     )
+    entry_obstacle_unknown = False
+    if contract.order_branch != "market_close":
+        long = contract.direction == "long"
+        touched = (entry_row["High"] >= contract.first_obstacle if long
+                   else entry_row["Low"] <= contract.first_obstacle)
+        if touched:
+            # A stop and an obstacle lie in the same price direction, hence
+            # the obstacle cannot precede the stop entry. For a limit entry
+            # a favorable extreme may predate entry unless it was marketable
+            # at the open or the closing price itself establishes the hit.
+            entry_at_open = (entry_row["Open"] <= contract.entry_trigger if long
+                             else entry_row["Open"] >= contract.entry_trigger)
+            close_beyond_obstacle = (entry_row["Close"] >= contract.first_obstacle if long
+                                    else entry_row["Close"] <= contract.first_obstacle)
+            if contract.order_branch == "stop_confirmation" or entry_at_open or close_beyond_obstacle:
+                obstacle_hit = True
+            elif not obstacle_hit:
+                entry_obstacle_unknown = True
     if ambiguous_date is not None:
         exit_reason = "ambiguous_intrabar_stop_target"
         trade_result = "pending"
         path_result = "ambiguous"
         realized_r: float | None = None
         evidence_status = "excluded_ambiguous"
+    elif entry_fill_unresolved:
+        exit_reason = "unresolved_entry_bar_protective_fill"
+        trade_result = "pending"
+        path_result = "unresolved-entry-bar-protective-fill"
+        realized_r = None
+        evidence_status = "excluded_entry_bar_fill"
     elif time_exit_executed:
         exit_reason = "time_exit"
         path_result = "time_exit"
@@ -1187,6 +1279,15 @@ def run_contract(
     else:
         space_r = (entry_price - contract.first_obstacle) / risk_per_unit
 
+    # Preserve the pre-entry bucket for provenance, but never let spread or
+    # an actual fill reprice a frozen >=1R contract into the completed group.
+    if _normalise_space_status(contract.space_status) in {"strict_ge_1R", "clearly_positive", "borderline_ge_1R"} and space_r < 1.0 - 1e-12:
+        trade_result = "pending"
+        realized_r = None
+        evidence_status = "excluded_actual_space"
+        exit_reason = "actual-fill-space-below-frozen-minimum"
+        path_result = "reprice-required"
+
     result = _base_result(contract, fill_status="filled", reason=exit_reason)
     result.update(
         {
@@ -1212,7 +1313,8 @@ def run_contract(
             # and expose the uncertainty in the process field.
             "first_obstacle_hit": (
                 "unknown"
-                if ambiguous_date is not None and obstacle_hit
+                if ((ambiguous_date is not None or entry_fill_unresolved) and obstacle_hit)
+                or entry_obstacle_unknown
                 else "yes"
                 if obstacle_hit
                 else "no"
@@ -1484,9 +1586,11 @@ def _prepare_result_frame(frame: pd.DataFrame) -> pd.DataFrame:
         )
         frame["contract_eligibility"] = derived_contract_eligibility
         frame["_contract_eligibility_guard"] = True
+        frame["_contract_eligibility_mismatch"] = mismatch
         frame.attrs["contract_eligibility_mismatch_count"] = int(mismatch.sum())
     else:
         frame["_contract_eligibility_guard"] = False
+        frame["_contract_eligibility_mismatch"] = False
         frame.attrs["contract_eligibility_mismatch_count"] = 0
     overlap, overlap_group_count, overlap_row_count = _exposure_overlap_stats(frame)
     frame["_exposure_overlap_row"] = overlap
@@ -1499,6 +1603,14 @@ def _completed_trade_mask(frame: pd.DataFrame) -> pd.Series:
     """Return the strict, auditable win-rate denominator mask."""
 
     realized_r = pd.to_numeric(frame["realized_R"], errors="coerce")
+    # Match the same net-R tolerance used when replay labels a trade. A
+    # contradictory imported label must not inflate wins or losses; retain the
+    # source row and expose it through the existing guard-exclusion counters.
+    result_sign_consistent = (
+        (frame["trade_result"].eq("win") & realized_r.gt(1e-12))
+        | (frame["trade_result"].eq("loss") & realized_r.lt(-1e-12))
+        | (frame["trade_result"].eq("scratch") & realized_r.abs().le(1e-12))
+    )
     duplicate_rows = frame.get(
         "_duplicate_result_row",
         pd.Series(False, index=frame.index, dtype="bool"),
@@ -1510,6 +1622,10 @@ def _completed_trade_mask(frame: pd.DataFrame) -> pd.Series:
     contract_eligibility = frame.get(
         "contract_eligibility",
         pd.Series("", index=frame.index, dtype="object"),
+    )
+    eligibility_mismatch = frame.get(
+        "_contract_eligibility_mismatch",
+        pd.Series(False, index=frame.index, dtype="bool"),
     )
     pre_entry_provenance_status = frame.get(
         "pre_entry_provenance_status",
@@ -1526,9 +1642,11 @@ def _completed_trade_mask(frame: pd.DataFrame) -> pd.Series:
         & frame["path_result"].ne("incomplete-horizon")
         & ~duplicate_rows
         & (~contract_eligibility_guard | contract_eligibility.eq("eligible"))
+        & ~eligibility_mismatch
         & pre_entry_provenance_status.eq("complete")
         & realized_r.notna()
         & np.isfinite(realized_r)
+        & result_sign_consistent
     )
 
 

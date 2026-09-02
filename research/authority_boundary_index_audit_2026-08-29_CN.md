@@ -193,3 +193,14 @@ validated win-rate: not-computable
 - 文档 validator 已检查 337 个 Markdown 文件、2299 个 Markdown 链接。
 
 validator 不读取图表、不修改裁决、不建立人工真值。专家可见 21 文件 allowlist、隔离 key 和零真实 annotation/adjudication 保持不变，结论继续为 `no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent`。
+
+## 十八、全仓修复后的索引追加快照（2026-09-02）
+
+本段保留以上历史版本、计数和结论；只记录本次修复后的当前索引状态：
+
+- patterns/ 下有 16 个 pattern 目录，foundations/ 下有 8 个基础层目录；
+- research/assets/visual_recognition/ 下有 14 个资产 README 和 145 张 PNG；
+- research/ 顶层有 182 个历史研究报告，research/backtesting/ 有 76 个报告文件、18 个 CSV 和 1 个 JSON 机器产物；
+- 文档 validator 已检查 337 个 Markdown 文件、2297 个 Markdown 链接。
+
+链接数减少2来自外部专家隔离包 README 删除不可交付的内部文档链接，不是删除研究材料。当前研究引擎为 `0.3.10`，旧 `0.3.9` 审计与冻结图像/数据保留；本次回归与合成导出测试不建立人工真值、真实成交或胜率证据。`no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent` 不变。

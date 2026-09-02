@@ -140,6 +140,79 @@ def _fact_counts(rows: list[dict[str, str]]) -> dict[str, Counter | int]:
     }
 
 
+def _semantic_report_lines(text: str) -> list[str]:
+    """Return report lines that are rendered content, not examples or comments."""
+    lines: list[str] = []
+    in_fence = False
+    text = re.sub(r"(?s)<!--.*?(?:-->|$)", "", text)
+    for raw_line in text.splitlines():
+        line = raw_line
+        if re.match(r"^\s*```", line):
+            in_fence = not in_fence
+            continue
+        if not in_fence and line.strip():
+            lines.append(line)
+    return lines
+
+
+def _active_report_text(*texts: str) -> str:
+    """Preserve fenced contract blocks while excluding commented-out claims."""
+    return "\n".join(re.sub(r"(?s)<!--.*?(?:-->|$)", "", text) for text in texts)
+
+
+def _structured_identity_lines(text: str, row: dict[str, str]) -> list[str]:
+    symbol = re.escape(row["symbol"])
+    decision_date = re.escape(row["decision_date"])
+    label = re.escape(row["internal_label"])
+    date_token = re.compile(r"(?<!\d)\d{4}-\d{2}-\d{2}(?!\d)")
+    expected_date = re.compile(rf"(?<!\d){decision_date}(?!\d)")
+    expected_label = re.compile(rf"(?<![A-Za-z0-9_]){label}(?![A-Za-z0-9_])")
+    identity_rows: list[str] = []
+    for line in _semantic_report_lines(text):
+        stripped = line.strip()
+        if not (stripped.startswith("|") and stripped.endswith("|")):
+            continue
+        cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+        if len(cells) < 2 or all(re.fullmatch(r":?-{3,}:?", cell) for cell in cells):
+            continue
+        if not re.search(rf"(?<![A-Za-z0-9_]){symbol}(?![A-Za-z0-9_])", stripped):
+            continue
+        date_matches = list(date_token.finditer(stripped))
+        for index, date_match in enumerate(date_matches):
+            if not expected_date.fullmatch(date_match.group()):
+                continue
+            if len(date_matches) == 1:
+                date_label_segment = stripped
+            else:
+                next_date = date_matches[index + 1].start() if index + 1 < len(date_matches) else len(stripped)
+                date_label_segment = stripped[date_match.start() : next_date]
+            if expected_label.search(date_label_segment):
+                identity_rows.append(line)
+                break
+    return identity_rows
+
+
+def _assert_report_facts(testcase: unittest.TestCase, selection: str, replay: str, batch: dict[str, object]) -> None:
+    report_text = _active_report_text(selection, replay)
+    for direction in sorted({row["direction"] for row in _read_contract_rows(batch["contracts"]) }):
+        testcase.assertIn(direction, report_text)
+    for label in sorted({row["internal_label"] for row in _read_contract_rows(batch["contracts"]) }):
+        testcase.assertIn(label, report_text)
+    for fact in batch["replay_facts"]:
+        testcase.assertIn(fact, _active_report_text(replay))
+    for fact in batch["outcome_facts"]:
+        if "/" in fact and all(part.isdigit() for part in fact.split("/")):
+            left, right = fact.split("/")
+            testcase.assertRegex(
+                _active_report_text(replay),
+                rf"(?<!\d){re.escape(left)}\s*/\s*{re.escape(right)}(?!\d)",
+            )
+        else:
+            testcase.assertIn(fact, _active_report_text(replay))
+    testcase.assertIn("no-new-positive", _active_report_text(replay))
+    testcase.assertIn("validated win-rate: not-computable", _active_report_text(replay))
+
+
 class PaResearchBatchReportConsistencyTests(unittest.TestCase):
     def test_current_contract_facts_match_machine_audit(self):
         audit = AUDIT_PATH.read_text(encoding="utf-8")
@@ -195,39 +268,56 @@ class PaResearchBatchReportConsistencyTests(unittest.TestCase):
                 replay = (BACKTEST_ROOT / batch["replay"]).read_text(encoding="utf-8")
 
                 for row in rows:
-                    identity_lines = [
-                        line
-                        for line in selection.splitlines()
-                        if row["symbol"] in line and row["decision_date"] in line
-                    ]
+                    identity_lines = _structured_identity_lines(selection, row)
                     self.assertTrue(
                         identity_lines,
                         f"missing {row['symbol']} {row['decision_date']} in selection report",
                     )
-                    self.assertTrue(
-                        any(row["internal_label"] in line for line in identity_lines),
-                        f"missing {row['internal_label']} for {row['symbol']} {row['decision_date']}",
-                    )
-                report_text = selection + replay
-                for direction in sorted({row["direction"] for row in rows}):
-                    self.assertIn(direction, report_text)
-                for label in sorted({row["internal_label"] for row in rows}):
-                    self.assertIn(label, report_text)
-                for fact in batch["replay_facts"]:
-                    self.assertIn(fact, replay)
-                for fact in batch["outcome_facts"]:
-                    if "/" in fact and all(part.isdigit() for part in fact.split("/")):
-                        left, right = fact.split("/")
-                        self.assertRegex(
-                            replay,
-                            rf"(?<!\d){re.escape(left)}\s*/\s*{re.escape(right)}(?!\d)",
-                        )
-                    else:
-                        self.assertIn(fact, replay)
-                self.assertIn("no-new-positive", replay)
-                self.assertIn("validated win-rate: not-computable", replay)
+                _assert_report_facts(self, selection, replay, batch)
 
                 self.assertIn(f"| {batch['name']} |", audit)
+
+    def test_identity_rows_ignore_comments_and_fenced_examples(self):
+        positive_batch = BATCHES[3]
+        positive_selection = (BACKTEST_ROOT / positive_batch["selection"]).read_text(encoding="utf-8")
+        positive_row = _read_contract_rows(positive_batch["contracts"])[0]
+        self.assertTrue(_structured_identity_lines(positive_selection, positive_row))
+
+        comment_only = (
+            "<!-- | {symbol} {date} | {label} | -->\n"
+            "```markdown\n"
+            "| {symbol} {date} | {label} | example |\n"
+            "```\n"
+        ).format(
+            symbol=positive_row["symbol"],
+            date=positive_row["decision_date"],
+            label=positive_row["internal_label"],
+        )
+        self.assertEqual([], _structured_identity_lines(comment_only, positive_row))
+
+        crossed_pair = (
+            f"| {positive_row['symbol']} | {positive_row['decision_date']} L1; "
+            f"2025-12-31 {positive_row['internal_label']} |\n"
+        )
+        self.assertEqual([], _structured_identity_lines(crossed_pair, positive_row))
+
+        facts_only_in_comment = (
+            f"| {positive_row['symbol']} {positive_row['decision_date']} | "
+            f"{positive_row['internal_label']} |\n"
+            "<!-- "
+            + " ".join(
+                (
+                    *positive_batch["replay_facts"],
+                    *positive_batch["outcome_facts"],
+                    "no-new-positive",
+                    "validated win-rate: not-computable",
+                )
+            )
+            + " -->\n"
+        )
+        self.assertTrue(_structured_identity_lines(facts_only_in_comment, positive_row))
+        with self.assertRaises(AssertionError):
+            _assert_report_facts(self, facts_only_in_comment, facts_only_in_comment, positive_batch)
 
     def test_intake_total_and_pattern_split_are_not_frozen_contracts(self):
         unified = _read_contract_rows("abc_bop_contract_intake_2026-08-28.csv")

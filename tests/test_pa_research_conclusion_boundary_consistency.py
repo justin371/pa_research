@@ -7,6 +7,8 @@ from pathlib import Path
 import re
 import unittest
 
+from pa_research_backtest.engine import ENGINE_VERSION
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 BACKTEST_ROOT = REPO_ROOT / "research" / "backtesting"
@@ -29,7 +31,7 @@ CORE_BOUNDARY_TOKENS = (
     "no-new-positive",
     "validated win-rate: not-computable",
     "60%",
-    "0.3.9",
+    ENGINE_VERSION,
     "不是 Codex Trading 生产规则",
     "量化扫描器",
     "Execution Agent",
@@ -183,8 +185,11 @@ class PaResearchConclusionBoundaryConsistencyTests(unittest.TestCase):
                     self.assertIn(token, text)
 
         audit = read(BACKTEST_ROOT / AUDIT_NAME)
+        # This is a dated 2026-08-29 audit, not a mutable runtime declaration.
+        # Current indexes above follow ENGINE_VERSION; historical text retains
+        # its recorded 0.3.9 version rather than being rewritten on upgrades.
         for token in CORE_BOUNDARY_TOKENS:
-            self.assertIn(token, audit)
+            self.assertIn("0.3.9" if token == ENGINE_VERSION else token, audit)
         backtesting_readme = read(BACKTEST_ROOT / "README.md")
         self.assertIn("study_status", backtesting_readme)
         self.assertIn("统一统计结论", backtesting_readme)

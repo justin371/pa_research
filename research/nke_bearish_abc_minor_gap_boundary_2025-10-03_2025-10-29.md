@@ -1,6 +1,6 @@
 # NKE 空头 ABC / L1-like：强 A、受控 B 与小缺口订单边界（2025-10-03 至 2025-10-29）
 
-状态：`pattern_like / strong-A / controlled-B-conditional / L1-like / minor-gap-trigger / original-stop-not-filled / limit-retest-process-target-reached / first-obstacle-borderline / sector-mixed / event-context / pending`
+状态：`pattern_like / strong-A / controlled-B-conditional / L1-like / minor-gap-trigger / original-stop-not-filled / limit-retest-process-target-reached / first-obstacle-borderline / sector-unverified/mixed / event-context / pending`
 
 ## 1. 证据头
 
@@ -56,7 +56,7 @@
 - `2025-10-28 13:15` 的 15m 最高约 `67.12`，价格重新上穿 `66.78`，收盘约 `66.90`。如果交易合同事先允许在旧低点附近挂 `sell-limit/retest`，这里存在一个可研究的回测路径；但仅凭 K 线不能证明队列、成交量和实际成交价；
 - `2025-10-29` 开盘约 `65.56`，低于 `2025-10-28` 低点约 `65.60`。这更像 L1 后的缺口跟随，不是被新 B 隔开的 L2；不能把连续下跌事后升级为第二次入场；
 - `2025-10-29` 最低约 `63.54`，仍略高于事先标出的 `63.48` 第一支撑；`2025-10-30` 最低约 `63.18`，才进入该支撑区。按 `66.78` 回测分支、`69.5` 结构止损观察区和 `63.48` 首支撑，粗略空间约 `1.2R`，属于边界而非宽裕；
-- `XLY` 在 `2025-10-28` 收盘约 `119.85`，当日并未同步走弱；`10-29` 才明显转弱。因此 NKE 空头在触发日没有得到清楚的板块顺势许可，必须标为 `sector-mixed`；
+- `XLY` 的 `2025-10-28` 收盘约 `119.85` 是触发/开盘跳过之后的全日端点，只能作为 post-entry/day-close audit，不能计入 `09:45` 的市场/板块或 META 确认。截止 `09:45` 的同期板块方向未以带时间戳的日内证据核验，仍保持 `sector-unverified/mixed`；
 - 这个过程只能支持“回测分支后来触及首支撑、原始 stop 没有按原价成交”的描述，不能把它升级为普通空头 ABC 的正向统计样本。
 
 ## 4. 结构止损、第一支撑与粗略 R/R
@@ -99,8 +99,8 @@
 | order | 原始 sell-stop 未按 `66.78` 精确成交；`10-28 13:15` 存在 sell-limit/retest 研究路径；开盘重订和追入必须分开 |
 | structural stop | B 高点 `68.91` 上方，约 `69.5` 研究缓冲 |
 | first obstacle | `63.48` 附近，先于后续更低点 |
-| tradeability | 回测分支约 `1.2R` 且 `10-30` 进入首支撑；开盘接受约 `1.1R`；追入约 `0.5R`；整体仍受板块混合和事件背景约束 |
-| status | `pattern_like / original-stop-not-filled / limit-retest-process-target-reached / first-obstacle-borderline / sector-mixed / event-context / pending` |
+| tradeability | 回测分支约 `1.2R` 且 `10-30` 进入首支撑；开盘接受约 `1.1R`；追入约 `0.5R`；整体仍受板块事前未核验/混合的历史背景和事件背景约束 |
+| status | `pattern_like / original-stop-not-filled / limit-retest-process-target-reached / first-obstacle-borderline / sector-unverified/mixed / event-context / pending` |
 
 ## 7. 可复用结论
 

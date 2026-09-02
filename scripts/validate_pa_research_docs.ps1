@@ -454,7 +454,7 @@ $coreBoundaryTokens = @(
     'no-new-positive',
     'validated win-rate: not-computable',
     '60%',
-    '0.3.9',
+    '0.3.10',
     '不是 Codex Trading 生产规则',
     '量化扫描器',
     'Execution Agent'
@@ -1964,8 +1964,11 @@ foreach ($entry in $canonicalChecks.GetEnumerator()) {
     $absolutePath = Join-Path -Path $repoRoot -ChildPath ($entry.Key -replace '/', '\')
     if (-not (Test-Path -LiteralPath $absolutePath -PathType Leaf)) { continue }
     $content = Get-Utf8Text -Path $absolutePath
+    # Canonical tokens in rendered content may be documented inside intentional
+    # fenced contract blocks, but an HTML-commented token is not active.
+    $activeContent = [regex]::Replace($content, '(?s)<!--.*?(?:-->|$)', '')
     foreach ($token in $entry.Value) {
-        if (-not $content.Contains($token)) {
+        if (-not $activeContent.Contains($token)) {
             Add-ValidationError "missing canonical token '$token': $($entry.Key)"
         }
     }
@@ -2407,6 +2410,40 @@ if (Test-Path -LiteralPath $researchReadmePath -PathType Leaf) {
 $intakeRows = @()
 $bopRows = @()
 $intakeIdRecords = [System.Collections.Generic.List[object]]::new()
+
+function Test-IntakeSourceCaseIdentity {
+    param(
+        [object]$Row,
+        [string]$SourcePath,
+        [string]$IntakeId,
+        [string]$SchemaLabel
+    )
+
+    if ([IO.Path]::GetExtension($SourcePath) -ine '.md') {
+        Add-ValidationError "$SchemaLabel intake row source_case is not a Markdown file: $IntakeId"
+        return
+    }
+
+    $sourceContent = Get-Utf8Text -Path $SourcePath
+    # Fenced metadata is part of the source record; only HTML comments are
+    # inactive and must not establish an intake identity.
+    $activeSourceContent = [regex]::Replace($sourceContent, '(?s)<!--.*?(?:-->|$)', '')
+    $escapedSymbol = [regex]::Escape((Get-TrimmedText $Row.symbol))
+    $tickerPattern = "(?<![A-Za-z0-9_])(?:US\.)?$escapedSymbol(?![A-Za-z0-9_])"
+    $date = Get-TrimmedText $Row.decision_date
+    $datePattern = "(?<!\d)$([regex]::Escape($date))(?!\d)"
+    $h1Pattern = "(?im)^[ \t]*#(?!#)[ \t]+.*$tickerPattern"
+    $symbolFieldPattern = "(?im)^[ \t]*(?:[-*][ \t]*)?(?:symbol|instrument|ticker|标的)[ \t]*[:：][ \t]*.*$tickerPattern"
+
+    if (-not [regex]::IsMatch($activeSourceContent, $datePattern)) {
+        Add-ValidationError "$SchemaLabel intake row source_case is missing exact decision_date '$date': $IntakeId"
+    }
+    if (-not ([regex]::IsMatch($activeSourceContent, $h1Pattern) -or
+            [regex]::IsMatch($activeSourceContent, $symbolFieldPattern))) {
+        Add-ValidationError "$SchemaLabel intake row source_case is missing ticker '$($Row.symbol)' in an active level-1 heading or explicit symbol field: $IntakeId"
+    }
+}
+
 $intakePath = Join-Path -Path $repoRoot -ChildPath 'research/backtesting/abc_bop_contract_intake_2026-08-28.csv'
 if (Test-Path -LiteralPath $intakePath -PathType Leaf) {
     $intakeRows = @(Import-Csv -LiteralPath $intakePath)
@@ -2450,6 +2487,8 @@ if (Test-Path -LiteralPath $intakePath -PathType Leaf) {
                 Add-ValidationError "ABC/BOP intake row source_case escapes repository: $intakeId"
             } elseif (-not (Test-Path -LiteralPath (Join-Path -Path $repoRoot -ChildPath $sourceCaseRelative) -PathType Leaf)) {
                 Add-ValidationError "ABC/BOP intake row source_case does not exist: $intakeId"
+            } else {
+                Test-IntakeSourceCaseIdentity -Row $row -SourcePath (Join-Path -Path $repoRoot -ChildPath $sourceCaseRelative) -IntakeId $intakeId -SchemaLabel 'ABC/BOP'
             }
             $direction = (Get-TrimmedText $row.direction).ToLowerInvariant()
             if ($direction -notin @('long', 'short')) {
@@ -2517,6 +2556,8 @@ if (Test-Path -LiteralPath $bopIntakePath -PathType Leaf) {
                 Add-ValidationError "BOP intake row source_case escapes repository: $intakeId"
             } elseif (-not (Test-Path -LiteralPath (Join-Path -Path $repoRoot -ChildPath $sourceCaseRelative) -PathType Leaf)) {
                 Add-ValidationError "BOP intake row source_case does not exist: $intakeId"
+            } else {
+                Test-IntakeSourceCaseIdentity -Row $row -SourcePath (Join-Path -Path $repoRoot -ChildPath $sourceCaseRelative) -IntakeId $intakeId -SchemaLabel 'BOP'
             }
             $direction = (Get-TrimmedText $row.direction).ToLowerInvariant()
             if ($direction -notin @('long', 'short')) {

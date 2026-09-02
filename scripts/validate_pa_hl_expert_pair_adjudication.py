@@ -8,6 +8,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 import importlib.util
 import json
+import math
 from pathlib import Path
 import sys
 from typing import Any
@@ -91,6 +92,16 @@ SUMMARY_FIELDS = {
     "validated_win_rate",
     "conclusion",
 }
+SUMMARY_INTEGER_FIELDS = {
+    "packet_total",
+    "clean_expert_pair_count",
+    "adjudicated_single_label_count",
+    "boundary_or_unclear_count",
+    "contaminated_count",
+    "model_prediction_coverage",
+    "accuracy_denominator",
+    "completed_trade_denominator",
+}
 
 
 def _load_pair_comparator():
@@ -131,6 +142,24 @@ def exact_fields(value: Any, expected: set[str], location: str, result: Validati
     if extra:
         result.error(f"{location} unknown fields: {', '.join(extra)}")
     return not missing and not extra
+
+
+def _is_allowed_string(value: Any, allowed: set[str]) -> bool:
+    """Return whether a JSON value is a string in the supplied enum."""
+
+    # JSON arrays/objects become unhashable Python values.  Type-check first so
+    # malformed input is reported as invalid instead of escaping as TypeError.
+    return isinstance(value, str) and value in allowed
+
+
+def _is_json_integer(value: Any) -> bool:
+    """Return whether a finite JSON number has an integral mathematical value."""
+
+    if isinstance(value, bool):
+        return False
+    if isinstance(value, int):
+        return True
+    return isinstance(value, float) and math.isfinite(value) and value.is_integer()
 
 
 def parse_time(value: Any, location: str, result: Validation) -> datetime | None:
@@ -181,7 +210,12 @@ def _validate_adjudicator(
         "knowledge_status": "clean",
     }
     for field_name, expected_value in expected.items():
-        if adjudicator[field_name] != expected_value:
+        actual_value = adjudicator[field_name]
+        if isinstance(expected_value, bool):
+            matches = isinstance(actual_value, bool) and actual_value is expected_value
+        else:
+            matches = actual_value == expected_value
+        if not matches:
             result.error(f"{location}.{field_name} must equal {expected_value!r}")
     identifier = adjudicator["identifier"]
     if not isinstance(identifier, str) or not identifier.strip():
@@ -211,9 +245,11 @@ def _expected_exclusion_reason(
         return "boundary_or_unclear"
     if state == "insufficient_evidence":
         return "insufficient_evidence"
-    if final_label not in FINAL_LABELS:
+    if not _is_allowed_string(final_label, FINAL_LABELS):
         return "no_final_single_label"
     if model_label is None:
+        return "model_prediction_missing"
+    if not _is_allowed_string(model_label, FINAL_LABELS):
         return "model_prediction_missing"
     if model_frozen is not True:
         return "model_prediction_not_frozen_before_reveal"
@@ -295,10 +331,11 @@ def validate(
                 result.error(f"adjudication_freeze.{flag} must be boolean")
             elif freeze[flag]:
                 result.ineligible(f"adjudication_freeze.{flag}=true")
-        if freeze["knowledge_status"] not in {"clean", "contaminated", "uncertain"}:
+        knowledge_status = freeze["knowledge_status"]
+        if not _is_allowed_string(knowledge_status, {"clean", "contaminated", "uncertain"}):
             result.error("adjudication_freeze.knowledge_status has invalid value")
-        elif freeze["knowledge_status"] != "clean":
-            result.ineligible(f"adjudication knowledge_status={freeze['knowledge_status']}")
+        elif knowledge_status != "clean":
+            result.ineligible(f"adjudication knowledge_status={knowledge_status}")
         global_clean = not result.ineligible_reasons
 
     source_rows_a = {row["expert_sample_id"]: row for row in expert_a_document["annotations"]}
@@ -344,17 +381,27 @@ def validate(
 
         comparison = row["comparison"]
         if exact_fields(comparison, COMPARISON_RECORD_FIELDS, f"{location}.comparison", result):
-            if comparison["label_and_exclusion_agree"] != comparator_row["label_and_exclusion_agree"]:
+            agreement = comparison["label_and_exclusion_agree"]
+            if not isinstance(agreement, bool):
+                result.error(f"{location}.comparison.label_and_exclusion_agree must be boolean")
+            elif agreement != comparator_row["label_and_exclusion_agree"]:
                 result.error(f"{location}.comparison.label_and_exclusion_agree does not match comparator")
-            if comparison["disagreement_fields"] != comparator_row["disagreement_fields"]:
+            disagreement_fields = comparison["disagreement_fields"]
+            if not isinstance(disagreement_fields, list):
+                result.error(f"{location}.comparison.disagreement_fields must be an array")
+            elif disagreement_fields != comparator_row["disagreement_fields"]:
                 result.error(f"{location}.comparison.disagreement_fields does not exactly match comparator")
 
         state = row["adjudication_state"]
-        if state not in ADJUDICATION_STATES:
+        state_valid = _is_allowed_string(state, ADJUDICATION_STATES)
+        if not state_valid:
             result.error(f"{location}.adjudication_state has invalid value: {state!r}")
+        state_for_logic = state if state_valid else ""
         final_label = row["final_label"]
-        if final_label is not None and final_label not in FINAL_LABELS:
+        final_label_valid = final_label is None or _is_allowed_string(final_label, FINAL_LABELS)
+        if not final_label_valid:
             result.error(f"{location}.final_label has invalid value: {final_label!r}")
+        final_label_for_logic = final_label if final_label_valid else None
         rationale = row["rationale"]
         if not isinstance(rationale, str) or not rationale.strip():
             result.error(f"{location}.rationale must be non-empty")
@@ -363,12 +410,12 @@ def validate(
         adjudicator_valid = adjudicator is None
         if adjudicator is not None:
             adjudicator_valid = _validate_adjudicator(adjudicator, source_identifiers, f"{location}.adjudicator", result)
-        if state == "adjudicator_choice" and adjudicator is None:
+        if state_for_logic == "adjudicator_choice" and adjudicator is None:
             result.error(f"{location}: adjudicator_choice requires a clean third adjudicator")
-        if state == "experts_agree" and adjudicator is not None:
+        if state_for_logic == "experts_agree" and adjudicator is not None:
             result.error(f"{location}: experts_agree must not name an adjudicator")
 
-        if snapshots_valid and state == "experts_agree":
+        if snapshots_valid and state_for_logic == "experts_agree":
             if not comparator_row["label_and_exclusion_agree"]:
                 result.error(f"{location}: experts_agree requires matching source label and exclusion")
             if source_a["evidence_usable"] != "yes" or source_b["evidence_usable"] != "yes":
@@ -377,12 +424,19 @@ def validate(
                 result.error(f"{location}: experts_agree cannot turn unclear into a final label")
             if final_label != source_a["expert_ordinary_hl_label"]:
                 result.error(f"{location}: experts_agree final_label must equal both frozen expert labels")
-        elif state == "adjudicator_choice":
-            if final_label not in FINAL_LABELS:
+        elif state_for_logic == "adjudicator_choice":
+            if not _is_allowed_string(final_label_for_logic, FINAL_LABELS):
                 result.error(f"{location}: adjudicator_choice requires a final single label")
             if not adjudicator_valid:
                 result.error(f"{location}: adjudicator_choice adjudicator is not clean and independent")
-        elif state in {"both_reasonable_boundary", "insufficient_evidence", "contaminated"}:
+        elif state_for_logic == "both_reasonable_boundary":
+            if final_label is not None:
+                result.error(f"{location}: {state} must not have a final_label")
+            if comparator_row["label_and_exclusion_agree"] is not False:
+                result.error(
+                    f"{location}: both_reasonable_boundary requires label/exclusion disagreement"
+                )
+        elif state_for_logic in {"insufficient_evidence", "contaminated"}:
             if final_label is not None:
                 result.error(f"{location}: {state} must not have a final_label")
 
@@ -393,17 +447,17 @@ def validate(
             model_label = accuracy["model_prediction_label"]
             if not isinstance(model_frozen, bool):
                 result.error(f"{location}.accuracy_eligibility.model_prediction_frozen_before_expert_reveal must be boolean")
-            if model_label is not None and model_label not in FINAL_LABELS:
+            if model_label is not None and not _is_allowed_string(model_label, FINAL_LABELS):
                 result.error(f"{location}.accuracy_eligibility.model_prediction_label has invalid value")
             if not isinstance(accuracy["eligible"], bool):
                 result.error(f"{location}.accuracy_eligibility.eligible must be boolean")
             expected_reason = _expected_exclusion_reason(
                 global_clean=global_clean,
-                state=state,
+                state=state_for_logic,
                 evidence_a=source_a["evidence_usable"],
                 evidence_b=source_b["evidence_usable"],
-                final_label=final_label,
-                model_label=model_label,
+                final_label=final_label_for_logic,
+                model_label=model_label if model_label is None or _is_allowed_string(model_label, FINAL_LABELS) else None,
                 model_frozen=model_frozen,
             )
             expected_eligible = expected_reason is None
@@ -411,16 +465,26 @@ def validate(
                 result.error(f"{location}.accuracy_eligibility.eligible does not match recomputed eligibility")
             if accuracy["excluded_reason"] != expected_reason:
                 result.error(f"{location}.accuracy_eligibility.excluded_reason must equal {expected_reason!r}")
-            if accuracy["excluded_reason"] is not None and accuracy["excluded_reason"] not in EXCLUDED_REASONS:
+            if accuracy["excluded_reason"] is not None and not _is_allowed_string(
+                accuracy["excluded_reason"], EXCLUDED_REASONS
+            ):
                 result.error(f"{location}.accuracy_eligibility.excluded_reason has invalid value")
         computed_rows.append(
             {
-                "state": state,
-                "final_label": final_label,
-                "model_label": accuracy.get("model_prediction_label") if isinstance(accuracy, dict) else None,
+                "state": state_for_logic,
+                "final_label": final_label_for_logic,
+                "model_label": (
+                    accuracy.get("model_prediction_label")
+                    if isinstance(accuracy, dict)
+                    and (
+                        accuracy.get("model_prediction_label") is None
+                        or _is_allowed_string(accuracy.get("model_prediction_label"), FINAL_LABELS)
+                    )
+                    else None
+                ),
                 "eligible": accuracy.get("eligible") is True if isinstance(accuracy, dict) else False,
                 "excluded_reason": expected_reason,
-                "clean_pair": global_clean and state != "contaminated",
+                "clean_pair": global_clean and state_for_logic != "contaminated",
             }
         )
 
@@ -444,6 +508,20 @@ def validate(
     }
     summary = document["summary"]
     if exact_fields(summary, SUMMARY_FIELDS, "summary", result):
+        for field_name in SUMMARY_INTEGER_FIELDS:
+            if not _is_json_integer(summary[field_name]):
+                result.error(f"summary.{field_name} must be a JSON integer")
+        excluded_reasons = summary["excluded_reasons"]
+        if not isinstance(excluded_reasons, dict):
+            result.error("summary.excluded_reasons must be an object")
+        else:
+            for reason, count in excluded_reasons.items():
+                if not isinstance(reason, str):
+                    result.error("summary.excluded_reasons keys must be strings")
+                if not _is_json_integer(count) or count < 0:
+                    result.error(
+                        f"summary.excluded_reasons[{reason!r}] must be a non-negative JSON integer"
+                    )
         for field_name, expected_value in expected_summary.items():
             if summary[field_name] != expected_value:
                 result.error(f"summary.{field_name} does not match independently recomputed value {expected_value!r}")

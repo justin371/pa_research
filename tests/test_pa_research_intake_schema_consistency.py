@@ -2,6 +2,7 @@ import csv
 from collections import Counter, defaultdict
 from datetime import date
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import tempfile
@@ -60,6 +61,30 @@ BOP_HEADERS = (
     "missing_fields",
     "freeze_recommendation",
 )
+
+
+def _active_source_text(text: str) -> str:
+    """Exclude inactive HTML comments while retaining fenced source metadata."""
+    return re.sub(r"(?s)<!--.*?(?:-->|$)", "", text)
+
+
+def _source_identity_is_bound(text: str, row: dict[str, str]) -> bool:
+    active_text = _active_source_text(text)
+    ticker = re.escape(row["symbol"])
+    ticker_pattern = rf"(?<![A-Za-z0-9_])(?:US\.)?{ticker}(?![A-Za-z0-9_])"
+    date_pattern = rf"(?<!\d){re.escape(row['decision_date'])}(?!\d)"
+    h1_pattern = rf"(?im)^[ \t]*#(?!#)[ \t]+.*{ticker_pattern}"
+    symbol_field_pattern = (
+        rf"(?im)^[ \t]*(?:[-*][ \t]*)?(?:symbol|instrument|ticker|标的)"
+        rf"[ \t]*[:：][ \t]*.*{ticker_pattern}"
+    )
+    return bool(
+        re.search(date_pattern, active_text)
+        and (
+            re.search(h1_pattern, active_text)
+            or re.search(symbol_field_pattern, active_text)
+        )
+    )
 
 EXPECTED_BOP_CLASSIFICATIONS = {
     "acceptance_candidate",
@@ -136,7 +161,11 @@ class PaResearchIntakeSchemaConsistencyTests(unittest.TestCase):
                     self.assertNotIn("..", Path(source_case).parts)
                     source_path = REPO_ROOT / source_case
                     self.assertTrue(source_path.is_file(), source_case)
-                    self.assertIn(row["symbol"], source_path.read_text(encoding="utf-8"))
+                    self.assertEqual(source_path.suffix.casefold(), ".md", source_case)
+                    self.assertTrue(
+                        _source_identity_is_bound(source_path.read_text(encoding="utf-8"), row),
+                        f"{filename}:{row_number} source_case identity is not bound",
+                    )
                     all_ids.append(row["intake_id"])
 
         self.assertEqual(len(all_ids), 25)
@@ -236,7 +265,7 @@ class PaResearchIntakeSchemaConsistencyTests(unittest.TestCase):
             shutil.copytree(
                 REPO_ROOT,
                 fixture_root,
-                ignore=shutil.ignore_patterns(".git", ".venv", "__pycache__", "*.pyc"),
+                ignore=shutil.ignore_patterns(".git", ".venv", ".codex", "__pycache__", "*.pyc"),
             )
             intake_path = fixture_root / "research" / "backtesting" / UNIFIED_FILE
             lines = intake_path.read_text(encoding="utf-8").splitlines()
@@ -264,6 +293,147 @@ class PaResearchIntakeSchemaConsistencyTests(unittest.TestCase):
             self.assertIn(
                 "ABC/BOP intake row missing required value 'freeze_recommendation': BOP-UNIFIED-NKE-20251028",
                 result.stdout,
+            )
+
+    def test_validator_rejects_unbound_source_case_variants(self):
+        unified_rows = _read_table(UNIFIED_FILE)[2]
+        bop_rows = _read_table(BOP_FILE)[2]
+        wrong_readme = unified_rows[0]
+        wrong_date = unified_rows[1]
+        comment_only = unified_rows[2]
+        same_symbol_target = next(row for row in bop_rows if row["decision_date"] == "2025-03-04")
+        same_symbol_source = next(
+            row["source_case"]
+            for row in bop_rows
+            if row["symbol"] == same_symbol_target["symbol"]
+            and row["decision_date"] != same_symbol_target["decision_date"]
+            and same_symbol_target["decision_date"]
+            not in (REPO_ROOT / row["source_case"]).read_text(encoding="utf-8")
+        )
+
+        with tempfile.TemporaryDirectory(prefix="pa-research-intake-source-binding-") as directory:
+            fixture_root = Path(directory) / "repo"
+            shutil.copytree(
+                REPO_ROOT,
+                fixture_root,
+                ignore=shutil.ignore_patterns(".git", ".venv", ".codex", "__pycache__", "*.pyc"),
+            )
+
+            def rewrite(filename: str, intake_id: str, **updates: str) -> None:
+                path = fixture_root / "research" / "backtesting" / filename
+                with path.open(encoding="utf-8-sig", newline="") as handle:
+                    reader = csv.DictReader(handle)
+                    fieldnames = reader.fieldnames
+                    rows = list(reader)
+                self.assertIsNotNone(fieldnames)
+                target = next(row for row in rows if row["intake_id"] == intake_id)
+                target.update(updates)
+                with path.open("w", encoding="utf-8", newline="") as handle:
+                    writer = csv.DictWriter(handle, fieldnames=fieldnames)
+                    writer.writeheader()
+                    writer.writerows(rows)
+
+            rewrite(UNIFIED_FILE, wrong_readme["intake_id"], source_case="research/README.md")
+            rewrite(UNIFIED_FILE, wrong_date["intake_id"], decision_date="2099-01-01")
+            rewrite(
+                UNIFIED_FILE,
+                comment_only["intake_id"],
+                source_case=comment_only["source_case"],
+            )
+            (fixture_root / comment_only["source_case"]).write_text(
+                f"<!-- # {comment_only['symbol']} {comment_only['decision_date']}\n"
+                f"symbol: US.{comment_only['symbol']} -->\n",
+                encoding="utf-8",
+                newline="",
+            )
+            rewrite(
+                BOP_FILE,
+                same_symbol_target["intake_id"],
+                source_case=same_symbol_source,
+            )
+
+            result = subprocess.run(
+                [
+                    "pwsh",
+                    "-NoProfile",
+                    "-ExecutionPolicy",
+                    "Bypass",
+                    "-File",
+                    str(fixture_root / "scripts" / "validate_pa_research_docs.ps1"),
+                    "-RepoRoot",
+                    str(fixture_root),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn(
+                f"ABC/BOP intake row source_case is missing ticker '{wrong_readme['symbol']}' in an active level-1 heading or explicit symbol field: {wrong_readme['intake_id']}",
+                result.stdout,
+            )
+            self.assertIn(
+                f"ABC/BOP intake row source_case is missing exact decision_date '2099-01-01': {wrong_date['intake_id']}",
+                result.stdout,
+            )
+            self.assertIn(
+                f"ABC/BOP intake row source_case is missing ticker '{comment_only['symbol']}' in an active level-1 heading or explicit symbol field: {comment_only['intake_id']}",
+                result.stdout,
+            )
+            self.assertIn(
+                f"BOP intake row source_case is missing exact decision_date '{same_symbol_target['decision_date']}': {same_symbol_target['intake_id']}",
+                result.stdout,
+            )
+
+    def test_validator_ignores_commented_canonical_tokens_but_keeps_fenced_tokens(self):
+        canonical_path = Path("docs/pa_research_output_schema_v0_1_CN.md")
+        canonical_token = "chart_scope: full / partial / unavailable"
+        with tempfile.TemporaryDirectory(prefix="pa-research-canonical-comment-") as directory:
+            fixture_root = Path(directory) / "repo"
+            shutil.copytree(
+                REPO_ROOT,
+                fixture_root,
+                ignore=shutil.ignore_patterns(".git", ".venv", ".codex", "__pycache__", "*.pyc"),
+            )
+            schema_path = fixture_root / canonical_path
+            original = schema_path.read_text(encoding="utf-8")
+            self.assertEqual(original.count(canonical_token), 1)
+            self.assertGreaterEqual(original.count("```"), 2)
+
+            def run_validator():
+                return subprocess.run(
+                    [
+                        "pwsh",
+                        "-NoProfile",
+                        "-ExecutionPolicy",
+                        "Bypass",
+                        "-File",
+                        str(fixture_root / "scripts" / "validate_pa_research_docs.ps1"),
+                        "-RepoRoot",
+                        str(fixture_root),
+                    ],
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                )
+
+            positive = run_validator()
+            self.assertEqual(positive.returncode, 0, positive.stdout)
+            self.assertNotIn(
+                f"missing canonical token '{canonical_token}': {canonical_path.as_posix()}",
+                positive.stdout,
+            )
+
+            schema_path.write_text(
+                original.replace(canonical_token, f"<!-- {canonical_token} -->"),
+                encoding="utf-8",
+                newline="",
+            )
+            negative = run_validator()
+            self.assertNotEqual(negative.returncode, 0)
+            self.assertIn(
+                f"missing canonical token '{canonical_token}': {canonical_path.as_posix()}",
+                negative.stdout,
             )
 
 

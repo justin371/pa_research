@@ -243,7 +243,7 @@ class HlPairAdjudicationValidatorTests(unittest.TestCase):
         self.assertTrue(any("final_label must equal both frozen expert labels" in error for error in report["errors"]))
 
     def test_boundary_insufficient_and_contaminated_states_forbid_final_labels(self):
-        states = ("both_reasonable_boundary", "insufficient_evidence", "contaminated")
+        states = ("insufficient_evidence", "contaminated")
         for state in states:
             with self.subTest(state=state):
                 def mutate(record, state=state):
@@ -263,6 +263,53 @@ class HlPairAdjudicationValidatorTests(unittest.TestCase):
 
                 report = self.validate_document(mutate)
                 self.assertEqual(report["status"], "valid", report["errors"])
+
+    def test_boundary_rejects_same_labels_and_accepts_real_disagreement(self):
+        def make_boundary(record):
+            record["samples"][0]["adjudication_state"] = "both_reasonable_boundary"
+            record["samples"][0]["final_label"] = None
+            record["samples"][0]["accuracy_eligibility"]["excluded_reason"] = "boundary_or_unclear"
+            record["summary"]["adjudicated_single_label_count"] = 15
+            record["summary"]["boundary_or_unclear_count"] = 1
+            record["summary"]["clean_expert_pair_count"] = 16
+            record["summary"]["excluded_reasons"] = {
+                "model_prediction_missing": 15,
+                "boundary_or_unclear": 1,
+            }
+
+        same_label_report = self.validate_document(make_boundary)
+        self.assertEqual(same_label_report["status"], "invalid")
+        self.assertTrue(
+            any("requires label/exclusion disagreement" in error for error in same_label_report["errors"])
+        )
+
+        def make_real_disagreement(expert_a, expert_b):
+            del expert_a
+            expert_b["annotations"][0].update(
+                {
+                    "parent_state": "open_trend",
+                    "direction": "long",
+                    "ema20_slope": "rising",
+                    "ema50_slope": "rising",
+                    "ema200_context": "supportive",
+                    "A_leg_quality": "strong",
+                    "B_leg_class": "controlled",
+                    "lineage_status": "same_lineage",
+                    "expert_ordinary_hl_label": "H1",
+                    "primary_exclusion": "not_applicable",
+                }
+            )
+
+        real_disagreement_report = self.validate_document(make_boundary, make_real_disagreement)
+        self.assertEqual(real_disagreement_report["status"], "valid", real_disagreement_report["errors"])
+
+    def test_summary_accepts_finite_integral_float_counts(self):
+        def mutate(record):
+            record["summary"]["clean_expert_pair_count"] = 16.0
+            record["summary"]["excluded_reasons"]["model_prediction_missing"] = 16.0
+
+        report = self.validate_document(mutate)
+        self.assertEqual(report["status"], "valid", report["errors"])
 
     def test_adjudicator_choice_requires_clean_distinct_third_human(self):
         def mutate(record):

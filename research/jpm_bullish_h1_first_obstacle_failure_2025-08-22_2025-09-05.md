@@ -1,6 +1,6 @@
-# JPM 多头 H1-like：板块顺势但首阻力拥挤、跟随失败（2025-08-22–2025-09-05）
+# JPM 多头 H1-like：板块事前未核验、首阻力拥挤、跟随失败（2025-08-22–2025-09-05）
 
-状态：`pattern_like / bullish-H1-like / sector-aligned-at-entry / first-obstacle-blocked / follow-through-failure / valid_no_trade / event-context-pending`
+状态：`pattern_like / bullish-H1-like / sector-unverified / first-obstacle-blocked / follow-through-failure / valid_no_trade / event-context-pending`
 
 ## 1. 研究目的
 
@@ -55,7 +55,7 @@ event_context: pending; must be checked before any real use
 
 ## 5. 失败与板块背景
 
-- `09-04` 当天 XLF 从约 `52.87` 推进至约 `53.23`，入场时板块方向是支持的；不能把失败简单归因于明显的板块逆势。
+- `09-04` 的 XLF 仅有全日区间/收盘后历史端点约 `52.87→53.23` 被记录；该全日移动发生在 `09:45` 之后，只能作为 post-entry/day-close audit，不能证明 `09:45` 入场时板块方向支持。同期、带时间戳的盘中板块证据仍未核验。
 - `09-05` JPM 先冲到约 `299.42`，随后逐步跌至约 `288.79`；这使 09-04 的局部恢复失去跟随，并跌回 B 低点附近。
 - 这不是“形态从未存在”，而是一个 `follow-through-failure`；同时，第一阻力在入场前已经足够近，所以即使没有后续大跌，日线 H1 也不应按正常新仓执行。
 
@@ -74,7 +74,7 @@ follow_through: failed on 2025-09-05
 current_status: pattern_like / valid_no_trade
 ```
 
-学习重点是：**板块顺势、信号 K 漂亮、低周期确实触发，仍然不能取消入场前已经可见的第一阻力；如果改成等待前高突破，那就是另一种订单和另一种 pattern。** 这个案例不作为正向样本，但比单纯的“没有触发”更能训练助手理解订单分支和跟随失败。
+学习重点是：**信号 K 漂亮、低周期确实触发，仍然不能取消入场前已经可见的第一阻力；如果改成等待前高突破，那就是另一种订单和另一种 pattern。** 这个案例不作为正向样本，但比单纯的“没有触发”更能训练助手理解订单分支和跟随失败。
 
 ## 7. 尚未冻结
 
@@ -82,4 +82,3 @@ current_status: pattern_like / valid_no_trade
 - 不能由单次失败推出 H1 的胜率；
 - 远端 MM/AB=CD 没有资格覆盖首阻力；
 - 若研究短线分支，必须另定低周期止损，不能套用日线结构结论。
-

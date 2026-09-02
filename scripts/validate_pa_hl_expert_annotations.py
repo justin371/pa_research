@@ -104,6 +104,15 @@ def exact_fields(value: Any, expected: set[str], location: str, result: Validati
     return not missing and not extra
 
 
+def _is_allowed_string(value: Any, allowed: set[str]) -> bool:
+    """Return whether a JSON value is a string in the supplied enum."""
+
+    # JSON arrays/objects become unhashable Python values.  Type-check before
+    # membership so malformed input is reported as invalid instead of escaping
+    # as a TypeError from a branch-specific policy check.
+    return isinstance(value, str) and value in allowed
+
+
 def parse_time(value: Any, location: str, result: Validation) -> datetime | None:
     if not isinstance(value, str) or not value.strip():
         result.error(f"{location} must be a non-empty ISO-8601 timestamp")
@@ -122,13 +131,19 @@ def parse_time(value: Any, location: str, result: Validation) -> datetime | None
 def validate_annotation(row: Any, index: int, result: Validation) -> str | None:
     location = f"annotations[{index}]"
     if not exact_fields(row, ANNOTATION_FIELDS, location, result):
-        return row.get("expert_sample_id") if isinstance(row, dict) else None
+        sample_id = row.get("expert_sample_id") if isinstance(row, dict) else None
+        return sample_id if isinstance(sample_id, str) else None
     sample_id = row["expert_sample_id"]
     if not isinstance(sample_id, str) or SAMPLE_ID_RE.fullmatch(sample_id) is None:
         result.error(f"{location}.expert_sample_id is invalid")
     for field_name, allowed in ENUMS.items():
-        if row[field_name] not in allowed:
-            result.error(f"{location}.{field_name} has invalid value: {row[field_name]!r}")
+        value = row[field_name]
+        # Check the JSON type before set membership.  Lists and objects are
+        # valid JSON values but unhashable Python values; testing either
+        # directly with ``value not in allowed`` would crash the validator
+        # instead of returning its promised structured invalid result.
+        if not _is_allowed_string(value, allowed):
+            result.error(f"{location}.{field_name} has invalid value: {value!r}")
     confidence = row["confidence_1_to_5"]
     if isinstance(confidence, bool) or not isinstance(confidence, int) or not 1 <= confidence <= 5:
         result.error(f"{location}.confidence_1_to_5 must be an integer from 1 to 5")
@@ -139,32 +154,32 @@ def validate_annotation(row: Any, index: int, result: Validation) -> str | None:
 
     label = row["expert_ordinary_hl_label"]
     exclusion = row["primary_exclusion"]
-    if label in ORDINARY_LABELS:
+    if isinstance(label, str) and label in ORDINARY_LABELS:
         if row["evidence_usable"] != "yes":
             result.error(f"{location}: ordinary H/L requires evidence_usable=yes")
         if row["parent_state"] != "open_trend":
             result.error(f"{location}: ordinary H/L requires parent_state=open_trend")
         if row["lineage_status"] != "same_lineage":
             result.error(f"{location}: ordinary H/L requires lineage_status=same_lineage")
-        if row["A_leg_quality"] not in {"strong", "ordinary"}:
+        if not _is_allowed_string(row["A_leg_quality"], {"strong", "ordinary"}):
             result.error(f"{location}: ordinary H/L requires directional non-event A leg")
-        if row["B_leg_class"] not in CONTROLLED_B:
+        if not _is_allowed_string(row["B_leg_class"], CONTROLLED_B):
             result.error(f"{location}: ordinary H/L requires a controlled B leg")
         if exclusion != "not_applicable":
             result.error(f"{location}: ordinary H/L requires primary_exclusion=not_applicable")
-        if label.startswith("H"):
+        if isinstance(label, str) and label.startswith("H"):
             if row["direction"] != "long" or row["ema20_slope"] != "rising" or row["ema50_slope"] != "rising":
                 result.error(f"{location}: H1/H2 requires long direction and rising EMA20/50")
-        if label.startswith("L"):
+        if isinstance(label, str) and label.startswith("L"):
             if row["direction"] != "short" or row["ema20_slope"] != "falling" or row["ema50_slope"] != "falling":
                 result.error(f"{location}: L1/L2 requires short direction and falling EMA20/50")
     elif label == "not_ordinary_HL" and exclusion == "not_applicable":
         result.error(f"{location}: not_ordinary_HL requires a primary exclusion")
-    elif label == "unclear" and exclusion not in {"insufficient_evidence", "other"}:
+    elif label == "unclear" and not _is_allowed_string(exclusion, {"insufficient_evidence", "other"}):
         result.error(f"{location}: unclear label requires insufficient_evidence or other exclusion")
 
     if row["evidence_usable"] == "no":
-        if label in ORDINARY_LABELS:
+        if isinstance(label, str) and label in ORDINARY_LABELS:
             result.error(f"{location}: unusable evidence cannot receive an ordinary H/L label")
         if exclusion != "insufficient_evidence":
             result.error(f"{location}: evidence_usable=no requires insufficient_evidence exclusion")
@@ -238,10 +253,11 @@ def validate(manifest_path: Path, annotations_path: Path) -> dict[str, Any]:
                 result.error(f"freeze.{flag} must be boolean")
             elif freeze[flag]:
                 result.ineligible(f"freeze.{flag}=true")
-        if freeze["knowledge_status"] not in {"clean", "contaminated", "uncertain"}:
+        knowledge_status = freeze["knowledge_status"]
+        if not isinstance(knowledge_status, str) or knowledge_status not in {"clean", "contaminated", "uncertain"}:
             result.error("freeze.knowledge_status has invalid value")
-        elif freeze["knowledge_status"] != "clean":
-            result.ineligible(f"knowledge_status={freeze['knowledge_status']}")
+        elif knowledge_status != "clean":
+            result.ineligible(f"knowledge_status={knowledge_status}")
 
     annotations = document["annotations"]
     actual_ids: list[str] = []
