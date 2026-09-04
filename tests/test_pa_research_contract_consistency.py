@@ -314,7 +314,7 @@ class PaResearchContractConsistencyTests(unittest.TestCase):
         self.assertIn("stop_limit", unified)
         self.assertIn("actual_fill_or_open_skip", unified)
         self.assertIn("不能直接传给当前回放器", unified)
-        self.assertIn("当前 engine `0.3.10` 的回放输入边界", replay_readme)
+        self.assertIn("当前 engine `0.3.15` 的回放输入边界", replay_readme)
         self.assertIn("`direction` 只接受 `long` 或 `short`", replay_readme)
         self.assertIn("`order_branch` 只接受", replay_readme)
         self.assertIn("不能直接传给当前回放器", replay_readme)

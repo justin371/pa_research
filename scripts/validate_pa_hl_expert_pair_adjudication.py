@@ -7,6 +7,7 @@ import argparse
 from dataclasses import dataclass, field
 from datetime import datetime
 import importlib.util
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -179,14 +180,14 @@ def parse_time(value: Any, location: str, result: Validation) -> datetime | None
 
 def _validate_expert_identity(
     identity: Any,
-    source_path: Path,
+    source_bytes: bytes,
     source_document: dict[str, Any],
     location: str,
     result: Validation,
 ) -> None:
     if not exact_fields(identity, EXPERT_IDENTITY_FIELDS, location, result):
         return
-    if identity["record_sha256"] != SINGLE_VALIDATOR.sha256_file(source_path):
+    if identity["record_sha256"] != hashlib.sha256(source_bytes).hexdigest():
         result.error(f"{location}.record_sha256 does not match source expert record bytes")
     if identity["annotator_identifier"] != source_document["annotator"]["identifier"]:
         result.error(f"{location}.annotator_identifier does not match source expert record")
@@ -251,9 +252,10 @@ def _expected_exclusion_reason(
         return "model_prediction_missing"
     if not _is_allowed_string(model_label, FINAL_LABELS):
         return "model_prediction_missing"
-    if model_frozen is not True:
-        return "model_prediction_not_frozen_before_reveal"
-    return None
+    # V1 carries only self-attested fields in the adjudication record. Even a
+    # true claim cannot prove when the prediction existed. Fail closed until
+    # an independently anchored pre-reveal receipt has an adopted verifier.
+    return "model_prediction_not_frozen_before_reveal"
 
 
 def validate(
@@ -263,7 +265,25 @@ def validate(
     adjudication_path: Path,
 ) -> dict[str, Any]:
     result = Validation()
-    pair_report = COMPARATOR.compare(manifest_path, expert_a_path, expert_b_path)
+    try:
+        manifest_bytes = manifest_path.read_bytes()
+        expert_a_bytes = expert_a_path.read_bytes()
+        expert_b_bytes = expert_b_path.read_bytes()
+        adjudication_bytes = adjudication_path.read_bytes()
+    except OSError as exc:
+        return {
+            "status": "invalid",
+            "errors": [f"cannot read adjudication input: {exc}"],
+            "ineligible_reasons": [],
+        }
+    pair_report = COMPARATOR.compare(
+        manifest_path,
+        expert_a_path,
+        expert_b_path,
+        _manifest_bytes=manifest_bytes,
+        _expert_a_bytes=expert_a_bytes,
+        _expert_b_bytes=expert_b_bytes,
+    )
     if pair_report["status"] != "comparison_ready":
         return {
             "status": "invalid",
@@ -272,10 +292,10 @@ def validate(
             "source_pair_validation": pair_report,
         }
     try:
-        manifest = SINGLE_VALIDATOR.load_json(manifest_path)
-        expert_a_document = SINGLE_VALIDATOR.load_json(expert_a_path)
-        expert_b_document = SINGLE_VALIDATOR.load_json(expert_b_path)
-        document = SINGLE_VALIDATOR.load_json(adjudication_path)
+        manifest = SINGLE_VALIDATOR.load_json_bytes(manifest_bytes, manifest_path)
+        expert_a_document = SINGLE_VALIDATOR.load_json_bytes(expert_a_bytes, expert_a_path)
+        expert_b_document = SINGLE_VALIDATOR.load_json_bytes(expert_b_bytes, expert_b_path)
+        document = SINGLE_VALIDATOR.load_json_bytes(adjudication_bytes, adjudication_path)
     except ValueError as exc:
         return {
             "status": "invalid",
@@ -295,14 +315,14 @@ def validate(
         result.error(f"unsupported schema_version: {document['schema_version']!r}")
     if document["packet_id"] != manifest.get("packet_id"):
         result.error("packet_id does not match manifest")
-    manifest_hash = SINGLE_VALIDATOR.sha256_file(manifest_path)
+    manifest_hash = hashlib.sha256(manifest_bytes).hexdigest()
     if document["manifest_sha256"] != manifest_hash:
         result.error("manifest_sha256 does not match manifest bytes")
 
     expert_pair = document["expert_pair"]
     if exact_fields(expert_pair, EXPERT_PAIR_FIELDS, "expert_pair", result):
-        _validate_expert_identity(expert_pair["expert_a"], expert_a_path, expert_a_document, "expert_pair.expert_a", result)
-        _validate_expert_identity(expert_pair["expert_b"], expert_b_path, expert_b_document, "expert_pair.expert_b", result)
+        _validate_expert_identity(expert_pair["expert_a"], expert_a_bytes, expert_a_document, "expert_pair.expert_a", result)
+        _validate_expert_identity(expert_pair["expert_b"], expert_b_bytes, expert_b_document, "expert_pair.expert_b", result)
         if expert_pair["distinct_identifiers"] is not True:
             result.error("expert_pair.distinct_identifiers must be true")
 
@@ -482,7 +502,7 @@ def validate(
                     )
                     else None
                 ),
-                "eligible": accuracy.get("eligible") is True if isinstance(accuracy, dict) else False,
+                "eligible": expected_reason is None,
                 "excluded_reason": expected_reason,
                 "clean_pair": global_clean and state_for_logic != "contaminated",
             }
@@ -535,6 +555,7 @@ def validate(
         "expected_sample_count": len(expected_ids),
         "received_sample_count": len(samples),
         "recomputed_summary": expected_summary,
+        "model_prediction_freeze_verification": "unavailable_v1_self_attestation_only",
         "errors": result.errors,
         "ineligible_reasons": sorted(set(result.ineligible_reasons)),
         "records_created_or_modified": 0,

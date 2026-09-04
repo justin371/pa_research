@@ -5,16 +5,25 @@ from pathlib import Path
 import shutil
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
 import pandas as pd
 
+from pa_source_binding import load_source_module
+import pa_research_backtest.artifact_validator as validator_module
 from pa_research_backtest.artifact_validator import main as validate_main
 from pa_research_backtest.artifact_validator import validate_artifact
-from pa_research_backtest.engine import ENGINE_VERSION, main as replay_main
+from pa_research_backtest.engine import ENGINE_VERSION
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 BACKTEST_ROOT = REPO_ROOT / "research" / "backtesting"
+REPLAY_ENGINE = load_source_module(
+    REPO_ROOT / "pa_research_backtest" / "engine.py",
+    "test_artifact_source_bound_replay_engine",
+    "engine source",
+)
+replay_main = REPLAY_ENGINE.main
 
 
 def create_current_artifact(output_dir: Path) -> None:
@@ -57,6 +66,31 @@ class PaResearchArtifactValidatorTests(unittest.TestCase):
             self.assertIn('"status": "current_valid"', output.getvalue())
             for name, content in before.items():
                 self.assertEqual((output_dir / name).read_bytes(), content)
+
+    def test_results_parse_and_hash_use_one_immutable_snapshot(self):
+        with TemporaryDirectory() as temp_dir:
+            output_dir = Path(temp_dir) / "output"
+            create_current_artifact(output_dir)
+            results_path = output_dir / "results.csv"
+            canonical_bytes = results_path.read_bytes()
+            frame = pd.read_csv(results_path)
+            self.assertIn("engine_warnings", frame.columns)
+            frame["engine_warnings"] = frame["engine_warnings"].astype("object")
+            frame.loc[0, "engine_warnings"] = "tampered-but-summary-neutral"
+            frame.to_csv(results_path, index=False)
+            tampered_bytes = results_path.read_bytes()
+            self.assertNotEqual(tampered_bytes, canonical_bytes)
+            original_read_csv = validator_module.pd.read_csv
+
+            def restore_after_parse(source, *args, **kwargs):
+                parsed = original_read_csv(source, *args, **kwargs)
+                if isinstance(source, (str, Path)):
+                    results_path.write_bytes(canonical_bytes)
+                return parsed
+
+            with patch.object(validator_module.pd, "read_csv", restore_after_parse):
+                report = validate_artifact(output_dir)
+            self.assertEqual(report["status"], "invalid")
 
     def test_cli_returns_one_for_missing_or_malformed_artifact_files(self):
         with TemporaryDirectory() as temp_dir:

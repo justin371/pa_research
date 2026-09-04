@@ -90,6 +90,12 @@ sample contaminated
 
 summary 必须从 16 行重新计数，不能信任手填总数。validator 仍不判断标签内容是否“看图正确”，也不计算交易统计。
 
+### 2026-09-03 事前冻结证据加固
+
+v1 裁决文件中的 `model_prediction_frozen_before_expert_reveal=true` 只是自报，不是独立证据。当前没有已验收的外部事前承诺校验器；即使该字段为 true 且提供标签，仍按 `model_prediction_not_frozen_before_reveal` 排除，准确率分母保持 0。可保留标签覆盖记录，但不能把它算作已验证预测。
+
+未来启用准确率分母前，必须另行验收独立预测文件、canonical packet 绑定、逐样本标签及 SHA，以及可验证的揭盲前外部承诺。仅补写文件、哈希或时间戳不能证明历史冻结时序，不回填真实预测。详情见[专家证据链加固审计](../../expert_evidence_chain_hardening_audit_2026-09-03_CN.md)。
+
 ## 三、视觉准确率分母
 
 只有在专家标签冻结并完成裁决后，才允许揭示事前冻结的模型预测。必须同时报告：
@@ -115,6 +121,12 @@ excluded_reasons
 `both_reasonable_boundary`、`unclear`、`insufficient_evidence`、污染、缺失模型预测或事后补写预测均排除，并逐类报告数量。不得静默删除困难样本。
 
 普通 H/L 的 sensitivity/specificity 还必须把 `not_ordinary_HL` 作为 hard-negative 类，不能只在四个 H/L 标签之间计算命中率。样本来源是策划 cohort，因此结果只能描述本 cohort，不能声称市场泛化。
+
+### 整包盲态与样本依赖
+
+2026-09-03 来源核验确认当前冻结包有同一标的不同截止日的重叠图窗。较晚图可能向同一审核者泄露较早图之后的走势，因此逐图 `future_bars_hidden=true`、不同 ID/文件 SHA 和标签冻结声明都不能单独证明整包无污染。导出完整性通过不等于可开始专家交接；当前包仍禁止用于无污染准确率研究，具体门槛见[协调清单](coordinator_handoff_checklist_CN.md)。本轮模型看图不产生真实专家污染记录或标签。
+
+未来启用分母时，除了独立事前承诺，还须验证跨图未来隔离及 instrument/window 分组；重叠图不能当作独立 Bernoulli 试验来扩大样本量、缩窄置信区间或主张市场泛化。协议未验收前不从当前 16 个图 ID 推导 16 个独立样本，准确率与胜率继续 `not-computable`。
 
 ## 四、与交易统计隔离
 

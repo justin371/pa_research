@@ -291,6 +291,7 @@ $requiredFiles = @(
     'research/hl_expert_pair_adjudication_contract_audit_2026-09-01_CN.md',
     'scripts/compare_pa_hl_expert_annotations.py',
     'research/hl_pair_adjudication_validator_audit_2026-09-01_CN.md',
+    'research/expert_evidence_chain_hardening_audit_2026-09-03_CN.md',
     'scripts/validate_pa_hl_expert_pair_adjudication.py',
     'research/assets/visual_recognition/2026-08-24/round2_multisymbol/README.md',
     'research/assets/visual_recognition/2026-08-24/round3_hl_drills/README.md',
@@ -329,7 +330,9 @@ $requiredFiles = @(
     'research/backtesting/bop_contract_intake_2026-08-28.csv',
     'research/backtesting/bop_contract_intake_audit_2026-08-28_CN.md',
     'scripts/validate_pa_research_artifact.py',
+    'pa_source_binding.py',
     'scripts/render_pa_blind_daily_batch.py',
+    'scripts/render_pa_blind_daily_batch_bound.py',
     'strategy/README.md'
 )
 foreach ($relativePath in $requiredFiles) {
@@ -430,7 +433,9 @@ foreach ($artifactFile in $backtestingMachineArtifactPaths) {
 }
 $backtestingExecutableEntryPaths = @(
     [IO.Path]::GetFullPath((Join-Path -Path $repoRoot -ChildPath 'scripts/pa_research_backtest.py'))
+    [IO.Path]::GetFullPath((Join-Path -Path $repoRoot -ChildPath 'pa_source_binding.py'))
     [IO.Path]::GetFullPath((Join-Path -Path $repoRoot -ChildPath 'pa_research_backtest/engine.py'))
+    [IO.Path]::GetFullPath((Join-Path -Path $repoRoot -ChildPath 'scripts/render_pa_blind_daily_batch_bound.py'))
     [IO.Path]::GetFullPath((Join-Path -Path $repoRoot -ChildPath 'scripts/validate_pa_research_artifact.py'))
 )
 foreach ($entryPath in $backtestingExecutableEntryPaths) {
@@ -454,7 +459,7 @@ $coreBoundaryTokens = @(
     'no-new-positive',
     'validated win-rate: not-computable',
     '60%',
-    '0.3.10',
+    '0.3.15',
     '不是 Codex Trading 生产规则',
     '量化扫描器',
     'Execution Agent'

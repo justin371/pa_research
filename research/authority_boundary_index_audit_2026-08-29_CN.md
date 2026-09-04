@@ -204,3 +204,37 @@ validator 不读取图表、不修改裁决、不建立人工真值。专家可�
 - 文档 validator 已检查 337 个 Markdown 文件、2297 个 Markdown 链接。
 
 链接数减少2来自外部专家隔离包 README 删除不可交付的内部文档链接，不是删除研究材料。当前研究引擎为 `0.3.10`，旧 `0.3.9` 审计与冻结图像/数据保留；本次回归与合成导出测试不建立人工真值、真实成交或胜率证据。`no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent` 不变。
+
+## 十九、六项回放边界修复后的索引追加快照（2026-09-03）
+
+本段保留以上历史版本、计数和结论，只记录引擎 `0.3.11` 与当前输出校验说明更新后的索引状态：
+
+- patterns/ 下有 16 个 pattern 目录，foundations/ 下有 8 个基础层目录；
+- research/assets/visual_recognition/ 下有 14 个资产 README 和 145 张 PNG；
+- research/ 顶层有 182 个历史研究报告，research/backtesting/ 有 76 个报告文件、18 个 CSV 和 1 个 JSON 机器产物；
+- 文档 validator 已检查 337 个 Markdown 文件、2298 个 Markdown 链接。
+
+新增链接来自输出 schema 到当前回放说明的交叉引用。六项修复涉及输入覆盖保护、导入几何、完成状态、收益/R 一致性、可证明的入场日保护成交和资金不足分类；新增测试仅使用合成数据。历史图表、冻结合同与结果不改写，不能据此宣称全仓 Sol Pro 穷尽复审已完成。`no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent` 不变。
+
+## 二十、专家证据链加固后的索引追加快照（2026-09-03）
+
+保留上方历史快照，当前新增专家证据链加固审计与交叉引用：
+
+- research/ 顶层有 183 个历史研究报告，research/backtesting/ 有 76 个报告文件、18 个 CSV 和 1 个 JSON 机器产物；
+- 文档 validator 已检查 338 个 Markdown 文件、2313 个 Markdown 链接。
+
+canonical 包绑定、导出内容完整性、重复 symbol/cutoff 与预测自报冻结已加固；独立事前承诺未验收时准确率分母保持 0。未修改冻结图像或市场数据，不把 25 个批准文本的专项 Pro 审查宣称为全仓穷尽完成。`no-new-positive / validated win-rate: not-computable / PA Research only / no Codex Trading / no quantitative scanner / no Execution Agent` 不变。
+
+## 二十一、全仓收尾审查追加快照（2026-09-04）
+
+本段保留全部历史快照，只记录当前待提交 checkout 的动态清单和本轮验证范围：
+
+- 614 个已跟踪路径加 8 个本轮待提交路径，共 622 个文件；
+- 338 个 Markdown、84 个 Python、161 个 PNG、18 个 CSV、17 个 JSON、2 个 TXT、1 个 PowerShell 和 1 个 `.gitignore`；
+- research/ 顶层有 184 个 Markdown，research/backtesting/ 有 77 个 Markdown、18 个 CSV 和 1 个 JSON；
+- research/assets/visual_recognition/ 有 145 张 PNG，外部人工包另有 16 张 PNG，受版本管理 PNG 合计 161 张。
+- 文档 validator 已检查 338 个 Markdown 文件、2315 个 Markdown 链接。
+
+161 张图已经逐张原生查看；旧冻结图中的标题/日期轴拥挤作为历史显示限制记录，当前 renderer 的 16 张非冻结临时复现确认布局已修复，冻结 PNG 不回写。所有 Python、JSON、CSV、PNG 和文本均完成相应机械完整性检查；专家 validator/comparator/adjudicator 的 canonical 输入改为单次不可变快照。最终 Sol Pro 接受性复核、全套测试、commit 和 push 在本段写入时仍待完成，不能提前标记整个 goal 结束。
+
+本轮不修改 Codex Trading，不创建量化扫描器或自动 pattern detector，不连接 Futu/OpenD、账户、订单或 Execution Agent。`no-new-positive / overall accuracy: not-computable / validated win-rate: not-computable / completed_trade_denominator: 0` 不变。

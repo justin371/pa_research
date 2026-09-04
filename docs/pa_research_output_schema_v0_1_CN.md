@@ -31,7 +31,7 @@ stage_1_fast_screen / deep_review / daily_candidate / historical_context_only
 - 当前日线候选的顶层 `primary_pattern` 仍只有 `ABC_CONT` 和 `BOP`；H1/H2/L1/L2/H3/L3 通过 `internal_label` 及 `secondary_context` 记录。`H1_L1`、`H2_L2`、`H3_L3`、`RFB`、`MTR` 和 `other` 在统一记录及当前回放器中保留，是历史/兼容冻结合同的 pattern 值，不会扩展日线选股规则。
 - `primary_pattern` 的允许值必须结合 `contract_scope` 解读：`daily_candidate` 只允许 `ABC_CONT` 或 `BOP`；`deep_review`/`historical_context_only` 才能在对应合同已闭合时使用历史/兼容值。H1/H2/L1/L2 在日线候选中只能写入 `internal_label`，不能借由 `pattern_family`、`secondary_context` 或自由文本重新变成主标签。
 - 研究记录的 `direction` 可以是 `no_valid_direction`，但当前回放输入只接受 `long` 或 `short`。没有有效方向的记录只能保留为研究记录，不能送入回放。
-- 研究记录的 `order_branch` 可以记录 `stop_limit` 或 `observation_only`；当前 engine `0.3.10` 的回放输入只接受 `stop_confirmation`、`limit_retest` 和 `market_close`。`observation_only` 不建立交易合同，`stop_limit` 不能静默映射为普通 stop；两者目前不能直接传给当前回放器。
+- 研究记录的 `order_branch` 可以记录 `stop_limit` 或 `observation_only`；当前 engine `0.3.15` 的回放输入只接受 `stop_confirmation`、`limit_retest` 和 `market_close`。`observation_only` 不建立交易合同，`stop_limit` 不能静默映射为普通 stop；两者目前不能直接传给当前回放器。
 - 回放输入中的 `entry_trigger`、`structural_stop`、`first_obstacle` 和 `target_price` 必须是有限数值价格；研究卡中的价格区域、`pending` 或 `unknown` 不能直接替代这些冻结数值。`market_close` 可以没有 `entry_trigger`，但仍必须满足该分支的其他合同要求。
 - 记录字段 `actual_fill_or_open_skip` 使用下划线状态，和回放结果字段 `fill_status` 的 `no-fill`、`opening-skip`、`unproven`、`not-traded` 不是同一字段，不能混写或互相推断。
 
@@ -268,6 +268,34 @@ exit_date:
 运行元数据应保留 `engine_version`、`backtesting_version`、`python_version`、`pandas_version`、`numpy_version`、`engine_source_sha256`、`price_file_sha256`、`contract_file_sha256`、`result_set_sha256`、`results_file` 和 `results_file_sha256`，并保留 `summary_provenance`。其中 `summary_provenance` 至少复制实际 `result_columns`、`pre_entry_provenance_status_counts`、`pre_entry_provenance_complete_count`、`pre_entry_provenance_incomplete_count`、`completed_trade_count`、`outcome_bucket_counts` 和各类 provenance/eligibility mismatch 计数；`summary.json` 中嵌套的 `run_metadata` 应与独立 `run_metadata.json` 一致。引擎源码指纹与运行时版本一起锁定执行语义，结果文件指纹锁定实际写出的 artifact；输入/结果指纹用于识别同一输入的重复 artifact 或同一 `sample_id` 的不同版本。它们是审计 provenance，不是交易信号。旧的、缺少这些字段的 `summary.json` 或 `run_metadata.json` 只能作为历史描述，不能与新摘要拼接成验证结果。
 
 `scripts/validate_pa_research_artifact.py` 是只读校验入口：它从 `results.csv` 重建摘要关键计数，核对 `summary_provenance`、CSV/summary/metadata 的 hash、当前 `engine_source` hash 和嵌套 metadata 一致性。`result_set_sha256` 按 engine 约定统一 CSV 换行符后核对，`results_file_sha256` 仍核对实际文件字节。当前 engine/schema 完整且通过检查返回 `current_valid`；旧 engine、缺少当前字段或缺少 provenance 的输出返回 `historical_incomplete`，不能作为当前验证样本；结构损坏、文件解析失败、源码文件不可用或当前字段互相矛盾返回 `invalid`。CLI 返回码固定为 `0=current_valid`、`2=historical_incomplete`、`1=invalid`；`current_valid` 只表示 artifact 链路完整，不等于胜率已经验证。校验过程不下载行情、不重跑回放、不写回文件。
+
+### 0.3.15 不可移植的模块源码绑定补充
+
+发布型入口必须先由独立启动器用同一个打开的文件描述符读取源码字节与文件身份，再从这组不可变字节 `compile/exec`。启动器把源码快照登记到私有 registry，并同时绑定其创建的精确 module object 与 `globals()` identity；普通 `read_source_snapshot()` 只返回数据，不能铸造发布权限。engine 与要求 `source_binding_required=true` 的渲染器必须用自己的 module object/namespace 向 registry 取回绑定，普通 import 即使注入公开 reader 返回的快照或移植别的模块快照也会失效安全。计算后和原子发布前仍需重新以单句柄读取当前路径并核对最初字节、身份、大小与时间戳。这样 `engine_source_sha256` / `renderer_source_sha256` 绑定的是实际编译执行的源码，而不是模块已加载后再从 `__file__` 读取到的另一个版本。普通 import、A 已加载而路径变为 B、snapshot transplant，以及运行中替换源码的回归都必须拒绝发布。
+
+### 0.3.14 初始 source-bound launcher
+
+0.3.14 首次把源码读取移到 Python 加载/编译之前，并以同一 fd 完成 `fstat/read/fstat`。该版仍把可复制的 `SourceSnapshot` 放入模块全局，普通 import 模块可移植公开 reader 生成的快照；0.3.15 用 loader 私有 module/namespace registry 闭合该缺口。0.3.14 不得作为当前发布 provenance 合同。
+
+### 0.3.13 冻结标签补充
+
+冻结回放输入不能使用 `internal_label=pending`；`primary_pattern=H3_L3` 必须明确收敛为 `internal_label=H3` 或 `L3`。导入结果中的 `pending` 同样只能保持 `contract_eligibility=pending`，不得进入 `completed_trade_count`。`none` 只可用于不要求 H/L 子标签的形态，不能替代三推方向标签。
+
+0.3.13 曾增加模块入口内的前后源码路径复核，但该控制仍晚于 Python 加载/编译，不能单独证明已执行字节；0.3.14 引入独立启动器，0.3.15 再闭合可移植快照凭证。所有这些控制都只提高 provenance 完整性，不证明策略有效或产生新样本。
+
+### 0.3.12 原子 artifact 发布补充
+
+新回放必须把 `results.csv`、`summary.json` 和 `run_metadata.json` 全部写入同一文件系统上的隔离暂存目录，完成序列化与哈希后再以平台原生的原子 no-replace 目录操作发布。`--output-dir` 必须是尚不存在的新目录；目标在发布前或发布竞态中出现时都必须拒绝，不能覆盖已有文件、空目录或外来内容。编码、序列化或发布失败不能在最终路径留下半套 artifact。该控制只证明文件发布完整性，不增加交易或胜率证据。
+
+只读 validator 对每个 artifact 文件只取一次字节快照；`results.csv` 的解析、`results_file_sha256` 与规范化 `result_set_sha256` 必须绑定同一批字节。不能在解析后重新打开同一路径并把另一个版本的哈希当作前一版内容的证明。
+
+### 0.3.11 结果校验补充
+
+当前完成分母还要求显式 `ambiguous_intrabar=no`，以及 `path_result` 属于 `target-reached / first-obstacle-reached / invalidated / time_exit`；缺失成交、证据或资格旗标不能由 win/loss 推断补齐。导入记录用计划触发和实际成交价分别复核止损、目标与首障碍方向几何。单股 `risk_per_unit` 必须等于入场至结构止损的绝对价差，`gross_pnl` 等于方向调整后的成交价差，`net_pnl=gross_pnl-commission_paid`，`realized_R=net_pnl/risk_per_unit`；这些字段须有限且成本非负，矛盾或缺失的结果不能计入完成分母。`gross_pnl` 已含成交价中的 spread，不表示所有成本前收益。
+
+当前 artifact 对自称胜率合格但被完成 guard 排除、或资格旗标矛盾的结果返回 `invalid`；即使同步重算结果哈希和摘要，也不能抹去矛盾。历史 schema/version 的 `historical_incomplete` 分类仍保留，不能通过改版本号伪装重新回放。
+
+连续 OHLC 路径下可证明的入场日单侧保护成交应记录为当日完成（`bars_held=0`）；两端触及或顺序仍不可知时继续排除。资金不足导致后端拒绝订单写 `fill_status=unproven`、`path_result=configuration-error-insufficient-cash`，单列 `configuration_error`，不并入普通 no-fill。完整说明见[当前冻结合同回放器](../research/backtesting/README.md)。这些修复不产生新的 PA 样本或已验证胜率。
 
 ## 五、状态轴与交接轴
 

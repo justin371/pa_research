@@ -8,15 +8,24 @@ from tempfile import TemporaryDirectory
 
 import pandas as pd
 
+from pa_source_binding import load_source_module
 from pa_research_backtest.engine import (
     BacktestContract,
     ContractValidationError,
     build_summary as _build_summary,
     load_contracts,
     load_prices,
-    main,
     run_contract,
 )
+
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+BOUND_ENGINE = load_source_module(
+    REPO_ROOT / "pa_research_backtest" / "engine.py",
+    "test_backtest_source_bound_engine",
+    "engine source",
+)
+main = BOUND_ENGINE.main
 
 
 def make_prices(rows):
@@ -78,9 +87,10 @@ def _complete_synthetic_result_rows(results):
             row.setdefault("planned_entry_trigger", "")
         else:
             row.setdefault("planned_entry_trigger", 10.0)
-        row.setdefault("structural_stop", 9.0)
-        row.setdefault("first_obstacle", 12.0)
-        row.setdefault("target_price", 12.0)
+        short = str(row["direction"]).lower() == "short"
+        row.setdefault("structural_stop", 11.0 if short else 9.0)
+        row.setdefault("first_obstacle", 8.0 if short else 12.0)
+        row.setdefault("target_price", 8.0 if short else 12.0)
         row.setdefault("max_hold_bars", 5)
         row.setdefault("gap_policy", "accept_open")
         row.setdefault("label_source", "human_chart_review")
@@ -91,6 +101,23 @@ def _complete_synthetic_result_rows(results):
         row.setdefault("contract_frozen", "yes")
         row.setdefault("lineage_id", f"SYNTH-LINEAGE-{index}")
         row.setdefault("path_result", "target-reached")
+        # Summary-only fixtures represent explicit synthetic one-unit trades.
+        # Production must never infer these missing economic/status fields.
+        completed_label = row.get("trade_result") in {"win", "loss", "scratch"}
+        row.setdefault("win_rate_eligible", "yes" if completed_label else "no")
+        row.setdefault("evidence_status", "comparable" if completed_label else "excluded")
+        row.setdefault("fill_status", "filled" if completed_label else "unknown")
+        row.setdefault("ambiguous_intrabar", "no")
+        row.setdefault("entry_price", 10.0)
+        row.setdefault("risk_per_unit", 1.0)
+        row.setdefault("commission_paid", 0.0)
+        row.setdefault("net_pnl", row.get("realized_R"))
+        row.setdefault("gross_pnl", row.get("realized_R"))
+        try:
+            synthetic_exit = 10.0 + (-1 if short else 1) * float(row.get("realized_R"))
+        except (TypeError, ValueError):
+            synthetic_exit = None
+        row.setdefault("exit_price", synthetic_exit)
         label = str(row["internal_label"]).upper()
         if label in {"H1", "H2"}:
             row.setdefault("daily_ema20_slope", "up")

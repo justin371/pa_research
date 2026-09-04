@@ -30,7 +30,7 @@ class FullReviewReplayRegressions(unittest.TestCase):
             'independence_adjusted_win_rate_pct': 999,
         }
         with TemporaryDirectory() as temp:
-            root = Path(temp)
+            root = Path(temp) / 'artifact'
             create_current_artifact(root)
             path = root / 'summary.json'
             original = json.loads(path.read_text(encoding='utf-8'))
@@ -49,7 +49,7 @@ class FullReviewReplayRegressions(unittest.TestCase):
     def test_input_hash_tampering_is_not_current_valid(self):
         for field in ('price_file_sha256', 'contract_file_sha256'):
             with self.subTest(field=field), TemporaryDirectory() as temp:
-                root = Path(temp)
+                root = Path(temp) / 'artifact'
                 create_current_artifact(root)
                 mp, sp = root/'run_metadata.json', root/'summary.json'
                 metadata = json.loads(mp.read_text(encoding='utf-8'))
@@ -124,9 +124,10 @@ class FullReviewReplayRegressions(unittest.TestCase):
                                  daily_ema20_slope='down', daily_ema50_slope='down',
                                  h_l_ema_slope_gate='short_pass', h_l_pullback_location='falling_ema20')
         result = run_contract(contract, prices)
-        self.assertEqual(result['trade_result'], 'pending')
-        self.assertEqual(result['exit_reason'], 'unresolved_entry_bar_protective_fill')
-        self.assertIsNone(result['realized_R'])
+        self.assertEqual(result['trade_result'], 'loss')
+        self.assertEqual(result['exit_reason'], 'stop')
+        self.assertEqual(result['exit_date'], '2026-01-03')
+        self.assertAlmostEqual(result['realized_R'], -1)
 
     def test_close_entry_ignores_pre_entry_range_but_protects_next_bar(self):
         prices = make_prices([
@@ -151,7 +152,7 @@ class FullReviewReplayRegressions(unittest.TestCase):
 
     def test_input_provenance_missing_and_relative_paths(self):
         with TemporaryDirectory() as temp:
-            root = Path(temp)
+            root = Path(temp) / 'artifact'
             create_current_artifact(root)
             mp, sp = root/'run_metadata.json', root/'summary.json'
             metadata = json.loads(mp.read_text(encoding='utf-8'))

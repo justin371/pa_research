@@ -10,7 +10,7 @@
 - [`视觉识别校准协议 v0.1`](visual_calibration_protocol_v0_1_CN.md)：分开确定性发现 cohort、类别配平 morphology cohort、专家裁决和交易结果分母。
 - [`共同上下文`](common_context.md)
 
-统一边界：`v0.x` 规则/合同与回放引擎 `0.3.10` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；`no-new-positive` 和 `validated win-rate: not-computable` 保持不变，`60%` 仅是待检验目标；不创建量化扫描器，不连接 Execution Agent。
+统一边界：`v0.x` 规则/合同与回放引擎 `0.3.15` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；`no-new-positive` 和 `validated win-rate: not-computable` 保持不变，`60%` 仅是待检验目标；不创建量化扫描器，不连接 Execution Agent。
 
 - [`共同视觉前置字段一致性审计`](../research/common_visual_preflight_field_consistency_audit_2026-08-29_CN.md)
 - [`入场几何与不交易状态边界审计`](../research/entry_geometry_state_boundary_audit_2026-08-29_CN.md)

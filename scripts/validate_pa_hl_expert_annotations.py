@@ -16,6 +16,7 @@ from typing import Any
 
 SCHEMA_VERSION = "pa_hl_expert_annotations_v1"
 EXPECTED_SAMPLE_COUNT = 16
+CANONICAL_MANIFEST_SHA256 = "d1616e568bceebbe605d498548ffc5c346cec1365831ba9035ab131ad9765b23"
 SAMPLE_ID_RE = re.compile(r"^EH1-[0-9]{3}$")
 ROOT_FIELDS = {"schema_version", "packet_id", "manifest_sha256", "annotator", "freeze", "annotations"}
 ANNOTATOR_FIELDS = {"role", "identifier", "independent"}
@@ -84,10 +85,17 @@ def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def load_json_bytes(payload: bytes, source: object) -> Any:
+    try:
+        return json.loads(payload.decode("utf-8"))
+    except (UnicodeError, json.JSONDecodeError) as exc:
+        raise ValueError(f"cannot read valid UTF-8 JSON: {source}: {exc}") from exc
+
+
 def load_json(path: Path) -> Any:
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        return load_json_bytes(path.read_bytes(), path)
+    except OSError as exc:
         raise ValueError(f"cannot read valid UTF-8 JSON: {path}: {exc}") from exc
 
 
@@ -186,14 +194,27 @@ def validate_annotation(row: Any, index: int, result: Validation) -> str | None:
     return sample_id if isinstance(sample_id, str) else None
 
 
-def validate(manifest_path: Path, annotations_path: Path) -> dict[str, Any]:
+def validate(
+    manifest_path: Path,
+    annotations_path: Path,
+    *,
+    _manifest_bytes: bytes | None = None,
+    _annotations_bytes: bytes | None = None,
+) -> dict[str, Any]:
     result = Validation()
     try:
-        manifest = load_json(manifest_path)
-        document = load_json(annotations_path)
-    except ValueError as exc:
+        manifest_bytes = manifest_path.read_bytes() if _manifest_bytes is None else _manifest_bytes
+        annotations_bytes = (
+            annotations_path.read_bytes() if _annotations_bytes is None else _annotations_bytes
+        )
+        actual_manifest_hash = hashlib.sha256(manifest_bytes).hexdigest()
+        manifest = load_json_bytes(manifest_bytes, manifest_path)
+        document = load_json_bytes(annotations_bytes, annotations_path)
+    except (OSError, ValueError) as exc:
         return {"status": "invalid", "errors": [str(exc)], "ineligible_reasons": []}
 
+    if actual_manifest_hash != CANONICAL_MANIFEST_SHA256:
+        result.error("manifest bytes do not match the frozen canonical expert packet")
     if not isinstance(manifest, dict):
         return {"status": "invalid", "errors": ["manifest must be an object"], "ineligible_reasons": []}
     if not isinstance(manifest.get("packet_id"), str) or not manifest["packet_id"].strip():
@@ -227,7 +248,6 @@ def validate(manifest_path: Path, annotations_path: Path) -> dict[str, Any]:
         result.error(f"unsupported schema_version: {document['schema_version']!r}")
     if document["packet_id"] != manifest.get("packet_id"):
         result.error("packet_id does not match manifest")
-    actual_manifest_hash = sha256_file(manifest_path)
     if document["manifest_sha256"] != actual_manifest_hash:
         result.error("manifest_sha256 does not match manifest bytes")
 
@@ -284,7 +304,7 @@ def validate(manifest_path: Path, annotations_path: Path) -> dict[str, Any]:
     return {
         "status": status,
         "packet_id": manifest.get("packet_id"),
-        "manifest_sha256": sha256_file(manifest_path),
+        "manifest_sha256": actual_manifest_hash,
         "expected_sample_count": len(expected_ids),
         "received_annotation_count": len(annotations) if isinstance(annotations, list) else None,
         "errors": result.errors,

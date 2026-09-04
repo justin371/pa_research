@@ -4,11 +4,11 @@
 
 统一统计结论：`no-new-positive`；`validated win-rate: not-computable`。`60%` 只是待检验目标，不是已验证胜率。
 
-这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.10`；当前维护版本仅指研究引擎）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
+这里是 PA Research 的 `backtesting.py` 适配层（当前引擎版本 `0.3.15`；当前维护版本仅指研究引擎）。它只回放已经由人工完整看图后冻结的合同，不自动筛选股票、不识别三推/H1/L1、不下载行情，也不连接 Execution Agent。
 
-统一边界：`v0.x` 规则/合同与研究引擎 `0.3.10` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；不创建量化扫描器，不连接 Execution Agent。
+统一边界：`v0.x` 规则/合同与研究引擎 `0.3.15` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；不创建量化扫描器，不连接 Execution Agent。
 
-研究实现与校验入口（仅限 PA Research）见：[`回放 CLI`](../../scripts/pa_research_backtest.py)、[`回放 engine`](../../pa_research_backtest/engine.py) 和 [`artifact validator`](../../scripts/validate_pa_research_artifact.py)。这些入口只处理冻结合同、历史价格输入和研究 artifact，不连接账户、券商或 Execution Agent。
+研究实现与校验入口（仅限 PA Research）见：[`回放 CLI`](../../scripts/pa_research_backtest.py)、[`单句柄源码绑定器`](../../pa_source_binding.py)、[`回放 engine`](../../pa_research_backtest/engine.py)、[`盲图 source-bound CLI`](../../scripts/render_pa_blind_daily_batch_bound.py)和[`artifact validator`](../../scripts/validate_pa_research_artifact.py)。这些入口只处理冻结合同、历史价格输入和研究 artifact，不连接账户、券商或 Execution Agent。
 
 当前 PA Research checkout 不包含券商或账户的真实交易日志；研究合同、历史回放结果和运行 metadata 都不能代替真实交易日志。
 
@@ -116,7 +116,7 @@ major_high_low_review,ema20_50_200_review,event_context,contract_frozen,lineage_
 
 ### 研究记录与回放输入的边界
 
-统一输出合同和视觉复核卡为了保留边界案例，允许比当前回放器更宽的记录状态。当前 engine `0.3.10` 的回放输入边界如下，必须在冻结合同时显式收敛：
+统一输出合同和视觉复核卡为了保留边界案例，允许比当前回放器更宽的记录状态。当前 engine `0.3.15` 的回放输入边界如下，必须在冻结合同时显式收敛：
 
 - `direction` 只接受 `long` 或 `short`；`no_valid_direction` 是研究记录状态，不能进入回放。
 - `primary_pattern` 接受 `ABC_CONT`、`BOP`、`H1_L1`、`H2_L2`、`H3_L3`、`RFB`、`MTR`、`other`。其中额外的 H/L、三推和旧模式值是历史/兼容冻结合同的支持，不改变当前日线候选顶层只用 `ABC_CONT/BOP` 的规则。
@@ -206,7 +206,45 @@ h_l_pullback_location,meta_confluence,meta_zone,meta_components
 8. 回放器不计算 EMA 斜率或自动寻找 META；这些字段必须来自回放前的人工图表审查，并在结果中原样保留。
 9. `engine_source_sha256`、运行时版本、`price_file_sha256`、`contract_file_sha256`、`result_set_sha256` 和 `results_file_sha256` 用于 artifact provenance 与输入/结果一致性核验；重复输入或结果版本不能合并成更大的独立样本。
 
-### 0.3.10 本轮回放与摘要校正
+### 0.3.15 不可移植的模块源码绑定
+
+2026-09-04：[`回放 CLI`](../../scripts/pa_research_backtest.py)先通过[`单句柄源码绑定器`](../../pa_source_binding.py)读取 engine 的源码字节与文件身份，再从同一组不可变字节 `compile/exec`。源码快照由一次 `os.open()` 后的同一 fd `fstat/read/fstat` 构成。加载成功后，绑定器在私有 registry 中把快照绑定到它创建的精确 module object 与 `globals()` identity；公开 `read_source_snapshot()` 只提供数据，不能铸造或移植发布权限。engine 只从 registry 取回自己的绑定，普通 import 即使注入公开 reader 或另一 bound module 的快照也拒绝发布。计算后和原子发布前仍重新核对当前路径。
+
+要求 `source_binding_required=true` 的盲图批次必须使用[`盲图 source-bound CLI`](../../scripts/render_pa_blind_daily_batch_bound.py)，执行同一套约束。回归同时覆盖 engine/renderer 的普通 import、snapshot transplant、A 已加载而路径变成 B、运行中替换源码；所有路径均拒绝发布。源码 SHA 因而绑定实际执行字节，但仍只是研究 provenance，不是策略、准确率、胜率或执行授权证据。
+
+### 0.3.14 初始 source-bound launcher
+
+0.3.14 首次把源码快照提前到 Python `compile/exec` 之前，并改为同一 fd 的身份/字节读取；但它把携带 token 的 `SourceSnapshot` 注入模块全局，公开 reader 也能生成同类对象，普通 import 模块可移植该凭证。0.3.15 改为 loader 私有 module/namespace registry，0.3.14 不再满足当前发布 provenance 合同。
+
+### 0.3.13 冻结标签闭合与入口内路径复核
+
+2026-09-04：冻结回放合同拒绝 `internal_label=pending`；`primary_pattern=H3_L3` 必须使用方向明确的 `H3` 或 `L3`。导入结果也按同一合同校验重建资格，`pending` 不得通过非 H/L 默认分支提升为 `eligible`，更不能进入 `completed_trade_count`。
+
+0.3.13 在模块入口内增加运行前后路径复核，能够发现初始快照之后的替换，但快照仍晚于 Python 对模块的加载和编译，不能单独证明实际执行字节。0.3.14 引入独立 source-bound 启动器，0.3.15 再闭合可移植快照凭证。0.3.13 的冻结标签规则继续有效；当前源码承诺以 0.3.15 为准。
+
+### 0.3.12 原子 artifact 发布
+
+2026-09-04：新回放先在目标父目录下的隔离暂存目录完成 `results.csv`、`summary.json`、`run_metadata.json` 的编码、哈希和相互引用，再用平台原生的 atomic no-replace 目录操作一次发布。`--output-dir` 必须是尚不存在的新目录；已有目录即使为空也拒绝，发布竞态中新出现的目录或文件也不能被替换。任何序列化、写入或发布失败都只清理私有暂存目录，不在最终路径留下半套 artifact，也不删除外来内容。Windows 使用 `MoveFileW`，Linux 使用 `renameat2(RENAME_NOREPLACE)`，macOS 使用 `renamex_np(RENAME_EXCL)`；没有等价原语的平台失效安全地拒绝。
+
+只读 validator 对 `summary.json`、`run_metadata.json` 和 `results.csv` 各读取一次；CSV 解析、实际文件 SHA-256 和规范化 `result_set_sha256` 必须共享同一份 `results.csv` 字节快照。验证过程中替换路径不能让“解析的一版”和“认证的另一版”拼成 `current_valid`。源价格、合同和 engine 文件也只用于当前存在性/哈希核验，不会被 validator 写回。
+
+这项发布控制不改变冻结合同、价格、成交路径、结果分母或历史 artifact；`0.3.11` 及更早输出继续保留原版本身份。它只提高新三件套的文件完整性，不构成策略、准确率或胜率证据。
+
+### 0.3.11 输入安全、完成结果与成交路径修复
+
+2026-09-03：以下修复只改变新回放及当前校验，不重写历史 CSV、PNG 或绩效报告，也不代表全仓 Sol Pro 穷尽复审已经完成。
+
+- CLI 写入前检查价格、合同、引擎源码与三个输出之间的路径/符号链接/硬链接重合，以及输出彼此重合；有冲突即拒绝。输入 SHA 来自载入器实际消费的同一份字节快照，不能在覆盖输入后补算。
+- 完成分母要求显式 `win_rate_eligible=yes`、`fill_status=filled`、`evidence_status=comparable`、`ambiguous_intrabar=no`。缺失状态不自动推断为合格。当前完成路径白名单是 `target-reached / first-obstacle-reached / invalidated / time_exit`；其他路径保留原始行，但不计入完成分母。
+- 导入结果复核冻结触发价与实际 `entry_price` 的方向几何；数值齐全不等于几何正确。单股结果还须保留有限的 `entry_price / exit_price / structural_stop / risk_per_unit / gross_pnl / net_pnl / commission_paid / realized_R`，并满足结构风险、价差收益、佣金和净 R 恒等式。`gross_pnl` 仍表示含 spread 成交价的佣金前收益，不是剔除所有成本后的原始价格收益。
+- `build_summary` 排除矛盾结果并保留 guard 计数；`validate_artifact` 对仍自称胜率合格却未通过 guard 的当前结果返回 `invalid`，即使哈希和摘要已被同步重算。validator 仍不重跑回放，链路有效不等于独立证明交易因果或胜率。
+- 在连续 OHLC 价格路径假设下，limit 入场后同方向继续穿过 stop、stop 入场后继续穿过 target，可判定先入场再退出；开盘即成交或收盘越过单一保护价也可提供顺序证据。可证明的单侧保护成交使用当日退出价/日期并重算双边费用和 R，`bars_held=0`。若首障碍可能在止损后才触及，保留 `first_obstacle_hit=unknown`，不能标为 `first-obstacle-reached`。两端都触及或仍可能先触及保护价后才入场的情况继续为 pending/歧义，不能一律 stop-first；这项规则不是逐笔成交真实性证明。
+- 后端明确因资金不足拒绝一股订单时，返回 `fill_status=unproven`、`path_result=configuration-error-insufficient-cash`，摘要归入 `configuration_error`；不再混入市场没有触发的 no-fill，不会自动补资金或调整杠杆。
+- `0.3.10` 及更早 artifact 继续保留历史身份；不能只改版本号或补字段就宣称已按新规则重放。新增回归全部为合成程序测试，不增加研究交易/视觉准确率分母。
+
+保持 `PA Research only`、`no-new-positive`、`validated win-rate: not-computable`；不改选股规则，不创建扫描器，不连接 Execution Agent 或 Codex Trading。
+
+### 0.3.10 历史回放与摘要校正
 
 以下边界只适用于新生成的 0.3.10 replay/result；历史 artifact 和历史输出不静默重写：
 

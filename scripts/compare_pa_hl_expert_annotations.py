@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -51,25 +52,26 @@ def _load_single_record_validator():
 SINGLE_VALIDATOR = _load_single_record_validator()
 
 
-def _input_identity(path: Path, document: Any | None, validation: dict[str, Any]) -> dict[str, Any]:
+def _input_identity(
+    path: Path,
+    source_bytes: bytes,
+    document: Any | None,
+    validation: dict[str, Any],
+) -> dict[str, Any]:
     identifier = None
     if isinstance(document, dict) and isinstance(document.get("annotator"), dict):
         identifier = document["annotator"].get("identifier")
-    try:
-        record_sha256 = SINGLE_VALIDATOR.sha256_file(path)
-    except OSError:
-        record_sha256 = None
     return {
         "path": str(path),
-        "record_sha256": record_sha256,
+        "record_sha256": hashlib.sha256(source_bytes).hexdigest(),
         "annotator_identifier": identifier,
         "single_record_validation": validation,
     }
 
 
-def _load_if_valid_json(path: Path) -> Any | None:
+def _load_if_valid_json(payload: bytes, path: Path) -> Any | None:
     try:
-        return SINGLE_VALIDATOR.load_json(path)
+        return SINGLE_VALIDATOR.load_json_bytes(payload, path)
     except ValueError:
         return None
 
@@ -78,18 +80,31 @@ def _base_report(
     manifest_path: Path,
     expert_a_path: Path,
     expert_b_path: Path,
+    manifest_bytes: bytes,
+    expert_a_bytes: bytes,
+    expert_b_bytes: bytes,
 ) -> tuple[dict[str, Any], Any | None, Any | None]:
-    validation_a = SINGLE_VALIDATOR.validate(manifest_path, expert_a_path)
-    validation_b = SINGLE_VALIDATOR.validate(manifest_path, expert_b_path)
-    document_a = _load_if_valid_json(expert_a_path)
-    document_b = _load_if_valid_json(expert_b_path)
+    validation_a = SINGLE_VALIDATOR.validate(
+        manifest_path,
+        expert_a_path,
+        _manifest_bytes=manifest_bytes,
+        _annotations_bytes=expert_a_bytes,
+    )
+    validation_b = SINGLE_VALIDATOR.validate(
+        manifest_path,
+        expert_b_path,
+        _manifest_bytes=manifest_bytes,
+        _annotations_bytes=expert_b_bytes,
+    )
+    document_a = _load_if_valid_json(expert_a_bytes, expert_a_path)
+    document_b = _load_if_valid_json(expert_b_bytes, expert_b_path)
     report = {
         "comparator_version": COMPARATOR_VERSION,
         "status": "invalid",
         "packet_id": validation_a.get("packet_id") or validation_b.get("packet_id"),
         "manifest_sha256": validation_a.get("manifest_sha256") or validation_b.get("manifest_sha256"),
-        "expert_a": _input_identity(expert_a_path, document_a, validation_a),
-        "expert_b": _input_identity(expert_b_path, document_b, validation_b),
+        "expert_a": _input_identity(expert_a_path, expert_a_bytes, document_a, validation_a),
+        "expert_b": _input_identity(expert_b_path, expert_b_bytes, document_b, validation_b),
         "pair_ineligible_reasons": [],
         "sample_comparisons": [],
         "summary": {
@@ -112,10 +127,42 @@ def _base_report(
     return report, document_a, document_b
 
 
-def compare(manifest_path: Path, expert_a_path: Path, expert_b_path: Path) -> dict[str, Any]:
+def compare(
+    manifest_path: Path,
+    expert_a_path: Path,
+    expert_b_path: Path,
+    *,
+    _manifest_bytes: bytes | None = None,
+    _expert_a_bytes: bytes | None = None,
+    _expert_b_bytes: bytes | None = None,
+) -> dict[str, Any]:
     """Validate both records, then compare exact frozen fields without adjudicating."""
 
-    report, document_a, document_b = _base_report(manifest_path, expert_a_path, expert_b_path)
+    try:
+        manifest_bytes = manifest_path.read_bytes() if _manifest_bytes is None else _manifest_bytes
+        expert_a_bytes = expert_a_path.read_bytes() if _expert_a_bytes is None else _expert_a_bytes
+        expert_b_bytes = expert_b_path.read_bytes() if _expert_b_bytes is None else _expert_b_bytes
+    except OSError as exc:
+        return {
+            "comparator_version": COMPARATOR_VERSION,
+            "status": "invalid",
+            "errors": [f"cannot read comparison input: {exc}"],
+            "pair_ineligible_reasons": [],
+            "sample_comparisons": [],
+            "trade_statistics": {
+                "completed_trade_denominator": 0,
+                "validated_win_rate": "not-computable",
+                "conclusion": "no-new-positive",
+            },
+        }
+    report, document_a, document_b = _base_report(
+        manifest_path,
+        expert_a_path,
+        expert_b_path,
+        manifest_bytes,
+        expert_a_bytes,
+        expert_b_bytes,
+    )
     validation_a = report["expert_a"]["single_record_validation"]
     validation_b = report["expert_b"]["single_record_validation"]
     statuses = (validation_a["status"], validation_b["status"])

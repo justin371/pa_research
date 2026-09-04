@@ -1,12 +1,14 @@
-# 形态覆盖候选集 v1 独立盲审与裁决审计（2026-09-01）
+# 形态覆盖候选集 v1 历史模型评审与裁决审计（2026-09-01）
 
 状态：`document_status=completed / evidence_scope=visual_calibration_only / adjudication_source=independent_model_review / human_expert_status=not_performed`
 
 ## 一、结论先行
 
-本轮完成了 16 张两年 Daily 截止图的 reviewer-first 盲审：每张图先由两名互相独立的视觉 reviewer 判断，再由未接触候选答案的第三名 adjudicator 处理分歧。32 份初审和 16 份裁决在候选答案揭示前冻结；所有记录的 `knowledge_status` 均为 `clean`，16/16 样本均为 `strict_eligible`。
+旧记录记载对 16 张最多 504 根 Daily 截止图采用 reviewer-first 流程：每张图先由两名视觉 reviewer 判断，再由第三名 adjudicator 处理分歧。32 份初审和 16 份裁决声明在候选答案揭示前冻结；其 `knowledge_status=clean`、16/16 的 `strict_eligible` 是当时保存的自述字段，不是当前独立验证过的盲态资格。
 
-这是一轮独立的**模型视觉裁决**，不是外部人工专家复核，也不是交易结果回放。它能衡量本轮读图的一致性和边界混淆，不能把模型共识升级为人类专家真值。
+2026-09-03 更正：股票代码和截止日期可见；7/16 张首末日期不足两个日历年；7/16 与先前 Batch 1 使用相同 symbol/cutoff/price_file，另有同一标的不同截止图的跨图未来暴露风险。现有哈希只能验证冻结字节，不能证明未接触旧结论、真实事前提交顺序或多图隔离。因此冻结原始记录和下表算术保留，但不能作为当前无污染准确率分母，也不把自述 `clean` 擅自改成已证明污染。
+
+这是一轮历史**模型视觉裁决**，不是外部人工专家复核，也不是交易结果回放。它描述保存记录的一致性和边界混淆，不能把模型共识升级为人类专家真值或独立样本准确率。
 
 主要发现：
 
@@ -18,14 +20,16 @@
 
 ## 二、盲法与冻结顺序
 
-1. reviewer 只看到中性编号图 `MC2-001` 至 `MC2-016`，不知道股票代码、候选 family、候选 label、未来 K 线或结果；
+以下为原流程声明，并非对实际盲态的追认：
+
+1. reviewer 使用中性编号图 `MC2-001` 至 `MC2-016`；股票代码和截止日期可见，未在单图展示候选 family、候选 label 或自身截止后的 K 线，但跨图组合仍可能暴露后续走势；
 2. 每张图由两个独立 reviewer 完成统一字段记录，共 32 份；
-3. 初审记录先冻结，再把同一张图和两份初审交给独立 adjudicator；
+3. 流程要求初审先冻结，再把同一张图和两份初审交给独立 adjudicator；现存最终文件哈希不能单独证明这一时间顺序；
 4. adjudicator 仍看不到候选答案，只处理 reviewer 分歧并记录 `reviewers_agree`、`both_reasonable_boundary` 或 `adjudicator_choice`；
 5. 16 份裁决冻结后，才揭示隔离的候选来源标签，且明确把它当作 candidate hypothesis，不当作 ground truth；
 6. 最后计算一致率、边界混淆和负控状态，不查看未来结果，不计算交易胜率。
 
-冻结证据：
+现存冻结文件与流程声明（不等同独立时间戳承诺）：
 
 - [32 份盲审原始记录](morphology_calibration_blind_reviews_2026-09-01.json)：SHA-256 `0f290849431ed2f246be08de9526b4fa58e7453b98af21b9f6a7a5299200d160`；
 - [16 份盲裁决原始记录](morphology_calibration_blind_adjudication_2026-09-01.json)：SHA-256 `101b7e6da4d0d11f04ffc5bf1e52f3bdf1efb1857d1d727a5aec8b7b1ceefa40`；
@@ -72,7 +76,7 @@
 
 ## 五、H/L 与三推边界
 
-候选来源标签只是构造 cohort 时的假设，揭示后出现的比较如下：
+候选来源标签只是构造 cohort 时的假设，揭示后出现的比较如下。`three_push_family_exact=3/4` 仅以 `candidate_family=THREE_PUSH_like` 的四个来源候选为分母，不是所有可比较 family 的总体比例，也不是三推识别准确率：
 
 | 候选来源 | 盲裁决结果 | 解释 |
 |---|---|---|
@@ -92,7 +96,7 @@ H/L attempt 的具体混淆为：`H1→H2/H3`、`H2→H2/H1`、`L1→L3/pending`
 
 本轮可以支持：
 
-- 模型能够直接从两年 Daily 图中较稳定地读取大趋势、方向和 EMA 背景；
+- 保存的模型记录在可见 Daily 窗口的大趋势、方向和 EMA 背景上较一致；尚不能据此证明新独立样本的准确性；
 - B leg 性质、H/L 尝试计数与 H/L/BOP/三推/普通延续之间的边界仍不稳定；
 - 下一轮规则优化应优先做边界卡和反例对，而不是扩大候选数量。
 

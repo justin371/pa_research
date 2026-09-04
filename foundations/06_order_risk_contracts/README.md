@@ -18,7 +18,7 @@
 
 新记录只使用上述下划线枚举。历史案例中的 `stop`、`limit-retest`、`market-close`、`reverse-stop` 和 `limit-edge` 作为别名保留，并分别映射到 `order_branch` 与 `branch_role`，不能再混写到同一个字段。
 
-这里的 `Canonical` 是研究/风险合同层的概念枚举，不等于当前回放器的可接受输入枚举。engine `0.3.10` 目前只回放 `stop_confirmation`、`limit_retest` 和 `market_close`；`stop_limit` 与 `observation_only` 必须留在研究记录或另行完成独立合同，不得直接传入当前回放器。
+这里的 `Canonical` 是研究/风险合同层的概念枚举，不等于当前回放器的可接受输入枚举。engine `0.3.15` 目前只回放 `stop_confirmation`、`limit_retest` 和 `market_close`；`stop_limit` 与 `observation_only` 必须留在研究记录或另行完成独立合同，不得直接传入当前回放器。
 
 ## 2. 方向语义必须准确
 

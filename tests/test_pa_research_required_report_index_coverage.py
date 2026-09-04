@@ -136,7 +136,9 @@ def backtesting_machine_artifact_paths() -> list[str]:
 def backtesting_executable_entry_paths() -> list[str]:
     return [
         "scripts/pa_research_backtest.py",
+        "pa_source_binding.py",
         "pa_research_backtest/engine.py",
+        "scripts/render_pa_blind_daily_batch_bound.py",
         "scripts/validate_pa_research_artifact.py",
     ]
 

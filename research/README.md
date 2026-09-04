@@ -4,12 +4,13 @@
 
 本目录保存 PA Research 的专项审计、历史案例、视觉验收记录和图像资产入口。它不是行情数据库、量化扫描器或执行层。新记录先使用[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)，方向必须明确写为 `long`、`short` 或 `no_valid_direction`。
 
-统一边界：`v0.x` 规则/合同与回放引擎 `0.3.10` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；`no-new-positive` 和 `validated win-rate: not-computable` 保持不变，`60%` 仅是待检验目标；不创建量化扫描器，不连接 Execution Agent。
+统一边界：`v0.x` 规则/合同与回放引擎 `0.3.15` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；`no-new-positive` 和 `validated win-rate: not-computable` 保持不变，`60%` 仅是待检验目标；不创建量化扫描器，不连接 Execution Agent。
 
 当前 PA Research checkout 不包含券商或账户的真实交易日志；研究合同、历史回放结果和运行 metadata 都不能代替真实交易日志。
 
 ## 当前 authority 与工作流
 
+- [`专家证据链加固审计（2026-09-03）`](expert_evidence_chain_hardening_audit_2026-09-03_CN.md)：修复 canonical 包绑定、预测自报冻结、导出完整性、重复截止图及交接状态误报；确认跨图未来暴露风险。追加渲染器禁止覆盖、整批预检、参数边界、Windows 附加数据流/设备文件名防护、候选图日期跨度与盲态误报更正，以及 32 份 CSV/JSON 的有限本地预审；本批 Pro 授权未完成，不增加其覆盖数。独立事前承诺、无泄露新包设计和全仓 Pro 覆盖仍未完成；
 - [`ABC 研究状态与工作边界`](abc_research_status_v0_3_CN.md)：ABC 的快筛/深审边界；
 - [`ABC + H/L 分层历史结果审计`](abc_hl_stratified_outcome_audit_2026-08-24_CN.md)：当前结果口径、样本分层和 `no-new-positive`；
 - [`BOP 真实多日回踩候选审计`](bop_multiday_pullback_candidate_audit_2026-08-24_CN.md)：普通 BOP、同日回测、事件/缺口分支和多日正例缺口；
@@ -20,8 +21,8 @@
 - [`形态边界视觉决策卡`](../docs/morphology_boundary_decision_card_CN.md)：根据盲审暴露的 B 腿与 H/L—BOP—三推—ABC 混淆，固定 reviewer 分流顺序和计数重置条件；
 - [`选股质量：发现召回、视觉分层与盲测基线审计（2026-09-01）`](selection_quality_process_audit_2026-09-01_CN.md)：记录发现流水对账、序数排序、强 A 等待结构、首批 outcome-hidden 基线及严格盲测限制；
 - [`选股质量盲测 Batch 1 首次视觉答案`](selection_quality_blind_batch1_predictions_2026-09-01_CN.md)：冻结 12 张随机发现图的首次读法；专家裁决仍 pending，不计算准确率或胜率；
-- [`形态覆盖候选集 v1 审计（2026-09-01）`](morphology_calibration_candidate_cohort_audit_2026-09-01_CN.md)：冻结 16 张 H/L、三推变形与相似负控候选图；标签来源隔离，专家真值、识别准确率和交易结果仍 pending；
-- [`形态覆盖候选集 v1 独立盲审与裁决审计（2026-09-01）`](morphology_calibration_adjudication_audit_2026-09-01_CN.md)：冻结 32 份模型盲审和 16 份模型裁决，记录字段一致率及 H/L、BOP、三推边界混淆；不是人工专家真值，不产生交易胜率分母；
+- [`形态覆盖候选集 v1 审计（2026-09-01）`](morphology_calibration_candidate_cohort_audit_2026-09-01_CN.md)：保留 16 张 H/L、三推变形与相似负控候选图；更正日历跨度并登记 7 组旧批次来源重用，不能算作新增独立样本，专家真值、识别准确率和交易结果仍 pending；
+- [`形态覆盖候选集 v1 历史模型评审与裁决审计（2026-09-01）`](morphology_calibration_adjudication_audit_2026-09-01_CN.md)：保留 32 份模型评审和 16 份裁决及字段一致率；更正身份隐藏和盲态资格误报，旧 clean/strict_eligible 是历史自述，不是独立准确率或交易胜率分母；
 - [`形态覆盖盲审原始记录`](morphology_calibration_blind_reviews_2026-09-01.json)、[`盲裁决原始记录`](morphology_calibration_blind_adjudication_2026-09-01.json)与[`机器可读统计`](morphology_calibration_metrics_2026-09-01.json)：保存冻结记录、哈希、分母和逐样本候选来源比较；
 - [`形态边界决策卡独立 Holdout 审计（2026-09-01）`](morphology_boundary_holdout_audit_2026-09-01_CN.md)：在 12 张不重叠、标签和结果隐藏的 Daily 图上冻结 24 份独立复核；B 腿与 family 一致性有描述性改善信号，但普通 H/L 共同正例为 0，不能报告准确率；
 - [`形态边界 Holdout 盲审原始记录`](morphology_boundary_holdout_blind_reviews_2026-09-01.json)与[`机器可读统计`](morphology_boundary_holdout_metrics_2026-09-01.json)：保存冻结哈希、字段一致率、旧批次描述性差值和无人工真值边界；

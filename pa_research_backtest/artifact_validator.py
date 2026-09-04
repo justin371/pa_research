@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+from io import BytesIO
 import json
 import math
 from pathlib import Path
@@ -96,6 +97,14 @@ REQUIRED_RESULT_COLUMNS = {
     "pre_entry_provenance_status",
     "pre_entry_provenance_missing_fields",
     "planned_entry_trigger",
+    "entry_price",
+    "exit_price",
+    "structural_stop",
+    "risk_per_unit",
+    "gross_pnl",
+    "net_pnl",
+    "commission_paid",
+    "ambiguous_intrabar",
 }
 
 # Every field emitted by build_summary is derived from the result rows and
@@ -111,11 +120,11 @@ def _sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _canonical_result_set_sha256(path: Path) -> str:
+def _canonical_result_set_sha256(payload: bytes) -> str:
     """Hash the exact emitted CSV after normalizing platform line endings."""
 
-    payload = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
-    return hashlib.sha256(payload).hexdigest()
+    canonical = payload.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(canonical).hexdigest()
 
 
 def _values_equal(left: Any, right: Any) -> bool:
@@ -143,8 +152,8 @@ def _missing_fields(mapping: dict[str, Any], required: set[str]) -> list[str]:
     return sorted(field for field in required if field not in mapping)
 
 
-def _load_json(path: Path) -> dict[str, Any]:
-    value = json.loads(path.read_text(encoding="utf-8"))
+def _load_json(payload: bytes) -> dict[str, Any]:
+    value = json.loads(payload.decode("utf-8"))
     if not isinstance(value, dict):
         raise ValueError("JSON root must be an object")
     return value
@@ -205,9 +214,15 @@ def validate_artifact(artifact_dir: str | Path) -> dict[str, Any]:
         return result
 
     try:
-        summary = _load_json(summary_path)
-        metadata = _load_json(metadata_path)
-        results = pd.read_csv(results_path)
+        # Bind every parse and digest to one byte snapshot per artifact file.
+        # Reopening a path later would permit a concurrent replacement to make
+        # parsed rows and authenticated bytes refer to different versions.
+        summary_bytes = summary_path.read_bytes()
+        metadata_bytes = metadata_path.read_bytes()
+        results_bytes = results_path.read_bytes()
+        summary = _load_json(summary_bytes)
+        metadata = _load_json(metadata_bytes)
+        results = pd.read_csv(BytesIO(results_bytes))
     except (
         OSError,
         ValueError,
@@ -315,7 +330,7 @@ def validate_artifact(artifact_dir: str | Path) -> dict[str, Any]:
     if summary_provenance.get("result_columns") != result_columns:
         issues.append("summary_provenance result_columns do not equal results.csv columns")
 
-    results_hash = _sha256_file(results_path)
+    results_hash = hashlib.sha256(results_bytes).hexdigest()
     if metadata.get("results_file_sha256") != results_hash:
         issues.append("metadata results_file_sha256 does not match results.csv")
     if summary.get("results_file_sha256") != results_hash:
@@ -327,7 +342,7 @@ def validate_artifact(artifact_dir: str | Path) -> dict[str, Any]:
     except (TypeError, ValueError, KeyError) as exc:
         issues.append(f"cannot rebuild summary from results.csv: {exc}")
         roundtrip_summary = None
-    roundtrip_result_set_hash = _canonical_result_set_sha256(results_path)
+    roundtrip_result_set_hash = _canonical_result_set_sha256(results_bytes)
     if metadata.get("result_set_sha256") != roundtrip_result_set_hash:
         issues.append("metadata result_set_sha256 does not match CSV round-trip")
     if summary.get("result_set_sha256") != roundtrip_result_set_hash:
@@ -344,6 +359,10 @@ def validate_artifact(artifact_dir: str | Path) -> dict[str, Any]:
             issues.append(f"summary_provenance does not match summary field {field}")
 
     if roundtrip_summary is not None:
+        if roundtrip_summary["win_rate_guard_exclusion_count"]:
+            issues.append("results claim win-rate eligibility but fail completed-result guards")
+        if roundtrip_summary["win_rate_eligibility_mismatch_count"]:
+            issues.append("results contain contradictory win-rate eligibility flags")
         for field, expected in roundtrip_summary.items():
             if field not in summary or not _values_equal(expected, summary[field]):
                 issues.append(f"CSV round-trip does not match summary field {field}")

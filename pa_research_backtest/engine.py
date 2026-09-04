@@ -9,14 +9,20 @@ the research record, not a label inferred by this program.
 from __future__ import annotations
 
 import argparse
+import ctypes
+import errno
 import hashlib
 import json
 import math
+import os
 import platform
 import re
+import sys
 import warnings
 from dataclasses import asdict, dataclass
+from io import BytesIO
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import Any, Iterable, Mapping
 
 import backtesting
@@ -24,8 +30,10 @@ import numpy as np
 import pandas as pd
 from backtesting import Backtest, Strategy
 
+from pa_source_binding import require_source_snapshot, verify_source_snapshot
 
-ENGINE_VERSION = "0.3.10"
+
+ENGINE_VERSION = "0.3.15"
 SUPPORTED_DIRECTIONS = {"long", "short"}
 SUPPORTED_PATTERNS = {"ABC_CONT", "BOP", "H1_L1", "H2_L2", "H3_L3", "RFB", "MTR", "other"}
 SUPPORTED_LABELS = {"H1", "H2", "L1", "L2", "H3", "L3", "none", "pending"}
@@ -51,6 +59,7 @@ SUPPORTED_META_CONFLUENCE = {"present", "absent", "unknown"}
 SUPPORTED_ORDER_BRANCHES = {"stop_confirmation", "limit_retest", "market_close"}
 SUPPORTED_GAP_POLICIES = {"accept_open", "skip", "flag_only", "not_applicable"}
 TRADE_RESULTS = {"win", "loss", "scratch"}
+COMPLETED_PATH_RESULTS = {"target-reached", "first-obstacle-reached", "invalidated", "time_exit"}
 
 REQUIRED_CONTRACT_COLUMNS = {
     "sample_id",
@@ -315,6 +324,8 @@ def _contract_space_bucket(space_status: str, pre_entry_space_r: float | None) -
 def _contract_eligibility(contract: BacktestContract) -> str:
     """Return the research replay status implied by the frozen H/L gate."""
 
+    if contract.internal_label == "pending":
+        return "pending"
     if contract.internal_label not in H_L_LABELS:
         return "eligible"
     if contract.h_l_ema_slope_gate in {"long_pass", "short_pass"}:
@@ -329,6 +340,8 @@ def _result_contract_eligibility(internal_label: Any, ema_gate: Any) -> str:
 
     label = _as_string(internal_label).upper()
     gate = _as_string(ema_gate).lower()
+    if label == "PENDING":
+        return "pending"
     if label not in H_L_LABELS:
         return "eligible"
     expected_gate = "long_pass" if label in {"H1", "H2"} else "short_pass"
@@ -451,7 +464,16 @@ def _pre_entry_provenance(frame: pd.DataFrame) -> tuple[pd.Series, pd.Series]:
             continue
         contract_record = dict(record, entry_trigger=record.get("planned_entry_trigger"))
         try:
-            validate_contract(BacktestContract.from_row(contract_record))
+            contract = BacktestContract.from_row(contract_record)
+            validate_contract(
+                contract,
+                entry_reference=contract.entry_trigger if contract.order_branch != "market_close" else None,
+            )
+            if record.get("fill_status") == "filled":
+                actual_entry = record.get("entry_price")
+                if isinstance(actual_entry, (bool, np.bool_)):
+                    raise ValueError("entry price must be numeric, not boolean")
+                validate_contract(contract, entry_reference=float(actual_entry))
         except (ContractValidationError, TypeError, ValueError, OverflowError):
             missing_by_row[position].append("invalid_frozen_contract")
 
@@ -483,6 +505,8 @@ def validate_contract(contract: BacktestContract, entry_reference: float | None 
         errors.append(f"primary_pattern must be one of {sorted(SUPPORTED_PATTERNS)}")
     if contract.internal_label not in SUPPORTED_LABELS:
         errors.append(f"internal_label must be one of {sorted(SUPPORTED_LABELS)}")
+    if contract.internal_label == "pending":
+        errors.append("frozen replay contracts cannot use internal_label=pending")
     if contract.order_branch not in SUPPORTED_ORDER_BRANCHES:
         errors.append(f"order_branch must be one of {sorted(SUPPORTED_ORDER_BRANCHES)}")
     if contract.order_branch != "market_close" and contract.entry_trigger is None:
@@ -557,6 +581,8 @@ def validate_contract(contract: BacktestContract, entry_reference: float | None 
             errors.append("H3/L3 contracts must have primary_pattern=H3_L3")
         if contract.h_l_ema_slope_gate != "not_applicable":
             errors.append("H3/L3 contracts require h_l_ema_slope_gate=not_applicable")
+    if contract.primary_pattern == "H3_L3" and contract.internal_label not in THIRD_PUSH_LABELS:
+        errors.append("primary_pattern H3_L3 requires internal_label H3 or L3")
     if contract.primary_pattern == "H1_L1" and contract.internal_label not in {"H1", "L1"}:
         errors.append("primary_pattern H1_L1 requires internal_label H1 or L1")
     if contract.primary_pattern == "H2_L2" and contract.internal_label not in {"H2", "L2"}:
@@ -951,6 +977,35 @@ def _classify_protective_exit(contract: BacktestContract, exit_price: float) -> 
     return "data_end"
 
 
+def _entry_bar_protective_exit(contract: BacktestContract, row: pd.Series) -> str | None:
+    """Prove a single protective hit after entry under continuous OHLC paths.
+
+    Both-level bars remain ambiguous. A limit stop (or stop-entry target)
+    lies beyond the entry in the same crossing direction. The other single
+    level is provable only for an opening fill or a close beyond that level.
+    """
+
+    if contract.order_branch == "market_close":
+        return None
+    long = contract.direction == "long"
+    stop_hit = row["Low"] <= contract.structural_stop if long else row["High"] >= contract.structural_stop
+    target_hit = row["High"] >= contract.target_price if long else row["Low"] <= contract.target_price
+    if bool(stop_hit) == bool(target_hit):
+        return None
+    limit = contract.order_branch == "limit_retest"
+    at_open = (row["Open"] <= contract.entry_trigger if long else row["Open"] >= contract.entry_trigger) if limit else (
+        row["Open"] >= contract.entry_trigger if long else row["Open"] <= contract.entry_trigger
+    )
+    reason = "stop" if stop_hit else "target"
+    close_proves_hit = (
+        (row["Close"] <= contract.structural_stop if long else row["Close"] >= contract.structural_stop)
+        if stop_hit else (row["Close"] >= contract.target_price if long else row["Close"] <= contract.target_price)
+    )
+    if at_open or close_proves_hit or (limit and stop_hit) or (not limit and target_hit):
+        return reason
+    return None
+
+
 def run_contract(
     contract: BacktestContract,
     prices: pd.DataFrame,
@@ -1095,7 +1150,17 @@ def run_contract(
 
     trades = stats["_trades"]
     if trades.empty:
-        result = _base_result(contract, fill_status="no-fill", reason="no-entry-fill")
+        # Pinned backtesting.py emits this warning for a rejected absolute
+        # one-unit order. Do not confuse a buying-power failure with absence
+        # of a market trigger (nor infer rejection from a generic cash warning).
+        cash_rejected = any(
+            "Broker canceled the order due to insufficient margin" in str(item.message)
+            for item in captured_warnings
+        )
+        result = _base_result(
+            contract, fill_status="unproven" if cash_rejected else "no-fill",
+            reason="configuration-error-insufficient-cash" if cash_rejected else "no-entry-fill",
+        )
         result["gap_through"] = bool(opportunity["gap_through"])
         if opportunity["gap_through"]:
             result["gap_adjustment"] = "accepted_open" if contract.gap_policy == "accept_open" else "flag_only"
@@ -1104,8 +1169,18 @@ def run_contract(
     if len(trades) != 1:
         raise RuntimeError(f"{contract.sample_id}: expected one trade, got {len(trades)}")
 
-    trade = trades.iloc[0]
+    trade = trades.iloc[0].copy()
     entry_bar = int(trade["EntryBar"])
+    resolved_entry_exit = _entry_bar_protective_exit(contract, symbol_prices.iloc[entry_bar])
+    if resolved_entry_exit is not None:
+        # Replace only a proven same-bar exit, never a guessed intrabar order.
+        # Downstream dates, fees, path horizon and R all use this same fill.
+        resolved_price = contract.structural_stop if resolved_entry_exit == "stop" else contract.target_price
+        trade["ExitBar"] = entry_bar
+        trade["ExitTime"] = symbol_prices.index[entry_bar]
+        trade["ExitPrice"] = resolved_price
+        trade["Commission"] = commission * (abs(float(trade["EntryPrice"])) + abs(resolved_price))
+        trade["PnL"] = (resolved_price - float(trade["EntryPrice"])) * (1 if contract.direction == "long" else -1) - trade["Commission"]
     exit_bar = int(trade["ExitBar"])
     entry_price = float(trade["EntryPrice"])
     exit_price = float(trade["ExitPrice"])
@@ -1113,7 +1188,7 @@ def run_contract(
     if risk_per_unit <= 0:
         raise ContractValidationError(f"{contract.sample_id}: realized risk is zero")
     strategy_state = stats["_strategy"]
-    time_exit_submitted = bool(getattr(strategy_state, "_time_exit_submitted", False))
+    time_exit_submitted = resolved_entry_exit is None and bool(getattr(strategy_state, "_time_exit_submitted", False))
     time_exit_request_bar = getattr(strategy_state, "_time_exit_request_bar", None)
     expected_time_exit_bar = None
     if time_exit_submitted and time_exit_request_bar is not None:
@@ -1181,8 +1256,8 @@ def run_contract(
     )
     # backtesting.py may defer a contingent order on its parent stop/limit
     # candle. Its later synthetic fill is not evidence of the original path.
-    # Even a single touched level must remain pending when not resolved on
-    # the entry bar; do not present the later fill as a completed trade.
+    # After the topology resolver, a remaining single touched level can still
+    # predate entry. Do not present a later backend fill as its resolution.
     entry_fill_unresolved = (
         contract.order_branch != "market_close"
         and (entry_stop_hit or entry_target_hit)
@@ -1212,6 +1287,9 @@ def run_contract(
             if contract.order_branch == "stop_confirmation" or entry_at_open or close_beyond_obstacle:
                 obstacle_hit = True
             elif not obstacle_hit:
+                entry_obstacle_unknown = True
+            if resolved_entry_exit == "stop":
+                # The favorable extreme may occur after the proven stop.
                 entry_obstacle_unknown = True
     if ambiguous_date is not None:
         exit_reason = "ambiguous_intrabar_stop_target"
@@ -1256,7 +1334,7 @@ def run_contract(
             evidence_status = "excluded_incomplete_horizon"
         else:
             path_result = "target-reached" if exit_reason == "target" else (
-                "first-obstacle-reached" if obstacle_hit else (
+                "first-obstacle-reached" if obstacle_hit and not entry_obstacle_unknown else (
                     "invalidated" if exit_reason == "stop" else exit_reason
                 )
             )
@@ -1528,33 +1606,21 @@ def _prepare_result_frame(frame: pd.DataFrame) -> pd.DataFrame:
     if "trade_result" not in frame:
         frame["trade_result"] = ""
     frame["trade_result"] = frame["trade_result"].fillna("").astype(str).str.strip().str.lower()
-    result_labels = frame["trade_result"].isin(TRADE_RESULTS)
-
     if "win_rate_eligible" not in frame:
-        frame["win_rate_eligible"] = np.where(result_labels, "yes", "no")
+        frame["win_rate_eligible"] = "no"
     frame["win_rate_eligible"] = (
         frame["win_rate_eligible"].fillna("").astype(str).str.strip().str.lower()
     )
-    eligible_flags = frame["win_rate_eligible"].eq("yes")
-
     if "evidence_status" not in frame:
-        frame["evidence_status"] = np.where(
-            result_labels & eligible_flags,
-            "comparable",
-            "excluded",
-        )
+        frame["evidence_status"] = "unknown"
     frame["evidence_status"] = frame["evidence_status"].fillna("").astype(str).str.strip().str.lower()
     if "fill_status" not in frame:
-        frame["fill_status"] = np.where(
-            result_labels & eligible_flags,
-            "filled",
-            "unknown",
-        )
+        frame["fill_status"] = "unknown"
     frame["fill_status"] = frame["fill_status"].fillna("").astype(str).str.strip().str.lower()
     if "ambiguous_intrabar" not in frame:
-        frame["ambiguous_intrabar"] = "no"
+        frame["ambiguous_intrabar"] = "unknown"
     frame["ambiguous_intrabar"] = (
-        frame["ambiguous_intrabar"].fillna("no").astype(str).str.strip().str.lower()
+        frame["ambiguous_intrabar"].fillna("unknown").astype(str).str.strip().str.lower()
     )
     if "path_result" not in frame:
         frame["path_result"] = ""
@@ -1599,6 +1665,32 @@ def _prepare_result_frame(frame: pd.DataFrame) -> pd.DataFrame:
     return frame
 
 
+def _result_economics_valid(frame: pd.DataFrame) -> pd.Series:
+    """Check one-unit filled-result accounting independently of claimed R."""
+
+    valid = pd.Series(True, index=frame.index, dtype="bool")
+    values: dict[str, pd.Series] = {}
+    for field in ("entry_price", "exit_price", "structural_stop", "risk_per_unit",
+                  "gross_pnl", "net_pnl", "commission_paid", "realized_R"):
+        raw = frame.get(field, pd.Series(None, index=frame.index, dtype="object"))
+        valid &= raw.map(_is_finite_numeric)
+        values[field] = pd.to_numeric(raw, errors="coerce")
+    entry, exit_price = values["entry_price"], values["exit_price"]
+    risk, net = values["risk_per_unit"], values["net_pnl"]
+    expected_risk = (entry - values["structural_stop"]).abs()
+    sign = np.where(_result_text_series(frame, "direction").str.lower().eq("long"), 1, -1)
+    expected_gross = (exit_price - entry) * sign
+    valid &= entry.gt(0) & exit_price.gt(0) & risk.gt(0) & values["commission_paid"].ge(0)
+    for actual, expected in (
+        (risk, expected_risk),
+        (values["gross_pnl"], expected_gross),
+        (net, expected_gross - values["commission_paid"]),
+        (values["realized_R"], net / risk.where(risk.gt(0))),
+    ):
+        valid &= np.isclose(actual, expected, rtol=1e-9, atol=1e-12, equal_nan=False)
+    return valid
+
+
 def _completed_trade_mask(frame: pd.DataFrame) -> pd.Series:
     """Return the strict, auditable win-rate denominator mask."""
 
@@ -1636,10 +1728,8 @@ def _completed_trade_mask(frame: pd.DataFrame) -> pd.Series:
         & frame["win_rate_eligible"].eq("yes")
         & frame["evidence_status"].eq("comparable")
         & frame["fill_status"].eq("filled")
-        & frame["ambiguous_intrabar"].ne("yes")
-        & frame["path_result"].ne("")
-        & frame["path_result"].ne("ambiguous")
-        & frame["path_result"].ne("incomplete-horizon")
+        & frame["ambiguous_intrabar"].eq("no")
+        & frame["path_result"].isin(COMPLETED_PATH_RESULTS)
         & ~duplicate_rows
         & (~contract_eligibility_guard | contract_eligibility.eq("eligible"))
         & ~eligibility_mismatch
@@ -1647,6 +1737,7 @@ def _completed_trade_mask(frame: pd.DataFrame) -> pd.Series:
         & realized_r.notna()
         & np.isfinite(realized_r)
         & result_sign_consistent
+        & _result_economics_valid(frame)
     )
 
 
@@ -1675,6 +1766,8 @@ def _outcome_bucket_series(frame: pd.DataFrame, completed: pd.Series) -> pd.Seri
     buckets.loc[no_fill] = "no_fill"
     unproven = (~completed) & frame["fill_status"].eq("unproven")
     buckets.loc[unproven] = "unproven"
+    configuration_error = (~completed) & frame["path_result"].eq("configuration-error-insufficient-cash")
+    buckets.loc[configuration_error] = "configuration_error"
     observation_only = (~completed) & (
         frame["fill_status"].eq("not-traded") | frame["evidence_status"].eq("observation_only")
     )
@@ -2108,6 +2201,57 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _check_output_paths(inputs: list[Path], outputs: list[Path]) -> None:
+    """Reject path, symlink and hard-link aliases before touching outputs."""
+
+    for index, output in enumerate(outputs):
+        for other in inputs + outputs[:index]:
+            if output.resolve() == other.resolve() or (
+                output.exists() and other.exists() and output.samefile(other)
+            ):
+                raise ValueError(f"input/output paths overlap: {output} and {other}")
+
+
+def _publish_directory_no_replace(staging_root: Path, output_dir: Path) -> None:
+    """Atomically publish a complete artifact directory without replacement."""
+
+    source = str(staging_root)
+    destination = str(output_dir)
+    if os.name == "nt":
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        move_file = kernel32.MoveFileW
+        move_file.argtypes = [ctypes.c_wchar_p, ctypes.c_wchar_p]
+        move_file.restype = ctypes.c_int
+        if not move_file(source, destination):
+            error = ctypes.get_last_error()
+            if error in {80, 183}:
+                raise FileExistsError(error, ctypes.FormatError(error), destination)
+            raise OSError(error, ctypes.FormatError(error), destination)
+        return
+    libc = ctypes.CDLL(None, use_errno=True)
+    if sys.platform.startswith("linux"):
+        rename_no_replace = getattr(libc, "renameat2", None)
+        if rename_no_replace is None:
+            raise OSError(errno.ENOTSUP, "atomic no-replace directory publication is unavailable")
+        rename_no_replace.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_uint]
+        rename_no_replace.restype = ctypes.c_int
+        result = rename_no_replace(-100, os.fsencode(source), -100, os.fsencode(destination), 1)
+    elif sys.platform == "darwin":
+        rename_no_replace = getattr(libc, "renamex_np", None)
+        if rename_no_replace is None:
+            raise OSError(errno.ENOTSUP, "atomic no-replace directory publication is unavailable")
+        rename_no_replace.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_uint]
+        rename_no_replace.restype = ctypes.c_int
+        result = rename_no_replace(os.fsencode(source), os.fsencode(destination), 0x00000004)
+    else:
+        raise OSError(errno.ENOTSUP, "atomic no-replace directory publication is unavailable")
+    if result != 0:
+        error = ctypes.get_errno()
+        if error in {errno.EEXIST, errno.ENOTEMPTY}:
+            raise FileExistsError(error, os.strerror(error), destination)
+        raise OSError(error, os.strerror(error), destination)
+
+
 def main(argv: list[str] | None = None) -> int:
     args = _build_parser().parse_args(argv)
     if (
@@ -2119,8 +2263,30 @@ def main(argv: list[str] | None = None) -> int:
         or args.cash <= 0
     ):
         raise SystemExit("commission/spread must be finite and non-negative; cash must be finite and positive")
-    prices = load_prices(args.prices, default_symbol=args.symbol)
-    contracts = load_contracts(args.contracts)
+    price_path = Path(args.prices).resolve()
+    contract_path = Path(args.contracts).resolve()
+    engine_source_path = Path(__file__).resolve(strict=True)
+    engine_source_snapshot = require_source_snapshot(
+        sys.modules.get(__name__),
+        globals(),
+        engine_source_path,
+        "engine source",
+    )
+    verify_source_snapshot(engine_source_snapshot, "engine source")
+    engine_source_sha256 = engine_source_snapshot.sha256
+    output_dir = Path(args.output_dir).resolve()
+    outputs = [output_dir / name for name in ("results.csv", "summary.json", "run_metadata.json")]
+    _check_output_paths([price_path, contract_path, engine_source_path], outputs)
+    if output_dir.exists() or output_dir.is_symlink():
+        raise FileExistsError(f"refusing to reuse output directory: {output_dir}; use a new output directory")
+    # Hash exactly the immutable bytes consumed by the loaders, before any
+    # output write. A later input edit must not acquire the run's provenance.
+    price_bytes = price_path.read_bytes()
+    contract_bytes = contract_path.read_bytes()
+    price_hash = hashlib.sha256(price_bytes).hexdigest()
+    contract_hash = hashlib.sha256(contract_bytes).hexdigest()
+    prices = load_prices(BytesIO(price_bytes), default_symbol=args.symbol)
+    contracts = load_contracts(BytesIO(contract_bytes))
     results = run_contracts(
         contracts,
         prices,
@@ -2129,66 +2295,64 @@ def main(argv: list[str] | None = None) -> int:
         cash=args.cash,
     )
     summary = build_summary(results)
-    price_path = Path(args.prices).resolve()
-    contract_path = Path(args.contracts).resolve()
-    engine_source_path = Path(__file__).resolve()
-    output_dir = Path(args.output_dir).resolve()
-    output_dir.mkdir(parents=True, exist_ok=True)
+    verify_source_snapshot(engine_source_snapshot, "engine source")
+    _check_output_paths([price_path, contract_path, engine_source_path], outputs)
     results_path = output_dir / "results.csv"
     result_set_sha256 = _result_set_sha256(results)
-    pd.DataFrame(results).to_csv(results_path, index=False)
-    results_file_sha256 = _sha256_file(results_path)
-    engine_source_sha256 = _sha256_file(engine_source_path)
-    summary["result_set_sha256"] = result_set_sha256
-    summary["results_file_sha256"] = results_file_sha256
-    summary["engine_source_sha256"] = engine_source_sha256
-    summary_provenance = {
-        "result_columns": list(pd.DataFrame(results).columns),
-        "pre_entry_provenance_complete_count": summary["pre_entry_provenance_complete_count"],
-        "pre_entry_provenance_incomplete_count": summary["pre_entry_provenance_incomplete_count"],
-        "pre_entry_provenance_status_counts": dict(summary["pre_entry_provenance_status_counts"]),
-        "contract_eligibility_mismatch_count": summary["contract_eligibility_mismatch_count"],
-        "event_bucket_mismatch_count": summary["event_bucket_mismatch_count"],
-        "contract_space_bucket_mismatch_count": summary["contract_space_bucket_mismatch_count"],
-        "win_rate_eligibility_mismatch_count": summary["win_rate_eligibility_mismatch_count"],
-        "win_rate_guard_exclusion_count": summary["win_rate_guard_exclusion_count"],
-        "completed_trade_count": summary["completed_trade_count"],
-        "outcome_bucket_counts": dict(summary["outcome_bucket_counts"]),
-    }
-    summary["run_metadata"] = {
-        "engine_version": ENGINE_VERSION,
-        "backtesting_version": getattr(backtesting, "__version__", "unknown"),
-        "python_version": platform.python_version(),
-        "pandas_version": pd.__version__,
-        "numpy_version": np.__version__,
-        "engine_source": str(engine_source_path),
-        "engine_source_sha256": engine_source_sha256,
-        "data_source": args.data_source,
-        "data_status": args.data_status,
-        "as_of_time": args.as_of_time,
-        "price_file": str(price_path),
-        "price_file_sha256": _sha256_file(price_path),
-        "contract_file": str(contract_path),
-        "contract_file_sha256": _sha256_file(contract_path),
-        "result_set_sha256": result_set_sha256,
-        "results_file": str(results_path),
-        "results_file_sha256": results_file_sha256,
-        "result_row_count": len(results),
-        "summary_provenance": summary_provenance,
-        "commission": args.commission,
-        "spread": args.spread,
-        "cash": args.cash,
-        "scope": "PA Research only; no scanner; no Execution Agent; no Codex Trading changes",
-    }
-    (output_dir / "summary.json").write_text(
-        json.dumps(summary, ensure_ascii=False, indent=2, default=_json_default) + "\n",
-        encoding="utf-8",
-    )
-    (output_dir / "run_metadata.json").write_text(
-        json.dumps(summary["run_metadata"], ensure_ascii=False, indent=2, default=_json_default) + "\n",
-        encoding="utf-8",
-    )
-    print(json.dumps(summary, ensure_ascii=False, indent=2, default=_json_default))
+    output_dir.parent.mkdir(parents=True, exist_ok=True)
+    with TemporaryDirectory(prefix=".pa-backtest-artifact-", dir=output_dir.parent) as staging_directory:
+        staging_root = Path(staging_directory)
+        staged_results = staging_root / "results.csv"
+        pd.DataFrame(results).to_csv(staged_results, index=False)
+        results_file_sha256 = _sha256_file(staged_results)
+        summary["result_set_sha256"] = result_set_sha256
+        summary["results_file_sha256"] = results_file_sha256
+        summary["engine_source_sha256"] = engine_source_sha256
+        summary_provenance = {
+            "result_columns": list(pd.DataFrame(results).columns),
+            "pre_entry_provenance_complete_count": summary["pre_entry_provenance_complete_count"],
+            "pre_entry_provenance_incomplete_count": summary["pre_entry_provenance_incomplete_count"],
+            "pre_entry_provenance_status_counts": dict(summary["pre_entry_provenance_status_counts"]),
+            "contract_eligibility_mismatch_count": summary["contract_eligibility_mismatch_count"],
+            "event_bucket_mismatch_count": summary["event_bucket_mismatch_count"],
+            "contract_space_bucket_mismatch_count": summary["contract_space_bucket_mismatch_count"],
+            "win_rate_eligibility_mismatch_count": summary["win_rate_eligibility_mismatch_count"],
+            "win_rate_guard_exclusion_count": summary["win_rate_guard_exclusion_count"],
+            "completed_trade_count": summary["completed_trade_count"],
+            "outcome_bucket_counts": dict(summary["outcome_bucket_counts"]),
+        }
+        summary["run_metadata"] = {
+            "engine_version": ENGINE_VERSION,
+            "backtesting_version": getattr(backtesting, "__version__", "unknown"),
+            "python_version": platform.python_version(),
+            "pandas_version": pd.__version__,
+            "numpy_version": np.__version__,
+            "engine_source": str(engine_source_path),
+            "engine_source_sha256": engine_source_sha256,
+            "data_source": args.data_source,
+            "data_status": args.data_status,
+            "as_of_time": args.as_of_time,
+            "price_file": str(price_path),
+            "price_file_sha256": price_hash,
+            "contract_file": str(contract_path),
+            "contract_file_sha256": contract_hash,
+            "result_set_sha256": result_set_sha256,
+            "results_file": str(results_path),
+            "results_file_sha256": results_file_sha256,
+            "result_row_count": len(results),
+            "summary_provenance": summary_provenance,
+            "commission": args.commission,
+            "spread": args.spread,
+            "cash": args.cash,
+            "scope": "PA Research only; no scanner; no Execution Agent; no Codex Trading changes",
+        }
+        summary_text = json.dumps(summary, ensure_ascii=False, indent=2, default=_json_default)
+        metadata_text = json.dumps(summary["run_metadata"], ensure_ascii=False, indent=2, default=_json_default)
+        (staging_root / "summary.json").write_text(summary_text + "\n", encoding="utf-8")
+        (staging_root / "run_metadata.json").write_text(metadata_text + "\n", encoding="utf-8")
+        verify_source_snapshot(engine_source_snapshot, "engine source")
+        _publish_directory_no_replace(staging_root, output_dir)
+    print(summary_text)
     return 0
 
 

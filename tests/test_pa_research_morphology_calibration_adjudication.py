@@ -82,7 +82,8 @@ class MorphologyCalibrationAdjudicationTests(unittest.TestCase):
             EXPECTED_REVIEWS_SHA256,
         )
 
-    def test_review_and_adjudication_cardinality_and_eligibility(self):
+    def test_review_and_adjudication_cardinality_and_recorded_eligibility(self):
+        # Frozen labels are historical declarations, not verified blindness.
         grouped = defaultdict(list)
         for review in self.reviews:
             grouped[review["sample_id"]].append(review)
@@ -244,6 +245,19 @@ class MorphologyCalibrationAdjudicationTests(unittest.TestCase):
                 "conclusion": "no-new-positive",
             },
         )
+
+    def test_audit_corrects_identity_and_independence_overclaims(self):
+        audit = AUDIT_PATH.read_text(encoding="utf-8")
+        self.assertNotIn("不知道股票代码", audit)
+        self.assertNotIn("16 张两年 Daily 截止图", audit)
+        for caveat in (
+            "股票代码和截止日期可见",
+            "7/16",
+            "不能证明未接触旧结论",
+            "不能作为当前无污染准确率分母",
+            "candidate_family=THREE_PUSH_like",
+        ):
+            self.assertIn(caveat, audit)
 
 
 if __name__ == "__main__":

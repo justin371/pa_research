@@ -484,15 +484,18 @@ class FullReviewInputRegressionTests(unittest.TestCase):
                     {
                         "model_prediction_frozen_before_expert_reveal": True,
                         "model_prediction_label": model_label,
-                        "eligible": True,
-                        "excluded_reason": None,
+                        "eligible": False,
+                        "excluded_reason": "model_prediction_not_frozen_before_reveal",
                     }
                 )
             frozen_predictions["summary"].update(
                 {
                     "model_prediction_coverage": 15,
-                    "accuracy_denominator": 15,
-                    "excluded_reasons": {"boundary_or_unclear": 1},
+                    "accuracy_denominator": 0,
+                    "excluded_reasons": {
+                        "boundary_or_unclear": 1,
+                        "model_prediction_not_frozen_before_reveal": 15,
+                    },
                 }
             )
             frozen_predictions_path = root / "valid-zero-model-missing-reason.json"
@@ -501,6 +504,7 @@ class FullReviewInputRegressionTests(unittest.TestCase):
                 manifest_copy, expert_a_path, expert_b_path, frozen_predictions_path
             )
             self.assertEqual(frozen_predictions_report["status"], "valid")
+            self.assertEqual(frozen_predictions_report["recomputed_summary"]["accuracy_denominator"], 0)
 
             bad_zero_reason = deepcopy(frozen_predictions)
             bad_zero_reason["summary"]["excluded_reasons"]["model_prediction_missing"] = False
@@ -555,7 +559,8 @@ class FullReviewInputRegressionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             output_dir = Path(temp_dir) / "expert-packet"
             report = EXPORTER.export_packet(ROOT, output_dir)
-            self.assertEqual(report["status"], "ready_for_isolated_human_handoff")
+            self.assertEqual(report["status"], "integrity_verified_handoff_blocked")
+            self.assertFalse(report["human_handoff_ready"])
             exported_files = sorted(
                 path.relative_to(output_dir).as_posix()
                 for path in output_dir.rglob("*")

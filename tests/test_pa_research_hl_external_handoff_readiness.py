@@ -8,6 +8,8 @@ import struct
 import tempfile
 import unittest
 
+from pa_source_binding import load_source_module
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 PACKET_ROOT = REPO_ROOT / "research" / "calibration" / "external_human_hl_v1"
@@ -21,11 +23,7 @@ CHART_HASH_PATH = PACKET_ROOT / "neutral_chart_sha256.json"
 RENDERER_PATH = REPO_ROOT / "scripts" / "render_pa_blind_daily_batch.py"
 EXPORTER_PATH = REPO_ROOT / "scripts" / "export_pa_hl_expert_packet.py"
 
-SPEC = importlib.util.spec_from_file_location("hl_handoff_renderer", RENDERER_PATH)
-RENDERER = importlib.util.module_from_spec(SPEC)
-assert SPEC.loader is not None
-sys.modules[SPEC.name] = RENDERER
-SPEC.loader.exec_module(RENDERER)
+RENDERER = load_source_module(RENDERER_PATH, "hl_handoff_source_bound_renderer", "renderer source")
 
 EXPORT_SPEC = importlib.util.spec_from_file_location("hl_handoff_exporter", EXPORTER_PATH)
 EXPORTER = importlib.util.module_from_spec(EXPORT_SPEC)
@@ -117,9 +115,13 @@ class HlExternalHandoffReadinessTests(unittest.TestCase):
     def test_collection_ready_remaining_tooling_and_human_gate_are_not_conflated(self):
         combined = read(CHECKLIST_PATH) + read(AUDIT_PATH)
         for token in (
+            "collection_handoff_readiness: blocked_for_accuracy_study",
+            "independent_agent_work_remaining_before_requesting_humans: independent_pre_reveal_commitment",
+        ):
+            self.assertIn(token, read(CHECKLIST_PATH))
+        for token in (
             "internal_packet_and_contract_work: complete",
             "collection_handoff_readiness: ready",
-            "independent_agent_work_remaining_before_requesting_humans: none",
             "external_human_expert_A: not_started",
             "external_human_expert_B: not_started",
             "external_human_execution=not_started",

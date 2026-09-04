@@ -1,0 +1,46 @@
+PA Research exhaustive whole-repository review: final Sol Pro acceptance packet, 2026-09-04.
+
+Scope and authority
+- Repository: justin371/PA_research, local workspace PA_research, base main commit 7dbbccc00be3838654e7fd77511d7bedb3b00941.
+- Only PA Research is in scope. Codex Trading, scanners, automatic pattern detection, Futu/account/order access, Execution Agent and global Codex configuration are prohibited and unchanged.
+- This is a read-only final review. Do not edit files or create labels, candidates, trades, statistics or execution logic.
+
+Review completed locally
+- Exhaustive inventory: 622 files total: 338 Markdown, 84 Python, 161 PNG, 18 CSV, 17 JSON, 2 TXT, 1 PowerShell and 1 gitignore.
+- Every Python file parsed as AST; every JSON and CSV parsed; CSV widths were consistent; every text file decoded as strict UTF-8; all 161 PNGs decoded and were visually inspected; no whole-file SHA-256 duplicate groups were found.
+- The 161-chart visual inspection checked candlesticks, EMA20/50/200 where present, volume, chart readability, left-side context and important highs/lows. Historical frozen MC2/BQ1/EH1 images retain known title/date-axis or panel overlap in some old producer outputs. The frozen images were not rewritten. Sixteen MC2 charts were regenerated to a temporary directory with the current renderer and the layout defect was absent. The temporary output is not part of this release.
+- Current validation: 530/530 unit tests PASS in 255.171 seconds; documentation validator PASS for 338 Markdown files and 2315 links; machine inventory PASS; git diff --check PASS; both JSON Schema files pass their metaschema checks.
+- The current working diff contains 42 modified tracked files and 8 untracked new files. This profile releases 49 safe text/data paths; `scripts/validate_pa_research_docs.ps1` is excluded because the connector's fixed extension policy does not allow PowerShell files. Codex reviewed and executed that one excluded validator locally. No PNG or CSV bytes are modified.
+
+Main confirmed fixes in the released diff
+- Replay engine/artifact validation: correct entry-day topology, gap and cash-admission semantics, completed-trade denominator/economics checks, immutable result snapshots, atomic no-replace artifact publication, and rejection of aliases or partial publication.
+- Blind daily renderer: immutable price snapshots, full pre-cutoff EMA warmup, stricter date/OHLCV/source/output validation, Windows ADS/device/UNC/nonportable-path rejection, neutral blind IDs, and batch atomic no-replace publication. Existing frozen PNGs remain historical evidence and were not regenerated.
+- External expert evidence chain: exporter rejects descendant destinations and publishes atomically; annotation validation, pair comparison and adjudication consume one immutable snapshot per input and do not reread switched files; new regression tests cover TOCTOU, malformed input and publication races.
+- Documentation and indexes register these boundaries without promoting historical observations into validated positives or trade evidence.
+
+Sol Pro rejection history and current remediation
+- The first current-snapshot review rejected P1 denominator contamination and an initial P2 source-provenance defect. Engine 0.3.13 closed P1 and detected source changes after its entry-point snapshot.
+- A second new-connector 43/43 EOF review first matched context SHA 48abfd4347829daa3ee60bf6e46a681ca87929bdfa91e8c57bec08dce521306e, engine SHA 19e5726875d748689ee58f3fa9b3802ca67c13d9124901a64e165703d94b428f and renderer SHA 6c1f3e331c5f0e7a9837c4d6a8a8ef438ce2180ee6a91d806dc2ed887dcd5742. It confirmed P1 PASS but rejected a narrower remaining P2: Python could load/compile A before main(), the path could become B before the entry-point snapshot, and stat/read_bytes/stat did not bind bytes and identity to one open handle. Both REJECT verdicts are historical and are not acceptance for these new bytes.
+- A third new-connector review matched the 0.3.14 context, engine, renderer and source-binding hashes and read all 49/49 approved paths to EOF. It reconfirmed P1 PASS but rejected two P2 defects: the token-bearing SourceSnapshot could be transplanted into an ordinary import module, and the Batch 1 reproduction README targeted its already-existing frozen asset directory. All three historical REJECT verdicts apply only to older bytes and are not acceptance for this packet.
+- Engine 0.3.15 keeps the independent source-bound launcher and same-descriptor fstat/read/fstat snapshot, but no longer injects a copyable publication credential. `load_source_module()` registers the snapshot in a private registry bound to the exact module object and globals identity it created. Engine and source-bound renderer must retrieve that exact binding; a conventional import cannot publish even if a public reader snapshot or another bound module snapshot is transplanted. Both publication paths still reverify the original bytes/identity after computation and immediately before atomic publication.
+- The Batch 1 reproduction README now uses a new `.codex/artifacts` output directory and explicitly states that it reproduces historical windows without overwriting frozen images or promising byte-identical PNG output.
+- Current provenance SHA-256 values: pa_source_binding.py = 3c434c2fc956e15a2542bac760955add7d1cf04486e7f5113410a19f0be86ae1; pa_research_backtest/engine.py = ff315865bfa7c81af39a8e4bae05e95e759118053e7547f34eb8ea01432c159d; scripts/pa_research_backtest.py = ee98d7c2ae063886940b99d53f326952d896ee95ebfd45a939609edfdc67677a; scripts/render_pa_blind_daily_batch.py = c3d55c280b29e4359a3dc2bd54dd7f5dbb24b2897aabe1e5b946da919fe12255; scripts/render_pa_blind_daily_batch_bound.py = ab3a8d220c2f9c2fab919a600dbf85716c70fbcce0df4d134eb60297d10c262b. The source-bound manifest records the current renderer value.
+- Regressions now prove: pending/untyped H3_L3 cannot enter completed_trade_count; source bytes and identity use one descriptor; conventional engine and renderer imports cannot gain publication rights by transplanting a public B snapshot after A was loaded; source-bound engine/renderer loaded from A reject publication after the path becomes B; source replacement during engine work or renderer encoding publishes nothing; the Batch 1 reproduction command does not target frozen assets.
+
+Preserved conclusions
+- Canonical conclusion remains no-new-positive.
+- Accuracy, validated win rate and reward/risk remain not-computable; completed_trade_denominator remains 0.
+- Blank expert annotations remain blank. Historical images, source CSVs and frozen contracts were not rewritten.
+
+Final Sol Pro task (waived by the user before commit)
+The user explicitly waived this final invocation after the packet was prepared and requested immediate commit/push. No final Sol Pro ACCEPT is claimed for the 0.3.15 bytes.
+1. Verify workspace_info is PA_research, workspaceId 14c931f281ea and read-only.
+2. Read this file to EOF, then inspect every one of the 49 released source, script, test, schema/data and documentation paths. Record coverage by path group and identify any file that could not be read.
+3. Independently look for current-byte correctness defects, unsafe partial publication, TOCTOU, path/NTFS issues, replay accounting errors, blind-label leakage, source/output aliasing, schema/validator drift, broken authority/index boundaries, or unsupported statistical claims.
+4. Treat the local 530-test, 338-document/2315-link and 161-image results above as execution/visual evidence supplied by Codex; raw execution output and unreleased repository files are unavailable. Do not claim to have rerun commands.
+5. Re-test P1 and all P2 counterexamples against current bytes. In particular, verify the binding digest comes from the exact bytes passed to compile/exec, all source snapshot identity and bytes come from one descriptor, a public or transplanted SourceSnapshot cannot give an ordinary import publication rights, A-loaded/B-on-path cannot publish, and the Batch 1 reproduction command obeys the new-directory contract. Do not treat this description as proof.
+6. Return concise Chinese: coverage, explicit P1/P2 retest result, prioritized confirmed findings with exact paths/lines or functions, known limitations, and a final verdict of ACCEPT or REJECT for commit/push. ACCEPT only if no actionable defect remains in the released diff and the stated PA-only/no-new-positive/statistics boundaries are preserved.
+validated win-rate: not-computable
+completed_trade_denominator: 0
+human_handoff_ready: false
+accuracy_study_ready: false

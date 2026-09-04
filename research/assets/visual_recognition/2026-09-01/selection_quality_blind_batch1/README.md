@@ -68,10 +68,10 @@ handoff_status: not_ready
 重现命令：
 
 ```powershell
-py -3 .\scripts\render_pa_blind_daily_batch.py `
+py -3 .\scripts\render_pa_blind_daily_batch_bound.py `
   --manifest .\research\assets\visual_recognition\2026-09-01\selection_quality_blind_batch1\manifest.json `
   --repo-root . `
-  --output-dir .\research\assets\visual_recognition\2026-09-01\selection_quality_blind_batch1
+  --output-dir .\.codex\artifacts\selection-quality-blind-batch1-repro-20260904
 ```
 
-该渲染器只复现图像，不选择股票、不识别 pattern、不计算候选分数，也不连接 Execution Agent。
+输出目录必须尚不存在，且不得指向冻结资产目录。该命令只重现历史窗口，不覆盖冻结图，也不承诺新旧 PNG 字节相同。渲染器不选择股票、不识别 pattern、不计算候选分数，也不连接 Execution Agent。

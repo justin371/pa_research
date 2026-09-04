@@ -328,7 +328,7 @@ class HlPairAdjudicationValidatorTests(unittest.TestCase):
         self.assertEqual(report["status"], "invalid")
         self.assertTrue(any("distinct from both source experts" in error for error in report["errors"]))
 
-    def test_frozen_model_prediction_can_enter_recomputed_accuracy_denominator(self):
+    def test_self_attested_frozen_prediction_cannot_enter_accuracy_denominator(self):
         def mutate(record):
             eligibility = record["samples"][0]["accuracy_eligibility"]
             eligibility["model_prediction_frozen_before_expert_reveal"] = True
@@ -340,8 +340,28 @@ class HlPairAdjudicationValidatorTests(unittest.TestCase):
             record["summary"]["excluded_reasons"] = {"model_prediction_missing": 15}
 
         report = self.validate_document(mutate)
+        self.assertEqual(report["status"], "invalid", report["errors"])
+        self.assertEqual(report["recomputed_summary"]["accuracy_denominator"], 0)
+        self.assertEqual(report["recomputed_summary"]["excluded_reasons"], {
+            "model_prediction_missing": 15,
+            "model_prediction_not_frozen_before_reveal": 1,
+        })
+
+    def test_unverified_prediction_can_be_retained_as_excluded(self):
+        def mutate(record):
+            eligibility = record["samples"][0]["accuracy_eligibility"]
+            eligibility["model_prediction_frozen_before_expert_reveal"] = True
+            eligibility["model_prediction_label"] = "not_ordinary_HL"
+            eligibility["excluded_reason"] = "model_prediction_not_frozen_before_reveal"
+            record["summary"]["model_prediction_coverage"] = 1
+            record["summary"]["excluded_reasons"] = {
+                "model_prediction_missing": 15,
+                "model_prediction_not_frozen_before_reveal": 1,
+            }
+
+        report = self.validate_document(mutate)
         self.assertEqual(report["status"], "valid", report["errors"])
-        self.assertEqual(report["recomputed_summary"]["accuracy_denominator"], 1)
+        self.assertEqual(report["recomputed_summary"]["accuracy_denominator"], 0)
 
     def test_summary_tampering_is_rejected(self):
         def mutate(record):

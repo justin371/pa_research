@@ -38,7 +38,7 @@ conclusion: no-new-positive
 
 ## 三、安全交接边界
 
-[协调人安全交接清单](calibration/external_human_hl_v1/coordinator_handoff_checklist_CN.md)规定只导出 21 个专家可见文件：5 个合同文件和 manifest 指向的 16 张 PNG。[安全导出器](../scripts/export_pa_hl_expert_packet.py)会先验证 manifest/图哈希，并拒绝非空输出目录；它不复制内部 hash inventory、清单、审计、来源资料或 annotation。不能把整个 repo、Git 历史、`.codex/`、来源 manifests、旧盲审、未来或结果文件交给专家。
+[协调人安全交接清单](calibration/external_human_hl_v1/coordinator_handoff_checklist_CN.md)规定只导出 21 个专家可见文件：5 个合同文件和 manifest 指向的 16 张 PNG。[安全导出器](../scripts/export_pa_hl_expert_packet.py)会先验证 manifest/图哈希，只接受尚不存在且不位于冻结源包内部的目标；完整暂存并复核后才原子 no-replace 发布。它不复制内部 hash inventory、清单、审计、来源资料或 annotation，也不会在失败时留下半包。不能把整个 repo、Git 历史、`.codex/`、来源 manifests、旧盲审、未来或结果文件交给专家。
 
 这是必要边界：原始来源图会显示 symbol、cutoff date 和 MC2/BH1 来源 ID，不能直接交给专家。本轮已用同一 OHLC/EMA/volume 窗口重新渲染身份与日历日期隐藏副本，并用 `neutral_chart_sha256.json` 固定 16 张图的 SHA-256。readiness 因此表示“可按 allowlist 交接这些中性副本”，不是“整个 checkout 可以分享”。
 
