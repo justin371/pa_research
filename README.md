@@ -2,9 +2,11 @@
 
 PA Research 是一个只读、视觉优先的 Price Action 研究仓库。它记录背景、支撑阻力、EMA20/50/200、ABC/H1-H2/L1-L2、BOP、三推及边界样本，不提供生产交易授权。
 
-当前日线选股合同：[`PA Research 日线选股规则 v0.1`](docs/pa_research_daily_selection_rules_v0_1_CN.md)。
+当前默认入口：[AI 视觉研究](docs/ai_visual_research_CN.md)。先由 AI 看图形成假设，再按需要读取案例和准备回放；[仓库指引](AGENTS.md)定义按需阅读范围。
 
-统一输出字段：[`PA Research 统一输出合同 v0.1`](docs/pa_research_output_schema_v0_1_CN.md)。
+历史兼容日线选股合同：[`PA Research 日线选股规则 v0.1`](docs/pa_research_daily_selection_rules_v0_1_CN.md)。
+
+历史兼容输出字段：[`PA Research 统一输出合同 v0.1`](docs/pa_research_output_schema_v0_1_CN.md)。
 
 每日候选批次与两年图表证据记录：[`每日候选批次与图表审查卡`](docs/daily_candidate_review_card_CN.md)。
 
@@ -25,7 +27,7 @@ PA Research 是一个只读、视觉优先的 Price Action 研究仓库。它记
 ## 当前边界
 
 - 当前仓库包含一个仅供研究使用的 `backtesting.py` 冻结合同回放器；它不自动识别图形、不扫描股票、不获取行情、不提供生产交易授权，也不连接 Execution Agent。
-- 回放器只接受已经由人工完整看图并在结果发生前冻结的合同；当前已有案例尚未形成经过验证的胜率证据。
+- 旧回放器只接受已经由人工完整看图并在结果发生前冻结的合同；AI 研究备忘不冒充此类来源；当前已有案例尚未形成经过验证的胜率证据。
 - Codex Trading 只作为明确标注的只读历史参考；PA Research 不复制其规则，不修改其仓库。
 - 当前结果审计保持 `no-new-positive`、`validated win-rate: not-computable`；形态候选不是胜率或下单授权。
 - 聚合矩阵、Strategy inventory 与历史案例入口的逐案合同边界见[`Pattern 案例矩阵、策略入口与历史别名合同审计`](research/backtesting/pattern_case_matrix_strategy_entry_contract_audit_2026-08-29_CN.md)。

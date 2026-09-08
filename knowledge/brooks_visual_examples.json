@@ -1,0 +1,86 @@
+[
+  {
+    "id": "brooks-2017-momentum-dt",
+    "title": "Context versus double top",
+    "concepts": [
+      "pressure",
+      "double top",
+      "反例"
+    ],
+    "source_url": "https://www.brookstradingcourse.com/wp-content/uploads/2017/02/17FEB21-futures-io-webinar-losing-when-good-trade-goes-bad.pdf#page=3",
+    "page": 3,
+    "visual_status": "text_located_image_review_pending",
+    "contrast_note": "Compare momentum with the apparent reversal shape.",
+    "usage": "teaching_with_outcome"
+  },
+  {
+    "id": "brooks-2017-protection",
+    "title": "Reversal context",
+    "concepts": [
+      "reversal",
+      "pressure",
+      "invalidation"
+    ],
+    "source_url": "https://www.brookstradingcourse.com/wp-content/uploads/2017/02/17FEB21-futures-io-webinar-losing-when-good-trade-goes-bad.pdf#page=6",
+    "page": 6,
+    "visual_status": "text_located_image_review_pending",
+    "contrast_note": "Compare weak rebound with persistent trend.",
+    "usage": "teaching_with_outcome"
+  },
+  {
+    "id": "brooks-2017-failed-wedge",
+    "title": "Failed wedge continuation",
+    "concepts": [
+      "wedge",
+      "high 3",
+      "continuation"
+    ],
+    "source_url": "https://www.brookstradingcourse.com/wp-content/uploads/2017/02/17FEB21-futures-io-webinar-losing-when-good-trade-goes-bad.pdf#page=9",
+    "page": 9,
+    "visual_status": "text_located_image_review_pending",
+    "contrast_note": "A reversal attempt can fail.",
+    "usage": "teaching_with_outcome"
+  },
+  {
+    "id": "brooks-2017-opposite-pressure",
+    "title": "Opposite pressure",
+    "concepts": [
+      "pressure",
+      "invalidation"
+    ],
+    "source_url": "https://www.brookstradingcourse.com/wp-content/uploads/2017/02/17FEB21-futures-io-webinar-losing-when-good-trade-goes-bad.pdf#page=11",
+    "page": 11,
+    "visual_status": "text_located_image_review_pending",
+    "contrast_note": "Inspect sequences as well as isolated bars.",
+    "usage": "teaching_with_outcome"
+  },
+  {
+    "id": "brooks-2017-first-pb",
+    "title": "Strong breakout pullback",
+    "concepts": [
+      "breakout",
+      "pullback",
+      "follow through"
+    ],
+    "source_url": "https://www.brookstradingcourse.com/wp-content/uploads/2017/02/17FEB21-futures-io-webinar-losing-when-good-trade-goes-bad.pdf#page=22",
+    "page": 22,
+    "visual_status": "text_located_image_review_pending",
+    "contrast_note": "Pair with the next page.",
+    "usage": "teaching_with_outcome"
+  },
+  {
+    "id": "brooks-2017-deep-pb",
+    "title": "Deep pullback transition",
+    "concepts": [
+      "breakout",
+      "pullback",
+      "range",
+      "反例"
+    ],
+    "source_url": "https://www.brookstradingcourse.com/wp-content/uploads/2017/02/17FEB21-futures-io-webinar-losing-when-good-trade-goes-bad.pdf#page=23",
+    "page": 23,
+    "visual_status": "text_located_image_review_pending",
+    "contrast_note": "Same starting thesis, changed context.",
+    "usage": "teaching_with_outcome"
+  }
+]

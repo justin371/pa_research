@@ -2,7 +2,11 @@
 
 状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / research-only`
 
-本目录保存 PA Research 的专项审计、历史案例、视觉验收记录和图像资产入口。它不是行情数据库、量化扫描器或执行层。新记录先使用[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)，方向必须明确写为 `long`、`short` 或 `no_valid_direction`。
+本目录保存 PA Research 的专项审计、历史案例、专业资料阅读笔记、视觉验收记录和图像资产入口。它不是行情数据库、量化扫描器或执行层。日常研究使用[AI视觉研究工作流](../docs/ai_visual_research_CN.md)，阅读笔记保留来源、页码、实际覆盖范围和适用边界。复现旧实验或导出旧合同的新记录先使用[`PA Research 统一输出合同 v0.1`](../docs/pa_research_output_schema_v0_1_CN.md)，方向必须明确写为 `long`、`short` 或 `no_valid_direction`。
+
+## 专业资料阅读
+
+- [《波段交易形态》IMA原图阅读笔记（2026-09-08）](ima_brooks_swing_reading_2026-09-08_CN.md)：216页全部浏览及关键案例精读；包含背景、跟随、形态变体、空间与时间的理解和页码索引，属于教学参考。
 
 统一边界：`v0.x` 规则/合同与回放引擎 `0.3.15` 均只属于 PA Research 研究层（`PA Research only`），不是 Codex Trading 生产规则；`no-new-positive` 和 `validated win-rate: not-computable` 保持不变，`60%` 仅是待检验目标；不创建量化扫描器，不连接 Execution Agent。
 
@@ -177,3 +181,5 @@
 - [`TSLA 多周期视觉识别资产`](assets/visual_recognition/2026-08-24/tsla_public_mtf/README.md)。
 
 Round4 的 5 个直接 MTF PNG 之前没有索引入链，现统一列在其资产 README 中；它们仍因 Daily 左侧不足两年而保持 `daily_context_window: <2y`。
+
+- [Astra 视觉工作流审查与示范](astra_visual_workflow_review_2026-09-08_CN.md)

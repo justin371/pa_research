@@ -1,5 +1,7 @@
 # PA Research 统一输出合同 v0.1
 
+> 适用范围（2026-09-08）：本文保留指定历史实验与兼容输出的合同。日常 AI 看图发现使用 [AI 视觉研究](ai_visual_research_CN.md)，不强制继承本文的分类、均线、窗口和字段门槛；冻结样本与既有校准边界保持原样。
+
 日期：2026-08-25；合同修订：2026-08-26；批次证据字段修订：2026-08-28；回放结果口径修订：2026-08-29；样本独立性字段修订：2026-08-29；回放输入边界修订：2026-08-29
 文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / research-only / not-quantitative`
 

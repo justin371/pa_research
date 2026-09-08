@@ -265,26 +265,11 @@ class RequiredReportIndexCoverageTests(unittest.TestCase):
             report,
         )
 
-    def test_audit_research_root_inventory_matches_the_current_link_graph(self):
-        report = read(AUDIT_PATH)
-        root_reports = research_root_report_paths()
-        canonical_links = canonical_index_linked_paths()
-        canonical_count = sum(path in canonical_links for path in root_reports)
-        topical_count = len(root_reports) - canonical_count
-        linked_count = len(linked_research_root_report_paths())
-        self.assertIn(
-            f"当前 `research/` 顶层有 {len(root_reports)} 个历史研究报告",
-            report,
+    def test_research_root_inventory_matches_the_current_link_graph(self):
+        # Compare actual files and links, not counts quoted in a dated audit.
+        self.assertEqual(
+            set(research_root_report_paths()), linked_research_root_report_paths()
         )
-        self.assertIn(
-            f"其中 {canonical_count} 个由 7 个 canonical index 直接承载",
-            report,
-        )
-        self.assertIn(
-            f"另外 {topical_count} 个由专题报告、Pattern 或 Strategy 入口承载",
-            report,
-        )
-        self.assertEqual(linked_count, len(root_reports))
 
 
 if __name__ == "__main__":

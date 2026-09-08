@@ -205,61 +205,9 @@ class PaResearchConclusionBoundaryConsistencyTests(unittest.TestCase):
         self.assertIn("source_version: not_provided", probability)
         self.assertIn("evidence_status: external_heuristic_not_validated", probability)
 
-    def test_authority_audit_records_current_index_inventory(self):
-        audit = read(AUTHORITY_AUDIT_PATH)
-        pattern_count = sum(
-            path.is_dir() for path in (REPO_ROOT / "patterns").iterdir()
-        )
-        foundation_count = sum(
-            path.is_dir() for path in (REPO_ROOT / "foundations").iterdir()
-        )
-        asset_root = REPO_ROOT / "research" / "assets" / "visual_recognition"
-        asset_readme_count = sum(1 for path in asset_root.rglob("README.md"))
-        png_count = sum(1 for path in asset_root.rglob("*.png"))
-        research_report_count = sum(
-            1
-            for path in (REPO_ROOT / "research").glob("*.md")
-            if path.name != "README.md"
-        )
-        backtesting_report_count = sum(
-            1
-            for path in (REPO_ROOT / "research" / "backtesting").glob("*.md")
-            if path.name != "README.md"
-        )
-        backtesting_csv_count = sum(
-            1 for path in (REPO_ROOT / "research" / "backtesting").glob("*.csv")
-        )
-        backtesting_json_count = sum(
-            1 for path in (REPO_ROOT / "research" / "backtesting").glob("*.json")
-        )
-        markdown_link_re = re.compile(
-            r"(?<!\!)\[[^\]]*\]\(([^)\r\n]+)\)|!\[[^\]]*\]\(([^)\r\n]+)\)"
-        )
-        markdown_files = [
-            path
-            for path in REPO_ROOT.rglob("*.md")
-            if ".codex" not in path.relative_to(REPO_ROOT).parts
-        ]
-        markdown_link_count = sum(
-            len(markdown_link_re.findall(read(path))) for path in markdown_files
-        )
-
-        self.assertIn(
-            f"patterns/ 下有 {pattern_count} 个 pattern 目录，foundations/ 下有 {foundation_count} 个基础层目录",
-            audit,
-        )
-        self.assertIn(
-            f"research/assets/visual_recognition/ 下有 {asset_readme_count} 个资产 README 和 {png_count} 张 PNG",
-            audit,
-        )
-        self.assertIn(
-            f"research/ 顶层有 {research_report_count} 个历史研究报告，research/backtesting/ 有 {backtesting_report_count} 个报告文件、{backtesting_csv_count} 个 CSV 和 {backtesting_json_count} 个 JSON 机器产物",
-            audit,
-        )
-        self.assertIn(
-            f"文档 validator 已检查 {len(markdown_files)} 个 Markdown 文件、{markdown_link_count} 个 Markdown 链接",
-            audit,
-        )
+    def test_authority_audit_remains_indexed(self):
+        # Historical inventory totals are snapshots, not limits on new research.
+        # Live link and asset coverage is checked by the dedicated coverage tests.
         for index_path in (
             REPO_ROOT / "docs" / "README.md",
             REPO_ROOT / "research" / "README.md",
