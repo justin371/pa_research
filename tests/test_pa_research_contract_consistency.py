@@ -1,9 +1,8 @@
 import csv
 from pathlib import Path
-import shutil
-import subprocess
-import tempfile
 import unittest
+
+from pa_test_support import isolated_repo, run_docs_validator
 
 from pa_research_backtest.engine import (
     ContractValidationError,
@@ -81,16 +80,8 @@ class PaResearchContractConsistencyTests(unittest.TestCase):
 
     def test_docs_validator_rejects_unsupported_order_branch_in_isolated_copy(self):
         target_name = "hl_next4_contracts_2026-08-27.csv"
-        validator = REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1"
 
-        with tempfile.TemporaryDirectory(prefix="pa-validator-fixture-") as temp_dir:
-            fixture_root = Path(temp_dir)
-            shutil.copytree(
-                REPO_ROOT,
-                fixture_root,
-                dirs_exist_ok=True,
-                ignore=shutil.ignore_patterns(".git", ".venv", "__pycache__", "*.pyc"),
-            )
+        with isolated_repo() as fixture_root:
             target = fixture_root / "research" / "backtesting" / target_name
             with target.open(encoding="utf-8", newline="") as handle:
                 rows = list(csv.DictReader(handle))
@@ -103,37 +94,15 @@ class PaResearchContractConsistencyTests(unittest.TestCase):
             with self.assertRaises(ContractValidationError):
                 load_contracts(target)
 
-            result = subprocess.run(
-                [
-                    "powershell.exe",
-                    "-NoProfile",
-                    "-ExecutionPolicy",
-                    "Bypass",
-                    "-File",
-                    str(validator),
-                    "-RepoRoot",
-                    str(fixture_root),
-                ],
-                capture_output=True,
-                text=True,
-                check=False,
-            )
+            result = run_docs_validator(fixture_root)
 
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("invalid order_branch", result.stdout)
 
     def test_docs_validator_rejects_engine_invalid_contract_boundaries(self):
         target_name = "hl_next4_contracts_2026-08-27.csv"
-        validator = REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1"
 
-        with tempfile.TemporaryDirectory(prefix="pa-validator-boundaries-") as temp_dir:
-            fixture_root = Path(temp_dir)
-            shutil.copytree(
-                REPO_ROOT,
-                fixture_root,
-                dirs_exist_ok=True,
-                ignore=shutil.ignore_patterns(".git", ".venv", "__pycache__", "*.pyc"),
-            )
+        with isolated_repo() as fixture_root:
             source = fixture_root / "research" / "backtesting" / target_name
             contract_dir = source.parent
             with source.open(encoding="utf-8", newline="") as handle:
@@ -153,21 +122,7 @@ class PaResearchContractConsistencyTests(unittest.TestCase):
                 return path
 
             def run_validator():
-                return subprocess.run(
-                    [
-                        "powershell.exe",
-                        "-NoProfile",
-                        "-ExecutionPolicy",
-                        "Bypass",
-                        "-File",
-                        str(validator),
-                        "-RepoRoot",
-                        str(fixture_root),
-                    ],
-                    capture_output=True,
-                    text=True,
-                    check=False,
-                )
+                return run_docs_validator(fixture_root)
 
             invalid_cases = (
                 ("missing required column", lambda row: row.pop("lineage_id"), "missing frozen contract column 'lineage_id'", [field for field in base_rows[0].keys() if field != "lineage_id"]),
@@ -235,16 +190,8 @@ class PaResearchContractConsistencyTests(unittest.TestCase):
                 self.assertIn(expected_message, result.stdout)
 
     def test_docs_validator_rejects_reverse_direction_ema_pass_gates(self):
-        validator = REPO_ROOT / "scripts" / "validate_pa_research_docs.ps1"
 
-        with tempfile.TemporaryDirectory(prefix="pa-validator-ema-direction-") as temp_dir:
-            fixture_root = Path(temp_dir)
-            shutil.copytree(
-                REPO_ROOT,
-                fixture_root,
-                dirs_exist_ok=True,
-                ignore=shutil.ignore_patterns(".git", ".venv", "__pycache__", "*.pyc"),
-            )
+        with isolated_repo() as fixture_root:
             contract_dir = fixture_root / "research" / "backtesting"
             source_rows = []
             for source_name, sample_id, lineage_id, wrong_gate in (
@@ -269,21 +216,7 @@ class PaResearchContractConsistencyTests(unittest.TestCase):
             with self.assertRaises(ContractValidationError):
                 load_contracts(target)
 
-            result = subprocess.run(
-                [
-                    "powershell.exe",
-                    "-NoProfile",
-                    "-ExecutionPolicy",
-                    "Bypass",
-                    "-File",
-                    str(validator),
-                    "-RepoRoot",
-                    str(fixture_root),
-                ],
-                capture_output=True,
-                text=True,
-                check=False,
-            )
+            result = run_docs_validator(fixture_root)
 
         self.assertNotEqual(result.returncode, 0)
         self.assertGreaterEqual(

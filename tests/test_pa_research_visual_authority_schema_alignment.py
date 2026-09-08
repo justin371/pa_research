@@ -1,9 +1,8 @@
 import re
-import shutil
-import subprocess
-import tempfile
 from pathlib import Path
 import unittest
+
+from pa_test_support import isolated_repo, run_docs_validator
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -362,15 +361,7 @@ class VisualAuthoritySchemaAlignmentTests(unittest.TestCase):
                 self.assertNotRegex(content, LEGACY_PARENT_STATE_LINE)
 
     def test_validator_rejects_legacy_parent_state_enum_in_active_template(self):
-        with tempfile.TemporaryDirectory(prefix="pa-parent-state-validator-") as temp_dir:
-            fixture_root = Path(temp_dir) / "repo"
-            shutil.copytree(
-                REPO_ROOT,
-                fixture_root,
-                ignore=shutil.ignore_patterns(
-                    ".git", ".codex", ".venv", "node_modules", "__pycache__"
-                ),
-            )
+        with isolated_repo() as fixture_root:
             target = (
                 fixture_root
                 / "research"
@@ -381,21 +372,7 @@ class VisualAuthoritySchemaAlignmentTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            result = subprocess.run(
-                [
-                    "powershell.exe",
-                    "-NoProfile",
-                    "-ExecutionPolicy",
-                    "Bypass",
-                    "-File",
-                    str(fixture_root / "scripts" / VALIDATOR_PATH.name),
-                    "-RepoRoot",
-                    str(fixture_root),
-                ],
-                capture_output=True,
-                text=True,
-                check=False,
-            )
+            result = run_docs_validator(fixture_root)
 
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("non-canonical parent_state enum remains", result.stdout)
