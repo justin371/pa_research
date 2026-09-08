@@ -1,5 +1,7 @@
 # PA 图表视觉复核卡
 
+> 适用范围（2026-09-08）：本文保留指定历史实验与兼容输出的合同。日常 AI 看图发现使用 [AI 视觉研究](ai_visual_research_CN.md)，不强制继承本文的分类、均线、窗口和字段门槛；冻结样本与既有校准边界保持原样。
+
 文档状态：`document_status=adopted / document_maturity=provisional / handoff_status=not_ready / canonical-output-v0.6`
 
 日线候选筛选先遵循 [`PA Research 日线选股规则 v0.1`](pa_research_daily_selection_rules_v0_1_CN.md)；本卡中的 4H/1H/15m 仅适用于候选入选后的深审、确认或独立低周期合同。

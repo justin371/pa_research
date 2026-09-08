@@ -1,5 +1,7 @@
 # PA Research Docs 索引
 
+当前默认：[AI 视觉研究](ai_visual_research_CN.md)。下列旧规则与卡片按历史实验或兼容导出需要读取。
+
 - [PA Research authority 与隔离边界审计](../research/authority_boundary_index_audit_2026-08-29_CN.md)
 
 - [`PA Research 日线选股规则 v0.1`](pa_research_daily_selection_rules_v0_1_CN.md)
