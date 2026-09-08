@@ -1,11 +1,11 @@
 """Regression checks for PA Research conclusion and authorization wording."""
 
-import shutil
-import subprocess
-import tempfile
+
 from pathlib import Path
 import re
 import unittest
+
+from pa_test_support import isolated_repo, run_docs_validator
 
 from pa_research_backtest.engine import ENGINE_VERSION
 
@@ -116,36 +116,14 @@ class PaResearchConclusionBoundaryConsistencyTests(unittest.TestCase):
         self.assertIn(AUDIT_NAME, text)
 
     def test_validator_rejects_unqualified_research_positive_conditional_alias(self):
-        with tempfile.TemporaryDirectory(prefix="pa-status-boundary-validator-") as temp_dir:
-            fixture_root = Path(temp_dir) / "repo"
-            shutil.copytree(
-                REPO_ROOT,
-                fixture_root,
-                ignore=shutil.ignore_patterns(
-                    ".git", ".codex", ".venv", "node_modules", "__pycache__"
-                ),
-            )
+        with isolated_repo() as fixture_root:
             target = fixture_root / KLAC_CASE_PATH.relative_to(REPO_ROOT)
             target.write_text(
                 read(target) + "\n历史别名测试：`research_positive / conditional`\n",
                 encoding="utf-8",
             )
 
-            result = subprocess.run(
-                [
-                    "powershell.exe",
-                    "-NoProfile",
-                    "-ExecutionPolicy",
-                    "Bypass",
-                    "-File",
-                    str(fixture_root / "scripts" / VALIDATOR_PATH.name),
-                    "-RepoRoot",
-                    str(fixture_root),
-                ],
-                capture_output=True,
-                text=True,
-                check=False,
-            )
+            result = run_docs_validator(fixture_root)
 
         self.assertNotEqual(result.returncode, 0)
         self.assertIn(

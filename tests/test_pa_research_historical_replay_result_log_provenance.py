@@ -1,9 +1,9 @@
 """Regression checks for historical replay and transaction-log boundaries."""
 
-import shutil
-import subprocess
-import tempfile
+
 import unittest
+
+from pa_test_support import isolated_repo, run_docs_validator
 from pathlib import Path
 
 
@@ -86,35 +86,13 @@ class HistoricalReplayResultLogProvenanceTests(unittest.TestCase):
         self.assertEqual(current_artifacts, [])
 
     def test_validator_rejects_nested_transaction_log_dirs_and_replay_artifacts(self):
-        with tempfile.TemporaryDirectory(prefix="pa-log-boundary-validator-") as temp_dir:
-            fixture_root = Path(temp_dir) / "repo"
-            shutil.copytree(
-                REPO_ROOT,
-                fixture_root,
-                ignore=shutil.ignore_patterns(
-                    ".git", ".codex", ".venv", "node_modules", "__pycache__"
-                ),
-            )
+        with isolated_repo() as fixture_root:
             (fixture_root / "research" / "nested" / "journal").mkdir(parents=True)
             (fixture_root / "research" / "nested" / "results.csv").write_text(
                 "sample_id\n", encoding="utf-8"
             )
 
-            result = subprocess.run(
-                [
-                    "powershell.exe",
-                    "-NoProfile",
-                    "-ExecutionPolicy",
-                    "Bypass",
-                    "-File",
-                    str(fixture_root / "scripts" / VALIDATOR_PATH.name),
-                    "-RepoRoot",
-                    str(fixture_root),
-                ],
-                capture_output=True,
-                text=True,
-                check=False,
-            )
+            result = run_docs_validator(fixture_root)
 
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("reserved actual transaction-log directory is present", result.stdout)

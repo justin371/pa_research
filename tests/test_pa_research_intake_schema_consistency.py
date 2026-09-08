@@ -3,10 +3,9 @@ from collections import Counter, defaultdict
 from datetime import date
 from pathlib import Path
 import re
-import shutil
-import subprocess
-import tempfile
 import unittest
+
+from pa_test_support import isolated_repo, run_docs_validator
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -260,13 +259,7 @@ class PaResearchIntakeSchemaConsistencyTests(unittest.TestCase):
             self.assertIn(token, audit)
 
     def test_validator_rejects_missing_intake_freeze_recommendation(self):
-        with tempfile.TemporaryDirectory(prefix="pa-research-intake-schema-") as directory:
-            fixture_root = Path(directory) / "repo"
-            shutil.copytree(
-                REPO_ROOT,
-                fixture_root,
-                ignore=shutil.ignore_patterns(".git", ".venv", ".codex", "__pycache__", "*.pyc"),
-            )
+        with isolated_repo() as fixture_root:
             intake_path = fixture_root / "research" / "backtesting" / UNIFIED_FILE
             lines = intake_path.read_text(encoding="utf-8").splitlines()
             target_index = next(
@@ -274,21 +267,7 @@ class PaResearchIntakeSchemaConsistencyTests(unittest.TestCase):
             )
             lines[target_index] = lines[target_index].rsplit(",", 1)[0]
             intake_path.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="")
-            result = subprocess.run(
-                [
-                    "powershell.exe",
-                    "-NoProfile",
-                    "-ExecutionPolicy",
-                    "Bypass",
-                    "-File",
-                    str(fixture_root / "scripts" / "validate_pa_research_docs.ps1"),
-                    "-RepoRoot",
-                    str(fixture_root),
-                ],
-                capture_output=True,
-                text=True,
-                check=False,
-            )
+            result = run_docs_validator(fixture_root)
             self.assertNotEqual(result.returncode, 0)
             self.assertIn(
                 "ABC/BOP intake row missing required value 'freeze_recommendation': BOP-UNIFIED-NKE-20251028",
@@ -311,13 +290,7 @@ class PaResearchIntakeSchemaConsistencyTests(unittest.TestCase):
             not in (REPO_ROOT / row["source_case"]).read_text(encoding="utf-8")
         )
 
-        with tempfile.TemporaryDirectory(prefix="pa-research-intake-source-binding-") as directory:
-            fixture_root = Path(directory) / "repo"
-            shutil.copytree(
-                REPO_ROOT,
-                fixture_root,
-                ignore=shutil.ignore_patterns(".git", ".venv", ".codex", "__pycache__", "*.pyc"),
-            )
+        with isolated_repo() as fixture_root:
 
             def rewrite(filename: str, intake_id: str, **updates: str) -> None:
                 path = fixture_root / "research" / "backtesting" / filename
@@ -352,21 +325,7 @@ class PaResearchIntakeSchemaConsistencyTests(unittest.TestCase):
                 source_case=same_symbol_source,
             )
 
-            result = subprocess.run(
-                [
-                    "pwsh",
-                    "-NoProfile",
-                    "-ExecutionPolicy",
-                    "Bypass",
-                    "-File",
-                    str(fixture_root / "scripts" / "validate_pa_research_docs.ps1"),
-                    "-RepoRoot",
-                    str(fixture_root),
-                ],
-                capture_output=True,
-                text=True,
-                check=False,
-            )
+            result = run_docs_validator(fixture_root)
             self.assertNotEqual(result.returncode, 0)
             self.assertIn(
                 f"ABC/BOP intake row source_case is missing ticker '{wrong_readme['symbol']}' in an active level-1 heading or explicit symbol field: {wrong_readme['intake_id']}",
@@ -388,34 +347,14 @@ class PaResearchIntakeSchemaConsistencyTests(unittest.TestCase):
     def test_validator_ignores_commented_canonical_tokens_but_keeps_fenced_tokens(self):
         canonical_path = Path("docs/pa_research_output_schema_v0_1_CN.md")
         canonical_token = "chart_scope: full / partial / unavailable"
-        with tempfile.TemporaryDirectory(prefix="pa-research-canonical-comment-") as directory:
-            fixture_root = Path(directory) / "repo"
-            shutil.copytree(
-                REPO_ROOT,
-                fixture_root,
-                ignore=shutil.ignore_patterns(".git", ".venv", ".codex", "__pycache__", "*.pyc"),
-            )
+        with isolated_repo() as fixture_root:
             schema_path = fixture_root / canonical_path
             original = schema_path.read_text(encoding="utf-8")
             self.assertEqual(original.count(canonical_token), 1)
             self.assertGreaterEqual(original.count("```"), 2)
 
             def run_validator():
-                return subprocess.run(
-                    [
-                        "pwsh",
-                        "-NoProfile",
-                        "-ExecutionPolicy",
-                        "Bypass",
-                        "-File",
-                        str(fixture_root / "scripts" / "validate_pa_research_docs.ps1"),
-                        "-RepoRoot",
-                        str(fixture_root),
-                    ],
-                    capture_output=True,
-                    text=True,
-                    check=False,
-                )
+                return run_docs_validator(fixture_root)
 
             positive = run_validator()
             self.assertEqual(positive.returncode, 0, positive.stdout)
