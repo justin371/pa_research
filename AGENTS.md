@@ -2,6 +2,15 @@
 
 This repository researches price action through AI chart reading. It does not authorize trades or connect to execution systems.
 
+## Repository ownership and pull request approval
+
+- The canonical repository is https://github.com/justin371/pa_research. Its code owner is Lijie_Wang (`@justin371`), as defined in [.github/CODEOWNERS](.github/CODEOWNERS).
+- Every pull request requires the human owner's explicit approval of the current changes before merging or enabling auto-merge. Approval of another pull request or an earlier version is not approval of new changes. Preserve all required repository checks and review requirements.
+- Never submit a review or approval comment on the owner's behalf, infer approval from passing checks, bypass protection, or weaken approval requirements to complete a merge. Leave an unapproved pull request open for review.
+- GitHub does not allow a pull request author to approve their own pull request. If the pull request is authored by `@justin371` and requires a formal GitHub review, report that limitation and leave it blocked until a separate authorized author is available; do not impersonate another author or reviewer.
+
+## Research workflow
+
 Start with [the AI visual research workflow](docs/ai_visual_research_CN.md). Use the model selected for the current task; preserve explicit configuration. Inspect actual chart images with the available image-viewing tool before making visual claims. Text summaries alone are not chart inspection.
 
 Let AI interpret context, pressure, legs, location, competing hypotheses and useful Brooks examples. Choose timeframes and zoom from the question and evidence. Do not turn legacy pattern enums, EMA slopes, a fixed two-year window or a fixed candidate quota into discovery gates. Ask for missing evidence only when it changes the conclusion; incomplete views can still support explicitly limited hypotheses.
