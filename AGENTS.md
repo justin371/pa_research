@@ -2,6 +2,16 @@
 
 This repository researches price action through AI chart reading. It does not authorize trades or connect to execution systems.
 
+## Repository ownership and pull request approval
+
+- The canonical repository is https://github.com/justin371/pa_research. Its code owner is Lijie_Wang (`@justin371`), as defined in [.github/CODEOWNERS](.github/CODEOWNERS).
+- Determine ownership from the pull request's GitHub author login, not commit metadata, branch names, or assignees. A pull request authored by `@justin371` is approved by default under the owner's standing policy; no separate approving review is required. This approval exception does not waive required checks, conflict resolution, or the scope of the requested merge.
+- Every pull request authored by anyone else must have a current, non-stale GitHub APPROVED review from `@justin371` before merging or enabling auto-merge. Verify approval against the current PR head and any outstanding change requests; passing checks, another reviewer's approval, or approval of another PR is insufficient.
+- Never submit a review or approval comment on the owner's behalf or impersonate another author or reviewer. Leave another author's unapproved pull request open for the owner to review.
+- Keep `main` protected with required code-owner review, stale-approval dismissal, and administrator enforcement. GitHub prohibits self-approval and its native protection does not provide an author-only exception. For an owner-authored PR only, after verifying author, exact head, target, reviews and required checks, temporarily disable administrator enforcement to perform the authorized merge as the owner; restore it immediately in a finally block even if merging fails. Preserve all other protection settings, verify restoration, and report a restoration failure immediately. Never use this exception for another author's PR. See [GitHub's approval restrictions](https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/approving-a-pull-request-with-required-reviews).
+
+## Research workflow
+
 Start with [the AI visual research workflow](docs/ai_visual_research_CN.md). Use the model selected for the current task; preserve explicit configuration. Inspect actual chart images with the available image-viewing tool before making visual claims. Text summaries alone are not chart inspection.
 
 Let AI interpret context, pressure, legs, location, competing hypotheses and useful Brooks examples. Choose timeframes and zoom from the question and evidence. Do not turn legacy pattern enums, EMA slopes, a fixed two-year window or a fixed candidate quota into discovery gates. Ask for missing evidence only when it changes the conclusion; incomplete views can still support explicitly limited hypotheses.
